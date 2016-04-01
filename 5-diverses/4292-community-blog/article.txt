@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Community-Blogging: Fork me on GitHub
+
+----
+
+Date: 2016-04-02
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ab sofort bezieht Webguys alle Blog-Beitäge von Github. Das eröffnet z.B. die Möglichkeit kleine Fehler in Beiträgen direkt mit einen "Fork" zu korrigieren.
+
+
+----
+
+Text: Mit Magento 2 kommt eine große Menge an neuen Informationen auf uns zu. Bereits jetzt habe ich das Problem dass ich im Web auf viele Blog-Beiträge stoße welche kleiner Fehler haben und mich somit nicht zum eigentlich Ziel führen - auch wenn manchmal nur 1% falsch ist.
+
+Ab und zu versuche ich dann eine Notiz zu hinterlassen aber ganz ehrlich: Leicht macht es dann nicht. Und so ein Magento-Blog ist ja auch kein Magazin sondern mir ein Know-How-Pool. Also warum nicht die Leser zu Autoren machen und die Autoren zu Lesern?
+
+## Nun mit Github Integration
+
+Daher: Ab sofort gibt es bei jedem Blog-Beitrag einen Button "Fork Post on Github". Ein Klick bringt Dich zum Blog-Beitrag auf Github den du dort direkt editieren kannst.
+
+Danach noch schnell einen Pull-Request losschicken und schwups sind deine Korrekturen auf Webguys und alle können zukünftig davon profitieren.
+
+Community-Blogging eben. 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4291
