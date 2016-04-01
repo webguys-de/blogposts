@@ -1,0 +1,92 @@
+Article-meta: 
+
+----
+
+Title: Türchen 07: Magento Lagerbestand aktualisieren
+
+----
+
+Date: 2010-12-07
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 07 ist ein Lagerbestands-Türchen. So ist es eine häufige Anforderungen Lagerbestände in regelmäßigen Abständen aktuell zu halten. Mit Magento in der Regel gar kein Problem.
+
+
+
+----
+
+Text: Zuerst gilt es das richtige Produkt mittels Magento-Product-Model zu finden.
+(code lang: php)
+$arnr = '1234';
+$product = Mage::getModel("catalog/product");
+$product->load( $product->getIdBySku( $arnr ) );
+(/code)
+
+Danach können wir mit zwei Wegen unseren Lagerbestand aktualisieren. Im ersten Beispiel gehen wir direkt über das Product-Model:
+
+(code lang: php)
+$bestand = 10;
+if ( $product->getId() ) {
+	$product->setStockData( array(
+			'is_in_stock' => ( $bestand > 0 ? 1 : 0 ),
+			'qty' => $bestand
+		)
+	);					
+	$product->save();
+}
+(/code)
+
+Das zweite Beispiel ist zum Speichern des Lagerbestandes ein wenig schneller als das erste Beispiel. Hier benutzen wir direkt das Stock-Item-Model: 
+
+(code lang: php)
+if ( $product->getId() ) {
+
+	$stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct( $product->getId() );
+
+	if ( !$stockItem->getId() ) {
+		// Falls noch kein Lagerbestand besteht
+		$stockItem->setProduct( $product );
+	}
+
+	$stockItem->setQty($bestand);
+	$stockItem->setData('is_in_stock',( $bestand > 0 ? 1 : 0 ));
+
+	$stockItem->save();
+	
+}
+(/code)
+
+Vielen Dank an Damian für das zweite Beispiel.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1091

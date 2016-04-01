@@ -1,0 +1,79 @@
+Article-meta: 
+
+----
+
+Title: Fehler in der Kategorie-Tabelle beseitigen
+
+----
+
+Date: 2010-07-28
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es kann durch einen Fehler im automatischen Kategorie-Import vorkommen das Level bzw. Children-Count der Kategorien nicht stimmen. Das äußert sich dadurch das im Magento-Admin neu angelegte Kategorien einfach verschwinden oder das bei Kategorien urplötzlich kein Plus-Zeichen zum Aufklappen mehr auftaucht und das obwohl man sich sicher ist das Unterkategorien bestehen.
+
+
+----
+
+Text: Mit folgendem SQL lassen sich die Level der Kategorien sowie deren Kinder wieder korrekt reparieren:
+
+<strong>Level der Kategorien neu setzen:</strong>
+
+(code lang: sql)
+UPDATE catalog_category_entity
+SET `level` = (LENGTH(path) - LENGTH(REPLACE( path, '/', '' ))+1)
+(/code)
+
+<strong>Anzahl der Unterkategorien (Kinder) setzen</strong>
+
+(code lang: sql)
+CREATE TEMPORARY TABLE `catalog_category_entity_tmp` as
+SELECT m.`entity_id`,
+(LENGTH(m.`path`) – LENGTH(REPLACE( m.`path`, ‘/’, '' ))+1) as `level`,
+COUNT(c.`entity_id`) as `children_count`
+FROM catalog_category_entity as m
+LEFT JOIN `catalog_category_entity` as c ON c.`parent_id` = m.`entity_id`
+GROUP BY m.`entity_id`;
+
+UPDATE `catalog_category_entity` m, `catalog_category_entity_tmp` c
+SET
+m.`children_count`=c.`children_count`,
+m.`level`=c.`level`
+WHERE m.`entity_id`=c.`entity_id`;
+(/code)
+
+Benutzung natürlich auf eigene Gefahr :)
+
+<strong>Update: </strong> Das SQL habe ich mit dem Kommentar von André Willing ergänzt. Danke für das Mitdenken an ihn.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 412

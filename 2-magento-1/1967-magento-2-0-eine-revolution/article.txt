@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: Magento 2.0 - Eine Revolution?
+
+----
+
+Date: 2011-10-15
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Innovative Konferenz bringt doch noch einiges zu Tage. So ist in meinem Twitter-Stream das aktuelle Magento 2.0 Wiki aufgetaucht. Werfen wir einen Blick hinein :)
+
+
+
+----
+
+Text: (image: Integration-Tests-User-Guide-Magento-2-Product-Documentation-Magento-Wiki_1318669336644-650x394.png)
+
+Das <a href="https://wiki.magento.com/display/MAGE2DOC/Magento+Documentation">Wiki</a> wirkt aufgeräumt und sehr übersichtlich. Es lässt sich erkennen das es mit einem durchaus durchdachten Ansatz aufgebaut wurde. Durch die neuen Regeln die besagen das kein Undokumentierter-Code mehr publiziert werden darf würde ich zum heutigen Zeitpunkt davon ausgehen das es zukünftig eine hohe Qualität haben wird. Ob die Community aktiv das Wiki mitgestalten darf ist mir nicht bekannt. Ich würde mir jedoch wünschen das es zentrale Verantwortliche zur Qualitätssicherung und Strukturierung gibt die Community aber durchaus Fehler im Wiki aufdeckt und bereinigt.
+
+Zum jetzigen Zeitpunkt fande ich die Artikel über "<a href="https://wiki.magento.com/display/MAGE2DOC/File+Structure+Changes+from+1.x+to+2.x">File Structure Changes from 1.x to 2.x</a>" und "<a href="https://wiki.magento.com/display/MAGE2DOC/Framework+Changes+from+1.x+to+2.x">Framework Changes from 1.x to 2.x</a>" am wichtigsten.  Ich fasse einmal grob zusammen:
+<ul><li>Beim holen von Tabellennamen entfällt der Slash (/)(code lang: php)getTableName('admin_role')(/code)</li>
+	<li>Mage::getModel/getResource stirbt. Zukünftig gibt es eine zentrale Instanz: createObject.(code lang: php)createObject('Mage_Catalog_Model_Product')(/code)</li>
+	<li>Magento unterscheidet zwischen Public Dateien, also HTML, CSS die index.php und Bildern und dem eigentlichen Source. Der Source liegt zukünftig in einem für den Webserver nicht lesbaren Verzeichnis. Gute Entscheidung - genau wie im Zend-Framework :)</li>
+	<li>Es gibt bereits einige Tests - die muss ich mir aber selbst in aller Ruhe einmal anschauen :)</li>
+</ul>
+Zum Schluss ist eine frühe Alpha von Magento 2.0 bereits über den <a href="http://mage2.magentocommerce.com/svn/public/">Public-SVN</a> zu lesen. Erscheinen soll Magento übrigens offiziell im zweiten Quartal 2012.
+
+Ich für meinen Teil bin begeistert vom Refactoring und den neuen internen Prozessen. Lasst uns gemeinsam das E-Commerce revolutionieren :)
+
+P.S. Richtig beeindruckt bin in von Damian welcher das SVN gestern bereits ohne Twitter entdeckt hat :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1967

@@ -1,0 +1,139 @@
+Article-meta: 
+
+----
+
+Title: Zugriff verweigert: Die Folgen von SUPEE-6285 und ACLs
+
+----
+
+Date: 2015-07-13
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,supee,patch
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Der letzte Magento-Patch <strong>SUPEE-6285</strong> macht momentan die Runde. Nach der Installation im ersten Shop dann auch schon die Ernüchterung: Die Benutzer erhalten "Zugriff verweigert" statt die gewohnten Shop-Funktionalitäten.
+
+----
+
+Text: (image: Zugriff-Verweigert.jpg)
+
+Aber warum? Schuld ist die kleine aber feine Änderung in der Datei: <strong>app/code/core/Mage/Adminhtml/Controller/Action.php</strong>
+
+Sprich: In der Klasse, von welcher jeder Admin-Controller erben sollte, welchen man so erstellt. Hier hat sich das Magento-Team entschlossen, nicht mehr einfach nur <em>true</em> zurück zu geben (was jedem Zugriff erlangt), sondern die Rechte entsprechend zu prüfen. Das ist so lange egal, wie man sich mit vollen Admin-Rechten durch den Shop bewegt. Hat man diese nicht mehr, machen sich schlampige Implementierungen der ACLs in den eigenen Modulen schnell durch die oben genannte Fehlermeldung bemerkbar.
+
+(image: SUPEE-6285-Adminhtml.png)
+
+<h2>Wie findet man heraus, ob man etwas tun muss?</h2>
+
+Relativ einfach: Den eigenen Code einfach nach "extends Mage_Adminhtml_Controller_Action" durchsuchen. Findet man hier etwas, muss auf jeden Fall die Methode _isAllowed() überschrieben worden sein. Faule Menschen überschreiben diese nun einfach und geben true zurück. Würde ich aber generell von abraten (auch, wenn es dann maximal so unsicher ist, wie vor dem Patch). <strong>Aber warum das Ganze nicht gleich als Chance sehen, die ACLs zu korrigieren?</strong>
+
+Zu einer sauberen ACL gehören zwei Dinge:
+
+<ul><li>Der entsprechende Eintrag in der adminhtml.xml des eigenen Moduls</li>
+    <li>Die Abfrage der Rechte an den entsprechenden Stellen (u.a. in _isAllowed)</li>
+</ul>
+
+Eine saubere adminhtml.xml sieht so aus:
+
+(code lang: xml)
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <my_module>
+            <children>
+                <some_operation module="my_module">
+                    <sort_order>50</sort_order>
+                    <title>Operationen durchführen</title>
+                    <action>adminhtml/operation</action>
+                </some_operation>
+            </children>
+        </my_module>
+    </menu>
+
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <my_module>
+                        <children>
+                            <some_operation translate="title">
+                                <title>Operationen durchführen</title>
+                                <sort_order>50</sort_order>
+                            </some_operation>
+                        </children>
+                    </my_module>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <my_config_node translate="title">
+                                        <title>Modulkonfiguration verändern</title>
+                                    </my_config_node>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
+(/code)
+
+In diesem Beispiel werden nicht nur die Rechte für den neuen Menueintrag richtig gesetzt, sondern auch für die Konfiguration unter System / Konfiguration (sofern vorhanden). Für Einträge unter "system" funktioniert das Rechtemanagement danach out of the Box. Alle anderen können wir danach zwar schön in den Gruppenberechtigungen anhaken, aber eben ohne Effekt. Gut, die Menueinträge verschwinden bei fehlenden Berechtigungen automatisch - aber wenn man die Route kennt, kommt man auch ohne Rechte in die Controller-Actions (unschön).
+
+Fehlt also noch das Überschreiben der Funktion im Controller:
+
+(code lang: php)
+protected function _isAllowed()
+{
+    return Mage::getSingleton('admin/session')->isAllowed('admin/my_module/some_operation');
+}
+(/code)
+
+Und schon fertig. Tat auch gar nicht weh, oder? Etwas nervig ist das herausfinden von bestehenden Nodes. Hier wird man auch nicht sonderlich gut von <a href="http://magicento.com/" target="_blank">Magicento</a> unterstützt und muss sich selbst durch bestehende adminhtml.xml-Dateien aus dem Core quälen. Dauert aber trotzdem maximal 5 Minuten und ist keine Ausrede.
+
+<h2>Was kann man mit ACLs noch so anstellen?</h2>
+
+Es macht wenig Sinn, dem Nutzer zum Beispiel einen Button anzuzeigen, und erst wenn er drauf klickt die Meldung "Zugriff verweigert" zu liefern. Usability geht wirklich anders - und auch echt einfach. Den entsprechenden Aufruf haben wir dafür schon gesehen. Die Abfragen nach den entsprechenden Rechten kann man also schon vor dem Aufruf durchführen und blendet bei fehlenden Rechte die ganzen Buttons oder Links gar nicht mehr ein.
+
+(code lang: php)
+if(Mage::getSingleton('admin/session')->isAllowed('admin/my_module/some_operation')) {
+    // Button oder Link einblenden
+}
+(/code)
+
+<h2>Fazit</h2>
+
+Klar kann man argumentieren, dass eh nur vertrauenswürdige Menschen einen Admin-Zugang bekommen, aber das gibt einem noch lange nicht das Recht hier zu schludern. Ich gebe zu, dass ich das Thema in der Vergangenheit auch gerne oft links liegen lassen habe - aber ich gelobe Besserung. Zumindest das hat der Patch für mich bewirkt. Nicht der Beste Zeitpunkt für so eine Aktion seitens Magento, aber eine vernünftige.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4302

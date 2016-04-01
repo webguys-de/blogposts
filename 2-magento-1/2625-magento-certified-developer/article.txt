@@ -1,0 +1,54 @@
+Article-meta: 
+
+----
+
+Title: Magento Certified Developer
+
+----
+
+Date: 2011-12-27
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich möchte es gerne <a href="http://www.matthias-zeis.com/archiv/magento-zertifizierung-bestanden">Matthias Zeis</a> gleich tun und bloggen das ich nun offiziell durch <em>Magento Inc</em> geprüfter und <a href="http://www.magentocommerce.com/certification/">anerkannter Magento-Entwickler</a> bin.
+
+
+
+----
+
+Text: <center>(image: badge-01.png)</center>
+
+<blockquote>We are happy to inform you that you achieved the passing score and therefore have achieved certification status. You can now consider yourself part of an elite group of Magento developers. In calculating scores on the Beta exam, we counted only the test items that will appear on the final exam.  Any item that was dropped as a result of the Beta exam was not counted in determining scores.</blockquote>
+Schon cool :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2625

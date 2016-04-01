@@ -1,0 +1,197 @@
+Article-meta: 
+
+----
+
+Title: Türchen 11: Gruppenpreise über die SOAP v2 API
+
+----
+
+Date: 2012-12-11
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: anna-voelkl
+
+----
+
+Article-content: 
+
+----
+
+Intro: Vor einiger Zeit stand ich vor der Aufgabe, Gruppenpreise über die SOAPv2 API von Magento 1.7.0.2 zu importieren.
+Wie ich zu meiner Überraschung  einige stackoverflow-Beiträge und Magento-Issues aus dem Bugtracker später herausfinden musste, unterstützt die SOAPv2 API den Import von Gruppenpreisen nicht. Nach einem ungläubigen Moment und ein paar weiteren Tests (der Schock saß noch immer tief ;-) ) war ich also bereit, meine eigene Lösung in Angriff zu nehmen.
+
+
+----
+
+Text: <h2>Wie übergibt Magento die Gruppenpreise im Backend?</h2>
+
+Das war die Frage, die ich mir dazu initial gestellt habe. Was brauche ich also alles, um Gruppenpreise zu speichern? Ich wurde fündig in app/code/core/Mage/Adminhtml/controllers/Catalog/ProductController.php. Eine Debug-Ausgabe von $this->getRequest()->getPost() in der saveAction zeigt, dass die Gruppenpreise wie folgt übergeben werden: 
+
+(code lang: php)
+["group_price"]=> array(2) {
+[0]=> array(4) {
+    ["website_id"]=> string(1) "0"
+    ["cust_group"]=> string(1) "1"
+    ["price"]=> string(5) "12.00"
+    ["delete"]=> string(0) ""
+}
+[1]=> array(4) {
+    ["website_id"]=> string(1) "0" 
+    ["cust_group"]=> string(1) "0" 
+    ["price"]=> string(5) "11.00" 
+    ["delete"]=> string(0) "" } 
+}
+(/code)
+
+Notwendig sind also die Attribute website_id (Website), cust_group (Kundengruppe), price (Preis) und delete (Leerstring bzw. 1 im Falle des Löschens). Mein Aufruf über die SOAP API soll diesem Schema folgen.
+
+<h2>Das Modul</h2>
+Was ist zu tun? Ein eigenes Modul muss her. Meines heißt hier beispielsweise Avoe_Catalog.
+Wir brauchen darin:
+
+<ul><li>etc/config.xml</li>
+<li>Model/Product/Api/V2.php</li>
+<li>Model/Product/Attribute/Groupprice/Api/V2.php</li>
+</ul><h3>Avoe/Catalog/etc/config.xml</h3>
+
+Wir überschreiben die Product API mit folgenden Zeilen:
+
+(code lang: php)
+<global>
+    <models>
+    	<avoecatalog>
+    		<class>Avoe_Catalog_Model</class>
+    	</avoecatalog>
+    	
+        <catalog>
+            <rewrite>
+                <product_api_v2>Avoe_Catalog_Model_Product_Api_V2</product_api_v2>
+            </rewrite>
+        </catalog>          
+    </models>
+
+</global>
+(/code)
+
+ 
+<h3>Avoe/Catalog/Model/Product/Api/V2.php</h3>
+
+Klassendefinition
+(code lang: php)
+class Avoe_Catalog_Model_Product_Api_V2 extends Mage_Catalog_Model_Product_Api_V2 { ... }
+(/code)
+
+In der Methode _prepareDataForSave habe ich, nach der Abfrage für die Staffelpreise (tier_price) folgende Abfrage ergänzt:
+
+(code lang: php)
+if (property_exists($productData, 'group_price')) {
+             $groupPrices = Mage::getModel('avoecatalog/product_attribute_groupprice_api_V2')
+                 ->prepareGroupPrices($product, $productData->group_price);
+             $product->setData("group_price", $groupPrices);
+}
+(/code)
+
+
+<h3>Avoe/Catalog/Model/Product/Attribute/Groupprice/Api/V2.php</h3>
+Die Datei ist eine Kopie von Mage/Catalog/Model/Product/Attribute/Tierprice/Api/V2.php
+
+(code lang: php)
+class Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2 extends Mage_Catalog_Model_Product_Attribute_Tierprice_Api
+(/code)
+
+Den Umweg über die SOAPv2 API lasse ich hier weg, deshalb lautet meine Klassendefinition:
+
+(code lang: php)
+class Avoe_Catalog_Model_Product_Attribute_Groupprice_Api_V2 extends Mage_Catalog_Model_Api_Resource { ... }
+(/code)
+ 
+Der Inhalt der Klasse ist, wie oberhalb erwähnt, eine Kopie von Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2 mit jenen Änderungen, dass ich $tierPrices gegen $groupPrices ersetzt habe sowie die Abfragen der if's entsprechend jenen der Gruppenpreis-Attribute (cust_group, pricem website_id) angepasst.
+
+<h2>Aufruf an die SOAP-API</h2>
+
+Der Demo-Aufruf lautet nun:
+
+(code lang: php)
+$newProductData = new stdClass();
+$additionalAttrs = array();
+
+$gp = array(
+	"0" => array (
+        	"website_id" => "0",
+        	"cust_group" => "1",
+        	"price" => "11.11",
+        	"delete" => "1"
+    	),
+	"1" => array (
+	        "website_id" => "0",
+	        "cust_group" => "0",
+	        "price" => "12.12"
+	    )
+	);
+
+$gp = array("key" => "group_price", "value" => array(serialize($gp[0]),serialize($gp[1])));
+
+$additionalAttrs['multi_data'][] = $gp;
+$newProductData->additional_attributes = $additionalAttrs;
+
+$result = $client->catalogProductUpdate($sessionId,$prodSku,$newProductData,"","sku");
+(/code)
+
+Zugegeben, der Teil mit dem Aufruf von array(serialize($gp[0]),serialize($gp[1]))); als Value ist nicht besonders schön. Allerdings funktioniert das Auslesen der Werte auf dem Server sonst nicht mehr.
+
+<h3>Warum?</h3>
+Sehen wir uns dazu Teile der WSDL genauer an:
+
+(code lang: php)
+<complexType name="associativeMultiArray">
+<complexContent>
+<restriction base="soapenc:Array">
+<attribute ref="soapenc:arrayType" wsdl:arrayType="typens:associativeMultiEntity[]"/>
+</restriction>
+</complexContent>
+</complexType>
+
+<complexType name="associativeMultiEntity">
+<all>
+<element name="key" type="xsd:string"/>
+<element name="value" type="typens:ArrayOfString"/>
+</all>
+</complexType>
+
+<complexType name="ArrayOfString">
+<complexContent>
+<restriction base="soapenc:Array">
+<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+</restriction>
+</complexContent>
+</complexType>
+(/code)
+
+Der Aufruf erfolgt über multi_data (typ: associativeMultiArray lt. WSDL), also über ein Array von Attributen, welches wiederum mehrere Werte enthalten kann. Nicht zuletzt ergibt sich (wenn man den Typdefinitionen in der WSDL folgt) aufgrund der Definition von <complextype name="ArrayOfString"> die Tatsache, dass hier Strings übergeben werden.
+
+Die Erweiterung, um dem Import und das Löschen der Gruppenpreise für die SOAPv2 API verfügbar zu machen ist also nicht allzu schwer, hat aber ein bisschen an Recherche im Core und in der WSDL gebraucht. Ich wünsche viel Erfolg bei der Erweiterung! Für den Fall das jemand von euch die API ebenfalls schon für Gruppenpreise erweitert haben sollte, bin ich gespannt auf eure Lösungen.</complextype>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3193

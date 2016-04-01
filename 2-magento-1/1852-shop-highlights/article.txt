@@ -1,0 +1,66 @@
+Article-meta: 
+
+----
+
+Title: Eure Magento Highlights - mit Verlosung
+
+----
+
+Date: 2011-09-09
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das <strong>Ökosystem von Magento</strong> wächst und gedeiht immer weiter und uns stellt sich regelmäßig die Frage was sind Eure Highlights in und rund um Magento?
+<ul>
+	<li>Ist es die Community,</li>
+	<li>die Events</li>
+	<li>oder vlt. doch ein bestimmtes Modul</li>
+	<li>oder Magazin?</li>
+	<li>vielleicht auch ein Buch?</li>
+</ul>
+Nutzt die Chancen, <strong>zeigt uns was ihr mögt</strong>, was euch gefällt oder auch was euch fehlt. <strong>Welcher "Bug-Highlight" stört am meisten?</strong> Wir sind super gespannt auf <strong>Eure Kommentare und Meinungen</strong> zu Magento und dessen Ökosystem und freuen uns auf eine hoffentlich <strong>rege Diskussion</strong>.
+
+Unter allen Kommentaren verlosen wir bis zum 30.09.2011 zusammen mit dem <strong><a href="http://www.t3n.de/">T3N</a> ein Jahresabo des <a href="http://www.t3n.de/">T3N</a> mit Birdswarm-T-Shirt und brandneuen t3n-Coffemug</strong> sowie <strong>2 Einzelhefte der aktuellen Ausgabe</strong>.
+
+
+
+----
+
+Text: <h3>1. Preis</h3>
+t3n-<strong>Jahresabo</strong>, ein Birdswarm-T-Shirt und eine der brandneuen t3n-Coffemug (kein Abo, verfällt automatisch nach einem Jahr)
+<p style="text-align: center;">(image: tasse+abo-650x624.jpg)
+
+<h3>2. +3. Preis</h3>
+jew. 1 Einzelheft der aktuellen <a href="http://www.t3n.de/">Ausgabe des T3N-Magazins</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1852

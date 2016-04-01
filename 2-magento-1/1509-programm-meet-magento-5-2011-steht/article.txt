@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Programm Meet Magento #5 2011 steht 
+
+----
+
+Date: 2011-03-14
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Das Programm das Meet-Magento #5.11 ist sein ein paar Minuten online verfügbar. Ihr findet es wie gewohnt unter <a href="http://www.meet-magento.de/programm.html">Programm auf der Meet-Magento Seite</a>.  Für mich wird es ein besonderes Meet-Magento denn ich darf dieses Jahr erstmalig einen kleinen Workshop zum Thema <a href="http://www.meet-magento.de/index.php?id=279"><strong>Magento Checkout</strong></a><strong></strong> <a href="http://www.meet-magento.de/index.php?id=279">(Details)</a> halten.
+
+Ich freue mich euch am 17.05 um 10.15 Uhr zu sehen :)
+
+(image: Meet-Magento-Programm_1300109972481.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1509

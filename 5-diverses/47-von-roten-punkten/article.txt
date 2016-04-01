@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Von roten Punkten
+
+----
+
+Date: 2009-11-09
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,templates,reddot
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das RedDot dem Redakteur über rote Punkte die Möglichkeit bietet, Inhalte zu bearbeiten ist nicht neu - ebenso wie die roten Punkte "Seite hinzufügen", "Seite anhängen". Diese Punkte finden sich schon seit einigen Versionen im Funktionsumfang von RedDot, doch nicht jedem Entwickler ist klar, wie diese Elemente zum Einsatz kommen, da die Dokumentation an dieser Stelle nicht ganz eindeutig ist.
+
+----
+
+Text: An einem kleinen und simplen Beispiel möchte ich diese Punkte näher vorstellen.
+Unser Projekt besteht aus einer Masterpage, in der ein/e Container/Liste, sowie den RedDot  "Seite öffnen" und einen, um den/die Container/Liste zu befüllen. Neben dieser Content-Klasse haben wir noch eine weitere, die an den/die Container/Liste angehängt wird. In diese Content-Klasse wird im oberen Teil der RedDot "Seite hinzufügen" und im unteren Teil der RedDot "Seite anhängen" eingefügt. Im SmartEdit Modus wird der/die Container/Liste initial über den dazugehörigen RedDot gepflegt, danach das Basistemplate über den RedDot "Seite öffnen" geöffnet. Nun erscheinen in der soeben angehängten Content-Klasse die beiden RedDots "Seite anhängen" und "Seite einfügen".
+
+<strong>Seite hinzufügen
+</strong>Nach einen Klick erscheint ein Dialog, mit welchem die neue Content-Klasse vor der aktuell ausgewählten Content-Klasse angehängt wird.<strong> </strong>
+
+<strong>Seite anhängen
+</strong>Nach einen Klick erscheint ein Dialog, mit welchem die neue Content-Klasse nach der aktuell ausgewählten Content-Klasse angehängt wird.<strong> </strong>
+
+<strong>Fazit
+</strong>Durch den Einsatz der beiden RedDots können einige Mausklicks eingespart werden, erscheint jedoch in meinen Augen nur bedingt als Killer-feature - der Redakteur hingegen mag sieht dies anders sehen.<strong>
+</strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 47

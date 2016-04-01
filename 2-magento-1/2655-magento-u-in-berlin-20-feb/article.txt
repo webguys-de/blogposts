@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Magento U in Berlin (20. Feb)
+
+----
+
+Date: 2012-02-14
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: <em>Ein kleiner Tipp:</em> Die Magento-U Kurse reisen um die Welt und so kommen sie vom <strong>20 bis zum 24. Februar</strong> auch nach Berlin. Der Kurs kostet 3.840 US-Dollar ist aber, bedenkt man die Dozenten und den Stoff, als Investition für Anfänger und fortgeschrittene Entwickler durchaus das Geld wert. Sollte jemand von euch teilnehmen würde ich mich freuen wenn dieser jemand unter Webguys eine kleine Zusammenfassung seiner Eindrücke schreibt :)
+
+----
+
+Text: <a href="http://www.magentocommerce.com/training/register">Zur Registrierung</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2655

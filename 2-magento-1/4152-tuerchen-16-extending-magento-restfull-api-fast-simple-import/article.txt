@@ -1,0 +1,217 @@
+Article-meta: 
+
+----
+
+Title: Türchen 16: Extending the magento RESTfull Api (Fast Simple Import)
+
+----
+
+Date: 2014-12-16
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: nils-preis
+
+----
+
+Article-content: 
+
+----
+
+Intro: <h1 id="extending-the-magento-restfull-api-fast-simple-import"></h1>
+
+The Magento REST-Api was introduced with CE 1.5 and many of us hoped that some of the flaws of the SOAP-Api would be fixed or could be circumvented. Both Apis have their pros and cons and one of the biggest con for me with the SOAP style was its speed. <br>
+Some time ago we decided to rewrite our complete import/export interface to become faster and reduce the pure amount of data that is updated on the shop side. Before the rewrite we used a pure model-based import/export and as you all know: this is super slow so i decided to try something else.
+
+
+
+----
+
+Text: <h2 id="tools">Tools</h2>
+
+The decision to switch from a model based import to something else was easy and so we decided to give <strong>AvS_FastSimpleImport</strong><a href="#fn-fsi" id="fnref-fsi" title="See footnote" class="footnote">1</a> a try based on the fact that to the time of decision it was the best fit for our needs. <br>
+As mentioned above we also decided to give the RESTfull approach a try.
+
+<h2 id="rest">REST</h2>
+
+At least when we started in the beginning of 2014 the amount of documentation and user generated content like blog posts was kinda low what made the journey not so super pleasant. In my naive mood I thought that it would be super easy because when there is an entity there will be a fully functional endpoint for this entity. That is not really the case. If you just plan on information retrieval, than you are somewhat fine, but if you try to manipulate or create data in the shop it gets tricky.  <br>
+One of the main uses of an Api on the shop side is order handling and if you browse the Magento documentation for the REST-Api<a href="#fn-magento_rest_doc" id="fnref-magento_rest_doc" title="See footnote" class="footnote">2</a> you often see â€œnot implementedâ€&#157;. After a bit of investigation you can see that <em>Mage_Sales_Model_Api2_Order_Rest_Admin_V1</em> is kinda empty. If you do not plan on core-hacking there has to be an alternative. 
+
+As mostly the best option is to get it done in a model of your own.
+
+<img src="https://lh4.googleusercontent.com/QkssISYyODaQYQqWYHpY6rHxN9oiQMJbx4fZIhhcigE=s0" alt="File system structure of a base REST-Api extension" title="Example file system tree">
+
+I just kept the naming and structure from the core files to allow easier adaptability because if you do massive changes you would have to mimic the whole authentication stuff to allow user and admin executable code and that would mean way more effort then i was willing to take. The whole configuration is done in the <em>api2.xml</em> file of the module:
+
+<pre>(code)<?xml version="1.0"?>
+<config>
+    <api2>
+        <resource_groups>
+            <spl_interface translate="title" module="api2">
+                <title>SPL Interface API calls</title>
+                <sort_order>30</sort_order>
+                <children>
+                    <spl_interface_order translate="title" module="api2">
+                        <title>Order</title>
+                        <sort_order>50</sort_order>
+                    </spl_interface_order>
+                    <spl_interface_product translate="title" module="api2">
+                        <title>Product</title>
+                        <sort_order>60</sort_order>
+                    </spl_interface_product>
+                </children>
+            </spl_interface>
+        </resource_groups>
+        <resources>
+            <spl_interfaceorders translate="title" module="api2">
+                <group>spl_interface_order</group>
+                <model>spl_interface/sales_api2_order</model>
+                <working_model>spl_interface/sales_api2_order</working_model>
+                <title>Sales Order</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <create>1</create>
+                        <retrieve>1</retrieve>
+                        <update>1</update>
+                        <delete>1</delete>
+                    </admin>
+                </privileges>
+                <routes>
+                    <route_entity>
+                        <route>/spl/orders/:id</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/spl/orders</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <attributes module="api2">
+                    <key>some key</key>
+                    <order_id>Order increment Id</order_id>
+                    <status>new status</status>
+                    <action>action to be taken</action>
+                    <track>tracking id</track>
+                </attributes>
+                <versions>1</versions>
+            </spl_interfaceorders>
+        </resources>
+    </api2>
+</config>
+(/code)</pre>
+
+As you can see i have choosen a different route <em>/api/rest/spl/</em> for my adaptions to keep the original <em>/api/rest</em> clear and not too overpopulated with custom made stuff. I added the (code)route_entity(/code) node only for convenience reasons because most of the times i handle collections and not single entities. Like in most cases an admin is allowed to do anything with the entitiy as defined in (code)<privileges><admin>(/code) .  <br>
+Authorization is handled by oauth. To explain the usage of oauth and magento would be too much for this but a really nice introduction that helped me a lot in the beginning was posted by Inchoo <a href="#fn-inchoo" id="fnref-inchoo" title="See footnote" class="footnote">3</a>.
+
+So you simply create the model <em>Spl_Interface_Model_Sales_Api2_Order_Rest_Admin_V1</em> like this:
+
+<pre>(code)class Spl_Interface_Model_Sales_Api2_Order_Rest_Admin_V1 extends Mage_Sales_Model_Api2_Order_Rest
+{
+    public function _retrieveCollection()
+    {
+        //get order Collection 
+        return $res;
+    }
+
+    public function _multiUpdate($data)
+    {
+        //do all the business logic magic in here.
+
+        $this->_successMessage('OK', Mage_Api2_Model_Server::HTTP_OK, array('item' => $result));
+        if ($error) {
+            $this->_errorMessage('Orders not found', Mage_Api2_Model_Server::HTTP_NOT_FOUND, array('item' => $error));
+        }
+    }
+}
+(/code)</pre>
+
+So in here i opted for using the `_multiUpdate` method that is automagically called if you make a PUT-Request to the `route_collection` endpoint. Other possible outcomes of calls are defined in the DocBlock of `Mage_Api2_Model_Resource`. <br>`_successMessage` and `_errorMessage` are response messages that can come alone or together, so if you have partial results you can also define some as success and others as errors. <br>
+For this case of order updates it was fast enough for me to use the standard Model based approach.
+
+<h2 id="fast-simple-import">Fast Simple Import</h2>
+
+Hopefully you have already used this imho wonderfull tool to easy up most of the import stuff you have to do. <br>
+We first used it to allow product import not only form the standard (code).csv(/code) files but from anything else. With the addition of nested array support it got even easier to use. <br>
+Generally you can throw an array at the importer<a href="#fn-fsi_doc" id="fnref-fsi_doc" title="See footnote" class="footnote">4</a> and it will do everything you formerly had to do yourself to use <em>Mage_Import/Export</em>
+
+I added the following block to (code)resources(/code) node: 
+
+<pre>(code)   <spl_interfaceproducts translate="title" module="api2">
+      <group>spl_interface_product</group>
+       <model>spl_interface/catalog_api2_product</model>
+       <working_model>spl_interface/catalog_api2_product</working_model>
+       <title>Catalog Product</title>
+       <sort_order>20</sort_order>
+       <privileges>
+           <admin>
+               <create>1</create>
+               <retrieve>1</retrieve>
+               <update>1</update>
+               <delete>1</delete>
+           </admin>
+       </privileges>
+       <routes>
+           <route_entity>
+               <route>/spl/products/:id</route>
+               <action_type>entity</action_type>
+           </route_entity>
+           <route_collection>
+               <route>/spl/products</route>
+               <action_type>collection</action_type>
+           </route_collection>
+       </routes>
+       <attributes module="api2">
+           <key>some key</key>
+           <Lieferstatus>Lieferstatus</Lieferstatus>
+           <_type>Product Type</_type>
+           <_attribute_set>Attribute Set</_attribute_set>
+           <_category>Category</_category>
+           <_links_related_sku>ZubehÃ¶r</_links_related_sku>
+           <_links_crosssell_sku>Cross selling</_links_crosssell_sku>
+           <_super_products_sku>Child Products</_super_products_sku>
+           <_super_attribute_code>Config Attribute</_super_attribute_code>
+           <_super_attribute_option>Price Correction Option</_super_attribute_option>
+           <_super_attribute_price_corr>addition to config base price</_super_attribute_price_corr>
+           <qty>quantity</qty>
+           <is_in_stock>iis</is_in_stock>
+           <id>sku</id>
+           <sku>sku</sku>
+       </attributes>
+       <versions>1</versions>
+   </spl_interfaceproducts>
+(/code)</pre>
+
+The normal product attribute nodes are allowed in the api but the more or less special ones starting with an underscore have to be listed if you do not want them to be filtered within the api. If you miss some attributes in the <em>_multiUpdate($data)</em>  call it is the first thing you should consider adding them to the (code)<attributes>(/code) node.
+
+<h2 id="conclusion">Conclusion</h2>
+
+As you can see with this approach to not really extend the given REST api but to create completely new endpoints it is kinda easy to stand on the shoulders of the authentication system and still use all the magento given apis without getting in conflicts with rewrites or updates. You are even save from complications with other 3rd party extensions at least on the <em>route/endpoint</em> point of problems. <br>
+In the last few month we generated many new endpoints to allow 3rd party programs (still under our control data wise) to access information from within magento or to be able to adapt the magento admin backend in a form that would be kinda hard from within the admin area itself .  <br>
+At least for me this is a very easy way to quickly add some features especially if you want to get or input some data from other applications. The old-school file exchanging gets a bit clumsy if you deal with multiple hosts or very frequent updates as csv is a big mess if you plan for incremental updates and xml has such an overhead data wise especially with simplexml as your weapon of choice in magento.
+
+<div class="footnotes"><hr><ol><li id="fn-fsi"><a href="https://github.com/avstudnitz/AvS_FastSimpleImport">https://github.com/avstudnitz/AvS_FastSimpleImport</a>  <a href="#fnref-fsi" title="Return to article" class="reversefootnote"></a></li><li id="fn-magento_rest_doc"><a href="http://www.magentocommerce.com/api/rest/introduction.html">http://www.magentocommerce.com/api/rest/introduction.html</a> <a href="#fnref-magento_rest_doc" title="Return to article" class="reversefootnote"></a></li><li id="fn-inchoo"><a href="http://inchoo.net/magento/configure-magento-rest-and-oauth-settings/">http://inchoo.net/magento/configure-magento-rest-and-oauth-settings/</a> <a href="#fnref-inchoo" title="Return to article" class="reversefootnote"></a></li><li id="fn-fsi_doc"><a href="http://avstudnitz.github.io/AvS_FastSimpleImport/usage.html">http://avstudnitz.github.io/AvS_FastSimpleImport/usage.html</a> <a href="#fnref-fsi_doc" title="Return to article" class="reversefootnote"></a></li></ol></div>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4152

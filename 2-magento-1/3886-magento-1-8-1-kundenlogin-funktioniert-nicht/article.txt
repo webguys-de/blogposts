@@ -1,0 +1,62 @@
+Article-meta: 
+
+----
+
+Title: Magento 1.8.1 - Kundenlogin funktioniert nicht
+
+----
+
+Date: 2014-02-12
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,themes-magento
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Nachdem wir ein Kundenprojekt von Version 1.8.0.0 auf 1.8.1.0 gehoben haben, konnten sich die Kunden nicht mehr im Shop anmelden. Schuld war eine Änderung in den Login-Templates, welche vom Custom-Theme überschrieben wurden und somit nicht gegriffen haben.
+
+An folgende Stellen muss ein Form-Key in das Template eingefügt werden (Code siehe unten - die Zeilen beziehen sich auf die Original-Dateien) - natürlich nur, wenn diese durch Euer Theme bereits geändert wurden.
+<ul><li>template/customer/form/login.phtml:42</li>
+	<li>template/persistent/customer/form/login.phtml:41</li>
+	<li>template/checkout/onepage/login.phtml:69</li>
+</ul>
+(code lang: php)
+<?php echo $this->getBlockHtml('formkey'); ?>
+(/code)
+
+Weiterhin findet ihr <a href="https://gist.github.com/drobinson/7913822" target="_blank">hier eine Liste</a> aller Controller und Templates in EE 1.13.1, in denen der Form-Validation-Key hinzugefügt worden ist. Vielen Dank an <em>Matthias Zeis</em> für den Hinweis!
+
+Danach geht der Kundenlogin auch wieder (hoffentlich überall). Falls ich eine Stelle vergessen habe, bitte ich um einen Kommentar.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3886

@@ -1,0 +1,75 @@
+Article-meta: 
+
+----
+
+Title: Transparenz schaffen durch Namenskonventionen
+
+----
+
+Date: 2010-04-15
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,templates,reddot
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Selten kommt es vor, dass nur ein Entwickler an einem Projekt arbeitet. Auch wenn dies so sein sollte, wird sicherlich ein Kollege die Urlaubsvertretung machen müssen. Dies kann unschön werden, sofern unter den Entwicklern keine einheitliche Abspreche hinsichtlich der Benamsung von Platzhaltern  existiert.
+
+----
+
+Text: Um ein Template übersichtlich zu halten emphielt es sich, eine übergreifende Namenskonvention zu erstellen. Dies schafft nicht nur Klarheit über den Platzhaltertyp, sondern auch in der Liste der vorhandenen Platzhaltern.  Projektübergreifende Verwendung spart Zeit und erleichtert den Einstieg in das Projekt.
+
+<strong>Anchor</strong>: anc_name
+<strong>Area:</strong> area_name
+<strong>Attribute:</strong> att_type
+<strong>Container: </strong>con_name
+<strong>Frame: </strong>frm_name
+<strong>Image: </strong>img_name
+<strong>Überschrift:</strong> hdl_name
+<strong>Info:</strong> inf_name
+<strong>Liste:</strong> lst_name
+<strong>Media: </strong>med_name
+<strong>Optionsliste:</strong> opt_name
+<strong>Standardfeld:</strong> stf_name
+<strong>Text:</strong> txt_name
+
+Das Standardfeld kann mehrere Ausprägungen annehmen, daher sind folgende Benamsungen ebenfalls sinnvoll:
+<strong>Standardfeld (numerisch):</strong>
+int_name
+
+<strong>Standardfeld (e-Mail):</strong>
+eml_name
+
+<strong>Standardfeld (Datum):</strong>
+dat_name
+
+Am Ende entscheidet der persönliche Geschmack über die endgültige Konvention, empfehlen kann ich den Einsatz eines "internationen" Standards in englischer Sprache, um sich mit anderen Entwicklern auszutauschen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 245

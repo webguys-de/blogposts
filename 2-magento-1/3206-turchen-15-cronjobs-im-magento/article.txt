@@ -1,0 +1,344 @@
+Article-meta: 
+
+----
+
+Title: Türchen 15: Cronjobs im Magento
+
+----
+
+Date: 2012-12-15
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: matthias-zeis
+
+----
+
+Article-content: 
+
+----
+
+Intro: Cronjobs sind nicht gerade ein Thema, mit dem man auf einer Cocktailparty Eindruck schinden kann (gut: das gilt nur für 99% der Cocktailpartys ;-)). Für die Gesundheit eines Systems aber sind sie von essentieller Bedeutung, da sie sich um Aufgaben wie Datenwartung, Mailversand und den Austausch mit anderen Systemen kümmern. Das ist auch in Magento so.
+
+
+----
+
+Text: Bei einem Großteil der Magento-Installationen sind die Cronjobs nicht richtig eingerichtet, wie auch beim Magento Developers Paradise 2012 beklagt wurde. Grund genug für mich, im heurigen Türchen eine Einführung zu geben und so dem einen oder anderen Cronjob zur Geburt zu verhelfen.
+<h2>Cronjobs in Magento</h2>
+Magento bringt bereits eine Reihe fertiger Jobs mit. Man muss sie nur noch <strong>einrichten</strong>, damit sie auch ausgeführt werden.
+
+Für diesen Zweck findet man im Root-Verzeichnis der Magento-Installation das <strong>Skript cron.sh</strong>. Es ruft cron.php auf, das eine Rumpf-Version der Magento-Applikation startet und die dort definierten Cronjobs ausführt.
+
+Magento verfügt nämlich über eine <strong>eigene Cronjob-Verwaltung</strong>. Dadurch ist es möglich, die Jobs in PHP zu programmieren und ihren Ablaufplan über die Konfiguration zu steuern.
+
+Ein Hinweis vorab: dieses Türchen bezieht sich auf Linux-Systeme, da die allermeisten Shop-Installationen darauf laufen.
+<h2>Einrichtung von cron.sh</h2>
+Im ersten Schritt wird cron.sh für jenen Linux-User <strong>ausführbar</strong> gemacht, der die Cronjobs aufruft. Je nach Server-Setup müssen die Rechte für den Besitzer, die Gruppe oder für alle freigegeben werden. Generell gilt: je restriktiver die Rechte gesetzt werden können, desto besser.
+
+Im zweiten Schritt trägt man den Job in <strong>crontab</strong> ein, also die Datei, welche die Aufgaben für <a href="http://en.wikipedia.org/wiki/Cron">cron</a> auflistet. Das geht üblicherweise so:
+(code) crontab -e(code) 
+Mit dem Befehl wird crontab geöffnet. Nun kann man den <strong>neuen Job</strong> eintragen:
+(code) */5 * * * * /var/www/pfad/zu/magento/cron.sh(code) 
+Diese Zeile bewirkt, dass Magentos Cron-Script <strong>alle 5 Minuten</strong> aufgerufen wird. Die genaue Syntax könnt ihr dem obigen Wikipedia-Link entnehmen. Achtet darauf, dass ihr crontab mit einer leeren Zeile abschließt, sonst wird der letzte Job in der Regel nicht ausgeführt.
+
+Zudem ist wichtig, dass der User, der die Cronjobs ausführt, die benötigten Rechte hat!
+
+Die Cronjobs sollten jetzt <strong>fertig eingerichtet</strong> sein. Habt ihr etwas falsch gemacht, dann erhält euer Linux-User Meldungen per Mail und ihr könnt euch auf die Fehlersuche machen.
+<h2>Überprüfung und Konfiguration</h2>
+Was tut Magento im Hintergrund? Es erstellt in regelmäßigen Abständen Jobs, die beim Aufruf durch cron ausgeführt werden. Die <strong>Konfiguration</strong> ist im Magento-Backend unter "System > Configuration > Advanced > System > Cron (Scheduled Tasks) - all the times are in minutes" zu finden:
+
+(image: cronjob_backend_configuration-650x327.png)
+
+Diese Einstellungen möchte man wahrscheinlich <strong>anpassen</strong>. Es ist ärgerlich, wenn fehlgeschlagene Cronjobs nur 10 Stunden archiviert werden und man Montag Morgen im Büro nicht feststellen kann, was denn am Wochenende genau schief gelaufen ist. (Sofern ihr kein automatisiertes Monitoring für Cronjobs verwendet.)
+
+Um zu <strong>überprüfen</strong>, wie es den Cronjobs ergangen ist, kann man einen Blick in die Datenbank-Tabelle cron_schedule werfen:
+
+(image: cronjob_database.png)
+
+Hier werden alle generierten Jobs und ihr Status aufgelistet. Diese Ansicht ist leider <strong>nicht komfortabel</strong>. Die Cronjobs gehen in Magento dadurch unter.
+<h2>Cronjob-Verwaltung 2.0</h2>
+Wenn ich einen neuen Shop aufsetze, ist einer meiner ersten Schritte daher die Installation der <strong>Extension</strong> <a href="https://github.com/fbrnc/Aoe_Scheduler">Aoe_Scheduler </a>von Fabrizio Branca. Sie kann über <a href="https://github.com/colinmollenhour/modman">modman</a>, <a href="https://github.com/magento-hackathon/magento-composer-installer">Composer</a> oder <a href="http://www.magentocommerce.com/magento-connect/aoe-scheduler.html">Magento Connect</a> eingerichtet werden. Ich empfehle modman oder Composer, da auf Magento Connect nicht die aktuelle Version zu finden ist.
+
+Aoe_Scheduler fügt im Backend-Menüpunkt "System > Scheduler" <strong>drei neue praktische Ansichten</strong> hinzu:
+<ol><li>Überblick über die Cronjobs und ihre Konfiguration</li>
+	<li>Die Liste der nächsten Jobs als Tabelle</li>
+	<li>Eine graphische Darstellung der gelaufenen und geplanten Jobs</li>
+</ol>
+Anbei ein paar <strong>Screenshots</strong>, mit denen man einen guten Eindruck gewinnt.
+(image: aoescheduler_scheduleconfiguration-650x343.png)
+
+(image: aoescheduler_listview-650x337.png)
+
+(image: aoescheduler_timelineview-650x155.png)
+
+Die Extension birgt folgende <strong>Vorteile</strong>:
+<ul><li>Aktivieren/Deaktivieren der Cronjobs ohne Eingriffe in Config-XML-Dateien</li>
+	<li>Übersicht über die Konfiguration und den Status der diversen Jobs</li>
+	<li>Kommandozeilen-Script und Web-Service-API-Befehle zum Erzeugen und Ausführen von Jobs</li>
+	<li>Ein "heartbeat"-Cronjob, der für die Überwachung der Cronjob-Funktionalität in Monitoring-Systemen verwendet werden kann</li>
+</ul>
+Besonders die <strong>Timeline-View</strong> erweist sich als hilfreich, da fehlgeschlagene Cronjobs farblich hervorgehoben werden und die Laufzeit der Jobs auf einen Blick ersichtlich ist. Beim Hovern über die Jobs erhält man weitere <strong>Details</strong>.
+<h2>Magento-Standard-Cronjobs</h2>
+Nun ist es an der Zeit, die <strong>von Magento mitgelieferten Jobs</strong> durchzugehen, nicht benötigte zu deaktivieren und die Ablaufpläne (falls nötig) anzupassen. Sehen wir uns an, welche Jobs die Magento Community Edition 1.7 bietet.
+<h3>Backup</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>system_backup</td>
+<td></td>
+<td>backup/observer::scheduledBackup</td>
+</tr></tbody></table>
+Auf Wunsch führt Magento mit dem Job "system_backup" <strong>Sicherungen</strong> der Datenbank, Media- und/oder Code-Dateien durch. Damit das Backup erstellt wird, muss es über den Menüpunkt "System > Configuration > Advanced > System > Scheduled Backup Settings" konfiguriert werden.
+
+Wer sich über das seit 1.7 erhältliche <strong>Backup-/Rollback-Feature</strong> informieren möchte, findet dazu einen <a href="http://www.matthias-zeis.com/archiv/backup-und-rollback-funktionalitaet-magento-1-7">Beitrag</a> in meinem Blog. Falls ihr die Daten auf anderen Wegen sichert, könnt ihr den Job ruhig über Fabrizios Extension deaktivieren. Auf irgendeine Weise muss aber gesichert werden.
+<h3>Cache</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>core_clean_cache</td>
+<td>30 2 * * *</td>
+<td>core/observer::cleanCache</td>
+</tr></tbody></table>
+Der Job "core_clean_cache" leert <strong>veraltete Cache-Einträge</strong>. Es wird also nicht alles gelöscht. Und kaum, dass ich das geschrieben habe, muss ich es relativieren. Welche Einträge betroffen sind, hängt nämlich von den eingesetzten Cache-Backends und einigen Settings ab. Gute Informationen zur Cache-Problematik liefert <a href="http://www.fabrizio-branca.de/caching.html">Fabrizio</a>.
+<h3>CAPTCHAs</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>captcha_delete_expired_images</td>
+<td>*/10 * * * *</td>
+<td>captcha/observer::deleteExpiredImages</td>
+</tr><tr><td>captcha_delete_old_attempts</td>
+<td>*/30 * * * *</td>
+<td>captcha/observer::deleteOldAttempts</td>
+</tr></tbody></table><a href="http://de.wikipedia.org/wiki/CAPTCHA">CAPTCHAs</a> sind verschnörkelte Buchstaben- und Zahlenfolgen, auf die man bei Web-Formularen immer wieder stößt. Sie sollen Shopbetreiber vor Unmengen an Spam-Mails schützen. Die Option, CAPTCHAs in diversen Backend- und Frontend-Formularen einzubinden, wurde ebenfalls mit Magento 1.7 in Magento integriert (siehe <a href="http://www.matthias-zeis.com/archiv/captchas-in-magento-1-7">CAPTCHAs in Magento 1.7</a>).
+
+Leicht zu erkennen ist die Aufgabe der Jobs: einerseits werden <strong>nicht mehr benötigte CAPTCHA-Bild-Dateien</strong> gelöscht, andererseits <strong>alte Einträge</strong> in der Log-Datenbank zu (fehlgeschlagenen) CAPTCHA-Lösungsversuchen. Wer CAPTCHAs nicht im Einsatz hat, kann diese Cronjobs deaktivieren.
+<h3>Google Sitemap</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>sitemap_generate</td>
+<td></td>
+<td>sitemap/observer::scheduledGenerateSitemaps</td>
+</tr></tbody></table>
+Genau genommen handelt es sich bei den Sitemap-XML-Dateien, die "sitemap_generate" erstellt, ja gar nicht um eine reine Google-Sitemap-Datei. Yahoo und co. verwenden diesen Standard ebenso. Aufgrund der Marktmacht von Google hat sich aber auch Magento zur Bezeichnung "Google Sitemap" hinreißen lassen.
+
+Sei's drum: es geht um die <strong>Erzeugung der Sitemap-Datei</strong>, die üblicherweise sitemap.xml heißt und im root-Verzeichnis der Magento-Installation abgelegt wird. Sie hilft Suchmaschinen, die Seiten des Angebots zu finden und entsprechend der Wünsche des Betreibers zu priorisieren.
+
+Damit Sitemap-Dateien automatisch angelegt werden, müssen zwei Schritte erfolgen:
+<ol><li>Die Sitemaps müssen im Hauptmenüpunkt "Catalog > Google Sitemap" angelegt werden.</li>
+	<li>Der Cronjob muss in "System > Configuration > Catalog > Google Sitemap" aktiviert und konfiguriert werden.</li>
+</ol><h3>Katalog</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>catalog_product_index_price_reindex_all</td>
+<td>0 2 * * *</td>
+<td>catalog/observer::reindexProductPrices</td>
+</tr><tr><td>catalogrule_apply_all</td>
+<td>0 1 * * *</td>
+<td>catalogrule/observer::dailyCatalogUpdate</td>
+</tr><tr><td>catalog_product_alert</td>
+<td></td>
+<td>productalert/observer::process</td>
+</tr></tbody></table>
+Jobs, die den Produktkatalog betreffen, sind auf verschiedene Module verteilt.
+
+"catalogrule_apply_all" berechnet <strong>Produktpreisänderungen</strong> aufgrund der Katalogpreisregeln. Berücksichtigt wird ein 3-Tage-Intervall bestehend aus dem vorangegangenen, dem aktuellen und dem nächsten Tag.
+
+"catalog_product_index_price_reindex_all" sorgt dann dafür, dass die <strong>Produktpreise</strong> auf dem laufenden Stand sind. Die Preise sollten bei einer automatischen Indizierung sowieso stimmen, doch solange keine anderen Parameter dagegen sprechen (Laufzeit des Jobs, Caching), kann eine Neuindizierung nicht schaden.
+
+Über "catalog_product_alert" werden <strong>Hinweis-Mails versendet</strong>, wenn sich Produktpreise ändern oder ein nicht lagerndes Produkt wieder verfügbar ist. Ob diese Funktionen zur Verfügung stehen, wird in "System > Configuration > Catalog > Catalog > Product Alerts" bzw. "System > Configuration > Catalog > Catalog > Product Alerts Run Settings" konfiguriert.
+<h3>Logs</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>log_clean</td>
+<td></td>
+<td>log/cron::logClean</td>
+</tr></tbody></table>
+Magento erzeugt Unmengen an Log-Daten. Wer nicht aufpasst, kann bald in zig Gigabyte (GB) an Datenbankeinträgen untergehen. Das verlängert Backup- und Rollback-Operationen. Nicht zuletzt kann die Performance darunter leiden. Um das zu verhindern, veranlasst man in "System > Configuration > Advanced > System > Log Cleaning" die <strong>Bereinigung der Log-Tabellen</strong> um alte Datensätze.
+
+Wer diese Daten weiterhin benötigt, kann eigene Jobs schreiben, welche die Daten rechtzeitig wegschreiben, bevor "log_clean" sie ins digitale Nirvana schickt.
+<h3>Magento Mobile</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>xmlconnect_notification_send_all</td>
+<td>*/5 * * * *</td>
+<td>xmlconnect/observer::scheduledSend</td>
+</tr></tbody></table>
+Mage_XmlConnect ist eines dieser Module, mit denen die meisten Entwickler nie in Berührung kommen. Im Prinzip dient es dem Betrieb von <strong>Magento Mobile Apps</strong>. Wer eine solche App eingerichtet hat, sollte daher den Cronjob aktiviert lassen.
+<h3>Newsletter</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>newsletter_send_all</td>
+<td>*/5 * * * *</td>
+<td>newsletter/observer::scheduledSend</td>
+</tr></tbody></table>
+"newsletter_send_all" kommt zum Einsatz, wenn <strong>Newsletter</strong> über die Magento-eigene Funktion <strong>verschickt</strong> werden. Der Job wird benötigt, da Magento die Mails verteilt versendet, um u.a. die Gefahr zu senken, dass der Server als Spam-Server eingestuft wird.
+
+Achtung: im Magento-Standard ist hard kodiert, dass pro Durchlauf maximal je 20 E-Mails gesendet werden. Große Mail-Listen benötigen daher geraume Zeit, um verschickt zu werden und der Einsatz ist so nur mäßig sinnvoll.
+<h3>PayPal</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>paypal_fetch_settlement_reports</td>
+<td></td>
+<td>paypal/observer::fetchReports</td>
+</tr></tbody></table>
+Wer <strong>PayPal</strong> direkt über Magento einbindet, kann "paypal_fetch_settlement_reports" einsetzen, um die <strong>Settlement Reports</strong> automatisiert abzuholen.
+
+Das Konfigurationsmenü für die Settlement Reports findet man rekordverdächtig gut versteckt unter "System > Configuration > Sales > Payment Methods > PayPal All-in-One Payment Solutions > PayPal Payments Advanced (Includes Express Checkout) > Required PayPal Settings > Basic Settings - PayPal Payments Advanced > Advanced Settings > Settlement Report Settings". Zuerst trägt man die SFTP-Zugangsdaten ein, dann konfiguriert man unter "Scheduled Fetching" den Job.
+
+Alle ohne diese Zahlmethode deaktivieren den Eintrag und freuen sich, dass sie nicht mit Grubenlampe und Spitzhacke 10 Ebenen tief in die Konfiguration eintauchen müssen.
+<h3>Quotes & Warenkorb</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>persistent_clear_expired</td>
+<td>0 0 * * *</td>
+<td>persistent/observer::clearExpiredCronJob</td>
+</tr><tr><td>sales_clean_quotes</td>
+<td>0 0 * * *</td>
+<td>sales/observer::cleanExpiredQuotes</td>
+</tr></tbody></table>
+Wer unter "System > Configuration > Customers > Persistent Shopping Cart" den <strong>persistenten Warenkorb</strong> aktiviert hat, kann mit "persistent_clear_expired" dafür sorgen, dass <strong>abgelaufene Sessions</strong> aus der Datenbank entfernt werden.
+
+"sales_clean_quotes" kümmert sich darum, dass <strong>Quotes gelöscht</strong> werden, die zu einer Order geführt haben und älter sind als die in "System > Configuration > Sales > Checkout > Shopping Cart > Quote Lifetime (days)" angegebenen Tage.
+
+Richtig gelesen: <strong>aktive Quotes</strong>, also Warenkörbe, die noch nicht in eine Bestellung umgewandelt wurden, werden von Standard-Magento <strong>nie gelöscht</strong>. Auch hier können ähnlich wie bei Logs Unmengen von Datenleichen entstehen. Wir kommen gleich noch zu einer Extension, die diesen Umstand bereinigt.
+<h3>Verkäufe und Reporting</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>aggregate_sales_report_bestsellers_data</td>
+<td>0 0 * * *</td>
+<td>sales/observer::aggregateSalesReportBestsellersData</td>
+</tr><tr><td>aggregate_sales_report_invoiced_data</td>
+<td>0 0 * * *</td>
+<td>sales/observer::aggregateSalesReportInvoicedData</td>
+</tr><tr><td>aggregate_sales_report_order_data</td>
+<td>0 0 * * *</td>
+<td>sales/observer::aggregateSalesReportOrderData</td>
+</tr><tr><td>aggregate_sales_report_refunded_data</td>
+<td>0 0 * * *</td>
+<td>sales/observer::aggregateSalesReportRefundedData</td>
+</tr><tr><td>aggregate_sales_report_shipment_data</td>
+<td>0 0 * * *</td>
+<td>sales/observer::aggregateSalesReportShipmentData</td>
+</tr><tr><td>aggregate_sales_report_coupons_data</td>
+<td>0 0 * * *</td>
+<td>salesrule/observer::aggregateSalesReportCouponsData</td>
+</tr><tr><td>aggregate_sales_report_tax_data</td>
+<td>0 0 * * *</td>
+<td>tax/observer::aggregateSalesReportTaxData</td>
+</tr></tbody></table>
+Aufgabe dieser Jobs ist das <strong>Aggregieren diverser Daten</strong> rund um Verkäufe und die Bestellabwicklung.
+
+Wenn Händler die Reports in Magento nicht verwenden, würde ich diese Jobs deaktivieren. Immer häufiger werden die Analysen in externen ERP-Systemen oder Data-Warehouses vollzogen, womit die ohnehin nicht problemlos funktionierende Reporting-Funktion obsolet wird.
+
+Falls die Reporting-Funktion eingesetzt wird, kann es abhängig vom Datenvolumen und Besucheraufkommen des Shops sinnvoll sein, die Jobs zeitversetzt laufen zu lassen.
+<h3>Währungen</h3>
+<table><thead><tr><th>Code</th>
+<th>Cron Expression</th>
+<th>Model</th>
+</tr></thead><tbody><tr><td>currency_rates_update</td>
+<td>0 0 * * *</td>
+<td>directory/observer::scheduledUpdateCurrencyRates</td>
+</tr></tbody></table>
+Dieser Task zur <strong>Aktualisierung der Währungskurse</strong> wird unter "System > Configuration > General > Currency Setup > Scheduler Import Settings" aktiviert. Auch hier gilt: wer das Feature nicht verwendet, kann es guten Gewissens über Aoe_Scheduler deaktivieren.
+<h2>Ablaufpläne der Standard-Jobs verändern</h2>
+Nachdem wir nun feststellen können, welche Cronjobs für uns relevant sind, geht es an die <strong>Ablaufplanung</strong> (wer es lieber englisch hat: "scheduling").
+
+Einige Jobs bieten die Möglichkeit, die Ablaufpläne über <strong>Einträge in "System > Configuration"</strong> zu verändern. Wer Tasks umplanen möchte, welche diese Option nicht bieten oder wer Änderungen direkt über Files warten will, kann das in der Datei <strong>config.xml</strong> seiner Extension tun:
+
+(code)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <!-- Restliche Konfiguration -->
+    <crontab>
+        <jobs>
+            <catalog_product_index_price_reindex_all>
+                <schedule>
+                    <cron_expr>30 1 * * *</cron_expr>
+                </schedule>
+            <catalog_product_index_price_reindex_all>
+        </jobs>
+    </crontab>
+</config>
+(/code)
+
+Einfach den Code des Cronjobs verwenden und eine Schedule festlegen, schon ist die Sache erledigt. Außerdem muss man dafür sorgen, dass die eigene Extension nach dem entsprechenden Magento-Modul geladen wird.
+
+<h2>Eigene Cronjobs hinzufügen</h2>
+
+<strong>Eigene Cronjobs</strong> lassen sich denkbar einfach festlegen.
+
+Nötig sind nur:
+<ul><li>der <strong>Name</strong> ("code") für den Cronjob</li>
+	<li>eine <strong>Schedule</strong> (in Form einer Cron-Expression oder eines Hinweises, in welchem "System > Config"-Eintrag man die Cron-Expression findet)</li>
+	<li>das <strong>Model</strong> und die Methode, die aufgerufen werden sollen.</li>
+</ul>
+Mit diesem Code werden zwei Jobs mit jeweils einer Art de Schedule-Definition eingerichtet:
+
+(code)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <!-- Restliche Konfiguration -->
+    <crontab>
+        <jobs>
+            <webguys_cronjob_one>
+                <schedule>
+                    <cron_expr>0 */2 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>webguys_example/observer::cronjobOne</model>
+                </run>
+            </webguys_cronjob_one>
+            <webguys_cronjob_two>
+                <schedule>
+                    <config_path>webguys/example/cronjob_two</config_path>
+                </schedule>
+                <run>
+                    <model>webguys_example/observer::cronjobTwo</model>
+                </run>
+            </webguys_cronjob_two>
+        </jobs>
+    </crontab>
+</config>
+(/code)
+
+<h2>Nützliche Extensions</h2>
+
+Zum Abschluss Hinweise auf einige <strong>Extensions</strong>, die ich regelmäßig bei Magento-Shops für die Datenwartung nutze und bei denen Cronjobs eine wichtige Rolle spielen:
+<ul><li><a href="https://github.com/fbrnc/Aoe_AsyncCache">Aoe_AsyncCache</a>: schreibt Lösch-Befehle für den Cache in eine Queue, anstatt sofort zu löschen (<strong>asynchrones Cache-Löschen</strong>). Dadurch wird der Cache seltener gelöscht und bestimmte Operationen wie der Backend-Login beschleunigt. Der Cronjob für die tatsächliche Löschung der Cache-Einträge wird standardmäßig alle 15 Minuten ausgeführt.</li>
+	<li><a href="https://github.com/fbrnc/Aoe_CacheCleaner">Aoe_CacheCleaner</a>: <strong>leert</strong> verschiedene Teile des <strong>Caches</strong> (den gesamten Cache, den Magento-Cache, JS/CSS, Katalogbilder). Die Schedule ist für jeden Teil getrennt konfigurierbar.</li>
+	<li><a href="https://github.com/fbrnc/Aoe_QuoteCleaner">Aoe_QuoteCleaner</a>: <strong>löscht alte Warenkörbe / Quotes</strong> unabhängig davon, ob sie in eine Bestellung überführt wurden. Wie oben erwähnt ist das sinnvoll, um die Datenmenge nicht zu stark ansteigen zu lassen. Wie lange man hofft verwaiste Warenkörbe noch reaktivieren zu können, ist mitunter eine Marketing-Frage. Wenn der Warenkorb trotz aller Bemühungen z.B. sechs Monate unberührt geblieben ist, kann man die Quote aber wohl ohne Bedenken löschen.</li>
+</ul><h2>Fazit</h2>
+Dieser Überblick hilft hoffentlich dem/der einen oder anderen, die saubere Basis für ein gesundes Shopsystem zu legen. Falls ihr Tipps für die Nutzung von Cronjobs oder weitere Extensions habt, freue ich mich über eure Kommentare.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3206

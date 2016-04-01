@@ -1,0 +1,66 @@
+Article-meta: 
+
+----
+
+Title: Türchen 08: Der Magento Indexer
+
+----
+
+Date: 2010-12-08
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 08 ist ein Performance-Türchen: Produkt-Importe sind deutlich schneller wenn der Index in "einem Rutsch" erstellt werden kann. Es dauert also länger jedes mal den Index pro Produkt neu aufzubauen als ihn nach dem Produkt-Import zu generieren. <a href="http://stackoverflow.com/users/465971/ivan-chepurnyi">
+
+----
+
+Text: Ivan Chepurnyi hat dazu ein Beispiel gepostet das ich niemanden vorenthalten möchte:
+
+(code lang: php)
+// Am Anfang des Produkt-Importes stellen wir den Indexer auf "manuell"
+$processes = Mage::getSingleton('index/indexer')->getProcessesCollection();
+$processes->walk('setMode', array(Mage_Index_Model_Process::MODE_MANUAL));
+$processes->walk('save');
+
+// Hier importieren wir ganz viele Produkte ..
+
+// Um letztlich den Indexer wieder auf automatisch zu stellen
+// und zeitgleich einen kompletten ReIndex anzustoßen
+$processes->walk('reindexAll');
+$processes->walk('setMode', array(Mage_Index_Model_Process::MODE_REAL_TIME));
+$processes->walk('save');
+(/code)
+
+So lassen sich laut <a href="http://www.matthias-zeis.com/archiv/magento-soap-api-performancetests-produkt-import">Matthias Zeis ca. 25% Zeit</a> sparen. Für den Fall das sich nur einige wenige Produkte geändert haben ist diese Methode eher ein Zeitfresser - es gilt also, wie immer, abzuwiegen welcher Weg der richtige ist.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1103

@@ -1,0 +1,310 @@
+Article-meta: 
+
+----
+
+Title: Türchen 23: Pimp My Produktgrid
+
+----
+
+Date: 2011-12-23
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: johannes
+
+----
+
+Article-content: 
+
+----
+
+Intro: In diesen Türchen soll es um die kundenspezifische Erweiterung und Anpassung vom Magento Produktgrid gehen. Das Productgrid von Magento bietet im Standard folgende Spalten: ID, Name, Typ, Attributsetname, Artikelnummer, Preis, Anzahl, Sichtbarkeit, Status, Aktion. Diese Spaltenauswahl ist schon sehr nützlich, aber natürlich recht allgemein gehalten, je nach dem, an was für einen Shop wir arbeiten, interessiert den Kunden einiges davon nicht, anderes wird ihm fehlen. Wir können also unserem Kunden das Leben einiges einfacher machen, wenn wir dieser zentralen Stelle um einige nützliche Infomationen/Features unterbringen.
+
+
+----
+
+Text: Unser Beispiel-Kunde hat einen einfachen T-Shirt-Shop ohne Warenwirtschaftsanbindung, die Verwaltung der Produkte passiert komplett in Magento und er hat sehr viele Produkte und ein schlechtes Gedächtnis, so dass er gute Filtermöglichkeiten braucht, um die Produkte wiederzufinden.
+
+Um unserem Beispiel-Kunden entgegenzukommen werden wir folgendes tun:
+<ul><li>Eine Spalte mit dem letzten Änderungsdatum (Magento-Standard-Attribut) hinzufügen, damit er "vernachlässigte" Produkte findet</li>
+<li>Die Spalte Farbe (kundenspezifisches Attribute) in dem Grid unterbringen, über die zugehörigen Filter findet er seine Produkte schnell wieder.</li>
+<li>Da unser Grid immer breiter wird, werden wir die Spalte Attributset entfernen, unser Kunde hat eh nur "T-Shirts". Auch die "Sichtbarkeit" werfen wir raus, alle Produkte stehen eh immer auf "Katalog/Suche"</li>
+</ul><h2>Aber zuerst ein bisschen Theorie:</h2>
+
+<strong>Allgemeine Funktionsweise von Grids</strong>
+
+Alle Grids in Magento werden von der Klasse Mage_Adminhtml_Block_Widget_Grid bzw. von Ihren Subklassen gerendert. Diese Klasse verwaltet im Attribut $_collection die angezeigte Magento-Collection und im Attribut $_columns die angezeigten Spalten des Grids.
+Die Collection und die Spalten werden in den abgeleiteten Klassen in den Methoden _prepareCollection() und _prepareColumns() befüllt. Beide Methoden werden automatisch aus der Methode _beforeToHtml() der Elternklasse aufgerufen.
+Für das bekannte Produkte-Grid sieht das so aus
+
+(code lang: php)
+	class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+		// ...
+		protected function _prepareCollection()
+		{
+			$store = $this->_getStore();
+			$collection = Mage::getModel('catalog/product')->getCollection()
+				->addAttributeToSelect('sku')
+				->addAttributeToSelect('name')
+				->addAttributeToSelect('attribute_set_id')
+				->addAttributeToSelect('type_id')
+			// weitere Attribute werden geladen
+			// ...
+		 }
+
+
+		protected function _prepareColumns()
+		{
+		    $this->addColumn('entity_id',
+		        array(
+		            'header'=> Mage::helper('catalog')->__('ID'),
+		            'width' => '50px',
+		            'type'  => 'number',
+		            'index' => 'entity_id',
+		    ));
+		    $this->addColumn('name',
+		        array(
+		            'header'=> Mage::helper('catalog')->__('Name'),
+		            'index' => 'name',
+		    ));
+		// weitere Spalten werden definiert
+		// ...
+		}
+		// ...
+	}
+(/code)
+
+<strong>Das Produkt-Grid erweitern</strong>
+
+Um das ganze zu erweitern könnten wir jetzt ein rewrite auf den Block adminhtml/catalog_product_grid machen und diese Methoden erweitern. Das wäre aber sehr unhöflich ;). Einserseits weiteren Entwicklern/Extensions gegenüber die dass Grid auch erweitern wollen, andererseits dem Magento Core Team gegenüber, die in der nächsten Version bestimmt ganz viele tolle Features in das Grid packen, die wir dann leider nicht mitbekommen. Ausserdem kommn wir, sofern Market Ready Germany installiert ist, eh schon zu spät, den deren Extension Symmetrics_DeliveryTime hat den Block schon überschrieben.
+
+Wir gehen also einen anderen Weg und zwar über Events: Schön wäre es, gäbe es ein Event "adminhtml_block_catalog_product_grid_html_before", gibt es aber nicht. Wir steigen also in der Block-Klasssenhierarchie ein paar Meter weiter nach oben und finden dort das Event "adminhtml_block_html_before". Das nehmen wir und überprüfen in unserem Observer ob wir jetzt den richtigen Block haben:
+
+(code lang: php)
+	<adminhtml>
+		<events>			
+			<adminhtml_block_html_before>
+				<observers>
+                    <webguys_productgrid_adminhtml_block_html_before>
+                        <class>webguys_productgrid/observer</class>
+                        <method>beforeBlockToHtml</method>
+                    </webguys_productgrid_adminhtml_block_html_before>
+                </observers>				
+			</adminhtml_block_html_before>
+		</events>
+	</adminhtml>
+(/code)
+
+Im Observer filtern wir uns den "interessanten" Block heraus:
+(code lang: php)
+	class Webguys_Productgrid_Model_Observer {
+		// ...
+		public function beforeBlockToHtml(Varien_Event_Observer $observer) {
+			$block = $observer->getEvent()->getBlock();
+			if ($block instanceof Mage_Adminhtml_Block_Catalog_Product_Grid) {
+				$this->_modifyProductGrid($block);
+		    	}
+		// ...
+		}
+	}
+(/code)
+
+<h2>So, jetzt können wir loslegen:</h2>
+
+<strong>Ein Standard-Attribut (Änderungsdatum) im Grid anzeigen:</strong>
+
+Die Grid-Klasse bietet die Funktionen addColumn($columnId, $column) und addColumnAfter($columnId, $column, $after) um das Grid zu manipulieren.
+Wir benutzen addColumnAfter() um Kontrolle über die Positionierung der Spalte zu bekommen.
+
+(code lang: php)
+	/**
+	 * Fügt dem Grid die Spalte "zuletzt geändert" hinter der Spalte "Name" hinzu 
+	 * 
+	 * @param Mage_Adminhtml_Block_Catalog_Product_Grid $grid 
+	 */
+	protected function _addUpdatedAtColumn(Mage_Adminhtml_Block_Catalog_Product_Grid $grid) {		
+		$grid->addColumnAfter(
+			'updated_at', // interne Spalten ID
+			array(
+				'header' => 'l. Änderung', // Text im Header
+				'index' => 'updated_at',	  // Array index der aktuellen Row				
+				'type' => 'date',			  // Welcher renderer
+				'format' => 'dd.MM.YYYY',	  // Datumsformat a la Zend_Date (type=date spezifisch)
+				'width' => '100px',			  // Breite der Spalte (empfohlen)				
+				'header_css_class' => 'updated_at', // zusätliche css Klasse für den Header
+				'sortable' => true,
+				'align' => 'right'
+			),
+			'status' // Nach welcher Spalte einfügen
+        	);
+		// muss von uns extra aufgerufen werden, damit die Sortierung greift
+		$grid->sortColumnsByOrder();
+	}
+(/code)
+
+<strong>Ein eigenes Select-Attribut im Grid anzeigen</strong>
+
+Wenn wir ein eigenes (nicht von Magento im Grid vorgesehenes Attribut) im Grid anzeigen wollen, müssen wir das Attribut erst - EAV sei Dank - an die zugrunde liegende Collection joinen. Auch das machen wir mit einem Event-Listener:
+(code lang: xml)
+	<adminhtml>
+		<events>			
+			<catalog_product_collection_load_before>
+				<observers>
+					<webguys_productgrid_adminhtml_block_html_before>
+						<class>webguys_productgrid/observer</class>
+						<method>beforeCatalogProductCollectionLoad</method>
+					</webguys_productgrid_adminhtml_block_html_before>
+				</observers>								
+			</catalog_product_collection_load_before>
+		</events>		
+	</adminhtml>
+(/code)
+und im Observer dann:
+(code lang: php)
+	public function beforeCatalogProductCollectionLoad(Varien_Event_Observer $observer) {
+		$collection = $observer->getEvent()->getCollection();
+		if ($collection instanceof Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection) {
+			$collection->addAttributeToSelect('color');
+		}
+	}
+(/code)
+
+Ein Select-Attribut fügt man mit dem type 'options' ein, zusätzlich werden die Optionen im Feld 'options' übergeben:
+(code lang: php)
+	protected function _addColorColumn(Mage_Adminhtml_Block_Catalog_Product_Grid $grid) {		
+		$grid->addColumnAfter(
+			'color', // interne Spalten ID
+			array(
+				'header' => 'Farbe', 
+				'index' => 'color',	  
+				'type'  => 'options',
+				'options' => $this->_getProductAttributeOptions('color')
+			),
+			'status' // Nach welcher Spalte einfügen
+        );
+	}
+(/code)
+
+Und hier zughörige Helper-Funktion getProductAttributeOptions():
+warum auch immer Magento alle Integer Werte mit 4 Nachkommstellen formatiert, wir kommen Magento da entgegen und machen das genauso ;)
+(code lang: php)
+	/**
+	 * Holt Attribute-Options im erwarteten Format 
+	 * @param string $attributeName 
+	 * @return array
+	 */
+	protected function _getProductAttributeOptions($attributeName) {
+		$attribute = Mage::getModel('eav/config')->getAttribute('catalog_product',$attributeName);
+		/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */		
+		$attributeOptions = $attribute->getSource()->getAllOptions();
+        	$options = array();
+		// options in key => value Format bringen
+		foreach ($attributeOptions as $option) {
+			$options[number_format($option['value'], 4, '.', '')] = $option['label'];
+		}		
+		return $options;		
+	}
+(/code)
+
+<strong>Spalten entfernen</strong>
+
+So, jetzt machen wir uns daran, unser langsam ein wenig eng werdendes Grid wieder zu entschlacken:
+Spalten entfernen kann man mit folgendem Code:
+(code lang: php)
+	/**
+	 * Entfernt eine Spalte aus dem Grid
+	 * 
+	 * @param Mage_Adminhtml_Block_Catalog_Product_Grid $block 
+	 * @param string $columnName
+	 */
+	protected function _removeColumn(Mage_Adminhtml_Block_Catalog_Product_Grid $block, $columnName) {
+		$columns = $block->getColumns();
+		// entfernt die Spalte
+		unset($columns[$columnName]);		
+		// Autsch, aber leider gibt es kein setColumns()
+		$this->_mutateProtectedProperty($block, '_columns', $columns);
+	}
+(/code)
+
+Leider fehlt in den Magento-Grids eine public Methode um die bestehenden Columns zu modifizieren, egal, wir bauen uns unsere eigene: PHP5.3 macht es mit <a href="http://www.php.net/manual/en/reflectionproperty.setaccessible.php">ReflectionProperty::setAccessible</a> möglich:
+
+(code lang: php)
+	protected function _mutateProtectedProperty($object, $propertyName, $value) {
+		$reflection = new ReflectionClass($object);
+		$property = $reflection->getProperty($propertyName);
+		$property->setAccessible(true);
+		$property->setValue($object, $value);		
+	}
+(/code)
+
+Schön ist das natürlich nicht, aber uns bleibt bei der Event-Methode keine andere Wahl. Hätten wir ein rewrite gemacht, wäre es kein Problem $this->_columns zu nutzen. Mist!
+
+<strong>Ausserdem gibt es noch einen Haken</strong>
+
+Nicht alle unsere Änderungen werden von Magento übernommen, zum Beispiel funktioniert die Sortierung und Filterung der neuen Attribute nicht.
+Das liegt daran, dass unsere Änderungen nach dem Aufruf von _prepareCollection(), in dem die Spalteninfos an die Collection übergeben werden, stattfinden. 
+Was tun? Mage_Adminhtml_Block_Widget_Grid::_prepareCollection() noch mal selber aufrufen geht leider nicht, da die Methode protected ist. Ihr ahnt es schon, oder?
+(code lang: php)
+	protected function _callProtectedMethod($object, $methodName) {
+		$reflection = new ReflectionClass($object);
+		$method = $reflection->getMethod($methodName);
+		$method->setAccessible(true);
+		return $method->invoke($object);
+	}
+(/code)
+und ganz ungeniert nach all den Änderungen _prepareCollection() aufrufen:
+(code lang: php)
+	protected function _modifyProductGrid(Mage_Adminhtml_Block_Catalog_Product_Grid $grid) {
+		
+		$this->_addUpdatedAtColumn($grid);
+		$this->_addColorColumn($grid);
+		
+		$this->_removeColumn($grid, 'set_name');
+		$this->_removeColumn($grid, 'visibility');		
+
+		// reinitialisiert die Spaltensortierung
+		$grid->sortColumnsByOrder();
+		// reinitialisiert die Sortierung und Filter der Collection 
+		$this->_callProtectedMethod($grid, '_prepareCollection');				
+		
+	} 
+(/code)
+
+<h3>Fazit</h3>
+Ein an den Kunden angepasstes Produktgrid kann man den Workflow oft sehr vereinfachen. Der Programmier-Aufwand ist dabei nicht sonderlich gross, die Usability für den Kunden aber viel besser. 
+Am besten fragt man nach den ersten Wochen Produktpflege mal beim Kunden nach, ob etwas fehlt. 
+Alle anderen Grids im Backend sind natürlich genauso anpassbar, zum Beispiel könnte man die Zahlart im Bestellgrid anzeigen, o.ä.
+
+<strong>Zum technischen Aspekt:</strong>
+
+Eigentlich sollte dieser Artikel ein großer Lobgesang auf Events statt Rewrites werden und zeigen, wie man mit Events viel eleganter zum Ziel kommt. Beim Schreiben des Artikels bin ich aber einige Male an die Grenzen von Events gestossen.
+Die Verrenkungen, die man anstellen muss, um an die protected Attribute und Methoden zu kommen, sind wirklich nicht schön. Auch das Timing der Events ist nicht ganz perfekt.
+Andererseits bleibt man upgradefähiger und unabhängiger von anderen Extensions.
+Ich persönlich werde wohl in Zukunft projektspezifische Anpassungen doch wieder in einem Rewrite programmieren, allgemein wiederverwendbare Module (z.B. einen Kategoriefilter) aber per Events umsetzen.
+Am praktischsten wäre es natürlich, würde Magento die benötigten Methoden public machen und Events a la "adminhtml_grid_prepare_columns" und "adminhtml_grid_prepare_collection" bieten würde.
+
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2615

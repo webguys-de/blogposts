@@ -1,0 +1,77 @@
+Article-meta: 
+
+----
+
+Title: Typ eines Attributs nachträglich ändern
+
+----
+
+Date: 2010-10-27
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es kann - sollte jedoch nicht - vorkommen, einen bestehende Attributtypen ändern zu müssen. Bei einigen hundert oder tausend Produkten die Daten in ein neu erstelltes Attribut händisch zu übertragen ist schlichtweg zu mühsam und dauert auch zu lange - außerdem muss es ja auch anders gehen.
+
+
+----
+
+Text: Und es geht anders. In vier einfachen Schritten ändern wir den Typen eines bestehenden Attributs - und zwar von einem <em>varchar</em> zu einem <em>decimal</em>. Die Attribute können von folgenden Typ sein: <em>static, datetime, decimal, int, text, varchar</em> und werden der zugehörigen Tabelle z.B. <em>catalog_product_entity_<strong>decimal</strong></em> gespeichert.
+
+<strong>1. Daten des Attributs übertragen</strong>
+Um die bestehenden Daten aus _varchar in die Tabelle _decimal zu übertragen reicht folgendes SQL Statement:
+(code lang: sql)
+REPLACE catalog_product_entity_decimal (
+    SELECT *
+    FROM catalog_product_entity_varchar
+    WHERE attribute_id =64
+)
+(/code)
+
+Im Anschluss sollte die Tabelle <em>catalog_product_entity_varchar</em> noch von den überflüssigen Einträgen befreit werden, dazu das folgende SQL-Statement:
+(code lang: sql)
+DELETE  FROM catalog_product_entity_varchar WHERE attribute_id=64
+(/code)
+
+<strong>2. Datentyp des Attributs ändern</strong>
+Auch diese Änderung machen wir auf Datenbankebene, die benötigen Informationen entnehmen wir der Tabelle: <em>eav_attribute</em>. Dazu öffen wir den zu ändernden Eintrag und wählen unter <em>backend_type decimal</em> aus.
+
+<strong>3. Cache leeren</strong>
+Im Anschluss sämtliche Caches leeren als auch den Katalog Index neu aufbauen
+
+<strong>4. Ausgabe kontrollieren</strong>
+ 
+
+<strong>Hinweis</strong>
+Wie immer bei Operationen auf Datenbankebene ist es notwendig, <strong>vor</strong> den Arbeiten ein Backup der Tabellen zu erstellen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 936

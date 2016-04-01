@@ -1,0 +1,166 @@
+Article-meta: 
+
+----
+
+Title: Türchen 07: Fixierung von Bruttopreisen - Gleiche Preise für alle Kunden
+
+----
+
+Date: 2012-12-07
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: pkxonu-de
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ein typischer deutscher Online-Shop beliefert hauptsächlich Kunden innerhalb Deutschlands. Kunden aus dem umliegenden Ausland bilden einen geringen Anteil. Die Steuereinstellungen sind mit German Setup schnell eingerichtet: die Liste der Steuersätze und -Zonen wird mit 25 Ländern gefüllt und für alle Länder die deutsche Mehrwertsteuer in Höhe von 19% bzw. 7% eingestellt. Somit erwerben alle Kunden, auch die aus dem Ausland, die Ware zu Bruttopreisen inklusive der deutschen Mehrwertsteuer, und alle sind glücklich.
+
+
+
+----
+
+Text: Spannend wird es erst, wenn der Nettoumsatz der ins Ausland verkauften Ware eine <a href="http://www.frankfurt-main.ihk.de/recht/steuerrecht/umsatzsteuer_international/erwerbs_liefschwelle/index.html" rel="nofollow" target="_blank">landesspezifische Lieferschwelle</a> überschreitet. In diesem Fall hat der Händler sich im Bestimmungsland umsatzsteuerlich zu registrieren und mit der Steuer dieses Landes abzurechnen.
+
+Fallbeispiel: Ein deutscher Händler verkauft u. a. nach Dänemark, wobei sein Jahresumsatz mit dänischen Kunden die Lieferschwelle überschreitet. Die Merwertsteuer in Dänemark beträgt für alle Waren 25%.
+
+In diesem Fallbeispiel bekommt ein dänischer Kunde einen höheren Preis berechnet. Kostet ein Produkt 100,- EUR inkl. 19% Merwertsteuer, muss der dänische Kunde für das gleiche Produkt 105,- EUR inkl. 25% MwSt. bezahlen (100,- EUR / 1,19 * 1,25 = 105,- EUR). Das Fatale dabei ist dass ein neuer Kunde den höheren Preis erst im letzten Checkout-Schritt angezeigt bekommt, da erst durch die Eingabe seiner Lieferadresse sein Bestimmungsland und damit der höhere Steuersatz feststanden.
+
+Ein registrierter Kunde, der eine Adresse in Dänemark als Standardlieferadresse in seinem Benutzerkonto gewählt hat, bekommt im eingeloggten Zustand die höheren Preise schon im Katalog angezeigt. Die vom Händler in grafischen Bannern beworbene Preise stimmen nicht mehr. Auch hat er den unrunden Neuner-Preis nicht mehr unter Kontrolle (der Kunde kommt z. B. 10,40 EUR statt 9,90 EUR angezeigt).
+
+Aus den genannten Gründen möchte der Händler allen Kunden zum gleichen Endkundenpreis verkaufen. Dabei geht er gerne den Kompromiss ein zu einem niedrigeren Nettopreis zu verkaufen. Er möchte also zu einem festen Brutto- und zu einem variablen Nettopreis verkaufen. Magento rechnet aber mit festen Nettopreisen!
+<h2>Berechnung des Bruttopreises in Magento</h2>
+<strong></strong> Für die Berechnung des Kaufpreises wird die passende Steuerregel herangezogen (<em>Verkäufe > Steuer > Steuerregeln verwalten</em>), die von den drei Variablen abhängt:
+<ul><li><strong>Kundengruppe<em></em></strong><em> - Kunden > Kundengruppen / Verkäufe > Steuer > Kundensteuerklassen</em><em></em></li>
+	<li><strong>Bestimmungsland</strong><em> - Verkäufe > Steuer > Steuerzonen und -Sätze verwalten</em></li>
+	<li><strong>Produktsteuerklasse</strong><em> -<strong> </strong>Verkäufe > Steuer > Artikelsteuerklassen</em></li>
+</ul>
+Die Kundengruppe wird dabei über die Kundensteuerklasse verknüpft. Die Steuerregel bestimmt den Steuersatz, der auf den Nettoproduktpreis aufgeschlagen wird.
+
+In der Voreinstellung (<em>System > Konfiguration > Verkäufe: Steuer > Berechnung: Katalog Preise</em>) werden Katalogpreise im Backend als Bruttopreise angegeben. Die darin enthaltene Mehrwertsteuer bestimmt das in <em>System > Konfiguration > Verkäufe: Versandeinstellungen > Herkunft </em>eingestellte Herkunftsland.
+
+Die im Katalog und Warenkorb angezeigten Bruttopreise für Artikel und Versandkosten hängen von dem Steuersatz des Bestimmungslands ab. Da das Bestimmungsland nicht von Anfang an bekannt ist, wird es in drei Stufen festgelegt, angefangen mit der niedrigsten Priorität:
+<ol><li><strong>Standardbestimmungsland</strong> - wenn ein neuer Besucher den Shop betritt</li>
+	<li><strong>Standardadresse</strong> - wenn ein Kunde sich eingeloggt hat</li>
+	<li><strong>Im Checkout gewählte oder eingegebene Adresse</strong> - wenn der Kunde ein Checkout-Versuch unternommen hat, bei dem die endgültige Lieferadresse festgelegt wurde</li>
+</ol>
+Das Standardbestimmungsland (1) ist einstellbar in <em>System > Konfiguration > Verkäufe: Steuer > Standard Ursprung für Steuerberechnung</em> (Hinweis: die deutsche Übersetzung des Gruppentitels ist mißverständlich, da Verwechslungsgefahr mit <em>Herkunft</em> in <em>Versandeinstellungen</em>).
+
+In der Voreinstellung (<em>System > Konfiguration > Verkäufe: Steuer > Berechnung: Steuerberechnung basiert auf</em>) legt die Lieferadresse das Bestimmungsland fest.
+
+Die Standardlieferadresse (2) ist erst bekannt, wenn der Kunde sich eingeloggt hat. Wird beim Checkout (3) eine andere Adresse aus dem Adressbuch gewählt oder eine Adresse eingegeben, legt sie das aktuelle Bestimmungsland fest, nach dem der Kunde auf die Schaltfläche <em>Weiter</em> im Checkout-Schritt geklickt hat. Um die neuberechnete Bruttopreise zu sehen, reicht es in den Warenkorb zurückzukehren ohne die Bestellung abzuschließen.
+
+Das folgende Diagramm zeigt die Abhängigkeiten und den Rechenweg von Magento zur Bestimmung des Bruttopreises, der dem Kunden im Warenkorb angezeigt wird:
+
+<img style="border-color: #BBBBBB #BBBBBB #BBBBBB #BBBBBB" src="/wp-content/uploads/2012/12/magento-fester-nettopreis.gif" alt="" width="666" height="292">
+
+Zur besseren Veranschaulichung ist unter jedem Block ist ein Beispielwert angegeben.
+<h2>Fixierung des Bruttopreises</h2>
+Bei meiner Recherche (Suchanfrage: magento fixed gross price) fand ich mehrere unbeantwortete Forenfragen und sogar ein ausgeschriebenes Projekt zu diesem Thema. Mehrere Entwickler, die ich angefragt habe, haben das Projekt als sehr aufwändig eingeschätzt, da die gesamte Steuerrechenlogik von Magento überarbeitet werden müsse. Doch genau dieser Ansatz war mir von Anfang an unsympatisch, weil er das Problem nicht bei der Ursache anpackt.
+
+Nach Einarbeitung in die Rechenlogik von Magento, die ich oben beschrieben habe, fand ich eine Lösung die genau das tut: sie fixiert den Bruttopreis im Ursprung seiner Berechnung durch eine einfache Operation:<strong> Setze Herkunftsland gleich dem Bestimmungsland</strong>.
+
+(code lang: php)class Xonu_FGP_Model_Calculation extends Mage_Tax_Model_Calculation
+{
+    public function getRateOriginRequest($store = null)
+    {
+        $request = new Varien_Object();
+
+	$quote = $session->getQuote();
+	$request = $this->getRateRequest(
+		$quote->getShippingAddress(),
+		$quote->getBillingAddress(),
+		$quote->getCustomerTaxClassId(),
+		$store
+	);
+
+        return $request;
+    }
+}(/code)
+
+Doch Magento wäre nicht Magento wenn es alles so einfach wäre: wechselt man den StoreView und wechselt dabei auch die Währung (und nur dann) gerät Magento in eine Endlosschleife!
+
+Im Backtracing wurde klar, dass beim Wechsel des StoreView und Währung der Warenkorb nicht beim ersten Aufruf von <em>getRateOriginRequest()</em> zur Verfügung steht. Die Existenz des Warenkorbs wird deshalb mit <em>$session->hasQuote()</em> geprüft.
+
+Und so sieht der Code der Extension <a title="Fixed Gross Price - Fester Bruttopreis für alle Kunden" href="http://www.magentocommerce.com/magento-connect/fixed-gross-price-4700.html" target="_blank">Fixed Gross Price</a> aus, die nun auf Magento Connect zur Verfügung steht:
+
+(code lang: php)class Xonu_FGP_Model_Calculation extends Mage_Tax_Model_Calculation
+{
+	public function getRateOriginRequest($store = null)
+	{
+		// set origin to destination
+
+		$request = new Varien_Object();
+
+		$session = Mage::getSingleton('checkout/session');
+		if($session->hasQuote()) // getQuote() would lead to infinite loop here when switching currency
+		{
+			// use quote destination if quote exists
+
+			$quote = $session->getQuote();
+			$request = $this->getRateRequest(
+				$quote->getShippingAddress(),
+				$quote->getBillingAddress(),
+				$quote->getCustomerTaxClassId(),
+				$store
+			);
+
+			return $request;
+		}
+		else // quote is not available when switching currency
+		{
+			return $this->getDefaultDestination();
+		}
+	}
+
+	private function getDefaultDestination($store = null)
+	{
+		$address = new Varien_Object();
+		$request = new Varien_Object();
+
+		$address
+			->setCountryId(Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_DEFAULT_COUNTRY, $store))
+			->setRegionId(Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_DEFAULT_REGION, $store))
+			->setPostcode(Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_DEFAULT_POSTCODE, $store));
+
+		$customer = $this->getCustomer();
+		$customerTaxClass = $customer->getTaxClassId();
+
+        $request
+            ->setCountryId($address->getCountryId())
+            ->setRegionId($address->getRegionId())
+            ->setPostcode($address->getPostcode())
+            ->setStore($store)
+            ->setCustomerClassId($customerTaxClass);
+
+		return $request;
+	}
+}(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3088

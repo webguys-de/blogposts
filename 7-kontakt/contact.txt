@@ -1,0 +1,41 @@
+Title: Kontakt & Impressum
+
+----
+
+Description: 
+
+----
+
+Text: 
+
+Du magst ein Bier mit uns trinken oder auch etwas bloggen? 
+Schreib uns! Wir freuen uns :-)
+
+----
+
+Contactinfo: 
+
+**Webguys**
+Tobias Vogt
+Schrieweshof 3
+DE-33106 Paderborn
+
+**Email**
+tobi@webguys.de
+ingo@webguys.de
+
+----
+
+From: anfrage@webguys.de
+
+----
+
+To: info@webguys.de
+
+----
+
+Subject: Webguys Kontaktformular
+
+----
+
+Footernav: 1

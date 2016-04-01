@@ -1,0 +1,55 @@
+Article-meta: 
+
+----
+
+Title: Maximale Anzahl von Einträgen des Multiselects erhöhen
+
+----
+
+Date: 2011-07-08
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento speichert die Werte eines Multiselect-Feldes kommasepariert in der Entität <em>catalog_product_entity_varchar</em>. Das ist eigentlich kein Problem außer man benötigt mehr als 40 aktive Einträge. Dann eröffnet sich schnell das Problem das die Länge des Varchars mit 255 Zeichen nicht genug Platz bietet um alle Einträge aufzunehmen. Wenn ein Eintrag aus einer vierstelligen ID besteht und das Komma zur Auswahl noch benötigt wird sind das immerhin schon 6 Zeichen pro aktivierten Eintrag. 255 / 6 = 42 Einträge maximal.
+
+----
+
+Text: Dafür gibt es nun zwei Patches. Auf der einen Seite kann man anstelle des Backend_Type varchar einfach Text verwenden. Damit können (quasi) beliebig viele Einträge gespeichert werden. Leider macht der Indexer der Layered-Navigation dort ein paar Probleme. Dazu habe ich aber gerade einen (file: indexer_multiselect_backendtype_text.diff_.zip text: Patch geschrieben).
+
+Auf der anderen Seite kann, wie Jan mit gerade nebenbei sagte, ab MySQL 5 die Anzahl der Einträge des Varchars, abhängig von der Max-Row-Length, auf bis zu 65.000 Zeichen erhöht werden. Das geht z.B. mit folgendem SQL:
+
+(code lang: sql)ALTER TABLE `catalog_product_entity_varchar` CHANGE `value` `value` VARCHAR( 21000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''(/code)
+
+Bleibt die Frage welche der Herangehensweisen die bessere ist. Aber das überlasse ich euch selbst :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1708

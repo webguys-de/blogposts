@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Tipp: Magento-Podcast
+
+----
+
+Date: 2010-04-11
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Wer beim Arbeiten ein paar News über Magento hören möchte der werfe einen Blick in den Magento Podcast. Sehr kurzweilige Themenauswahl aber leider im Moment eher unregelmäßig veröffentlicht - trotzdem tolle Idee!
+
+<a href="http://www.magento-podcast.de/">http://www.magento-podcast.de/</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 127

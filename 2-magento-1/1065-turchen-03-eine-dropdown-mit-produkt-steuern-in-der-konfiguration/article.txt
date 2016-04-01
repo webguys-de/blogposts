@@ -1,0 +1,94 @@
+Article-meta: 
+
+----
+
+Title: Türchen 03: Eine Dropdown mit Produkt-Steuern in der Konfiguration.
+
+----
+
+Date: 2010-12-03
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: .. und hinter Türchen 03 verbirgt sich eine kleine Erläuterung wie eine Dropdown mit Auswahl von Produkt-Steuern in der Admin-Konfiguration hinterlegt werden kann. Dazu bedarf es bloß ein wenig XML in der system.xml das eigenen Moduls. Den Rest bringt Magento von Haus aus mit.
+
+----
+
+Text: (code lang: xml)
+<?xml version="1.0"?>
+<config>
+	<tabs>
+		<webguys translate="label" module="webguys">
+			<label>webguys</label>
+			<sort_order>508</sort_order>
+		</webguys>
+	</tabs>
+	<sections>
+		<webguys translate="label" module="webguys">
+			<tab>webguys</tab>
+			<label>Import</label>
+			<sort_order>10</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<import translate="label" module="webguys">
+					<label>Import</label>
+					<sort_order>1000</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+
+                        <tax translate="label,comment">
+							<label>Steuern</label>
+							<comment>Mit welcher Steuerklasse werden die Produkte importiert</comment>
+							<frontend_type>select</frontend_type>
+                            <source_model>tax/class_source_product</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</tax>
+
+					</fields>
+				</import>
+			</groups>
+		</webguys>
+	</sections>
+</config>
+(/code)
+
+Zuerst erstellen wir einen neuen Tab in der linken Navigation. Dort fügen wir eine neue Sektion mit dem Namen Import ein für die wir anschließend eine neue Gruppe, ebenfalls mit dem Namen Import festlegen. Letztlich erstellen wir im Fields-Tag ein neues Feld vom Typ <em>select</em> welches seine Inhalte über das Source-Model <em>tax/class_source_product</em> erhält.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1065

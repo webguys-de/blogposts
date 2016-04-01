@@ -1,0 +1,73 @@
+Article-meta: 
+
+----
+
+Title: Das Foocamp
+
+----
+
+Date: 2010-10-18
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Am vergangenen Wochenende durfte ich das Magento Foocamp besuchen. Dieser "Event", den es am nun zum ersten Mal gab, wurde mit dem Hintergrund veranstaltet das sich einige Community Entwickler, die auch häufig im IRC anzutreffen sind, einfach ein wenig kennenlernen, gegenseitiges Know-How transferieren und zusammen neue Module und Erweiterungen für Magento initiieren. Eine grandiose Idee von <a href="http://www.willcodeforfood.de/">Damian Luszczymak</a>. Vielen vielen Dank noch einmal an dieser Stelle für die tolle Organisation und das Networking :) Zusätzlich geht ein großes großes Danke an <strong><a style="color: #0062a6;" href="http://www.flagbit.de/">FlagBit</a></strong> (<a href="http://www.flagbit.de/leistungen/ecommerce-magento-agentur.html">Magento-Enterprise-Partner</a>) für die großzügige Spende zur Veranstaltung.
+
+----
+
+Text: <h3>Vorträge</h3>
+<ul><li><a href="http://www.icyapp.de">Damian Luszczymak</a> zeigte uns seine Fortschritte zur Solr-Suche in Magento, wir diskutierten ob Open-Source oder nicht - was es wohl kosten wird und ob wir mitunter ein paar Beta-Versionen erhalten</li>
+	<li><a href="http://www.itabs.de/">Rouven Rieker</a> stellte seine Erfahrungen mit dem Vertrieb von <a href="http://www.itabs.de/loesungen/magento">Magento Extensions</a> vor: Wie vertreibt man sie, was benötigt man und ab wann lohnt sich das eigentlich?</li>
+	<li><a href="http://www.mageblog.de">David Fuhr</a> zeigte uns wie man mittels <a href="http://www.mageblog.de/">ANT automatisch PEAR-Pakete</a> erzeugt</li>
+	<li><a href="http://www.flagbit.de/">Steffen Meuser</a> erläuterte, abseits von Magento, wie man wirklich JavaScript entwickelt: Objektorientiert und Performant.</li>
+	<li>Ich erläuterte noch einmal mein Vorgehen beim<a href="../magento/magento-checkout-ohne-javascript-ajax/"> Magento Checkout ohne Java-Script</a>.</li>
+</ul>
+Neben den Vortragenden waren zudem noch <a href="http://www.netzarbeiter.de/">Vinai Kopp</a> und <a href="https://www.xing.com/profile/Karl_Spies2">Karl Spies</a> dabei. Auf deren Beiträge (Magento API erweitern und Magento WaWI Kopplung mittels der API) mussten wir jedoch im Rahmen der begrenzten Zeit leider verzichten.
+<h3>Ablauf</h3>
+Wir begannen, mit anfänglichen Schwierigkeiten mit dem Internetanschluss der VHS-Herford, dennoch pünktlich um 10:00 Uhr. Nach einem kurzen Beschnuppern ("Ach du bist das..") ging es direkt los. Neben den Vorträgen hatten Damian und Vinai uns noch ein kleines Projekt mitgebracht. Ziel war es den Multishipping-Checkout von Magento so anzupassen das die Basis-Payment-Module dort ebenfalls funktionieren. Nach einigen Stunden Diskussionen zum Konzept, unterbrochen von Abschweifungen und Mittagessen (sehr lecker), und meinem Beitrag zum Magento Checkout  hatten wir uns letztlich auf ein Vorgehen geeinigt. Bevor wir richtig programmieren konnten war die Zeit des Samstags jedoch quasi schon um: Paintball rief. Also alle in zwei Autos verteilt und losgefahren nach <a href="http://www.paintball-paderborn.de/">Paderborn in die Paintball Halle</a>. Dann wieder zurück, wir hatten doch glatt Karl vergessen. (Peinlich..) Er war uns aber Gott sein Dank nicht böse :) Gegen 21.00 Uhr waren wir zurück in Herford wo wir uns gegen 22.00 Uhr noch einmal trafen um eine Kneipe in der Nähe zu besuchen. Dort gab es zu der Zeit sogar noch etwas richtiges zu essen - toll!
+
+Der Sonntag war durch einige Diskussionen und Weiterentwicklung unseres Projektes bis 17.00 Uhr komplett verplant.
+<h3>Das Projekt</h3>
+Das Ziel bestand darin den Multishipping-Checkout so anzupassen das die Standard-Payment-Module dort einigermaßen problemlos funktionieren. Oftmals ist die Unterstützung der Module nicht gegeben da Magento beim Multishipping-Checkout je Lieferadresse eine Bestellung erzeugt. Der Kunde erhält somit je Lieferadresse eine Bestellnummer und Email. Der Workflow der Payment-Module würde es nun also erfordern das jede Bestellungen einzeln bezahlt wird. Hintergrund ist das Magento im Standard keine echte Relation zwischen allen Bestellungen speichert - das System weiß also nicht das die Bestellungen 1,2 und 3 durch einen Multishipping-Account generiert wurden. Dieses Problem haben wir grob wie folgt gelöst:
+<ul><li>Virtuelles Order-Model mit eigenes Nummernkreis erschaffen</li>
+	<li>Virtuelle Order speichert Relationen zwischen den einzelnen  Bestellungen und summiert diese auf</li>
+	<li>Payment-Modul wird virtuelle Order übergeben
+<ul><li>Amount ist Summe aller Amounts der einzelnen Orders</li>
+	<li>Methoden des Payment-Moduels (z.B. save) werden auf alle zugehörigen Bestellungen angewendet</li>
+</ul></li>
+	<li>Kunde zahlt alle Bestellungen gemeinsam beim Payment-Dienstleister</li>
+</ul>
+Wir sind denke ich z.Z. bei 90% und müssen noch ein wenig Debugging betreiben. Danach wird die Extension in irgendeiner Weise, Einigung dazu steht noch aus, veröffentlicht.
+<h3>Fazit</h3>
+Eine wirklich tolle Veranstaltung die trotz einiger spontaner Absagen ein voller Erfolg war. Beim nächsten Treffen bin ich hoffentlich wieder dabei :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 915

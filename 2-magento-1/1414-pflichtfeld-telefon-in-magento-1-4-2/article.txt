@@ -1,0 +1,58 @@
+Article-meta: 
+
+----
+
+Title: Pflichtfeld Telefon in Magento 1.4.2 ändern
+
+----
+
+Date: 2011-02-14
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: In Magento &lt;= 1.4.1 war es noch großer Aufwand ein Pflichtfeld aus dem Checkout herauszunehmen: Man musste mal eben zwei Models überlagern nur damit die doofe Validierung, die in der Abstract zu finden war, deaktiviert werden konnte. In Magento 1.4.2 ist das einfach geworden.
+
+
+
+----
+
+Text: Hier muss einfach nur in der Datenbank in der Tabelle eav_attributes die Spalte 'is_required' auf 0 bzw. 1 gesetzt werden und schon weiß Magento ob das Feld nun benötigt wird oder eben nicht. Für den Fall das ihr kein weiteres Attribute (z.B. auf Produktebene) habt das den Attribute-Code 'telephone' besitzt geht das wie folgt:
+
+(code lang: sql)UPDATE  `eav_attribute`  
+	SET  `is_required`  =  '0' 
+	WHERE  `eav_attribute`.`attribute_code`  =  'telephone';
+(/code)
+
+.. und schon ist Telefon kein Pflichtfeld mehr :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1414

@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Verlosung: 8 x 2 CeBIT Tagestickets 
+
+----
+
+Date: 2012-02-25
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Genau wie <a href="http://blog.wpde.org/2012/02/19/verlosung-von-tagestickets-fuer-die-cebit.html">WordPress Deutschland</a> hat uns unser CeBIT Gastgeber <a href="http://blog.mittwald.de/allgemein/cebit-gaste-aus-der-open-source-community/">Mittwald</a> 8x 2 Tagestickets zur Verlosung bereitgestellt. Und genau die 16 Tickets werden wir hier unter allen Kommentatoren verlosen. Aber ein bisschen was machen wir doch anders: Wir verlosen jeweils zwei Tickets. So könnt ihr auch einen Freund mitbringen und müsst den weiten Weg nicht alleine auf euch nehmen!
+
+
+
+----
+
+Text: Die Verlosung läuft bis zum 01.03 23:59 Uhr. Wir wünschen viel Erfolg und ich freue mich wenn ich euch in <a href="http://www.webguys.de/magento/webguys-auf-der-cebit-am-opensource-stand-von-mittwald/">Halle 6 zu sehen bekomme</a>. Dort können wir ein bisschen über Magento quatschen :) Dazu gibt es übrigens auch eine <a href="https://www.facebook.com/events/266067610128930/">Veranstaltung bei Facebook</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2676

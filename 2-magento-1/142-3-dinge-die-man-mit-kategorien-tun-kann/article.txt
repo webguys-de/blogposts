@@ -1,0 +1,90 @@
+Article-meta: 
+
+----
+
+Title: 3 Dinge die man mit Kategorien tun kann
+
+----
+
+Date: 2010-04-12
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ein paar Code-Schnippsel von Dingen die man im Umgang mit Mage::getModel('catalog/category') gebrauchen kann :)
+
+
+
+----
+
+Text: <h3>1. Die Eltern-Kategorie aufrufen</h3>
+(code lang: php)
+$_category = Mage::getModel('catalog/category')->load( 1234 );
+$_parentcategory = $_category->getParentCategory();
+(/code)
+
+Nützlich um z.B. den Farbcode der Parent-Kategorie zu übernehmen.
+<h3>2.  Das Level der Kategorie ermitteln</h3>
+Das Level einer Kategorie gibt an wie tief die Kategorie verschachtelt ist oder anders wie viele Oberkategorien sie einschließlich sich selbst hat.
+<ul><li>Hauptkategorie/ Root-Kategorie (Level = 1)
+<ul><li>Bekleidung ( Level = 2 )
+<ul><li>Socken ( Level = 3)</li>
+	<li>Hosen ( Level = 3)</li>
+</ul></li>
+</ul></li>
+</ul>
+(code lang: php)
+$_level = $_category->getLevel();
+var_dump($_level);
+(/code)
+
+Nützlich um z.B. die dritte Ebene anders darzustellen.
+<h3>3. Für alle Kategorien Level 1 isAnchor aktivieren</h3>
+Wenn die Layered-Navigation benutzt werden soll muss bei den Kategorien im jeweiligen Level aktiviert werden das sie als Anker dienen. Das bedeutet soviel wie das, unabhängig vom Filter, die Kategorie aktiv bleibt. Bei vielen vielen Unterkategorien kostet das manuelle Bearbeiten viel zu viel Zeit deswegen geht es mit folgendem Code-Schnipsel deutlich schneller:
+
+(code lang: php)
+// Alle Kategorien abrufen + durchlaufen
+$categories = Mage::getModel("catalog/category")->getCollection();
+
+foreach( $categories AS $cat ) {
+	$cat = Mage::getModel("catalog/category")->load( $cat->getId() );
+	if ( $cat->getLevel() == 1 ) {
+		// Nur für Level 1
+		$cat->setData('is_anchor', 1);
+
+		// Nur verändertes Attribute speichern (geht deutlich schneller)
+		$cat->getResource()->saveAttribute($cat, 'is_anchor' );
+	}
+}
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 142

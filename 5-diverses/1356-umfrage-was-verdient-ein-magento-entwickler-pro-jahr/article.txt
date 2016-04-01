@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Umfrage: Was verdient ein Magento-Entwickler pro Jahr?
+
+----
+
+Date: 2011-01-23
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Was verdienen eigentlich andere Magento-Entwickler pro Jahr? Werde ich gut bezahlt oder bewege ich mich im Durchschnitt? Genau das wollen wir nun die nächsten Wochen mittels einer kleinen Umfrage ergründen. Nehmt teil und sagt es weiter :)
+
+
+
+----
+
+Text:  (image: einkommen.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1356

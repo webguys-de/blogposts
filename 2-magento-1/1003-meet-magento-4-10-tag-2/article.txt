@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento 4.10 Tag 2
+
+----
+
+Date: 2010-11-06
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nach einem Artikel zur <a href="http://www.webguys.de/magento/entwicklung/meet-magento-4-10-tag-1/">Meet Magento 4.10 des erstes Tages</a> folgt nun mein zweiter Review.
+
+----
+
+Text: Nach der tollen Aftershow-Party, die Aufgrund eines Feuers um eine Räumlichkeit weiter ziehen musste, begann mein Tag ein weniger später um 9.00 Uhr. Die Keynote habe ich somit verpasst. Ich denke aber das die tollen Gespräche, das Miteinander und dazu das Freibier die richtige Wahl war :)
+
+Den ersten Vortag von David Fuhr zum Thema <a href="http://www.mageblog.de/2010/11/05/meet-magento-vortrag-wie-programmiere-ich-ein-modul/">Magento Modul Entwicklung</a> konnte ich leider ebenfalls nicht wahrnehmen. Ich hatte mich an dieser Stelle auf den Vortrag zu High-Performance in Magento von DailyDeal fokussiert. Ich konnte hierzu ein paar Ansätze für mich mitnehmen:
+<ul><li>Im High-Performacne-Umfeld dient Magento eher dazu Content an Caching-Systeme auszuliefern</li>
+	<li>Mit Apache/PHP ist es fast unmöglich statischen Content an viele User gleichzeitig auszuliefern da pro parallel Request der Ram-Verbrauch quasi linear steigt</li>
+	<li>Es benötigt gute intelligente Caching-Strategien</li>
+</ul>
+Das sind zwar nicht unbedingt neue Innovative Ansätze spiegeln aber die Erfahrungen die ich mit der Betreuung anderes High-Performance-Webshops gemacht habe wieder. Bestelleingänge mit 8 Bestellungen pro Sekunde sind mit Magento und dem richtigen Serverkonzept also möglich.
+<h3>Barcamp</h3>
+Für mich war der Barcamp-Teil dieses Jahr sehr sehr spannend. Wir diskutieren Magento-Modulentwicklung, stellten uns die Frage ob Unit-Tests Sinn machen und wie wir Updates kalkulieren können bzw. sollten. Alles in allem - wirklich gelungen.
+<h3>Fazit</h3>
+Die Meet-Magento ist immer wieder eine gute Sache um Kontakte zu knüpfen bzw. Kontakte aufrecht zu erhalten und ein paar Erfahrungen auszutauschen. Es macht wirklich Spaß dort zu sein: tolle Leute und tolle Gespräche. Mitunter habe ich sogar ein Thema für meine Bachelor-Thesis gefunden :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1003

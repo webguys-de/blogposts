@@ -1,0 +1,93 @@
+Article-meta: 
+
+----
+
+Title: Türchen 22: Docker für Entwickler
+
+----
+
+Date: 2014-12-22
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: damian-luszczymak
+
+----
+
+Article-content: 
+
+----
+
+Intro: Virtualisierung ist eigentlich ein alter Hut jedoch kam in diesem Jahr ein neuer Player aufs Parkett namens Docker. Diese hat es geschafft alte Technik neu zu kombinieren (LXC und cgroups) und ein guten Layer drauf zu packen. Das ganze hätte jedoch nicht viel Aufmerksamkeit bekommen wenn nicht einiges an VC geflossen wäre. Doch was ist eigentlich Docker? Docker ist ein Container Virtualisierung System. Vagrant was viele von euch kenne ist eine Virtual Machine.
+
+
+
+----
+
+Text: Damit kann ich z.B. auf einem Linux ein Windows starten. Für Docker heißt das momentan das auf einem Linux nur Linux Container verwalten und laufen lassen kann. Ein Vorteil ist dadurch das man weniger Overhead zum Hostsystem hat und sich diese libs und Daten teilen können.
+
+(image: docker-containers-vms.png)
+
+Mit diesen einen Vorteil im Hinterkopf möchte man natürlich  Docker nutzen wenn man eh schon auf einem Unix System entwickelt. Wie fängt man jedoch an? Für Ubuntu:
+
+(code)
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+
+$ sudo sh -c "echo deb https://get.docker.com/ubuntu docker main\
+> /etc/apt/sources.list.d/docker.list"
+$ sudo apt-get update
+$ sudo apt-get install lxc-docker
+(/code)
+
+Testen kann man die Installation mit:
+
+(code)
+$ sudo docker run -i -t ubuntu /bin/bash
+(/code)
+
+Damit wird die ‘ubuntu’ image heruntergeladen und ein Terminal geöffnet. Der erste Start dauert wegen des herunterladen des Images aber schon beim zweiten ausführen merkt man wie schnell ein docker container starten kann (dies kann man mit einer virtual machine leider nicht erreichen). Da wir alle nicht viel Zeit haben außer an Weihnachten ;-) würde ich euch empfehlen erstmal das Tutorial unter <a href="https://www.docker.com/tryit/">https://www.docker.com/tryit/</a> durchzulaufen. Das erklärt euch kurz,interaktiv und knapp die wichtigsten Befehle um mit Docker durchzustarten. Nun seid ihr bestimmt schon heiß drauf mysql/nginx/percona/apache zu installieren. Bevor ihr jedoch den ganzen Tag verbringt ein Setup zu erstellen könnt ihr unter <a href="https://registry.hub.docker.com/">https://registry.hub.docker.com/</a> schauen ob nicht jemand schon was aktuelles gebastelt hat. Natürlich finden man dort alte Bekannte wieder wie nginx (<a href="https://registry.hub.docker.com/_/nginx/">https://registry.hub.docker.com/<em>/nginx/</em></a>) oder mysql (<a href="https://registry.hub.docker.com/_/mysql/">https://registry.hub.docker.com//mysql/</a>) damit hat man in 5 Minuten sein Setup fertig (Bandbreite vorrausgesetzt). Ein wichtiger Aspekt den ich hier erwähnen möchte ist wenn man ein Image startet dort Änderungen macht und den Container wieder stop und dann wieder startet sind die Daten weg! Dies kann man verhindern indem man z.B. den mysql data Ordner auf das Hostsystem verlinkt.
+
+(code)
+docker run -d -v /path/in/host:/var/lib/mysql foo/bar
+(/code)
+
+Somit kann man im Container eine Magento Datenbank importieren und diese bleibt dann persistent. Das muss man natürlich nicht machen und würde beim testen (behat, phpunit) hinderlich sein. Nun hat man natürlich damit als Team noch nix gewonnen wenn z.B. jeder  seine mysql datenbank auf dem Rechner laufen lässt. Ich habe öfters mit größeren Datenbanken zu tun und allein der import dauert immer ewig :-( und das bei jedem Kollegen. Nicht auszudenken wenn man sich diese Datenbank auch noch kaputt spielt ;-) Daher hat Docker an uns gedacht und Data Container bereitgestellt. Diese Data Container enthalten wie der Name schon sagt nur die Daten. Das gute an den Containern ist das man verschiedene Versionen erstellen kann und auch Tags einsetzen kann. Das heißt am Ende importiert nur ein Entwickler einmalig die Daten und stellt allen anderen Entwicklern den Data Container zur Verfügung. Jeder Entwickler startet dann z.B. sein MySQL Container und gibt den Data Container einfach an:
+
+(code)
+docker run -d --volumes-from db_vol -p 3306:3306 foo/bar
+(/code)
+
+Das coole an der Geschichte ist das ich mir innerhalb Sekunden dann eine frische Datenbank einrichten kann ! Nie wieder warten (Downloadzeit nicht inbegriffen ;-) )
+
+Natürlich das das nur ein Weg wie man sich im Team etwas besser strukturieren kann, aber es ist ein schneller. Man kann mit Docker noch viel mehr anstellen was den Blogeintrag hier sprengen würde dennoch möchte ich noch auf drei Dinge verweisen.
+
+<ol><li>Magento 1 Images gibt es unter
+<a href="https://github.com/kojiromike/docker-magento">https://github.com/kojiromike/docker-magento</a> (sehr abstrakte Lösung siehe github)
+<a href="https://github.com/alankent/docker-magento-ce">https://github.com/alankent/docker-magento-ce</a> (kein gelungenes Image da fast über 2 GB)</li>
+    <li>Magento 2 Image <a href="https://github.com/alankent/docker-magento2-demo-apache">https://github.com/alankent/docker-magento2-demo-apache</a></li>
+    <li>Es sollte bald ein Video von der MMPL14 zu dem Thema geben.</li>
+</ol>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4192

@@ -1,0 +1,63 @@
+Article-meta: 
+
+----
+
+Title: Türchen 04: Admin-URL ändern
+
+----
+
+Date: 2010-12-04
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 04 ist ein Sicherheits-Türchen. Um automatische Angriffen ein wenig vorzubeugen ist es sinnvoll die Admin-URL im Live-System zu verändern. Das hat den Vorteil das Aktionen, wenn man im Magento-Admin angemeldet ist, nicht einfach von anderen Webseiten über z.B. I-Frame ausgelöst werden können. Zwar versucht Magento durch das anhängen von Keys in der URLs vorzubeugen - leider unterstützen das bei weitem noch nicht alle Module so das das Feature mitunter deaktiviert ist.
+
+----
+
+Text: Die Admin URL wird in der <em>local.xml</em> in <em>app/etc/local.xml</em> gespeichert:
+
+(code lang: xml)
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <frontName><![CDATA[admin]]></frontName>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+(/code)
+
+Anstelle von "admin" kann dort ein fast beliebiger Name eingetragen werden. Der Name sollte natürlich nicht mit einem Link des Shops kollidieren. Danach noch den Cache in <em>var/cache</em> komplett leeren und die Administration hat eine völlig neue URL.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1079

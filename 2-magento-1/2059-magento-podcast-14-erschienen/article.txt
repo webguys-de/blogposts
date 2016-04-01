@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Magento Podcast #14 erschienen
+
+----
+
+Date: 2011-11-29
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Ganz vergessen hier zu informieren: Der Magento-Podcast #14 ist erschienen. Themen waren unter anderen Magento 2, die Zertifizierung, das Foocamp und, wie immer, die Stammtische in ganz Deutschland.
+
+<a href="http://magentopodcast.de/2011/11/magento-podcast-14-2/">Weiterlesen >></a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2059

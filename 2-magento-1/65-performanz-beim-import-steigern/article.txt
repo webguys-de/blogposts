@@ -1,0 +1,64 @@
+Article-meta: 
+
+----
+
+Title: Performance beim Import steigern
+
+----
+
+Date: 2010-04-06
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,import
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Jungs von <a href="http://www.flagbit.de/">FlagBit</a> haben eine kleine Anregung gepostet um zumindest das Aktualisieren von Produkten beim Import zu beschleunigen. Je nachdem was sich am Produkt  ändert ist der Artikel mit dem Titel "<a href="http://www.mageblog.de/2010/01/08/einzelne-eav-attribute-performant-speichern/"><strong>Einzelne EAV-Attribute performant speichern</strong></a>" ganz spannend.
+
+
+
+----
+
+Text: Das Beispiel will ich einmal zitieren:
+
+(code lang: php)
+// Produkt irgendwoher holen
+$product = Mage::getModel("catalog/product")->load(142);
+
+// Attribut ändern
+$product->setTitle("Test");
+
+// Produkt anweisen, das geänderte Attribut zu speichern
+$product->getResource()->saveAttribute($product, "title");
+(/code)
+
+Der Trick besteht darin nur die geänderten Attribute zu speichern - alles andere bleibt unangetastet.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 65

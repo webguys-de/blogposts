@@ -1,0 +1,83 @@
+Article-meta: 
+
+----
+
+Title: Türchen 01: Vertrauen - die Basis unserer Kunden
+
+----
+
+Date: 2012-12-01
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender,hsts,security,session,cookies
+
+----
+
+Author: fabian-blechschmidt
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es ist der erste Dezember, bei uns in Berlin ist es grau, kalt und nass und nicht schön weiß, wie z.B. in Baden-Württemberg. Aber beschäftigen wir uns nicht mit der Welt da draußen. Ich habe die große Ehre, den Adventskalender zu eröffnen und mache das mit einem Thema, welches mir sehr am Herzen liegt und wenn ihr mich fragt, sollte es auch euch sehr am Herzen liegen: <strong>Vertrauen</strong>.
+
+----
+
+Text: Es gibt viele Arten des Vertrauens. Ich möchte heute über Kundenvertrauen reden und was wir tun können um es uns zu verdienen.
+
+Kommen wir also endlich zum Thema: Sicherheit. Meist unterpriorisiert und dank Magento ist das nicht ganz so schlimm, denn wie sagt Basti immer: <a href="http://www.youtube.com/watch?v=-iQpz6T8khY">"Im Vergleich zu anderer Software ist Magento ziemlich sicher"</a>. Nichts desto trotz gibt es neben den üblichen Empfehlungen, die man bei der Magento-Programmierung und dem Hosting beherzigen sollte:
+<ul><li>Admin-Pfad ändern</li>
+	<li><a href="http://www.ikonoshirt.de/stuff/12-08-08%20Passw%c3%b6rter%20speichern.pdf">Ordentliche Passwörter</a></li>
+	<li><a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"><strong>KEIN</strong> eigenes SQL, <strong>GARKEINS</strong>!</a></li>
+	<li><a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet">Höchste Vorsicht mit Benutzereingaben und der Ausgabe selbiger (XSS)</a></li>
+	<li>...</li>
+</ul>
+andere Probleme, mit denen wir uns bisher nicht so beschäftigt haben, nämlich alles um das Thema Sessions.
+<h1>Warum man Sessions schützen sollte</h1>
+Es geht um Vertrauen. Es geht um Sicherheit. Der Kunde im Shop soll sich sicher fühlen. Dazu trägt unter anderem bei, dass er uns seine Daten bedenkenlos anvertrauen kann. Niemand kauft bei uns ein, wenn er glaubt, dass mit seiner Kreditkarte zwanzig Sekunden später irgendwo anders eingekauft wird. Oder er damit rechnen muss, dass wir seine Einkäufe inkl. seiner Adresse und E-Mailadresse weiterverkaufen.
+
+<strong>Genau das gleiche</strong> gilt für die Session unseres Kunden. Eine Session muss geschützt werden, und jetzt sind wir im Thema. Aus Kundensicht kann ein Angreifer eine Menge Unsinn mit der Session machen. Wenn die Session übernommen wurde, kann man Adressdaten ändern und dafür sorgen, dass die Pakete woanders hin geschickt werden (z.B. zu uns). In einer Standard-Magento-Installation werden zusätzlich alle Enkäufe im Kundenbereich aufgelistet. Außerdem finden wir die Wunschliste, die Tags und die Reviews eines Kunden. Man kann sich also einen guten Überblick über ihn verschaffen. Dank der Abfrage des aktuellen Passworts, kann man es nicht einfach ändern, aber der Umweg über Email-Adresse ändern, Passwort vergessen, Passwort ändern, Mailadresse zurück ändern geht.
+
+Aus Shopbetreibersicht, gibt es aber auch einige Gründe, neben dem Vertrauensaspekt, die Session des Kunden zu schützen. Eingeloggte Kunden können ihre Download-Produkte nochmal herunterladen. Bekommt also jemand die Session, bezahlt er nicht für die MP3, das Ebook, etc. Besonders übel wird es bei Kundenkreditprogrammen und Belohnungs- und Punktesammelsystemen und kaufen auf Rechnung. Dann muss nur die neue Adresse eingegeben werden und bezahlt wird mit den bisher gesammelten Punkten oder dem Guthaben welches man noch im Shop hat. Der Kunde wurde geprellt und ist sauer und wir haben gerade Ware verschenkt.
+
+Danke an dieser Stelle an <a href="https://twitter.com/VinaiKopp/status/266642679675355136" target="_blank">Vinai</a> und <a href="https://twitter.com/pavelnovitsky/status/266632255831687168" target="_blank">Pavel</a> für die Recherchehilfe.
+<h1>Wie schützen wir eine Session</h1>
+<h2>Transport Layer Security</h2>
+TLS ist das Stichwort. Den meisten dürfte es unter dem alten Namen SSL bekannt sein oder der Implementierung auf HTTP: HTTPS. Aus meiner Sicht als Programmierer, <a href="http://gmailblog.blogspot.de/2010/01/default-https-access-for-gmail.html" target="_blank">gibt</a> <a href="http://www.imperialviolet.org/2010/06/25/overclocking-ssl.html" target="_blank">es</a> <a href="http://ssl.entrust.net/blog/?p=360" target="_blank">keinen</a> <a href="http://highscalability.com/blog/2011/2/10/dispelling-the-new-ssl-myth.html" target="_blank">Grund</a> <a href="http://ssl.entrust.net/blog/?p=455" target="_blank">mehr</a>, auf HTTPS zu verzichten. <strong>Ein Shop sollte nur über HTTPS erreichbar sein.</strong>
+<h2>Secure Cookies</h2>
+Nachdem der erste Schritt getan ist und alle URLs nur via HTTPS erreichbar sind, bleibt das Problem, dass Kunden für gewöhnlich www.mein-shop.de in ihren Browser eingeben, das führt dazu, dass eine 302 Weiterleitung von http://www.mein-shop.de auf http<strong>s</strong>://www.mein-shop.de gemacht wird. Entweder der Kunde hat bereits eine Session-ID, dann wird diese unverschlüsselt über das Netzwerk übertragen (z.B. das offene WLAN vom Starbucks) oder aber, der Server vergibt eine neue via Set-Cookie, die dann auch unverschlüssel vom Server an den Client geht. In jedem Fall: Wenn jemand mit hört, hat er gerade unsere Session-ID erfahren. Die mit der wir uns dann gleich einloggen!
+
+Das lässt sich verhinden, indem bei den Cookies das "Secure"-Attribut gesetzt wird. Das sorgt dafür, dass das Cookie dann nur über HTTPS übertragen wird. <a href="http://www.rfc-editor.org/rfc/rfc6265.txt" target="_blank">Mehr dazu im RFC 6265</a>.
+
+Es sei noch erwähnt, dass die Gefahr, dass eine Session-ID gestohlen wird minimiert wird, wenn zusätzlich das "httpOnly" Attribut auf dem Cookie gesetzt wird. Dadurch kann JavaScript weder den Inhalt des Cookies lesen noch schreiben. Dies macht Magento glücklicherweise bereits für uns!
+<h2>Session Fixation</h2>
+Eine eingeloggte Session-ID zu klauen ist aber nicht der einzige Weg an eine authentifizierte Session zu gelangen. Ein weiterer Weg ist ein sog. "Session-Fixation" Angriff. Bei diesem Angriff stiehlt man dem Benutzer nicht die authentifizierte Session, sondern schiebt ihm eine Session-ID unter. Der Unterschied ist, dass der Angreifer in diesem Szenario die Session-ID während des kompletten Ablaufs kennt und nur darauf warten muss, bis der Benutzer sich einloggt.
+
+Leider ist es bei PHP sehr einfach eine Session unterzuschieben, nämlich so: http://www.mein-shop.de/?SID=12345. Wichtig hierbei zu verstehen ist, dass eine Session-ID, die via GET gesetzt wird, jeden Cookie überschreibt, mindestens in der Standardkonfiguration.
+
+Magento ändert seit der Version 1.5 die Session-ID während des Logins. Habt ihr eine ältere Version, aktualisiert. Ich habe - bevor ich das erfahren habe - ein Modul implementiert, welches das auch tut, evtl. hilft euch das: <a href="https://github.com/ikonoshirt/secureSession">Ikonoshirt_SecureSession</a>
+<h2><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security (HSTS)</a></h2>
+HSTS sorgt kurz gesagt dafür, dass ein Shop nur per HTTPS erreichbar ist. Im Detail verschickt der Server einen HTTP Header der für eine bestimmte Zeit den Browser anweist die Domain (evtl. inkl Subdomains) nur über HTTPS anzusprechen. Empfohlen werden hier 6-12 Monate. Das ist ein Ansatz gegen "<a href="http://www.thoughtcrime.org/software/sslstrip/" target="_blank">HTTPS stripping attacks</a>". Wenn ihr mehr wissen wollt, folgt den Links. Und auch hier habe ich ein Modul geschrieben. Das Modul implementiert HSTS inkl. ein paar Prüfungen, z.B. ob die unsecure und die secure_base_url https sind: <a title="Ikonoshirt_StrictTransportSecurity" href="https://github.com/ikonoshirt/StrictTransportSecurity" target="_blank">Ikonoshirt_StrictTransportSecurity</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2977

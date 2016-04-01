@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Layered Navigation / Filter-Navigation auf der Meet Magento 
+
+----
+
+Date: 2013-05-30
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich freue mich schon sehr. Montag geht die Meet Magento los. Einige Entwickler treffen jedoch ab Freitag beim Hackathon schon aufeinander. Ich geselle mich ab Sonntag dazu. Meine erste Aktion wird ein gemütlich Bier im Spizz in Leipzig sein - gemüntliche Runde dank "unserem" Timste garantiert. Ich freue mich natürlich sehr wenn ich mich beim meinem Vortrag zur Layered Navigation mit Magento besucht. Für alle mit etwas Neugier und Vorfreude im Blut hier ein kleiner Screenshot.
+
+
+
+----
+
+Text: (image: Bildschirmfoto-2013-05-30-um-15.06.14-650x371.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3412

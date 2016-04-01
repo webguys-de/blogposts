@@ -1,0 +1,79 @@
+Article-meta: 
+
+----
+
+Title: Einbinden statischer Blöcke
+
+----
+
+Date: 2010-09-24
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Neben kompletten Seiten, bietet Magento die Möglichkeit, zusätzliche Inhaltsbereiche anzuziehen. Dafür gibt es keinen festgelegt , sondern mehrere Möglichkeiten. Aus dem jeweiligen Einsatzzweck resultiert letztlich ein Best-Practice Ansatz.
+
+
+----
+
+Text: Um einen Block anzuzeigen, bietet Magento drei Möglichkeiten an, den Inhalt dieses Block anzuzeigen.
+
+<strong>1. Einbindung über die Layout.xml</strong>
+Der im Backend angelegte statische Block wird - wie die meisten Elemente - in der Layout.xml platziert:
+
+(code lang: xml)
+<layout>
+    <bereich_in_dem_der_block_erscheinen_soll>
+        <reference name="content">
+            <block type="cms/block" name="new_static_block">
+                <action method="setBlockId"><block_id>store_check</block_id></action>
+            </block>
+        </reference>
+    </bereich_in_dem_der_block_erscheinen_soll>
+</layout>
+(/code)
+
+<strong>2. Einbinden über den Texteditor einer CMS Seite</strong>
+Der statische Block kann bequem über das Inhaltsfeld im CMS eingefügt werden:
+
+(code lang: php)
+{{block type="cms/block" block_id="BLOCK_ID"}}
+(/code)
+
+<strong>3. Integration in Designvorlagen</strong>
+Jedoch ist der Einsatz nicht nur auf den Contentbereich der CMS Seiten beschränkt, sondern kann problemlos in Designvorlagen genutzt werden:
+
+(code lang: php)
+echo $this->getLayout()->createBlock('cms/block')->setBlockId('BLOCK_ID')->toHTML();
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 791

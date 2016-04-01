@@ -1,0 +1,238 @@
+Article-meta: 
+
+----
+
+Title: Türchen 22: Magento und Google Website Optimizer
+
+----
+
+Date: 2011-12-22
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: ralf-siepker
+
+----
+
+Article-content: 
+
+----
+
+Intro: Beim Website-Optimierungstools handelt es sich um ein Tool von Google, mit dem man die Effiktivität einer Website bzw. eines Magento-Shops verbessern kann, indem man testet, ob durch Änderungen am Inhalt der Seite mehr Conversions erzielt werden. Hierbei legt man fest, welche Seiten oder Teile der einer Seite getestet werden sollen. Hierzu zählen z.B. Überschriften, Bilder, Banner, Werbetexte und ganze Blöcke. Somit lässt sich messbar feststellen, welcher Inhalt den Benutzer am besten anspricht. Vielfach wird nur seitens des Shopbetreibers oder Webdesigners/Programmierers geraten, was besser sein könnte. Ob dies tatsächlich der Fall ist, sind häufig Vermutungen, jedoch keine messbaren Resultate.
+
+
+----
+
+Text: <h2>Warum Google Website Optimizer?</h2>
+<ul><li>GWO ist kostenlos (<a href="http://www.google.com/websiteoptimizer">www.google.com/websiteoptimizer</a>)</li>
+<li>GWO basiert auf Google Analytics</li>
+</ul><h2>Was sind A/B-Tests?</h2>
+A/B-Tests testen Varianten kompletter Websites. Die Ursprungsversion wird dabei mit einer oder mehreren Testvarianten verglichen. Der Google Website Optimizer sorgt dafür, das beide Seiten gleich viel Traffic bekommen.
+
+<h2>Was sind multivariate Tests?</h2>
+Bei multivariaten Tests werden mehrere Bereiche gleichzeitig getestet und zu Kombinationen zusammengefasst. Testet man z.B. eine Überschrift, einen Banner und einen Kategorietext, so werden hieraus die Kombinationen erstellt und GWO sorgt dafür, das jede einzelne Variation gleich viel Besucher erhält. 
+
+<h2>Allgemeine Voraussetzungen</h2>
+- Magento
+- Konto bei <a href="http://www.google.de/websiteoptimizer">Google</a>
+- Besucher muss JavaScript und Cookies aktiviert haben
+- falls nicht aktiviert, wird dieser nicht gezählt
+
+<h2>Google Website Optimizer ist/war in Magento vorhanden</h2>
+Der Google Website Optimizer ist seit Magento 1.1 verfügbar und bezieht sich auf Produkte, Kategorien und CMS-Seiten. Leider konnten mit diesem Modul jedoch keine seitenübergreifenden Tests durchgeführt werden. Will man z.B. den Warenkorb-Button auf jeder Listen- und Detailseite ändern, ist dies mit Hausmitteln nicht möglich gewesen. Mit dem Update auf Magento 1.6.1 wurde dieses Modul auch wieder entfernt und wird zukünftig als Core-Extension verfügbar sein, siehe <a href="http://www.magentocommerce.com/download/release_notes#Release%20Notes%20-%20Magento%201.6.1.0%20(Oct%2019,%202011)">Changelog</a>. Deshalb werde ich auf diese Funktionen nicht weiter eingehen.
+
+<h2>Umsetzung per Hand</h2>
+Damit man komplette Workflows und seitenübergreifende Experimente durchführen kann, ist ein wenig Handarbeit notwendig. Dieses möchte ich hier Schritt für Schritt illustrieren.
+
+<h3>Schritt 1: Erstellen eines neues Experiments</h3>
+(image: 01_gwo_startseite-650x232.png)
+Nachdem man sich ein Konto erstellt hat bzw. in das Konto eingeloggt hat, legt man einen neuen Test an.
+
+<h3>Schritt 2: Multivariates Experiment</h3>
+(image: 02_gwo_test_erstellen-650x411.png)
+
+Auf der nächsten Seite wird man gefragt, ob man einen A/B-Test oder einen multivariaten Test anlegen möchte. Für dieses Beispiel konzentriere ich mich auf die multivariaten Tests.
+
+(image: 03_gwo_multivariater_test-650x581.png)
+
+Man erhält eine Übersichtsseite, bei der man bestätigt, die entsprechenden Schritte durchgeführt zu haben.
+
+<h3>Schritt 3: Eingabe der Daten</h3>
+(image: 04_gwo_identifizieren_testseiten-650x595.png)
+
+Im weiteren Schritt gibt man den Namen des Experiments ein, welche Seite man testen möchte und auf welcher Seite sich das Script befindet wird, das eine erfolgreiche Conversion zählt.
+
+<strong>Wichtig:</strong>
+Diese Daten dienen GWO nur zur Überprüfung, ob das später zu installierende JavaScript an die richtige Stelle kopiert wurde. Da die Success-Seite bei Magento für Google nicht erreichbar ist, werden wir in einem der nächsten Schritte diese Prüfung per Hand vornehmen.
+
+Bestätigt man dann in dieser Stelle mit dem Button weiter, erfolgt eine Fehlermeldung. Hier muss man bestätigen, das die eingegebenen URLs richtig sind.
+
+(image: 05_fehlermeldung-650x130.png)
+
+<h3>Schritt 4: Javascript installieren</h3>
+
+(image: 06_installation-650x383.png)
+
+Als nächstes wird man gefragt, wer das JavaScript erstellt. Dies machen wir natürlich selbst.
+
+(image: 07_javascript_tags_installieren-633x1024.png)
+
+Somit erhalten wir jetzt verschiedene Scripte, die wir in unsere Magento-Templates integrieren müssen.
+<ul><li>Kontroll- und Trackingscript</li>
+<li>Seitenbereiche</li>
+<li>Conversionscript</li>
+</ul><h3>Schritt 5: JavaScript zum Einbau in die eigene Seite</h3>
+Es gibt verschiedene Möglichkeiten, die Scripte zu installieren. Zur Illustration wähle ich an dieser Stelle mal den einfachen Weg und gehe davon aus, das die Templates in app/design/frontend/default/default/template liegen. Eine alternative Möglichkeit wäre z.B. die Einrichtung von statischen Blöcken, die per XML eingebunden und über das Backend gepflegt werden können.
+
+<strong>Kontroll- und Trackingscript: app/design/frontend/default/default/template/page/head.phtml</strong>
+Dieser Bereich wird direkt in den oberen Bereich geschrieben.
+(code lang: html)
+<!-- Google Website Optimizer Control Script -->
+<script>
+function utmx_section(){}function utmx(){}
+(function(){var k='0327200871',d=document,l=d.location,c=d.cookie;function f(n){
+if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.indexOf(';',i);return escape(c.substring(i+n.
+length+1,j<0?c.length:j))}}}var x=f('__utmx'),xx=f('__utmxx'),h=l.hash;
+d.write('<sc'+'ript src="'+
+'http'+(l.protocol=='https:'?'s://ssl':'://www')+'.google-analytics.com'
++'/siteopt.js?v=1&utmxkey='+k+'&utmx='+(x?x:'')+'&utmxx='+(xx?xx:'')+'&utmxtime='
++new Date().valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
+'" type="text/javascript" charset="utf-8"></sc'+'ript>')})();
+</script>
+<!-- End of Google Website Optimizer Control Script -->
+<!-- Google Website Optimizer Tracking Script -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['gwo._setAccount', 'UA-5234811-12']);
+  _gaq.push(['gwo._trackPageview', '/0327200871/test']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<!-- End of Google Website Optimizer Tracking Script -->
+(/code)
+
+<strong>Seitenbereiche: app/design/frontend/default/default/template/catalog/product/list.phtml</strong>
+Im Kopf der list.phtml habe ich einen Bereich definiert, mit dem ich allgemein das CSS dieser Seite beinflussen möchte.
+(code lang: html)
+<script>utmx_section("Green Button")</script>
+    <style type="text/css"></style>
+</noscript>
+(/code)
+
+Im weiteren Verlauf des Templates habe ich einen Seitenbereich um den Text des Warenkorb-Buttons gelegt, um diesen anders zu belegen.
+(code lang: html)
+<button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')">
+<span><span><script>utmx_section("Add to Cart")</script><?php echo $this->__('Add to Cart') ?></noscript></span></span>
+</button>
+(/code)
+
+<strong>Conversionscript: app/design/frontend/default/default/template/checkout/success.phtml</strong>
+Im der Success-Seite wird das Script direkt im oberen Bereich platziert.
+(code lang: html)
+<!-- Google Website Optimizer Tracking Script -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['gwo._setAccount', 'UA-5234811-12']);
+  _gaq.push(['gwo._trackPageview', '/0327200871/goal']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<!-- End of Google Website Optimizer Tracking Script -->
+(/code)
+
+<h3>Automatische Validierung schlägt fehl</h3>
+
+Klickt man nun auf den Button "Seite überprüfen", so erhält man eine Fehlermeldung, die je nach der Erreichbarkeit der Website wie folgt aussieht:
+(image: 08_fehlermeldung.png)
+
+<h3>Schritt 6: Validierung per Hand</h3>
+Die Validierung muss per Hand erfolgen, da z.B. checkout/success normalerweise nicht erreichbar ist. Deshalb habe ich mir zweite HTML-Dateien per Hand angelegt, die anschließend an dieser Stelle hochgeladen werden.
+(image: 09_javascript_tags_manuell.png)
+(code)webguys.html(/code) enthält den gespeicherten Source einer beliebigen Kategorie-Seite
+(code)webguys_success.html(/code) enthält das blanke Conversion-Script (siehe app/design/frontend/default/default/template/checkout/success.phtml)
+
+
+<h3>Schritt 7: Erfolgreiche Validierung</h3>
+
+
+(image: 10_javascript_tags_validiert.png)
+
+Nach dem Upload per Hand validiert nun die Seite und man kann nun im nächsten Schritt seine Varianten anlegen.
+
+<h3>Schritt 8: Anlegen der Varianten</h3>
+(image: 11_variationen_erstellen-650x617.png)
+
+GWO erkennt nun durch den Upload unserer Datei die Seitenbereiche. An dieser Stelle kann man nun neue Variationen hinzufügen.
+
+Im Seitenbereich "Add to Cart" habe ich eine Variation "Buy it now" hinzugefügt. Hier wird einfach nur der Text Add to Cart ausgetauscht.
+(code lang: html)Buy it now(/code)
+
+Im Seitenbereich "Green Button" habe ich eine Variation "Green Button" hinzugefügt. Hier wird per CSS der Button verändert.
+(code lang: html)<style type="text/css">button.button span {background-color: #A9EA00;  border-color: #008800;}</style>(/code)
+
+Die Beispiele sind an dieser Stelle natürlich relativ einfach gehalten. In aktuellen Projekten werden z.B. komplette DIV-Blöcke ausgetauscht. Dabei werden alle Versionen für die eine Seite erstellt und die Varianten per CSS mit (code)display:none;(/code) ausgeblendet. In den Seitenbereichen von GWO werden dann bei den Varianten der Ursprungsblock versteckt und die Variante dargestellt, so das man hier wenig Overhead hat.
+
+<h3>Schritt 9: Preview der Varianten</h3>
+(image: 12_testvorschau-650x636.png)
+Mit der Testvorschau kann man nun seine Eingaben überprüfen und jede einzelne Variation anzeigen lassen.
+
+(image: 13_ursprungsversion.png)
+Ursprungsversion
+
+(image: 14_variante.png)
+Variante mit grünen Button
+
+<h3>Schritt 10: Start des Experiments</h3>
+Wenn man alles geprüft hat, kann man den Test starten. Folgender Ablauf ergibt sich im Browser des Besuchers
+<ul><li>Javascript wird ausgeführt und Cookie gesetzt</li>
+<li>GWO schaut nach, ob der Kunde bereits eine Variante angezeigt bekommen hat und liefert diese wieder aus</li>
+<li>anonsten wird gleichmässig verteilt ausgeliefert</li>
+<li>per JS wird der Inhalt der Varianten nachgeladen und in die Sections eingesetzt</li>
+<li>an dieser Stelle lassen sich alle möglichen Inhalte einsetzen: Text, Bilder, CSS, Javascript</li>
+<li>somit können z.B. komplette Seitenelemente, z.B. div-Blöcke ausgetauscht werden</li>
+</ul><h3>Schritt 11: Die Auswertung</h3>
+(image: gwo.jpg)
+
+Nach einer Laufzeit von mindestens 24 Stunden erkennt man erste Ergebnisse in seinem Google-Konto. Hierbei werden alle Kombinationen aufgeführt und man erkennt, wie diese im Vergleich zu Ursprungsversion konvertieren. Man erkennt Gewinner und Verlierer und eine mögliche Verbesserung wird dargestellt. Somit kann man seine Entscheidungen auf Basis von Fakten fällen, nicht nur auf Vermutungen. Folgende Punkte sollte man jedoch beachten.
+<ul><li>pro Variante sollten mindestens 100 Conversion erfolgen, um ein aussagekräftige Ergebnis zu haben</li>
+<li>bei 12 Varianten benötigt man somit 1200 Conversions</li>
+<li>innerhalb von GWO gibt es ein Tool zum Berechnen der benötigten Conversion</li>
+</ul><h2>Fazit</h2>
+Mithilfe von Google Website Optimizer ist es möglich, verschiedene Varianten seines Magento-Shops zu testen und festzustellen, welche Variante am besten konvertiert. Man verlässt sich nicht nur auf sein Gefühl, sondern kann messbare Ergebnisse heranziehen. Um das Prinzip besser zu verstehen, sollte man sich die zahlreichen Hilfestellungen sowie den unten aufgeführten Techie Guide anschauen.
+
+<h2>Weiterführende Links</h2>
+<ul><li><a href="http://www.google.com/websiteoptimizer">Google Website Optimizer</a></li>
+<li><a href="http://static.googleusercontent.com/external_content/untrusted_dlcp/www.google.com/de//websiteoptimizer/techieguide.pdf">Goolge Techie Guide</a></li>
+<li><a href="http://blog.kissmetrics.com/google-website-optimizer">35 Resources for Getting most out of GWO</a> </li>
+<li><a href="http://websiteoptimizer.blogspot.com/2008/09/top-myths-about-google-website.html">Top Myths about GWO</a></li>
+</ul>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2539

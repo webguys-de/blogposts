@@ -1,0 +1,109 @@
+Article-meta: 
+
+----
+
+Title: Automatisch das Theme wechseln
+
+----
+
+Date: 2010-09-09
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Durch Interfaces bzw. Themes in Magento ist es möglich ein und das selbe System mit unterschiedlichen Darstellungen zu betreiben. Themes können häufig von Shop A nach Shop B kopiert und dort eingesetzt werden. Möchte man aber nun automatisch, anhand selbst definierter Kriterien, das Design wechseln ist ein wenig Programmcode von Nöten. Schwierig dabei ist eigentlich nur zu wissen welche Funktionen und Events benötigt werden.
+
+
+
+----
+
+Text: In erster Regel ist herauszufinden wie und warum Magento das aktuell eingestellte Theme darstellt. Dies wird durch ein Singleton mit dem Namen <em>core/design_package</em> kontrolliert. Dieses kann wie folgt geladen werden:
+
+(code lang: php)
+$package = Mage::getSingleton('core/design_package');
+(/code)
+
+<em>$package</em> enthält im Anschluss eine Instance vom Typ <em><a href="http://docs.magentocommerce.com/Mage_Core/Mage_Core_Model_Design_Package.html">Mage_Core_Model_Design_Package</a>. </em>Mittels <em>setPackageName</em> kann nun wie folgt ein beliebiges Theme aktiv gesetzt werden:
+
+(code lang: php)
+$package->setPackageName('deinTheme');
+(/code)
+
+Letztlich fehlt noch die Möglichkeit mittels Event Magento beim Starten dazu zu überreden nicht das Standard sondern, falls ein bestimmtes Kriterium zugrifft, das alternative Theme zu verwenden. Hierzu kann das Event <em>controller_action_layout_load_before</em> abgefangen und an einen Observer-Class weitergeleitet werden. In der config.xml des Moduls sind das wie folgt aus:
+
+(code lang: xml)
+<config>
+	<modules>
+		<Webguys_Owntheme>
+		<version>0.0.1</version>
+		</Webguys_Owntheme>
+	</modules>
+
+	<global>
+		<models>
+			<Owntheme>
+				<class>Webguys_Owntheme_Model</class>
+			</Owntheme>
+		</models>
+
+		<events>
+			<controller_action_layout_load_before>
+				<observers>
+					<webguys_owntheme_controller_front_init_before>
+						<type>singleton</type>
+						<class>Webguys_Owntheme_Model_Observer_Layout</class>
+						<method>updateInterface</method>
+					</webguys_owntheme_controller_front_init_before>
+				</observers>
+			</controller_action_layout_load_before>
+		</events>
+
+	</global>
+
+</config>
+(/code)
+
+Das dazugehörige Model, welches nun eine Methode bereitstellt die Einfluss auf das Magento-Theme nimmt, baut sich wie folgt auf:
+(code lang: php)
+class Webguys_Owntheme_Model_Observer_Layout {	
+	public function updateInterface( $observer ) {		
+		$package = Mage::getSingleton('core/design_package');		
+		if ( /* DEINE BEDINGUNGEN */ ) {
+			$package->setPackageName('deinTheme');
+		}		
+	}	
+}
+(/code)
+
+Ein solches Vorgehen bietet sich z.B. an um umfangreiche A/B Design-Tests in Magento zu realisieren. Um jedoch nur einzelne Blöcke des Layouts unter bestimmten Bedingungen zu verändern ist ein eigener Layout-Handler, der im Fall der Fälle aufgerufen wird, vermutlich der bessere Weg.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 747

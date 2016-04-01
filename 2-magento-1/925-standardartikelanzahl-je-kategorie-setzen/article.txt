@@ -1,0 +1,71 @@
+Article-meta: 
+
+----
+
+Title: Standardartikelanzahl je Kategorie setzen
+
+----
+
+Date: 2010-10-18
+
+----
+
+Description: 
+
+----
+
+Tags: themes-magento
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Gerade in Webshops mit größeren Produktsortimenten ist es mitunter notwendig Kategorien unterschiedlich darzustellen. Die einfachste Anforderung ist dabei sicherlich Standardsortierungen oder Anzahl der Artikel pro Seite festzulegen. In Magento ist dies mit eigenen Layout-Updates auf Kategorieebene möglich. 
+
+----
+
+Text: Mit Layout-Updates auf Kategorie-Ebene lässt sich somit Einfluss auf die vorhanden Blöcke der jeweiligen Seite nehmen. Jedes Layout-Update lässt sich je Kategorie einzeln anpassen - das ermöglicht eine große Flexibilität. Die Layout-Updates beziehen sich dabei in der Regel auf bestimmte Blöcke und setzen, durch den Aufruf von Methoden, Parameter neu - schon verhält sich ein Block ein wenig anders.
+
+In unserem Fall gilt es nun also unter <em>Catalog/ Manage Categories</em> die gewünschte Kategorie zum Bearbeiten auszuwählen und dann zum Reiter <em>Custom Design</em> zu wechseln. Dort findet sich eine Textarea mit dem Namen <em>Custom Layout Update</em>. Hier sind die eigenen Layout-Updates einzufügen.
+
+(image: doodle-500x228.png)
+
+Die Anzahl der Artikel pro Kategorie sowie die Standardsortierung wird in Magento mithilfe der Toolbar bewerkstelligt. Diese holt sich die aktuelle Product-Collection und wendet Limitierung und Sortierung darauf an. Gekapselt sind die Methoden dazu im Block <em>Mage_Catalog_Block_Product_List_Toolbar</em> in den Methoden <em>setDefaultGridPerPage</em>,  <em>setDefaultDirection</em> und <em>setDefaultOrder</em>. Gelesen werden die Daten natürlich über die zuständigen Getter.
+
+Um nun z.B. die Anzahl der Artikel pro Seite per Standard auf "alle" zu setzen muss, auf Kategorieebene in das Feld Custom Design, folgendes Layout-Update zu platzieren:
+
+(code lang: php)
+<reference name="product_list_toolbar">
+    <action method="setDefaultGridPerPage">
+        <limit>all</limit>
+    </action>
+</reference>
+(/code)
+
+Diese Änderung betrifft natürlich nur die Grid-Darstellung. Wer die Listen-Darstellung beeinflussen möchte muss natürlich anstelle von <em>setDefaultGridPerPage</em> die Methode <em>setDefaultListPerPage</em> verwenden.
+
+Natürlich können nur Limitierungen angegeben wurde die im Magento-Admin unter System/ Konfiguration/ Katalog auch freigeschaltet wurden. Genauso muss freigeschaltet werden das alle Produkte pro Kategorie angezeigt werden dürfen.
+
+Gleiches lässt sich auf diverse andere Blöcke vergleichbar anwenden. Einfach einen Blick in die Magento-Doku werfen bzw. direkt im Quelltext prüfen welche Methoden der Block zur Verfügung stellt.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 925

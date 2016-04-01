@@ -1,0 +1,103 @@
+Article-meta: 
+
+----
+
+Title: Türchen 13: Eigene Layout-Handles
+
+----
+
+Date: 2010-12-13
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,themes-magento,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen Dreizehn ist noch lange kein Unglückstürchen - ist ja auch kein Freitag heute am Montag. Aber was wäre wenn unser Shop-Design an Freitagen irgendwie besonders aussehen sollte? Wie könnte man das Shop-Design für angemeldete Premium-Kunden besonders hervorheben? Ganz klar: Dazu gibt es eigene Layout-Handles die die gewünschten Layout-Updates durchführen.
+
+
+----
+
+Text: Layout-Handles sind XML-Blöcke die Einfluss auf das jeweilige Theme haben - es also aktualisieren können. Einige Beispiele dazu gibt es in unserem <a href="http://www.webguys.de/magento/layout-updates-uber-die-local-xml/">Artikel zu Layout-Updates mittels local.xml</a>. Jeder Controller besitzt quasi sein eigenes Layout-Handle dessen Aufbau in der Regel <Modul>_<Controller>_<Action> ist. Um z.B. ein Layout-Update für das Modul Checkout mit dem Controller Cart in der Action Index zu erstellen wird in der local.xml folgendes benötigt:
+(code lang: xml)
+[..]
+        <checkout_cart_index>
+                 <!-- Versandkosten schätzen im Warenkorb raus -->
+                <remove name="checkout.cart.shipping" />
+        </checkout_cart_index>
+[..]
+(/code)
+
+Dieses Layout-Update wird ausschließlich aufgerufen falls der jeweilige Controller aktiv ist. Es entfernt dabei den Block zum Schätzen der Versandkosten rückstandslos. 
+
+Nun gehen wir einen Schritt weiter uns registrieren unser eigenes Layout-Handle. Dieses wird jedoch nur bei bestimmen Ereignissen aufgerufen - z.B. wenn der Kunde über x Euro Umsatz hat oder wenn eben Freitag ist. Dazu erweitern wir die config.xml unseres Moduls um einen Event der aufgerufen wird bevor das Layout komplett geladen wird.
+
+(code lang: xml)
+..
+<events>
+   <controller_action_layout_load_before>
+        <observers>
+            <webguys_load_layout>
+                <class>webguys/observer</class>
+                <method>beforeLoadLayout</method>
+            </webguys_load_layout>
+        </observers>
+    </controller_action_layout_load_before>
+</events>
+..
+(/code)
+
+Das Event leiten wir an das Model <em>Observer</em> im Namespace <em>webguys</em> weiter. In der Regel wird diese also <em>Webguys_Webguys_Model_Observer</em> heißen. Dort rufen wir die Methode <em>beforeLoadLayout</em> auf welche ungefähr wie folgt implementiert sein kann:
+
+(code lang: php)
+    public function beforeLoadLayout($observer)
+    {
+        if ( $besonderes_ereignis ) {
+            $layout = $observer->getEvent()->getLayout()->getUpdate();
+            $layout->addHandle('webguys_besonderes_ereignis');
+        }
+    }
+(/code)
+
+Die Variable <em>$besonderes_ereignis</em> repräsentiert hier natürlich irgendein besonderes Ereignis welches eben z.B. das Erreichen einer Umsatzgrenze oder ein besonderer Tag sein kann. Wie zu erkennen ist wird das Layout-Handle nur angerufen falls unser besonderes Ereignis auch eingetreten ist. In das Praxis bedeutet dies das wir nachträglich unser Layout mittels dieses Events und Layout-Updates verändern können. Um somit die Versandkosten-Schätzung im Warenkorb nur zu entfernen falls unser Ereignis eingetreten ist würde die dazugehörige Layout-XML wie folgt aussehen:
+
+(code lang: xml)
+[..]
+        <webguys_besonderes_ereignis>
+                 <!-- Versandkosten schätzen im Warenkorb raus -->
+                <remove name="checkout.cart.shipping" />
+        </webguys_besonderes_ereignis>
+[..]
+(/code)
+
+Viel Spaß beim Experimentieren.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1152

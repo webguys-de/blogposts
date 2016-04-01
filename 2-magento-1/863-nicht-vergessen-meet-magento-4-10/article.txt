@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Nicht vergessen: Meet Magento #4.10
+
+----
+
+Date: 2010-10-01
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: In fast 4 Wochen ist es schon soweit - die Meet-Magento #4.10 öffnet die Pforten. Genau rechtzeitig wurde nun auch das <a href="http://www.meet-magento.de/programm.html">Programm veröffentlicht</a>.  Wenn also noch <a href="http://www.meet-magento.de/tickets.html">kein Ticket hat sollte schnell zuschlagen</a> - der Preis für zwei Tage Meet Magento inkl. Catering für 100 € ist mehr als Fair.
+
+Wir sind natürlich auch da und nächtigen wieder im 500m entfernten <a href="http://www.plagwitzer-hof.de/index.html">Hotel Plagwitzer Hof</a>. Das hatte uns letztes Jahr schon gut gefallen :) Angereist wird übrigens dieses Jahr schon einen Abend eher - wenn also jemand Lust auf ein "Vortreffen" hat, immer gern!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 863

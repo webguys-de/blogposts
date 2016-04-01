@@ -1,0 +1,53 @@
+Title: webguys.de
+
+----
+
+Description: Deutsches Magento Entwickler Blog
+
+----
+
+Copyright: © 2009-(date: Year) (link: http://www.webguys.de text: Deutsches Magento Blog - webguys.de)
+
+----
+
+Logo: logo.png
+
+----
+
+Icon: site-icon.png
+
+----
+
+Subtitle: Magento Blog für Entwickler
+
+----
+
+Twitter: https://twitter.com/tobi_pb
+
+----
+
+Facebook: 
+
+----
+
+Google: 
+
+----
+
+Pinterest: 
+
+----
+
+Instagram: 
+
+----
+
+Sharetwitter: 1
+
+----
+
+Sharefacebook: 1
+
+----
+
+Sharegoogle: 0

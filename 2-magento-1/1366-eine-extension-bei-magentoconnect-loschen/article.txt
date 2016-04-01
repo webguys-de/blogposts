@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Eine Extension bei MagentoConnect löschen?
+
+----
+
+Date: 2011-01-25
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Wer sich genauso wundert wie ich: Extensions bei MagentoConnect lassen sich nicht selber löschen. Dies geht ausschließlich über den <a href="http://www.magentocommerce.com/company/contact-us/">Support von Magento</a>.  Ich persönlich kann das nachvollziehen - so vermeidet man das Entwickler aus spontanem Frust oder durch Dritte alle ihre Erweiterungen löschen - ein Mensch kann hier noch deeskalieren.  Was ich nicht verstehe: Warum kann ich eine Extension die noch nie freigeschaltet war nicht selber löschen? So aufwendig wäre eine Implementierung davon doch nun auch nicht :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1366

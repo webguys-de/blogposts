@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Magento – Das Handbuch für Entwickler erschienen
+
+----
+
+Date: 2010-08-04
+
+----
+
+Description: 
+
+----
+
+Tags: buch
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Lang lang war es angekündigt und nun ist es soweit. Das <a href="http://www.amazon.de/gp/product/389721928X?ie=UTF8&tag=magentwebguyd-21&linkCode=as2&camp=1638&creative=6742&creativeASIN=389721928X">Magento - Das Handbuch für Entwickler</a> von <a href="www.visions-new-media.com/de/">Visions</a> in Kooperation mit <a href="http://www.romanzenner.com">Roman Zenner</a>, <a href="http://www.netzarbeiter.de/">Vinai Kopp</a> ist erschienen. Es kann für 44,90 bei <a href="http://www.amazon.de/gp/product/389721928X?ie=UTF8&tag=magentwebguyd-21&linkCode=as2&camp=1638&creative=6742&creativeASIN=389721928X">Amazon bestellt</a> werden. Ein Exemplar für uns ist bereits bestellt, sobald es geliefert und angelesen ist gibt es natürlich einen Review.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 449

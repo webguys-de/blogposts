@@ -1,0 +1,99 @@
+Article-meta: 
+
+----
+
+Title: Magento2: Wie verwalte ich meine Module?
+
+----
+
+Date: 2015-06-06
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nun habe ich doch angefangen mich etwas mit Magento 2 zu beschäftigen und habe auch direkt das Gefühl ich muss - im Vergleich zu einigen anderen - viele Wochen aufholen. Aktuell beschäftigt mich das Problem wie wir zukünftig unsere Projekte mit Magento 2 anlegen sollten.
+
+
+
+----
+
+Text: In Magento 1 bin ich nämlich mit dem Workflow den wir aktuell nutzen sehr zufrieden:
+
+<ul><li>Mittels composer werden alle externen Module nach vendor/ geladen</li>
+    <li>Ein Vendor Modul ist auch der Magento Core selbst</li>
+    <li>Mit einem kleinen Script (welches wir xlink nennen) "symlinken" wir nun den Magento Core nach htdocs</li>
+    <li>Danach erfolgen alle Vendor-Module per Modman - welche auch xlink verarbeitet werden</li>
+    <li>Falls xlink eine tgz findet entpackt es diese und erstellt Symlinks auf Basis der packages.xml</li>
+</ul>
+
+Damit haben wir nur eine composer.json und eine composer.lock im GIT Repo.  Es folgt noch die Module und Themes die genau nur ein Kunde verwenden möchte oder speziell für ihn angefertigt sind:
+
+<ul><li>in local/$Modulname liegt ein Modul und eine modman-Datei</li>
+    <li>xlink verlinkt ebenfalls alles was in local/ direkt in den htdocs/ - natürlich mit Hilfe der modman</li>
+</ul>
+
+Symlinks waren toll weil ich so direkt im Repo arbeiten konnte. Quellcode ändern, in Magento testen, commiten und Bugfix pushen. Easy.
+
+
+<h2>In Magento 2</h2>
+
+Machen wir erst mal eine kleine Bestandsaufnahme für Magento 2.
+
+<ul><li>In Magento 2 gibt es schon composer von Haus aus</li>
+    <li>Damit können Libs oder auch Magento-Module, Sprachen, Themes installiert werden</li>
+    <li>Alle Infos dazu stehen unter <a href="https://github.com/magento/magento-composer-installer">https://github.com/magento/magento-composer-installer</a> im Readme.md</li>
+    <li>Die Default Strategie für Deployment ist "copy". Die Strategie "Symlink" sagt mir z.Z. folgendes: "Warning: Magento 2 is not tested with "symlink" deployment strategy. It may not function properly."</li>
+</ul><h3>Mein Anforderungen</h3>
+
+<ol><li>Ich gerne wieder ein GiT-Repo das die Composer.json + Lock enthält UND zusätzlich die Dinge die ich nur für den Kunden brauche.</li>
+    <li>Ich hätte gerne keine externen Abhängigkeiten die ich nicht betreue</li>
+</ol><strong>Anforderung 1</strong> gestaltet sich eigentlich, dank Composer als releativ einfach. Hoffe ich zumindest. Meine Idee besteht darin die Composer <a href="https://getcomposer.org/doc/articles/scripts.md#installer-events">Hooks post-update-cmd und post-install-cmd</a> dazu zu veranlassen alles was im Verzeichnis local/* liegt, unter der Beachtung der composer.json des Verzeichnisses, korrekt zu symlinken. Also Themes nach Themes, Module zu Modulen usw. Eventuell verwerfe ich aber auch die Composer.json Idee und übernehme beim symlinken 1:1 die Verzeichnis-Struktur.
+
+<p>
+<strong>Anforderung 2</strong> gestaltet sich als recht komplex. Wenn ich keine externen Anforderungen möchte muss ich alle Libs die Magento selbst bereits benötigt umbiegen und in mein GIT portieren. Das wäre relativ magisch und sehr aufwendig. Hierzu habe ich aktuell noch keine Idee. Generell fühlt es sich aber doof an wenn ein ganzes Team nicht arbeiten kann weil z.B. GitHub gerade down ist und niemand einen Stand ziehen kann. Oder wenn selbiges kurz vor dem Go-Live passiert?
+</p>
+
+<p>
+Vermutlich wird man in diesem Fall auch "einfach" den Source von einem anderen Projekt oder der Dev-Maschine kopieren können. Ich bin unschlüssig.
+</p>
+
+<h2>Deine Meinung!</h2>
+
+<p>
+Jetzt habe ich meine Gedanken soweit "ausgekotzt". Was denkt ihr? Ein Git-Repo je Kunde oder einfach mehrere? Für jedes Modul des Kunden ein eigenes Git-Repo damit das mit Composer toll klappt? Ist es den Verwaltungsaufwand los? Stelle ich mich, was die externen Abhängigkeiten angeht, nur an?
+</p>
+
+<h2>Update 07.06.15</h2>
+
+Andere sind schon eine Ecke weiter und diskutieren unter <a class="issue-title-link js-navigation-open" href="https://github.com/magento/magento2/pull/1206"> Allow modules to live outside of app/code directory  </a> selbes Problem. Allerdings gibt es schon einen Pull-Request zur Lösung :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4262

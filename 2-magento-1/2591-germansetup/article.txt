@@ -1,0 +1,80 @@
+Article-meta: 
+
+----
+
+Title: GermanSetup - Magento für den deutschen Markt vorbereiten
+
+----
+
+Date: 2012-02-21
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,allgemein
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento ist bekanntlich eine OpenSource-Software aus den USA und kann problemlos auch für den deutschen Markt eingesetzt werden; jedoch müssen dafür im Vorfeld einige Vorbereitungen getroffen werden, um rechtlich auf der sicheren Seite zu stehen. Dazu zählen u.a. die AGB und Widerrufsbelehrung und die Steuerklassen. Um diese Vorbereitungen nicht jedesmal von Hand erledigen zu müssen, gibt es einige Extensions die direkt über <a href="http://www.Magentoconnect.com">Magentoconnect</a> installiert werden können und die meisten Arbeitsschritte abnehmen. Jedoch sind diese Extensions so umfassend, dass diese neben den rudimentären auch nicht benötigte Funktionen enthalten. Diese können dem Entwickler das Leben streckenweise schwer machen.
+
+
+----
+
+Text: Aus diesem Grund ist auf dem diesjährigen FooCamp die Idee entstanden, eine neue Alternative zu schaffen, um Magento optimal vorzubereiten. Der Fokus dabei liegt auf der strikten Beschränkung auf die Kern-Funktionen.
+
+Der offizielle Name: <strong>GermanSetup</strong>.
+
+Die Installation legt folgenden Seiten an:
+<ul><li>404 Fehlerseite</li>
+	<li>Impressum</li>
+	<li>Bezahlmethoden</li>
+	<li>Datenschutzerklärung</li>
+	<li>Versandkosten</li>
+	<li>Bestellverlauf</li>
+	<li>AGB</li>
+	<li>Widerrufsbelehrung</li>
+</ul>
+dazu diese Blöcke:
+<ul><li>ABG</li>
+	<li>Widerrufsbelehrung</li>
+</ul>
+darüber hinaus fügt es die folgenden Links den <em>footerlinks</em> zu:
+<ul><li>Widerrufsbelehrung</li>
+	<li>Versand</li>
+	<li>Bezahlmethoden</li>
+	<li>Datenschutzerklärung</li>
+	<li>Bestellverlauf</li>
+	<li>Impressum</li>
+</ul>
+Das Setup-Skript der Extension legt die Seiten an und befüllt diese auch gleich mit den mitgelieferten Texten, legt die Bestellbedingungen und Steuerklassen an. Bis zu dieser Stelle kann man sich fragen, warum man auf GermanSetup setzen sollte - der Grund: genau hier hört das Modul auf.
+
+Es macht genau das, was es soll - nicht mehr und nicht weniger. So bleibt man von unliebsamen Überraschungen verschont und muss keine Seiteneffekte fürchten oder sich umständlich durch Code-Zeilen teilweise diversen (abhängige) Extensions wühlen. Dies ist jedoch immer dann notwendig, um Änderungen vornehmen zu können und/oder die Funktionsweise zu verstehen.
+
+Meiner Meinung nach ist die Extension der vollkommen richtige Weg, um Magento optimal auf den deutschen Markt vorzubereiten. Die Extension ist  über <a href="http://www.magentocommerce.com/magento-connect/german-setup-6623.html">Magentoconnect</a> verfügbar. Neue Informationen gibt es zusätzlich auf der offiziellen Projektseite unter <a href="http://firegento.com/">http://firegento.com/</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2591

@@ -1,0 +1,124 @@
+Article-meta: 
+
+----
+
+Title: Türchen 02: PhpStorm – besser, schneller, entspannter
+
+----
+
+Date: 2013-12-02
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: b-wunderlich
+
+----
+
+Article-content: 
+
+----
+
+Intro: Seit <a href="http://www.jetbrains.com/phpstorm/" target="_blank">PhpStorm</a> von <a href="http://www.jetbrains.com/" target="_blank">JetBrains</a> 2009 erschienen ist, hat sich diese Entwicklungsumgebung (Integrated Development Environment, IDE) für PHP rasch durchgesetzt. Wer sie einmal ausprobiert hat, gibt sie nicht mehr her. Anders als <a href="http://projects.eclipse.org/projects/tools.pdt" target="_blank">Eclipse PDT</a>, <a href="https://netbeans.org/" target="_blank">NetBeans</a> oder <a href="http://www.aptana.com/" target="_blank">Aptana Studio</a> ist PhpStorm in den meisten Formen <a href="http://www.jetbrains.com/phpstorm/buy/" target="_blank">kostenpflichtig</a>.
+
+
+
+----
+
+Text: <h2>Schneller Magento entwickeln</h2>
+In erster Linie besticht PhpStorm durch seine enorme Geschwindigkeit. Sowohl das Hochfahren der IDE als auch das Indizieren eines Projektes sind schnell erledigt. Das gilt auch bei größeren Projekten, zu denen Magento-Projekte ja zweifelsohne zählen. Je mehr Dateien und Quellcode-Zeilen die Entwicklungsumgebung im Hinblick auf die Autovervollständigung verarbeiten muss, desto langsamer wird der Editor. Dies scheint für PhpStorm aber nicht zu gelten: Die Code-Autovervollständig kommt immer nahezu in Echtzeit. PhpStorm versucht auch intelligent die gefundenen Ergebnisse nach Relevanz und Bedarf des Entwicklers zu sortieren, nicht einfach nur alphabetisch.
+
+Neben der Geschwindigkeit der IDE selbst bietet sie eine Reihe von Shortcuts und Tools, um schneller entwickeln zu können. Die wohl größte Beschleunigung erlebt ein Nutzer wohl, wenn er sich die Nutzung der Maus abgewöhnt. Hier unterstützt PhpStorm durch enorm viele Tastaturkürzel, die in der <a href="https://www.jetbrains.com/phpstorm/documentation/PhpStorm_ReferenceCard.pdf" target="_blank">PhpStorm Default Keymap</a> aufgeführt sind. Diese ist auch in der IDE im Hilfebereich zugreifbar. Darüber hinaus lohnt es sich auch, die Tips of the Day zu studieren, die nach der Installation automatisch erscheinen oder über das Help-Menü erreichbar sind:
+
+(image: phpstorm-tip-of-the-day.png)
+<h3>Und Action …</h3>
+Über das Tastaturkürzel <strong>Strg + Umschalt + A</strong> lassen sich beliebige PhpStorm-Actions aus dem Menü oder sogar darüber hinaus direkt aufrufen:
+
+(image: phpstorm-find-action.png)
+<h3>Die Suche nach der Klasse</h3>
+Wer schnell in eine Klasse springen möchte, deren Namen er kennt oder teilweise kennt, kann mit <strong>Strg + N</strong> diese schnell über ihren Namen finden. Dabei reicht schon die Angabe der Anfangsbuchstaben der CamelCase-Schreibweise:
+
+(image: phpstorm-class-name-650x162.png)
+<h3>Ablage V</h3>
+PhpStorm bringt direkt eine multiple Zwischenablage mit, in der man beliebig viele (Standard-Einstellung: 5) Texte zwischenspeichern kann. Mit <strong>Strg + Umschalt + V</strong> öffnet sich die entsprechende Toolbox, die sich bequem per Tastatur bedienen lässt:
+
+(image: phpstorm-clipboard.png)
+<h3>Wo war ich noch gleich ...</h3>
+Wer sich auf der Suche nach einer Information im Magento-Kern durch zig Klassen durcharbeitet, sucht zwangsläufig wohl hinterher den Ort, wo er zuletzt Quellcode verändert hat. Mit dem Tastaturkürzel <strong>Strg + Umschalt + Backspace</strong> springt man automatisch zu dieser Stelle zurück.
+<h2>Besser Magento entwickeln</h2>
+Natürlich kommt es nicht nur auf Geschwindigkeit beim Coding an, sondern vor allem auf Qualität. Auch hier bietet PhpStorm einige interessante Shortcuts und Refactoring-Tools an, die dabei helfen, Fehler zu vermeiden.
+<h3>Ihr heißt jetzt alle anders</h3>
+Das Umbenennen einer Variablen, Methode oder Konstanten ist sehr fehleranfällig, wenn diese bereits vielfach in Gebrauch sind. Schnell rutscht einem ein Exemplar durch und man erhält einen schwer zu findenden Fehler. PhpStorm und <strong>Umschalt + F6</strong> helfen einem hier, indem alle Vorkommen im entsprechenden Scope (z.B. einer Methode) konsistent geändert werden. Ändert man eine Klassen-Variable, bietet PhpStorm sogar die konsistente Änderung von Getter- und Setter-Methoden an.
+
+(image: phpstorm-rename-650x348.png)
+<h3>Tausend und eine Variable / Methode / Konstante</h3>
+Beim Refactoring gliedert man nicht selten Ausdrücke in neue Variablen oder Methoden aus. Um aus bestehendem Code Variablen, Methoden oder Konstanten anzufertigen, bietet PhpStorm mit den Shortcuts <strong>Strg + Umschalt + V</strong> (Variablen), <strong>Strg + Umschalt + M</strong> (Methoden) bzw. <strong>Strg + Umschalt + C</strong> (Konstanten) Refactorings an, die vollständig und korrekt arbeiten. Bei Methoden werden alle Abhängigkeiten über einen Dialog erkannt und aufgelöst:
+
+(image: phpstorm-extract-method-650x307.png)
+<h3>Achtung! Befehl zum Einrücken!</h3>
+Hat sich die Einrückung in Teilen des Codes verabschiedet oder der Autor hat hier mal „ein Auge zugedrückt“, kann man die Code-Passage einfach markieren und mit <strong>Strg + Alt + I</strong> durch PhpStorm einrücken lassen.
+<h2>Noch schneller und besser mit Magicento</h2>
+Enrique Piatti ist vor einiger Zeit auf die glorreiche Idee gekommen, ein Plugin namens <a href="http://magicento.com/" target="_blank">Magicento</a> für PhpStorm zu entwickeln, das die speziellen Anforderungen von Magento an eine IDE noch präziser abdeckt. Drückt man im Code-Editor <strong>Alt + M</strong>, öffnet sich das Magicento-Kontextmenü mit einigen hilfreichen Funktionalitäten.
+Beispielsweise hilft das Tool beim Kopieren eines Templates in ein anderes Theme, wenn dies überlagert werden soll:
+
+(image: magicento-copy-template.png)
+
+Und auch die Autovervollständigung bei Klassennamen wird durch Magicento entsprechend der Konvention (Verzeichnispfad + Dateiname) ermöglicht:
+
+(image: magicento-auto-complete-cla.png)
+
+Die Autovervollständigung funktioniert mit Magicento auch bei Objekten, die aus entsprechenden Factory-Methoden stammen:
+
+(image: magicento-auto-complete-fac.png)
+
+Diese und weitere Features listet das Magicento-Plugin auf seiner <a href="http://magicento.com/#features" target="_blank">Feature-Seite</a>, wo auch die wöchentlich durch das Plugin eingesparte Zeit geschätzt wird.
+
+Das Tool ist kostenlos, aber eine Spende zwischen $15 und $50 wird erbeten und ist nur fair, bei dem daraus entstehenden Produktivitätsgewinn.
+<h2>Tool-Integration</h2>
+PhpStorm integriert die verschiedensten Tools direkt in die Entwicklungsumgebung. Angefangen bei FTP- und Datenbank-Server über Versionsverwaltungssysteme (VCS, z.B. <a href="http://www.git-scm.com/" target="_blank">Git</a>, <a href="http://subversion.tigris.org/" target="_blank">Subversion</a>), einen REST-Client, eine SSH-Konsole bis hin zu <a href="http://www.vagrantup.com/" target="_blank">Vagrant</a> und <a href="http://getcomposer.org/" target="_blank">Composer</a>.
+
+Bei uns in der Firma ist unter anderem die Integration unseres Ticket-Systems (<a href="http://www.redmine.org/" target="_blank">Redmine</a>) in Kombination mit den Changelists interessant. So lassen sich beispielsweise <a href="https://www.atlassian.com/de/software/jira" target="_blank">JIRA</a>, <a href="http://www.redmine.org/" target="_blank">Redmine</a>, <a href="http://trac.edgewall.org/" target="_blank">Trac</a>, <a href="http://www.mantisbt.org/" target="_blank">Mantis</a> oder <a href="https://github.com/" target="_blank">Github</a> über <strong>Tools > Tasks & Contexts</strong> einbinden.
+
+Die Auswahl eines Tasks / Tickets erfolgt über das Menü oder schneller über <strong>Alt + Umschalt + N</strong>, woraufhin sich folgendes Auswahlfenster öffnet:
+
+(image: phpstorm-redmine-ticketauswahl.png)
+
+Für jedes angefangene Ticket kann PhpStorm eine eigene Changelist und einen eigenen Entwicklungskontext führen. Das hat zur Folge, dass man schnell zwischen den Aufgaben hin und her springen kann: PhpStorm öffnet automatisch die Dateien in den Editor, die mit der Aufgabe in Verbindung stehen.
+Außerdem kann automatisch ein Branch in der Versionsverwaltung erstellt werden. Der Entwickler braucht also nur noch die Aufgabe auswählen und ist sofort startklar.
+
+(image: phpstorm-redmine-open-tastk.png)
+
+Werden Änderungen in die Versionsverwaltung eingecheckt, füllt PhpStorm automatisch den Commit-Kommentar aus. Die Vorlage hierfür lässt sich im konfigurierten Server des Ticketsystems in PhpStorm vorgeben. So kann beispielsweise der Commit automatisch per <strong>refs. #3646</strong> mit dem Ticket verknüpft werden. Also auch hier eine angenehme Unterstützung.
+<h2>Debugging</h2>
+Wie könnte man nur effizient programmieren ohne Debugging? Die Fähigkeiten von IDEs bzgl. des Debuggings sind wohl weitläufig bekannt.
+Ich habe erst kürzlich entdeckt, dass man die einzelnen Breakpoints in PhpStorm auch noch konfigurieren kann. So kann man beispielsweise festlegen, dass der Breakpoint nur dann greift, wenn eine bestimmte Bedingung erfüllt ist (Condition). Dies ist besonders praktisch bei Schleifen oder zentralen, häufig aufgerufenen Methoden, bei denen nur ein ganz spezieller Durchlauf untersucht werden möchte.
+
+(image: phpstorm-debugging-breakpoi.png)
+
+Im obigen Beispiel wird beim Breakpoint nur dann gestoppt, wenn das Produkt in der Methode die ID 15 besitzt. Darüber hinaus ist der Breakpoint zunächst deaktiviert, bis ein anderer Breakpoint in der Datei Observer.php (Zeile 17) durchlaufen wurde. Damit lassen sich bestimmte Abhängigkeiten besser beleuchten: <em>„Halte hier im Code nur an, wenn du vorher an Stelle XY vorbeigekommen bist.“</em>
+Besonderes Augenmerk ist dabei auf den Schalter <strong>Suspend</strong> zu legen, mit dem ein Anhalten im Code verhindert werden kann. Es ist möglicherweise sinnvoll, diesen Haken in Observer.php zu entfernen, da dieser nur als stille Markierung dient.
+<h2>Fazit</h2>
+PhpStorm begeistert durch Geschwindigkeit und wirklich nützliche Tools, die bis ins Detail ausgeklügelt wurden. Die Entwicklung von großen PHP-Projekten wie Magento war noch nie so komfortabel wie heute mit dieser IDE in Kombination mit Magicento und den weiteren Tools der eigenen Wahl, die zumeist nativ in PhpStorm integriert sind. Wem das nicht reicht, der greift auf die zahlreichen Plugins zurück oder schreibt sich gleich selbst eins in Java. Dafür bietet JetBrains seine IntelliJ IDEA an, aber das ist eine andere Geschichte ...
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3493

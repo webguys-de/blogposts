@@ -1,0 +1,55 @@
+Article-meta: 
+
+----
+
+Title: Verzeichnis nachträglich aus dem SVN entfernen
+
+----
+
+Date: 2012-04-20
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Manchmal sind <a href="http://www.code-x.de/team/jan-brinkmann/">Entwickler</a> etwas stürmisch und packen gedankenlos etwas viel in das SVN-Repo. Dazu gehören dann auch schnell Ordner die, wie z.B. var/, Bewegungsdaten enthalten. Lösen lässt sich das jedoch mit ein paar Kommandos:
+
+----
+
+Text: (code)
+cd magento/
+svn rm --keep-local var
+svn pe svn:ignore .
+(/code)
+
+Zuerst entfernen wie mittels 'svn rm' den var Ordner weisen das System aber darauf hin das er lokal erhalten bleiben soll. Danach müssen wir den Ordner jedoch noch zur Ignore-Liste hinzufügen. Das geschieht mittels 'svn pe svn:ignore .' Hierdurch öffnet sich der Default-Editor in dem wir das Verzeichnis 'var' eintragen. Fertig.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2770

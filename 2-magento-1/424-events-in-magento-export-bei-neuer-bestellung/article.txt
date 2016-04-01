@@ -1,0 +1,115 @@
+Article-meta: 
+
+----
+
+Title: Events in Magento: Export bei neuer Bestellung
+
+----
+
+Date: 2010-07-29
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento beinhaltet ein mächtiges Event-Management-Werkzeug mit dem es möglich ist ein Event auszulösen oder auch informiert zu werden sobald ein bestimmtes Event eintritt.
+
+In unserem Fall soll jede eingegange Bestellung automatisch per Email exportiert werden. Dazu erstellen wir im Anfang ein kleines Modul mit dem Namen Webguys_Export. Dieses enthält ein Model das dann eine Bestellung per E-Mail in einem bestimmten Format verschickt.
+
+
+----
+
+Text: Erstmal brauchen wir unsere XML-Datei Webguys_Export.xml in app/etc/modules die unser Modul aktiviert:
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Webguys_Export>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Checkout />
+            </depends>
+        </Webguys_Export>
+    </modules>
+</config>
+(/code)
+
+Danach müssen wir Magento mitteilen das unser Event mit dem Namen "checkout_type_onepage_save_order" abgefangen werden soll bzw. das dort etwas zusätzlich passiert. Das können wir durch die app/local/Webguys/Export/etc/config.xml veranlassen die dort ungefähr wie folgt aufgebaut ist:
+
+(code lang: xml)
+<config>
+
+	<global>
+
+	   <events>
+	        <checkout_type_onepage_save_order>
+	            <observers>
+	                <webguys_export_order_observer>
+	                    <type>singleton</type>
+	                    <class>Webguys_Export_Model_Observer</class>
+	                    <method>mailExport</method>
+	                </webguys_export_order_observer>
+	            </observers>
+	        </checkout_type_onepage_save_order>
+	    </events>
+
+	</global>
+
+</config>
+(/code)
+
+Nun würde in der Class Webguys_Export_Model_Observer die Funktion mailExport aufgerufen. Einziges Problem: Die Classe gibt es noch nicht. Dem können wir aber leicht Abhilfe schaffen indem wir die Datei app/local/Webguys/Export/Model/Observer.php erstellen und wie folgt befüllen:
+
+(code lang: php)
+<?php
+class Webguys_Export_Model_Observer {
+
+	public function mailExport( $event ) {
+		$order = $event->getOrder();
+
+		// Some Magic
+		// mail('tobi@webguys.de', 'Test', $order->getId() );
+
+	}
+
+}
+(/code)
+
+Das war es schon. Natürlich ist die E-Mail noch mit den richtigen Infos aufzubauen und letztlich an den richtigen Empfänger zuzustellen :) Wenn übrigens etwas mal nicht klappt lohnt sich ein Blick in die Datei var/log/system.log. Diese enthält viele Informationen was Magento eigentlich tut bzw. wo es Probleme hat. Logging muss natürlich vorher in der Administration aktiviert werden.
+
+<strong>Update</strong>: Besser ist es noch das Event "checkout_submit_all_after" anstelle von "checkout_type_onepage_save_order" zu verwenden. Bei "checkout_type_onepage_save_order" hatte ich mit der Magento 1.4.1.1 Probleme beim Bestellen des Warenkorbes.
+<div id="_mcePaste" style="position: absolute; left: -10000px; top: 1028px; width: 1px; height: 1px; overflow: hidden;">
+<pre>checkout_type_onepage_save_order</pre>
+</div>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 424

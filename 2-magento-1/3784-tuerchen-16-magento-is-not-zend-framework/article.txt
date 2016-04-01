@@ -1,0 +1,138 @@
+Article-meta: 
+
+----
+
+Title: Türchen 16: Magento is not Zend Framework
+
+----
+
+Date: 2013-12-16
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: wp-oleksii-svarychevskyi
+
+----
+
+Article-content: 
+
+----
+
+Intro: <style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>During my job interview at Magento, I was asked: “What do you know about Magento?”, “Magento is an open source e-commerce platform based on Zend Framework.” – I answered and was wrong. After several years of experience with the platform, I would have answered differently. Nowadays, a lot of developers who plan to create websites using Magento prefer to start with Zend Framework and only after to continue with Magento. However, overall knowledge of ZF had a little impact on getting along with this complicated for the first view system.
+
+
+
+----
+
+Text: All my current investigations are based on Magento 1.7.0.2 and Zend Framework 1.x versions.
+
+First, it is worth to mention that ZF is a library of classes, which helps to create simple and high load applications. One may select from several ZF components or to use the whole library. The easiest way is to create a simple skeleton structure proposed by ZF developers.
+
+The entry point of an application is index.php. This is where paths to code libraries are defined and the application is initialized. The Bootstrap class extends the functionality of Zend_Application component and creates all necessary objects, while sending the request to the controller and returning the response. See, everything is simple ;)
+
+(image: img1.jpg)
+
+ 
+
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>Magento is a complete application that consists of a great number of strongly interconnected core extensions. The structure is similar to the ZF. As well as ZF, Magento’s main entry point is index.php and application class which is located in core code pool Mage/Core/Model/App.php. Furthermore, the main application class and all of the magic is located here. app/Mage.php is just a wrapper in order to create the main class and access to it. Interestingly, Magento main application class does not extend ZF functionality. It is a separate application with its own initialization logic.
+
+(image: img2-e1387110869929.jpg)
+
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>The following chart shows the primary differences between Magento and ZF. The MVC model plays the major role.
+
+ZF MVC: Request is dispatched using routing rules and processed by an appropriate controller using necessary models. The result of the controller process is sent to View, which generates HTML/XML/JSON or other types of response.
+
+(image: img3-650x541.jpg)
+(Image was taken from http://mytech.dsa.me/)
+
+<p style="text-align: center;">
+
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style><h3>Magento MVC</h3>
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>Unlike ZF, there is no View object in Magento. Layout configs and Blocks are used instead. Blocks contain the application logic and layout configs allow to define when and which view template should be used to render the content.
+
+[caption id="attachment_3789" align="aligncenter" width="650"](image: img4-650x448.jpg) Image was taken from http://mytech.dsa.me/[/caption]
+
+ 
+
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>Magento follows the principle of thin controller. It means that the main responsibility of the controller is to initialize the layout and to render it.
+
+It is also worth to mention, that Magento does not use following ZF application-level components:
+
+Zend_Application, Zend_Layout, Zend_Form and Zend_View. Furthermore, Zend_Controller is not used as a parent class for Magento controllers.
+
+However, Request and Response classes extend Zend ones. And Magento uses ZF internalization components such as Zend_Locale, Zend_Date, Zend_Currency, Zend_Measure and Zend_Translate. All database workflows are based on Zend_Db, cache on Zend_Cache and sessions on Zend_Session.
+
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>Zend_Http_Client is used in payment and shipping methods to send and receive requests to third party services. Magento API was build with Zend_Soap and Zend_XmlRpc. Below is the list of other used ZF components:
+<ul><li>Zend_Log</li>
+	<li>Zend_Json</li>
+	<li>Zend_Validate</li>
+	<li>Zend_Filter</li>
+	<li>Zend_Config</li>
+	<li>Zend_Exception</li>
+	<li>Zend_Captcha</li>
+	<li>Zend_Mail</li>
+	<li>Zend_Uri</li>
+</ul><style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style><h2>Modular Structure</h2>
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>The main advantage of ZF is its well organized modular structure. By creating a module it is easy to control and separate functionalities of the project. Following with adding the config, controllers to use models, views to display the results, you will receive your first complete module. Usage of console tools will help with creating skeletons. Everything is in the very same place, which makes it simple to refactor or reuse in other projects. The good news is that there is great number of completed modules in Internet which can truly simplify the developing process.
+
+(image: 4b.jpg)
+
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>Magento modules have similar structure. But module templates, layout updates, module declaration and module itself are located in different places. One should always remember where to find the necessary file. Otherwise, debugging process will be complicated, especially for Magento beginners.
+
+Config itself might be not as simple to understand at first. Although, with its help it is possible to rewrite almost any model, helper or block. Catching of Magento events will allow to influence and change the behavior of the objects even without rewrites.
+
+(image: img6.jpg)
+
+<style type="text/css"><!--
+P { margin-bottom: 0.21cm; }
+--></style>SQL update files are another important subject. They can be executed during installation or an upgrading process. If module’s version has changed, Magento will compare it with SQL version of upgrades and execute non-used ones.
+
+Due to the fact that Magento extends Zend_Db compotent, the work with database is similar to ZF. Moreover, Magento has Varien library which provides instruments to work with collections. That will simplify the handling with results derived from database.
+
+<a name="_GoBack"></a>Summing up, one may be sure to affirm that Magento is not a ZF application. It was simply build using ZF components. I do not think that learning Zend Framework will help you a lot with understanding Magento. In fact, working scrupulously with ZF might have a disorientating impact. Therefore, during Magento investigation one may refer to ZF experience as a main source. That is what have happened in my case, and where I understood the importance of these differences. On the one hand, studying Magento without any knowledge in ZF could make your life easier. On the other hand, having the experience with ZF can be a great benefit in realizing these core differences effectively.
+
+Good luck!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3784

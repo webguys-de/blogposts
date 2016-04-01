@@ -1,0 +1,66 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps im März 2011
+
+----
+
+Date: 2011-03-07
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Schon wieder sind fast vier Wochen herum. Für mich heißt das einmal die Bookmarks durchgehen und ein paar Lesetipps zusammenstellen. Also los!
+
+
+
+----
+
+Text: Matthias Zeis, bekannt durch seine guten umfangreichen Beiträge, hat sich einmal näher mit <a href="http://www.matthias-zeis.com/archiv/magento-indizes-manuell-neu-erstellen">dem Indexer-Prozess</a> beschäftigt. Ganz gut erklärt und noch mal ein wenig umfangreicher als unser <a title="Türchen 08: Der Magento Indexer" href="http://www.webguys.de/magento/turchen-08-der-magento-indexer/">eigener Beitrag zu dem Thema</a>.
+
+Fabrizio Branca, der sich immer weiter mit Top-Beiträgen einen Namen macht, stellt eine<a href="http://www.fabrizio-branca.de/automatisches-versionieren-von-javascript-und-css-dateien-in-magento.html"> Extension vor die sich bei externen JS/CSS-Dateien darum kümmert das Browser-Cache-Problem zu umgehen</a>. Alternativ müsste sich hier auch einiges über den last-modified Meta Tag realisieren lassen: zumindest so lange wie man die IE6 ignorieren kann.
+
+(code lang: html)<meta name="last-modified" content="Mon, 07 Mar 2011 17:03:02" />(/code)
+
+Eigentlich eine spannende Idee: Da werde ich noch mal einen umfangreichen Beitrag zu verfassen :)
+
+Folgende weitere spannenden Beiträge aus dem direkten oder indirekten Magento Umfeld sind mir ebenfalls ins Auge gesprungen:
+<ul><li><a href="http://magebase.com/magento-tutorials/adding-custom-css-and-custom-style-options-to-the-wysiwyg-editor/">Adding Custom CSS and Custom Style Options to the WYSIWYG Editor</a> : Wie man eigene Formatierung im TinyMCE in Magento einfügt</li>
+	<li><a href="http://www.phpmonkeys.de/2011/03/02/exception-werfen-oder-false-zurueckgeben/">Exception werfen oder false zurückgeben</a> : Grundlegende konzeptionelle Frage die in Magento in der Regel sehr sauber gelöst ist</li>
+	<li><a href="http://www.phpgangsta.de/slides-der-php-london-conference-2011-phpuk2011">Slides der PHP London Conference 2011: PHPUK2011</a> : Immer ganz spannend ein wenig über den eigenen Tellerrand zu schauen</li>
+	<li><a href="http://inchoo.net/ecommerce/magento/magentogo-screenshot-tour/">Screenshot Tour von Magento-Go</a> : Was kommt mit Magento-Go eigentlich auf uns zu?</li>
+	<li><a href="http://www.rohde-christian.de/magento-update-1-4-2-0-checkout-problem/">Magento Update 1.4.2.0 Checkout Problem</a> : Das Problem beim Upgrade mit Magento Market Ready German lösen</li>
+</ul>
+Wer sich für Test-Driven Entwicklung interessiert dem empfehle ich den Beitrag von Jan Brinkmann zu dem Thema <a href="http://the-luckyduck.de/2011/03/continous-integration-mit-jenkins-phpunit-und-dem-zend-framework/">Continous Integration mit Jenkins, PHPUnit und dem Zend Framework</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1473

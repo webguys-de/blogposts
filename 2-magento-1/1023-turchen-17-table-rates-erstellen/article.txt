@@ -1,0 +1,96 @@
+Article-meta: 
+
+----
+
+Title: Türchen 17: Table Rates erstellen
+
+----
+
+Date: 2010-12-17
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 17 bringt uns die Table Rates näher und zeigt auf, wie man Versandkosten (fast) einfach erstellen und verwalten kann. Table Rates gehören zum Magento Standardumfang und bieten bereits einiges an Möglichkeiten. Dem wie gehen wir heute nach.
+
+
+----
+
+Text: Mithilfe der Table Rates ist es möglich, die Versandkosten in folgenden Abhängigkeiten zu definieren:
+- Warenwert
+- Gewicht
+- Anzahl der Artikel im Warenkorb
+
+### Warenwert
+Ab bestimmten Warenwerten können andere Versandkosten definiert werden.
+
+### Gewicht
+Ab bestimmten Gewicht können andere Versandkosten definiert werden, hierzu muss das Gewicht bei den Artikeln gepflegt sein, sonst funktioniert dies nicht, dabei ist zu beachten, dass das Gewicht in KG angegeben wird, mit einem <em>"."</em> als Dezimaltrennzeichen. Für ein Produkt, welches 200g wiegt, ist im Gewichtsfeld folgendes einzutragen: <em>"0.2000"</em>.
+
+### Anzahl Artikel im Warenkorb
+Ab definierten Anzahlen von Artikeln im Warenkorb können andere Versandkosten definiert werden.
+
+Anlegen der Table Rates in einfachen Schritten:
+
+###1. Schritt: Zum Menu wechseln.
+<em>System > Konfiguration > Verkäufe > Versandarten</em>
+
+###2. Schritt: Aktuellen Konfigurationsbereich wechseln
+Hier die Standardkonfiguration auswählen, denn nur in diesem Modus ist es möglich, die Table Rates gesammelt als .csv Datei hochgeladen werden. Die Basis der .csv Datei kann man über den Button "exportieren" herunterladen. Diese Datei benutzen wir als Vorlage und füllen diese mit Leben.
+
+###3. Schritt: .csv Datei füllen
+Die Datei ist folgendermaßen aufgebaut - in diesem Fall benutzen wir das Gewicht:
+(code)
+"Land","Region","Postleitzahl","Gewicht (und darüber)","Versandpreis"
+(/code)
+
+Das Land ist in ISO Norm 3611 dreistellig angegeben, für Deutschland also <em>"DEU"</em>. Für Regionen und Postleitzahlen können verschiedene Werte definiert werden, also können für Bayern andere Versandkosten festgelegt werden, also in anderen Bundesländern, für eine generelle Angabe können für Region und Postleitzahlen ein <em>"*"</em> benutzt werden. Für Postleitzahlen das normale Format - also die PLZ  - verwenden, bei den Regionen wird die ISO Norm 3611-2 verwendet, für Bayern wäre dies <em>DE-BY</em>.
+
+Die .csv soll für Warensendungen innerhalb Deutschland 5€, ab  1KG 10€ und alles über 10KG 99€ angegeben werden, nur nicht für Bayern, dort kostet der Versand pauschal 99€ und für NRW gelten die Stufen 2,5€, 5€ und 10€.
+
+(code)
+"Land","Region","Postleitzahl","Gewicht (und darüber)","Versandpreis"
+"DEU", "*", "*", "0.0000", "5.0000"
+"DEU", "*", "*", "1.0000", "10.0000"
+"DEU", "*", "*", "10.0000", "99.0000"
+"DEU", "DE-BY", "*", "0.0000", "99.0000"
+"DEU", "DE-NW", "*", "0.0000", "2.5000"
+"DEU", "DE-NW", "*", "1.0000", "5.0000"
+"DEU", "DE-NW", "*", "10.0000", "10.0000"
+(/code)
+
+Bei einem Request wird die gesamten Table Rates durchgegangen und der Eintrag mit den meisten Übereinstimmungen gewählt.
+
+Viel Spass beim Anlegen weiterer Kosten - ein Grid fehlt leider an dieser Stelle.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1023

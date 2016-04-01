@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: Adsense Plugins für Wordpress
+
+----
+
+Date: 2009-05-08
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Google Adsense ist in aller Munde und auf vielen Webseiten und Blogs zu sehen. Geld verdienen, indem man (sinnvolle) Artikel schreibt ist gut. Plugins um den Adsense-code gibt es einige, die folgendensetze ich ein.
+
+----
+
+Text: <strong>
+1. <a href="http://www.supriyadisw.net/2006/07/adsense-beautifier">Adsense Beautifier</a></strong>
+Ein gutes Plugin, um die Werbung grafisch zu überarbeiten und verbessern.
+
+<strong>2. <a href="http://wordpress.org/extend/plugins/all-in-one-adsense-and-ypn/">All in One Adsense and YPN</a>
+</strong>Dieses Plugin baut Google Adsense als auch YPN in dem Blog ein. Dabei kann man das Aussehen noch festlegen. Die Werbeblöcke werden der Seite dynamisch hinzugefügt, im Administrationsmenu kann man festlegen, auf welchen Seiten keine oder wieviele Anziegen angezeigt werden sollen.
+
+Sie sind schon nicht schlecht, jedoch vermisse ich einige Funktionen, daher habe ich mich dazu entschieden, ein eigenes Plugin dafür zu schreiben. Bald kann man sich hier über den aktuellen Stand informieren.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 577

@@ -1,0 +1,155 @@
+Article-meta: 
+
+----
+
+Title: Türchen 07: Aufräumen im Mail-Chaos
+
+----
+
+Date: 2013-12-07
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Für mich ist es das erste Jahr im Webguys-Adventskalender. Letztes Jahr hat Tobi mich zwar auch schon gefragt, ob ich gerne einen Beitrag schreiben möchte, aber ich hatte auf Grund meines geringen Mangento-Wissens keine schönen Themen für einen Artikel. Dieses Jahr sieht das alles etwas aus - nach einem weiteren Jahr der täglichen Arbeit mit Magento, fallen einem schon eine Menge Themen auf, über die man eigentlich unbedingt Schreiben müsste. So sind mir in den letzten paar Tagen immer mal wieder Themen in den Sinn gekommen, über die man schreiben muss, weil sie einfach unendlich stören und nicht so richtig zu Ende gedacht sind.
+
+
+
+----
+
+Text: Das Thema, was mich persönlich dieses Jahr am meisten genervt hat, ist sicher das Thema Transaktionsemails. So kommt ein ganzer Haufen an Vorlagen mit der Magento-Installation. Noch schlimmer wird es dann, wenn man dann das German-Setup installiert. Insgesamt sicher alles schön und gut - solange man nichts anpassen muss.
+
+Spätestens wenn ein Shop bereits live ist, und man mit zwei verschiedenen Datenbanken arbeitet, kann sich auf doppelte Arbeit einstellen. Dann fängt man an im Testsystem die Mails zu konfigurieren, dann zu testen und später kopiert man den ganzen Inhalt auf das Live-System - im schlimmsten Fall ist noch ein Staging dazwischen. Alles wirklich umständlich und nicht gerade entwicklerfreundlich - schließlich ist es nur eine Frage der Zeit, bis sich die ersten Flüchtigkeitsfehler beim Kopieren einschleichen und man die falsche Vorlage überschreibt oder vergisst. Änderungen können schließlich auch nicht rückgängig gemacht werden.
+
+Genug Einleitung: Genau an dieser Stelle soll mein Beitrag ansetzen. <strong>Ziel ist es, die Mails mit in die Versionskontrolle zu bekommen und sich die nervigen Änderungen im Backend sparen zu können.</strong> Das schöne ist, dass man diese Änderungen nur einmal machen muss, und sie ab dann in jedem Projekt einfach wieder verwenden kann - ohne Backend und zig tausend Klicks.
+
+Alle Vorteile im Überblick:
+<ul><li>Keine nervigen Änderungen mehr in der Datenbank</li>
+	<li>Wir kommen, dank Versionsverwaltung, jederzeit auf einen älteren Stand zurück</li>
+	<li>Das Deployment geht super schnell und einfach - und vor allem: Ohne Risiko</li>
+	<li>Man genießt die vollen Features der IDE</li>
+	<li>Man spart  jede Menge Zeit</li>
+</ul><h3>Wie arbeitet das Mail-Templating</h3>
+Damit wir aber verstehen, wie die Konfiguration arbeitet, schauen wir uns erstmal ein wenig Code an. Jede Konfiguration eines E-Mail-Templates kann als Standard den Wert „<em>Standard-Vorlage aus der Lokalisierung</em>“ erhalten.
+
+Doch was wird dann verwendet? Die Standard-Mail-Vorlagen „<em>aus der Lokalisierung</em>“ findet man (wie der Name schon sagt) unter app/locale/<<em>Sprache</em>>/template/email. Bleibt die Frage, wie Magento die Verbindung zwischen den einzelnen Dateien und der Konfiguration herstellen kann.
+
+Alle Mails innerhalb von Magento, werden mit Hilfe der Klasse <em>Mage_Core_Model_Email_Template_Mailer</em> (core/email_template_mailer) aufbereitet, welche das Model <em>Mage_Core_Model_Email_Template</em> zum senden der Mails nutzt. Dieses Model wird mit einer TemplateId aus der Konfiguration gefüttert. Ist diese TemplateId numerisch, wird ein Template aus der Datenbank genutzt - aber davon möchten wir ja weg. <strong>Falls wir aber nun den Wert der Konfiguration auf „Standard-Vorlage aus der Lokalisierung“ gesetzt haben, wird statt einer numerischen Id ein String an den Mailer übergeben</strong>. Wie das aussieht, können wir sehr schön in der Methode sendTransactional(…) sehen:
+
+app/code/core/Mage/Core/Model/Email/Template.php:484
+
+(code lang: php)
+if (is_numeric($templateId)) {
+    $this->load($templateId);
+} else {
+    $localeCode = Mage::getStoreConfig('general/locale/code', $storeId);
+    $this->loadDefault($templateId, $localeCode);
+}
+(/code)
+
+Ein paar Methoden weiter sehen wir, wie die Default-Templates geladen werden. Nämlich über die XML-Konfiguration:
+
+app/code/core/Mage/Core/Model/Email/Template.php:239
+
+(code lang: php)
+static public function getDefaultTemplates()
+{
+    if(is_null(self::$_defaultTemplates)) {
+        self::$_defaultTemplates = Mage::getConfig()->getNode(self::XML_PATH_TEMPLATE_EMAIL)->asArray();
+    }
+
+    return self::$_defaultTemplates;
+}
+(/code)
+
+Es wird also in der Konfiguration nach Einträgen gesucht, welche unter <strong>global/template/email</strong> im XML zu finden sind. Ein Beispiel dazu, finden wir in der Konfiguration des Adminhtml-Moduls:
+
+app/code/core/Mage/Adminhtml/etc/config.xml:50
+
+(code lang: xml)
+<template>
+    <email>
+        <admin_emails_forgot_email_template translate="label" module="adminhtml">
+            <label>Forgot Admin Password</label>
+            <file>admin_password_reset_confirmation.html</file>
+            <type>html</type>
+        </admin_emails_forgot_email_template>
+    </email>
+</template>
+(/code)
+
+Die Templates werden dann einfach per Translator geladen und verspracht, wie man hier sehen kann:
+
+app/code/core/Mage/Core/Model/Email/Template.php:201
+
+(code lang: php)
+$templateText = Mage::app()->getTranslator()->getTemplateFile(
+    $data['file'], 'email', $locale
+);
+(/code)
+
+Wie der Translator arbeitet, wurde übrigens im <a title="Türchen 03: Magento Übersetzungen – demystified" href="http://www.webguys.de/magento/tuerchen-03-magento-uebersetzungen-demystified/">Türchen 03 von Jan</a> sehr gut erklärt. So weit, so gut. Doch wie ändert man den Pfad der EMails sinnig und sorgt dafür, dass zukünftige Magento-Updates unsere schönen Mailvorlagen nicht wieder überschreiben? Auf dem Weg dahin gibt es wie immer mehrere Möglichkeiten.
+<h3>Eigene Mail-Templates nutzen</h3>
+Leider kann man die Mail-Templates nicht einfach in das entsprechende Theme-Verzeichnis legen und dort überschreiben. Magento schaut zuerst nämlich in das app/locale/ Verzeichnis, und wenn das Template da bereits gefunden wurde, wird nicht weiter gesucht. Für mich persönlich ist das aber kein Beinbruch, da es elegantere Wege gibt.
+<h4>1. Pfade der Templates über die Konfiguration ändern.</h4>
+Nun könnte man die entsprechende Pfade der einzelnen Templates einfach in einer Modul-Konfiguration überschreiben. Dabei ist darauf zu achten, dass die Pfade weiterhin relativ zu app/locale/<Sprache>/template/email/ angegeben werden. Andernfalls werden sie von core Translate nicht gefunden. Das könnte in etwa so aussehen:
+
+(code lang: xml)
+<template>
+    <email>
+        <admin_emails_forgot_email_template>
+            <file>mytemplate/admin_password_reset_confirmation.html</file>
+        </admin_emails_forgot_email_template>
+    </email>
+</template>
+(/code)
+<h4>2. Das Translate-Model überschreiben</h4>
+Falls man die Dateien wo Ganz anders ablegen möchte (beispielsweise unterhalb des eigenen Moduls), braucht man ein Rewrite für Mage_Core_Model_Translate. Dort könnte man dann einfach andere Pfade zu den Templates zurückgeben. Einstiegspunkt wäre folgende Methode:
+
+app/code/core/Mage/Core/Model/Translate.php:460
+
+Rewrites sind natürlich immer weniger elegant. Dieses hätte allerdings den Vorteil, dass wohl die wenigsten Extensions ebenfalls dieses Model überschreiben werden. Dafür hat man aber auch die komplette Freiheit.
+<h2>Alle Mailtemplates auf "Standard" setzen</h2>
+Nun wäre es natürlich relativ anstrengend, wenn man alle Werte im Admin per Hand durchgehen müsste, um die Mailtemplates auf ihren Standardwert zu setzen. Wenn man sich die Werte in Datenbank genauer anguckt, steht dort genau der Pfad der Konfiguration als Wert - nur dass alle Slashes durch Unterstriche ersetzt werden müssen. Dank dieser Logik kann man ein einfaches SQL-Update schreiben, welches genau diese Aufgabe übernimmt und in Zukunft dann auch in unseren Install-Scripts genutzt werden könnte.
+
+(code lang: sql)
+UPDATE `core_config_data`
+SET `value` = REPLACE(`path`, '/', '_')
+WHERE `path` LIKE '%mail%template%'
+(/code)
+
+<h2>Fazit</h2>
+Ich kann es jedem nur empfehlen, die Templates NICHT in der Datenbank zu verwalten. Spätenstens wenn man jedes Template in vier verschiedenen Sprachen über die Oberfläche im Backend verwalten muss, verliert man ganz schnell die Übersicht. Immerhin wollen alle Templates ja auch in den Store-Views richtig konfiguriert werden. Die wenigsten Kunden wollen aber meiner Erfahrung nach selbst an den Templates schrauben - so gehören schön formatierte Mails einfach zum Shop dazu und die meisten Kunden sind eh überfordert, wenn sie die ganzen Handles und Layout-Updates im Code sehen. Für mich war das schon immer ein Thema auf Entwicklerseite.
+
+Wahrscheinlich haben viele von Euch schon genauso gearbeitet, oder kennen einen anderen Weg. In jedem Fall freue ich mich über Kommentare und Anregungen, wie man im Alltag die Transaktionsmails noch schöner verwalten kann.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3579

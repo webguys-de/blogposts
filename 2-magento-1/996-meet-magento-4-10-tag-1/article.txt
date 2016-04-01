@@ -1,0 +1,70 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento 4.10 Tag 1 
+
+----
+
+Date: 2010-11-04
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Der erste Teil der Meet Magento ist, abgesehen von der Aftershow-Party, vorbei. Nach dem sehr kurzweiligen Tag ziehe ich ein kleines Résumé:
+
+----
+
+Text: <h2>Produktimporte</h2>
+Importe von Produkten sind weiterhin ein schwieriges Thema. Es braucht einfach seine Zeit oder führt, wenn man auf direkte Datenbank-Importe setzt, zu Kompabilitätsproblemen. Die Eierlegende-Wollmilch-Sau der Importe fehlt also weiterhin. Dennoch stelle Damian die vier Grundarten der Importe vor:
+<ol><li>Dataflow</li>
+	<li>SOAP-Api</li>
+	<li>Magento Model</li>
+	<li>Raw Database</li>
+</ol>
+Als besonderen persönlichen Hinweis verwies er auf <a href="http://www.magentocommerce.com/extension/3047/urapidflow/">uRapidFlow</a> und das MIP von FlagBit. (Kennt jemand einen Link dazu?)
+<h2>Sicherheit</h2>
+Lee hat einen sehr tollen Beitrag zum Thema Sicherheit gehalten. Seine Kernaussagen ließen sich wie folgt zusammenfassen:
+<ul><li>Liebe Shopbetreiber seid ein wenig paranoid. Passt auf welchen Entwicklern ihr welche Zugänge gebt. Vertraut ihr ihnen wirklich uneingeschränkt? Sie könnten z.B. Module installieren die Kreditkartendaten sammeln oder jede zweite Zahlung auf ein eigenes Konto lenken.Nicht jeder Entwickler ist ein guter Mensch, es gibt auch böse.</li>
+	<li>Installation fremder Module: Liebe Entwickler, macht Ihr einen kompletten Review des Moduls? Was tut es? Hat es Schwachstellen? Funkt es eventuell nach Hause? Welche Daten trägt es zu externen Stellen? Lee kontrolliert das nach eigener Aussage.</li>
+</ul>
+Dann erklärte er noch zwei Bugs in älteren Magento-Versionen. So konnte mit der 1.x Version noch Produkte über das Frontend aus dem Katalog löschen und auch die 1.3.x, die bei vielen Kunden noch im Einsatz ist, hat einen Bug im Paypal-Modul. Unabhängig von der Zahlungsart kann über die Paypal-Controller eine Bestellung, sofern man Bestellnummer und Grand Total kennt, auf bezahlt gesetzt werden - sehr problematisch wenn man ein ausgeklügeltes FulFillment betreibt. Magento selbst bietet für die 1.3.x keinen Patch an. Lee selbst aber unter <a href="https://gist.github.com/662396">https://gist.github.com/66239</a>6 schon.
+
+Ich vermisse an dieser Stelle eine vernünftige Upgrade-Politik. Updates sind aufwendig, kosten Geld und nicht jeder Shopbetreiber der ein lauffähiges System hat möchte unbedingt zum neusten System wechseln. Was toll wäre ist eine Update-Politik ähnlich der zu Ubuntu. Es gibt regelmäßige Neuerscheinungen. Diese Versionen haben die aktuellsten Features werden aber immer nur bis zur nächsten Neuerscheinung supportet. Zusätzlich gibt es die LTS (Long Time Support) Version. Im Magento-Fall würde das Shopbetreiber z.B. drei Jahre ausschließlich Sicherheitsupdates zur aktuellen LTS Version bekommen. Gerne natürlich auch gegen eine jährlich Gebühr.
+<h2>Hosting</h2>
+Gegen Ende gab es eine sehr spannende Diskussion im Barcamp zum Thema Hosting initiiert von der Firma SysEleven. Kernaussage: Testet eure großen Shops bezüglich Leistungsgrenzen - und nicht erst im Live-Betrieb! Es reicht in der Regel nicht ein paar Vergleichstest mittels "ab" zu machen. Da braucht es schon mehr. Der Königsweg ist es natürlich möglichst realistisch zu testen. Dazu besorge man sich einige alte Logs und lasse dieses mitgeschriebene Userverhalten auf das neue System los - eventuell auch einfach mit dem Faktor 1.5. Nun beobachten was passiert und generiere tolle Auswertungen bezüglich IO/CPU-Last usw.
+<h2>Zwischenfazit</h2>
+Spannend, erfrischend und tolles Networking. Auf zur Aftershow-Party.
+
+Ein weiterer <a href="http://www.magelounge.de/2010/11/meet-magento-4-der-erste-tag/">Rückblick zur MeetMagento bei MageLounge</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 996

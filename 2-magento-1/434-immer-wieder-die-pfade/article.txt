@@ -1,0 +1,76 @@
+Article-meta: 
+
+----
+
+Title: Immer wieder die Pfade
+
+----
+
+Date: 2010-07-29
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Hin und wieder kommt es vor, dass man Dateien aus dem Magento Verzeichnis benötigt, daher hier eine kleine Übersicht über verschiedene Magento-Pfade.
+
+
+----
+
+Text: Ein Auszug aus den am meisten benötigten Pfaden:
+
+(code lang: php)
+$options->getAppDir();
+$options->getBaseDir();
+$options->getCodeDir();
+$options->getDesignDir();
+$options->getEtcDir();
+$options->getLibDir();
+$options->getLocaleDir();
+(/code)
+
+Wer den vollen Umfang haben und sehen möchte:
+
+(code lang: php)
+$options = Mage::getModel('core/config')->getOptions();
+echo "<pre>";
+print_r( get_class_methods( get_class( $options ) ) );
+echo "</pre>";
+(/code)
+
+<strong>Update:</strong> Alternativ geht das natürlich auch über eine Funktion:
+(code lang: php)
+Mage::getBaseDir('var') 
+Mage::getBaseDir('media')
+(/code)
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 434

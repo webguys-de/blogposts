@@ -1,0 +1,50 @@
+Article-meta: 
+
+----
+
+Title: Einblicke in Magento 2.0
+
+----
+
+Date: 2011-06-24
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps,allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Ich möchte kurz darauf Hinweisen das <a href="http://www.avs-webentwicklung.de/nc/blog/artikel/details-zu-magento-2.html">Andreas von Studnitz in seinem Blog</a> einen umfangreichen Beitrag zu den Details von Magento 2.0 veröffentlicht hat. Der Beitrag ist unbedingt zu lesen! Magento hat sich doch einige sehr spannende Dinge einfallen lassen :)
+<ul></ul><a href="http://www.avs-webentwicklung.de/nc/blog/artikel/details-zu-magento-2.html">Weiter in seinem Blog</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1694

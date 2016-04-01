@@ -1,0 +1,100 @@
+Article-meta: 
+
+----
+
+Title: Code Coverage mit Travis CI und Code Climate
+
+----
+
+Date: 2015-02-22
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nach einem tollen Beitrag von Matthias Zeis zum Thema <a href="http://www.matthias-zeis.com/archiv/magento-extensions-mit-travis-ci-testen" target="_blank">Magento-Extensions mit Travis CI testen</a>, habe ich das Ganze auch sofort für eines meiner Projekte auf GitHub ausprobiert. Und es hat sofort super funktioniert. Nach einiger Zeit habe ich den Dienst Code Climate für mich entdeckt - hier kann man seinen Code bewerten lassen, und auch die Code Coverage der Tests messen lassen.
+
+
+
+----
+
+Text: Das funktioniert mit MageTestStand leider nicht out of the box. Daher musste ich einige Veränderungen vornehmen. Diese sind in dem <a href="https://github.com/webguys-de/MageTestStand" target="_blank">webguys.de-Fork von MageTestStand</a> zu finden. Folgende Änderungen habe ich durchgeführt:
+
+<h2>MageTestStand</h2>
+
+Zuerst wurde also das code-climate repo in die composer.json aufgenommen:
+
+(code)
+"require": {
+    "aoepeople/composer-installers": "*",
+    "ivanchepurnyi/ecomdev_phpunit": "dev-dev",
+    "codeclimate/php-test-reporter": "dev-master"
+}
+(/code)
+
+Da man für code coverage xDebug benötigt, wurde dieses kurzerhand aktiviert. Dazu habe ich in der <em>setup.sh</em> folgende Zeile eingefügt:
+
+(code)
+echo "zend_extenstion = xdebug.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+(/code)
+
+Weiterhin habe ich den Aufruf von phpunit angepasst, um code coverage zu aktivieren. Dies könnte man zwar auch über eine phpunit.xml.dist lösen, aber diese liegt eben im EcomDev_PHPUnit-Projekt. Leider brauchte ich für eine Whitelist der Code-Coverage eine eigene Datei im Projekt - dies möchte ich noch etwas angenehmer gestalten. Kann man diese nicht über die Kommandozeile hinzufügen? Fürs erste funktioniert es nun aber so:
+
+(code)
+cp ${WORKSPACE}/phpunit.xml.dist .
+${BUILDENV}/bin/phpunit --coverage-clover ${BUILDENV}/build/logs/clover.xml --colors -d display_errors=1
+(/code)
+
+Danach brauchen wir die Ergebnisse nur noch zu Code Climate exportieren und schon ist man fertig.
+
+(code)
+cd ${BUILDENV}
+vendor/codeclimate/php-test-reporter/composer/bin/test-reporter --stdout &gt; codeclimate.json
+curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v1.0.1-dev)' https://codeclimate.com/test_reports
+(/code)
+
+<h2>Das zu testende Projekt</h2>
+
+Hier muss man lediglich in seiner .travis.yml folgende Zeilen einfügen:
+
+(code)
+addons:
+    code_climate:
+        repo_token: 03942e903cbb........
+(/code)
+
+Das Token bekommt man über die CodeClimate-Seite, indem man einfach auf "Code Coverage" klickt.
+
+Und schon bekam ich am Ende ein Zahl von 0.4% für mein Projekt heraus. Gut, ich habe auch noch nicht sonderlich viele Tests geschrieben - aber das kann ich ja nun nachholen. Natürlich kann man sich (wie immer) auch ein schönes Badge in seine Readme packen, um damit zu beweisen, dass die Extension ausführlich getestet wurde. Denn ein grünes CI-Badge hat noch nicht viel zu sagen, wenn man einfach nur eine Zeile mit assertTrue(true) hinzufügt, sind die Tests schließlich auch grün...
+
+Ich werde mich einmal mit Fabrizio in Verbindung setzen, um zu schauen, ob man das Ganze nicht in den Standard von MageTestStand integrieren könnte. Für mich ist die ganze Travis CI-Thematik noch recht neu, und ich glaube, dass ich noch viele Umwege gehe, die man einfacher lösen könnte.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4222

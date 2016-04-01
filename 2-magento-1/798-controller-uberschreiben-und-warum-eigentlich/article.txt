@@ -1,0 +1,84 @@
+Article-meta: 
+
+----
+
+Title: Controller überschreiben: Wann, Warum und Wie?
+
+----
+
+Date: 2010-09-23
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das "C" im Magento zugrunde liegende <a href="http://de.wikipedia.org/wiki/Model_View_Controller">MVC</a>-Ansatz steht, wie sollte es anders sein, für Controller. Ein Controller fungiert im grundlegenden als Vermittler zwischen Model, View, und im speziellen Magento-Umfeld von Blöcken. Er reagiert auf Benutzeranfragen und ruft die jeweiligen Methoden und Layouts auf sodass der Benutzer am Ende ein Ergebnis zur Anzeige erhält. Diese Controller lassen sich in Magento mit ein wenig XML überschreiben - in welchen Situationen das Sinn macht und in welchen nicht erklären wir im folgenden Beitrag.
+
+----
+
+Text: In der Regel erfüllen Controller spezielle Aufgaben. Diese haben grundlegenden etwas mit Ihren Namen zu tun. So kümmert sich der Product-Controller um die Darstellung von Produkten und der Checkout-Controller um den "zur Kasse"-Prozess. Controller sollten nur überschrieben werden wenn der Controller eine gleichartige Aufgabe auf eine andere Art erledigen soll. Werden Produkte z.B. nur im Detail angezeigt wenn der Benutzer eingeloggt ist wäre es eine Möglichkeit hier Einfluss auf den Controller zu nehmen. In diesem Fall erfüllt der Controller weiterhin seine Ursprungsaufgabe jedoch in etwas abgewandelter Weise. <strong>Bei neuartigen Aufgaben werden selbstverständlich neue Controller verwendet und nicht bestehende bis zur Unkenntlichkeit verändert. </strong>
+<h3>Den Controller überschreiben</h3>
+Für den Fall wir also einen bestehenden Controller verändern müssen bietet Magento diese Möglichkeit über ein wenig XML-Code in der config.xml unseres Modules an:
+
+(code lang: xml)
+<frontend>
+	<routers>
+		<catalog>
+			<args>
+				<modules>
+					<webguys_example before="Mage_Catalog">Webguys_Example</webguys_example>
+				</modules>
+			</args>
+		</catalog>
+	</routers>
+</frontend>
+(/code)
+
+Dieser XML-Code fügt im Suchpfad der Router von Magento vor <em>Mage_Catalog</em> unser Modul ein. Das bewirkt das Magento zuerst in unserem Controller-Ordner prüft ob ein passender Controller vorhanden ist. Erst danach schaut Magento im Modul <em>Mage_Catalog</em> nach. Erstellen wir nun in <em>app/code/local/Webguys/Example/controllers</em> den Controller mit dem Namen <em>CategoryController.php </em>überschreiben wir den Basiscontroller von Magento:
+
+(code lang: php)
+<?php
+include_once("Mage/Catalog/controllers/CategoryController.php");
+
+class Webguys_Example_CategoryController extends Mage_Catalog_CategoryController {
+	public function viewAction() {
+		die("Implementieren wir doch die View-Action neu!");
+	}
+}
+(/code)
+
+Um die Standardfunktionen vom Ursprungscontroller zu erben ist ein kleiner Trick von Nöten: Der Ursprungscontroller muss manuell mittels Include eingebunden werden da Magento bzw. das Zend-Framework prinzipiell Controller nicht automatisch lädt.
+
+Ist das Modul richtig in Magento eingebunden erhält man nun, sobald die View-Action des Category-Controller aufgerufen wird, anstelle der Category die Ausgabe "Implementieren wir doch die View-Action neu!". Eine sinnvolle Implementierung fehlt somit und ist nicht Bestandteil dieses Beispiels.
+
+[wgAddVersion version="1.4.1.1"]
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 798

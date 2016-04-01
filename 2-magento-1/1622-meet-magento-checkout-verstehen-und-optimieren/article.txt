@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Meet-Magento: Checkout verstehen und optimieren
+
+----
+
+Date: 2011-05-17
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro:
+
+----
+
+Text: Die Meet-Magento ist noch im vollen Zuge aber dennoch kurz, wie allen Zuhörern versprochen, meine Vortragstitel "(file: Checkout-verstehen-und-optimieren.pdf text: Den Checkout-Prozess verstehen und optimieren)" zum Anschauen und natürlich zum Kontaktieren als (file: Checkout-verstehen-und-optimieren.pdf text: PDF).
+
+(image: Checkout-verstehen-und-optimieren-650x487.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1622

@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Tipp: Modul “German Shop” + 100 Video Tutorials
+
+----
+
+Date: 2010-04-16
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Heute Abend nur kurz zwei kurzweilige Lesetipps die es aber dennoch in sich haben: Ein neues Modul das den Magento-Shop fit für den deutschen Markt macht und zusätzlich eine Sammlung von 100 Video-Tutorial zu Magento.
+
+
+
+----
+
+Text: <h3>German Shop</h3>
+Die <a href="http://www.techdivision.com">Techdivision</a> veröffentlicht ihre eigene Erweiterung als alternative zum Market Ready Germany Modul. Ich hoffe ich finde am Wochenende Zeit für einen kleinen Review :)
+
+So heißt es in der Produktbeschreibung:
+<blockquote>Mit dem neuen, kostenlosen Modul „Magento German Shop“, machen Sie Magento 1.4 fit für den Einsatz in Deutschland. Bei der Entwicklung des Moduls wurde auf unnötige Gimmicks verzichtet und der Fokus auf die Anpassung bzw. Ergänzung der relevanten Bereiche für deutsche Magento-Shops gelegt. Das Modul wurde so angelegt, dass – soweit technisch möglich - keine tiefgreifenden Änderungen bzw. Änderungen an Magento Core-Klassen vorgenommen werden. Dadurch kann die Updatefähigkeit sichergestellt werden.</blockquote>
+<a href="http://www.techdivision.com/shop/magento-german-shop">http://www.techdivision.com/shop/magento-german-shop</a>
+<h3>100 Video Tutorials [en]</h3>
+Der <a href="http://www.redstage.com">RedStage Magento Blog</a> hat eine sehr umfangreiche Liste von englischen Video-Tutorials zu Magento zusammengestellt. Vermutlich für jeden etwas dabei :)
+<blockquote>We looked around the web and found 100 videos that showcase various features and additions to Magento that can help you install, set up and work with Magento E-Commerce.</blockquote>
+<a href="http://www.redstage.com/magento/blog/2010/04/16/100-magento-videos-tutorials/">http://www.redstage.com/magento/blog/2010/04/16/100-magento-videos-tutorials/</a>
+<div id="_mcePaste" style="overflow: hidden; position: absolute; left: -10000px; top: 154px; width: 1px; height: 1px;">Learning Magento can be a tough process. Luckily, over the past few years as Magento has gained popularity, the community has grown and contributed incredible amounts of information about the program.</div>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 295

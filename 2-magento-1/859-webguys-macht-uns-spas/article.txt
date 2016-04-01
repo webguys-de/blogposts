@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Webguys macht uns Spaß!
+
+----
+
+Date: 2010-10-01
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Das Schreiben für Webguys macht wirklich Spaß. Es entstehen spannende Kontakte, tolle Diskussionen und und und .. und weil es eben Spaß macht haben wir auch ein paar kleine Werbevisitenkarten drucken lassen :) Dazu ein kleines Foto:
+
+(image: IMG_20101001_132354-500x375.jpg)
+
+Danke auch an die regelmäßigen Leser. Ohne euch wäre es ziemlich langweilig :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 859

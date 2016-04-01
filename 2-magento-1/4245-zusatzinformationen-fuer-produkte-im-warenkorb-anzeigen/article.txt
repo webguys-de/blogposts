@@ -1,0 +1,151 @@
+Article-meta: 
+
+----
+
+Title: Zusatzinformationen für Produkte im Warenkorb anzeigen
+
+----
+
+Date: 2015-03-29
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Häufig braucht man eine Möglichkeit, um zusätzliche Informationen auf dem Quote-Item anzuzeigen. Das könnten Geschenktexte, Lieferinformationen oder andere wichtigen Dinge sein, welche man dem Kunden übersichtlich mit auf den Weg geben möchte. Magento hat dazu die sogenannten "additional options" auf Quote-Item-Ebene bereitgestellt.
+
+Ich muss zugeben, dass ich diese sehr spät kennengelernt habe und in der Vergangenheit schon mehrere Anwendungsfälle für dieses Feature gehabt hätte. Statt dessen wird man häufig in Versuchung geführt, die einzelnen Informationen in zusätzlichen Spalten darzustellen und muss dafür sämtliche Templates überschreiben - das ist sehr viel Arbeit und erfordert eine Menge Änderungen (Warenkorb, Sichtkontrolle, Druck der Bestätigung, E-Mail-Templates, ...).
+
+----
+
+Text: Aktuell entwickle ich gerade eine Erweiterung, mit welcher man Abo-Artikel abbilden kann. Dazu möchte ich je Artikel im Warenkorb natürlich anzeigen, ab wann das Abo losgeht, und vor allem wie oft es angestoßen wird. Hierzu nutzen wir das gleiche Event, wie schon beim Problem, jeden <a title="Ein Produkt mehrfach in den Warenkorb legen" href="http://www.webguys.de/magento/ein-produkt-mehrfach-den-warenkorb-legen/">Artikel einzeln im Warenkorb aufzuführen</a>.
+
+(code lang: xml)
+<frontend>
+    <events>
+        <sales_quote_product_add_after>
+            <observers>
+                <webguys_betterrecurringprofiles>
+                    <class>betterrecurringprofiles/observer</class>
+                    <method>salesQuoteProductAddAfter</method>
+                </webguys_betterrecurringprofiles>
+            </observers>
+        </sales_quote_product_add_after>
+    </events>
+</frontend>
+(/code)
+
+(code lang: php)
+/**
+ * @param $observer Varien_Event_Observer
+ */
+public function salesQuoteProductAddAfter($observer)
+{
+    /** @var $helper Webguys_BetterRecurringProfiles_etc_Helper_Data */
+    $helper = Mage::helper('betterrecurringprofiles');
+
+    $items = $observer->getItems();
+
+    /* @var $item Mage_Sales_Model_Quote_Item */
+    foreach ($items AS $item) {
+
+        $product = $item->getProduct();
+        $item->addOption(
+            new Varien_Object(
+                array(
+                    'product' => $product,
+                    'code' => 'additional_options',
+                    'value' => serialize(
+                        array(
+                            array(
+                                'label' => 'Versandhäufigkeit',
+                                'value' => $helper->__('%d Tage', $item->getRecurringItemInterval())
+                            ),
+                            array(
+                                'label' => 'Termin',
+                                'value' => Mage::helper('core')->formatDate($item->getRecurringItemNextDate(), 'short', false)
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+}
+(/code)
+
+Wie man sieht, wird hier einfach die entsprechende Option hinzugefügt und fertig. Wirklich ganz einfach. Danach sieht man auch schon alle Optionen im Warenkorb.
+
+(image: AdditionalOptions-Cart.png)
+
+Leider merkt man nun schnell, dass nach Bestellabschluss all diese Optionen nicht mehr ersichtlich sind (seit Magento 1.5). Daher muss man diese mit in das Order-Item übernehmen. Mit einem Event-Observer und ein paar Zeilen ist auch das schnell erledigt.
+
+(code lang: xml)
+<global>
+    <events>
+        <sales_convert_quote_item_to_order_item>
+            <observers>
+                <webguys_betterrecurringprofiles>
+                    <class>betterrecurringprofiles/observer</class>
+                    <method>salesConvertQuoteItemToOrderItem</method>
+                </webguys_betterrecurringprofiles>
+            </observers>
+        </sales_convert_quote_item_to_order_item>
+    </events>
+</global>
+(/code)
+
+(code lang: php)
+/**
+ * @param $observer Varien_Event_Observer
+ */
+public function salesConvertQuoteItemToOrderItem($observer)
+{
+    // Add additional options to order item
+    // Otherwise they won't survive the conversion
+
+    $quoteItem = $observer->getItem();
+    if ($additionalOptions = $quoteItem->getOptionByCode('additional_options')) {
+        $orderItem = $observer->getOrderItem();
+        $options = $orderItem->getProductOptions();
+        $options['additional_options'] = unserialize($additionalOptions->getValue());
+        $orderItem->setProductOptions($options);
+    }
+}
+(/code)
+
+Fertig! Ab jetzt findet man die entsprechenden Optionen überall wieder.
+
+(image: AdditionalOptions-Cart.png)
+
+(image: AdditionalOptions-Admin.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4245

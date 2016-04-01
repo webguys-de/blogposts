@@ -1,0 +1,79 @@
+Article-meta: 
+
+----
+
+Title: Türchen 21: Varnish – der Webbeschleuniger für den Magento-Shop
+
+----
+
+Date: 2012-12-21
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: daniel-wolf
+
+----
+
+Article-content: 
+
+----
+
+Intro: Dass Magento ein mächtiges und leistungsstarkes E-Commerce-System ist, wissen wir. Allerdings werden die meisten Magento-User auch zustimmen, wenn ich sage, dass die Anwendung sehr ressourcenhungrig ist. Schnellere Ladezeiten und eine Steigerung der Conversion Rate sind also gerade bei komplexen Onlineshops oft ein großer Wunsch der Shopbetreiber. Die Lösung hierfür heißt Varnish.
+
+
+
+----
+
+Text: <h2>Was ist Varnish?</h2>
+Varnish ist ein <strong>Webbeschleuniger.</strong> Er wird vor den eigentlichen Webserver (das Backend) vorgeschaltet. Varnish merkt sich den ersten Seitenaufruf und legt sich die entsprechenden Inhalte im Arbeitsspeicher ab. Varnish kann beim zweiten Aufruf also direkt ausliefern und sorgt auf diese Weise für eine <strong>hohe Performance</strong> und <strong>blitzschnelle Ladezeiten.</strong>
+
+Shop-Besucher können sich so besonders komfortabel auf den Seiten bewegen und das Online-Shopping-Erlebnis unter den besten Voraussetzungen erleben. Die <strong>Kundenzufriedenheit</strong> steigt dadurch erheblich.
+
+<span style="font-size: medium;">(image: Diagramm_rgb_Varnish_Performancesteigerung_Mittwald-e1356016701238-650x447.png)
+</span>
+<h2>Edge Side Includes</h2>
+Wenn eine Seite überwiegend statische und vereinzelt dynamische Inhalte wie Warenkörbe oder News-Boxen enthält, macht es keinen Sinn, die gesamte Seite zu cachen. Diese Bereiche sollten per AJAX nachgeladen werden.
+
+Alternativ gibt es die Möglichkeit, sogenannte ESIs (Edge Side Includes) zu verwenden. Die erforderlichen ESI-Tags werden mit Hilfe der Extension „PageCache powered by Varnish“ von für Magento automatisch im HTML-Code gesetzt. So werden die entsprechenden Abschnitte bei jedem Aufruf nachgeladen. Auch das zeitweilige Cachen dieser Objekte, ist z. B. möglich.
+<h2>VCL – Varnish Configuration Language</h2>
+Varnish bringt eine mächtige aber auch leichtgewichtige Konfigurationssprache mit, um das System zu konfigurieren, nämlich die Varnish Configuration Language. Mit VCL könnt Ihr Varnish ganz an eure individuellen Bedürfnisse anpassen.
+
+So könnt Ihr festlegen, welche Inhalte aus dem Cache geladen oder dynamisch vom Webserver geliefert werden. Außerdem könnt Ihr per VCL den Cache leeren oder das Verhalten bei gesetzten Cookies durch Anpassungen von Header-Informationen beeinflussen.
+
+Mit dem <a href="https://www.varnish-software.com/static/book/">Varnish Book</a> steht Euch eine umfangreiche Dokumentation als Grundlage für die Konfiguration zur Verfügung. Bei <a href="http://www.mittwald.de/hosting/varnish-hosting/">Mittwald</a> gibt es außerdem als Starthilfe vorkonfigurierte VCL-Dateien für Magento.
+
+Die Varnish-Verwaltungsoberfläche von Mittwald bietet zudem einen Editor zum Bearbeiten eurer persönlichen VCL-Konfiguration. Wenn Ihr Änderungen vornehmt, werden diese sofort im System aktiv und können über umfangreiche Analyse- sowie Statistiktools ausgewertet werden.
+<h2>Wie binde ich Varnish in meinen Magento-Shop ein?</h2>
+Um Magento-Shops mit Varnish zu verbinden, haben wir uns für die Extension „<a href="http://www.magentocommerce.com/magento-connect/pagecache-powered-by-varnish.html">PageCache powered by Varnish</a>“ (<a href="https://github.com/aligent/Phoenix_VarnishCache">Github</a>) entschieden.
+
+Die initiale Einrichtung gestaltet sich einfach, die Einstellungen lassen sich im Backend unter „System → Konfiguration → Erweitert → System → PageCache powered by Varnish“ finden
+
+(image: varnish-config-650x477.jpg)
+
+Die wichtigsten Optionen lassen sich hier bequem einstellen. Hierzu gehört die eigentliche Aktivierung des Caches, die IP des Varnish-Servers und die Routen, für die das Caching generell deaktiviert werden soll.
+
+Die Extension bringt auch VCL-Dateien für Varnish 2.0 und Varnish 3.0 mit und deckt bereits die Grundfunktionen ab. So bietet sie einen guten Einstieg für eigene Erweiterungen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3328

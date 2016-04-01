@@ -1,0 +1,70 @@
+Article-meta: 
+
+----
+
+Title: Eingebettetes Video liegt über Navigation
+
+----
+
+Date: 2012-03-13
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo,css,video,html
+
+----
+
+Author: guido
+
+----
+
+Article-content: 
+
+----
+
+Intro: Einige kennen das Problem, wenn man ein Dropdown-Menü öffnet, dass dies nur unter einem eingebetteten Video (z.B. youtube) angezeigt wird und somit unbrauchbar ist.
+
+----
+
+Text: Die Lösung liegt hier nicht etwa im z-index (z-index zeigt in dem Fall nur der Firefox korrekt an), für Safari, Chrome und IE muss man dem eingebetteten Video einfach bestimmte Parameter geben:
+
+Man fügt einfach folgendes dem <embed> tag hinzu:
+
+(code lang: html)
+quality="high" wmode="transparent"
+(/code)
+
+Der fertige Code sieht dann so aus und das Menü liegt über dem Video:
+
+(code language: html)
+<object style="height: 390px; width: 640px; z-index: 200;" width="640" height="360" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="quality" value="high" /><param name="wmode" value="transparent" /><param name="allowFullScreen" value="true" /><param name="allowScriptAccess" value="always" /><param name="src" value="http://www.youtube.com/v/dwpjJmLb9fs?version=3&feature=player_detailpage" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><embed style="height: 390px; width: 640px; z-index: 200;" width="640" height="360" type="application/x-shockwave-flash" src="http://www.youtube.com/v/dwpjJmLb9fs?version=3&feature=player_detailpage" quality="high" wmode="transparent" allowFullScreen="true" allowScriptAccess="always" allowfullscreen="true" allowscriptaccess="always" /></object>
+(/code)
+
+
+<strong>Update 26.03.2013:</strong> Wie dem 1. Kommentar zu diesem Theme zu entnehmen ist, kann man auch weitere Parameter setzen, die ggf. besser/ebenso funktionieren. Bei einem aktuellen Projekt hat uns nun der &wmode=transparent geholfen, da unter Windows7 im IE9 diese Problematik erneut aufgetaucht war.
+
+(code language: html)
+&wmode=Opaque
+&wmode=transparent
+(/code)
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2702

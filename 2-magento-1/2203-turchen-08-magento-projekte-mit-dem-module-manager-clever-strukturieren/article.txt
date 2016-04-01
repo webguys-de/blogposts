@@ -1,0 +1,152 @@
+Article-meta: 
+
+----
+
+Title: Türchen 08: Magento Projekte mit dem Module-Manager clever strukturieren
+
+----
+
+Date: 2011-12-08
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: fabrizio-branca
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magentos Architektur erlaubt es den Magento-Kern mit eigenen Modulen zu erweitern. Leicht kann man damit eigene Funktionen ergänzen oder bestehende Funktionen flexibel anpassen. Die meisten Shops werden mit dem Standardfunktionsumfang von Magento nicht auskommen und eigene Module benötigen. Auf <a href="http://www.magentocommerce.com/magento-connect/">Magento Connect</a> gibt es zahlreiche freie und kostenpflichtige Module und schnell wird man auch eigene Module entwickeln.
+
+----
+
+Text: <h2>Struktur von Magento Modulen</h2>
+Die Architektur von Magento sieht vor, dass Dateien  - je nach Typ - ihren vorhergesehenen Platz haben. Magento Module verteilen also ihre Dateien in zahlreichen Verzeichnissen anstatt alle Dateien in innerhalb eines Modulverzeichnisses zu bündeln.
+Selbst ein kleines Modul, das Erweiterungen für das Frontend und für das Backend implementiert, wird seine Dateien zum Beispiel in folgende Verzeichnisse ablegen, wobei je nach Modulumfang noch weitere Verzeichnisse möglich sind:
+
+(code lang: bash)
+app/etc/modules/Foo_Bar.xml
+app/code/local/Foo/Bar
+app/design/frontend/base/default/layout/foobar
+app/design/frontend/base/default/template/foobar
+app/design/adminhtml/default/default/layout/foobar
+app/design/adminhtml /default/default/template/foobar
+app/locale/en_US/Foo_Bar.csv
+(/code)
+<h2>Problem</h2>
+Das Problem dabei ist, dass Module so <strong>fest mit einer Magento Instanz verwoben</strong> sind. Nur schwer lassen sich die Module so rückstandslos entfernen oder updaten. Erst recht wenn es sich um fremde Module handeln und man nicht den Überblick hat welche Dateien ursprünglich mit installiert worden sind. "Mal schnell ein neues Modul oder eine neue Version ausprobieren" kann damit eine zeitraubende Aufräumaktion auslösen.
+
+Auch ein Update von Magento selbst wird so erschwert, weil man nicht immer eindeutig unterscheiden kann welche Dateien und Verzeichnisse aus dem Magento-Kern sind und welche durch Module erzeugt worden sind.
+
+Aus Entwicklerperspektive ist es schwer den Überblick über alle Dateien seiner Module zu behalten. Während des Entwickelns ist man so den Großteil der Zeit damit beschäftigt, die Dateien in der Masse von Magentos Verzeichnissen zu suchen und wenn man das Modul dann exportieren will wird man garantiert Dateien vergessen, die in weniger offensichtlichen Verzeichnissen angelegt wurden.
+
+Entwickelt man Module, die man wiederverwenden möchte und einzeln in einer Versionsverwaltung wie Subversion oder Git ablegen möchte, stellt die normale Organisation der Module eine große Hürde dar, da die Dateien nicht losgelöst von der Magento Instanz vorliegen. Viele Entwickler committen daher üblicherweise das gesamte Magento-Projekt in ein Repository.
+<h2>Module-Manager</h2>
+Abhilfe für all diese Problem schafft <a href="http://colin.mollenhour.com/">Colin Mollenhour</a>s "<a href="http://code.google.com/p/module-manager/">Module Manager</a>". Der <strong>Module-Manager - oder kurz "modman"</strong> ist zunächst einmal unabhängig von Magento und kann auch in anderen Szenarien verwendet werden, ist allerdings ursprünglich für die Organisation von Magento-Modulen entwickelt worden um oben genannte Problem zu lösen und eignet sich dafür hervorragend.
+
+Modman ist ein Bash-Skript, das mit Symlinks arbeitet und lässt sich daher auf Windows nur mit Umwegen verwenden. (Aber wer will schon eine Entwicklungsumgebung auf Windows haben? :)
+
+Die Funktionsweise des modman-Skriptes ist sehr einfach: Das Konzept sieht vor, <strong>dass Module in einzelnen Verzeichnissen getrennt vom Magento-Kern vorliegen</strong>. In jedem Modul ist eine "modman" Konfigurationsdatei enthalten (nicht zu verwechseln mit dem modman-<em>Skript</em>, das genauso heißt), die beschreibt welche Dateien oder Verzeichnisse an welche Stelle im Magento-Kern gehören. Das modman-Skript parst diese Datei und erzeugt Symlinks in den Verzeichnissen des Magento-Kerns, die auf die entsprechenden Dateien und Verzeichnisse in den Modulen zeigen.
+
+Dieses Vorgehen erlaubt es<strong>, alle Module und den Magento-Kern unabhängig voneinander zu verwalten</strong> (auch in der Versionsverwaltung) und das modman-Skript kümmert sich um das "Zusammenbauen" und darum, dass aus allen Bausteinen eine vollständige und funktionierende Magento-Instanz wird.
+
+Als Entwickler kann man nun <strong>in den Modulverzeichnissen arbeiten</strong>, die alle benötigten Dateien und die modman-Konfigurationsdatei  - also den "Bauplan" welche Dateien wohin gehören - enthalten. Diese steigert die Übersichtlichkeit, ermöglicht es, die Module wiederzuverwenden und einzeln zu verwalten und legt den Grundstein für Entwicklerteams, um <strong>gemeinsam und sauber</strong> an einem Projekt zu arbeiten.
+Zudem kann man seine <strong>IDE</strong> so einrichten, dass nur das .modman-Verzeichnis mit dem Remote-Server synchronisiert wird, während die unangetasteten Magento-Sourcen lokal vorliegen. Das macht die Entwicklung auf einem Remote-Server deutlich "leichtgewichtiger" und flüssiger.
+
+Ein <strong>Update von Magento</strong> auf eine neue Version wird somit zum Kinderspiel, da man einfach den Kern austauschen kann (z.B. indem man den svn:external auf die neue Version umbiegt) und danach das modman-Skript aufruft um alle Symlinks neu zu setzen.
+
+Mit folgendem Befehl werden die <strong>Module in den Magento-Kern "deployed"</strong>:
+
+(code lang: bash)
+module-manager/modman deploy-all
+(/code)
+
+Mit dem Befehl (code)module-manager/modman deploy(/code) lassen sich auch <strong>einzelne Module deployen</strong> und mit (code)module-manager/modman deploy --copy(/code) veranlasst man den Module-Manager dazu keine Symlinks herzustellen, sondern die <strong>Dateien an die Zielstelle zu kopieren</strong> (über Hardlinks wenn möglich). Das führt zwar wieder zu den Problemen, die man mit der Standard-Projektstruktur von Magento hat, kann aber verwendet werden um ein Deployment-Package für einen Produktionsserver zu erstellen (auf dem ja sowieso nicht mehr entwickelt wird).
+
+Unter der Annahme, dass alle Symlinks vom modman-Skript erzeugt worden sind, kann man leicht aufräumen (und somit auch einzelne Module entfernen), indem man alle Symlinks löscht, das Modul aus dem Modulverzeichnis entfernt und dann wieder alle Symlinks erzeugt:
+
+(code lang: bash)
+find . -type l -delete module-manager/modman deploy-all
+(/code)
+<h2>Struktur von Magento-Projekten</h2>
+Ursprünglich war es wohl vorgesehen, dass sich das ".modman"-Verzeichnis - in dem sich alle Magento Module befinden - innerhalb des Webroots befindet (z.B. htdocs/). Bald wurde dann aber das <strong>Basedir-Feature</strong> ergänzt, das nun erlaubt, das .modman-Verzeichnis an beliebiger Stelle abzulegen und über den Inhalt der .basedir Datei den Pfad zum Magento-Webroot zu definieren. So kann man die Quelldateien einerseits an einem sicheren Ort außerhalb des Webroots aufbewahren und damit dort auch Dateien, wie zum Beispiel Dokumentationen, Spezifikationen oder Beispieldateien, die nicht von außen zugänglich sein sollen, ablegen. Andererseits lässt diese Trennung auch folgende Struktur wunderbar zu:
+
+(image: modman-650x388.png)
+
+In diesem Beispiel wird Subversion mit svn:externals verwendet, diese Struktur ist aber auch problemlos auch mit Git und Submodulen realisierbar.
+
+Im Projekthauptverzeichnis wird der Original-Magento-Kern als svn:external in htdocs/ zur Verfügung gestellt. Ebenfalls über svn:extenals kommt das modman-Skript in das module-manager Verzeichnis (Svn erlaubt das Einbinden einzelnen Dateien nicht, daher wird hier ein eigenes Verzeichnis angelegt).
+Im .modman-Verzeichnis sind alle Module enthalten. Diese können entweder ebenfalls über svn:externals mit dem Projekt verknüpft sein oder direkt in dem Verzeichnis enthalten sein, wenn diese Module projektspezifisch sind.
+
+Über ein weiteres <strong>projektspezifisches Modul</strong> (im Beispiel "Aoe_ProjectSpecificExtension") kann man allgemeine projektgebundene Dateien wie die local.xml oder die .htaccess verwalten, unabhängig vom Magento-Kern in die Versionsverwaltung einchecken und trotzdem innerhalb der Magento-Instanz verfügbar machen. Hier kann man außerdem auch das Theme/Skin für das projektspezifische Layout hinterlegen.
+
+Nach dem Auschecken aller Dateien hat man nun zunächst eine nacktes Magento vorliegen. Erst durch Aufruf des modman Befehls "deploy-all" werden alle Symlinks hergestellt. (s.o.)
+
+Der Module-Manager bietet außerdem noch Funktionen, um Module direkt über Subversion oder Git zu verwalten, die allerdings nicht verwendet werden müssen. Das kann hilfreich sein, meiner Meinung nach muss die Versionskontrolle allerdings nichts mit dem modman zu tun haben, daher habe ich diese Funktionen bisher nicht verwendet.
+<h2>Aufbau der Modman-Module</h2>
+Die <strong>Verzeichnisstruktur</strong> innerhalb eines Modman-Moduls ist frei wählbar. Über die modman-Datei wird dann konfiguriert an welche Stelle die Dateien oder Verzeichnisse verlinkt werden sollen. Hier ist es dem Entwickler überlassen, ob er sich trotzdem an die Verzeichnisstruktur in Magento hält (wie im Beispiel beim Modul "Aoe_TemplateHints" zu sehen, oder ob er lieber eine flachere Struktur wählt, so dass er während der Entwicklung nicht zwischen so vielen Verzeichnissen wechseln muss. Ersteres hat den Vorteil, dass andere Benutzer des Moduls alle Dateien einfach ins Magento-Rootverzeichnis kopieren können und somit das Modul auch ohne das modman-Skript "installieren" können.
+
+Die modman Datei der <a href="https://github.com/fbrnc/Aoe_TemplateHints/blob/master/modman">Aoe_TemplateHints</a> sieht wie folgt aus:
+
+(code lang: bash)
+app/etc/modules/Aoe_TemplateHints.xml          app/etc/modules/Aoe_TemplateHints.xml
+app/code/local/Aoe/TemplateHints/              app/code/local/Aoe/TemplateHints/
+(/code)
+
+Links befindet sich immer der Pfad <strong>relativ zum Modulrootverzeichnis</strong> und rechts der Pfad <strong>relativ zum Basedir</strong>. Wenn kein abweichendes Basedir-Verzeichnis in der .modman/.basedir Datei konfiguriert ist, dann ist das Überverzeichnis des .modman-Verzeichnisses das Basedir.
+
+Da die Verzeichnisstruktur im Beispiel mit der Originalstruktur übereinstimmt sind in diesem Fall die Pfade links und rechts gleich.
+
+In modman-Konfigurationsdateien kann man <strong>sowohl einzelne Dateien als auch ganze Verzeichnisse verlinken</strong>. Um die Lesbarkeit zu erhöhen empfiehlt es sich, Verzeichnisse sowohl links als auch rechts immer mit einem "/" abzuschließen. So kann man auf einen Blick unterscheiden, ob es sich um eine einzelne Datei oder um ein ganzes Verzeichnis handelt.
+
+Alle <strong>Zwischenverzeichnisse</strong>, die benötigt werden um den Symlink an der richtigen Stelle zu erzeugen, werden automatisch angelegt falls sie noch nicht existieren. Im Beispiel der Aoe_TemplateHints werden wird also das "Aoe" Verzeichnis innerhalb app/code/local angelegt, falls zuvor kein anderes Modul in diesem Namespace installiert wurde. Im Aoe-Verzeichnis wird dann ein Symlink "TemplateHints" erzeugt, der in das entsprechende Verzeichnis innerhalb des Modman-Moduls im .modman-Verzeichnis zeigt.
+
+Es empfiehlt sich immer <strong>eigene Verzeichnisse</strong> anzulegen, anstatt einzelne Dateien in existierende Verzeichnisse zu verlinken. So sollte man zum Beispiel im layout- oder im template Verzeichnisses am besten ein eigenes Verzeichnis anlegen und dieses verlinken anstatt einzelne Dateien im bestehende Verzeichnisse zu verlinken. Durch diesen "Namespace" kommt es nicht zu Konflikten und außerdem man spart sich den Aufruf des modman-Skriptes nachdem man eine neue Datei hinzugefügt hat, wenn das Verzeichnis schon richtig verlinkt worden ist.
+
+In einigen Fällen ist es allerdings nicht möglich eine eigene Verzeichnisstruktur anzulegen. Möchte man dann trotzdem mehrere Dateien verlinken kann man <strong>Wildcards ("Bash-Globbing")</strong> verwenden um gleiche mehrere einzelne Dateien zu verlinken ohne sie explizit aufzuführen:
+
+(code lang: bash)
+translations/de_DE/*                    app/locale/de_DE/
+(/code)
+
+Das modman-Skript erlaubt zudem auch noch das Ausführen von <strong>Shell-Befehlen</strong>. Dort können die Variablen $PROJECT (zeigt auf das Rootverzeichnis des Projektes unter Berücksichtigung des Basedirs) und $MODULE (zeigt auf das aktuelle Modman-Modul) verwendet werden. Hier ein Beispiel, bei dem der Zeitstempel des ersten Deployments in einer Datei erfasst wird:
+
+(code lang: bash)
+@shell if [ ! -f $PROJECT/created ] ; then echo `date +%s` > $PROJECT/created; fi
+(/code)
+
+Mit ein wenig Übung kann man schnell modman-Konfigurationsdateien für eigene oder fremde Extensions erstellen. Wenn man das für <strong>alle Extensions</strong> (auch für fremde Extensions, falls nicht vorhanden) durchzieht, kann man sich so eine saubere Projektstruktur zusammenbauen, bei der der Magento-Kern schön von den Modulen getrennt verwaltet wird und erst während des Deployments "zusammen gebaut" wird. Immer mehr Modulentwickler verwenden inzwischen den Module-Manager und liefern nun auch die passenden modman-Konfigurationsdateien zu ihren Modulen ab. Durch das frei wählbare Basedir ist es einem dann modulunabhängig selbst überlassen wie man sein Projekt strukturieren möchte.
+
+Beim Erstellen der modman-Konfigurationsdatei sollte es vermieden werden Dateien oder Verzeichnisse innerhalb von Verzeichnissen anzulegen, die von anderen Modulen erzeugt worden sind. Gerade Themes und Skins sind Kandidaten dafür und durch unüberlegte Links erzeugt man schnell ein mittleres Chaos wenn Dateien in weiteren Extensions ausgelagert werden und dann per Symlink innerhalb des projektspezifischen Themes verlinkt werden. Besonders beim Committen der Dateien in die Versionskontrolle passiert hier leicht mal ein Fehler und die Dateien werden ins falsche Modul übernommen.
+<h2>Magento-Einstellung: Symlinks erlauben</h2>
+Magento prüft bei der Einbindung von Template-Dateien, ob diese Dateien verlinkt sind und lässt dies in der Default-Einstellung nicht zu. Die Dateien, die aus den Modman-Paketen kommen sind allerdings verlinkt und werden zunächst einfach still ignoriert. Um die stundenlange Suche nach den fehlenden Blöcken zu ersparen, sollte man sich angewöhnen, die Symlinks im Backend bei Projekten zu erlauben, die den Module-Manager verwenden. Das geht unter <strong>System > Konfiguration > Fortgeschritten > Entwickler > Template-Einstellungen > Symlinks</strong> <strong>erlauben: Ja</strong>.
+
+(image: symlinks_erlauben-650x223.png)
+<h2>Fazit</h2>
+Die Arbeit mit dem Module-Manager ist nicht nur unheimlich praktisch, sondern macht auch sehr viel Spaß. Schon nach kurzer Zeit hat man sich daran gewöhnt, die modman-Konfigurationsdatei während des Entwickelns mitzupflegen und der "modman deploy-all" Befehl hat schon lange seinen festen Platz in der Bash-History und im Deployment-Prozess gefunden. Auch andere Entwickler im Team lassen sich dafür begeistern und finden sich schnell damit zurecht. Der Module-Manager ist bei <a href="http://www.fabrizio-branca.de/">mir</a> und bei <a href="http://www.aoemedia.de/">AOE media</a> ein unverzichtbares Tool für alle Magento-Projekte geworden!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2203

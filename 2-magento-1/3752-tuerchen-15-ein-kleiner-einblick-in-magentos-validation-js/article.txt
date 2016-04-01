@@ -1,0 +1,119 @@
+Article-meta: 
+
+----
+
+Title: Türchen 15: Ein kleiner Einblick in Magentos validation.js
+
+----
+
+Date: 2013-12-15
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: peter-ukena
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nachdem mir in diesem Jahr auch die Ehre zuteil wurde, ein Teil des Webguys Adventskalenders zu sein, werde ich hier versuchen, dieser Ehre gerecht zu werden. Was in den nächsten Absätzen folgt, soll ein kleiner Einblick in die Frontend-Validierungsmöglichkeiten werden, die Magento so bietet.
+
+
+----
+
+Text: <h2>Sicherheit - Ein Gedanke der sich durch alle Kundenschichten hindurchzieht</h2>
+
+Heutzutage denken viele Kunden über verschiedene Sicherheitsaspekte in ihren Online-Shops nach und kommen zu dem Schluss, dass hier dringend etwas getan werden muss. Natürlich sind diese Sicherheitsaspekte auf ein Spektrum konzentriert, das sich oft mit dem Frontend beschäftigt und weniger mit serverseitigen Prozessen. Genau aus diesem Anlass kam mir kürzlich eine Kundenanfrage auf den Tisch, in der darum gebeten wurde im Rahmen der <a title="EHI-Zertifizierung" href="http://de.wikipedia.org/wiki/EHI_Retail_Institute" target="_blank">EHI-Zertifizierung</a>, verschärfte Vorgaben für Kundenpasswörter umzusetzen.
+
+Während dieser Arbeit habe ich mich verstärkt mit Magentos Formularverifizierungen auseinandergesetzt und möchte das hier ein wenig ausbreiten.
+
+<h2>Really Easy Field Validation</h2>
+
+Magento benutzt für die Validierung von Formularen <em>validation.js</em> - diese Bibliothek entstammt dem Projekt <a title="Really Easy Field Validation" href="https://github.com/atetlaw/Really-Easy-Field-Validation" target="_blank">Really Easy Field Validation</a> (im Folgenden <em>REFV</em> genannt). Diese Bibliothek ist in der Lage, über CSS-Selektoren Formularfelder nach bestimmten Regeln zu validieren. Diese Regeln können dynamisch erweitert oder ersetzt werden und bieten damit die ideale Grundlage, die Regeln für Passwörter oder beispielsweise Benutzernamen anzupassen, bevor diese an Magento geschickt werden.
+
+Um die eingangs erwähnte Problemstellung zu lösen, habe ich eine kleine Extension erstellt, die die bestehende Passwort-Validierung auf den customer/account/create-Seiten überschreibt und mit einem RegExp auf etwas aufwändigere Regeln prüft.
+<ul><li>Nicht nur Buchstaben, auch Sonderzeichen und Ziffern müssen verwendet werden</li>
+  <li>Die Zeichenfolge des Passwortes darf nicht gleich dem Benutzer-Identifier sein (sprich, das Passwort darf nicht die Anmelde-Email-Adresse sein)</li>
+  <li>Einfachstmuster a lá "aaaaaaaaa" oder "1234567" dürfen nicht verwendet werden</li>
+  <li>Das Passwort muss zwischen 8 und 20 Zeichen lang sein</li>
+</ul>
+Ein kleines Modul übernimmt das Einbinden des erweiterten Validators per layout.xml. Wie das geht, werde ich hier allerdings nicht erklären - vielmehr werde ich den Inhalt des zusätzlichen Validators etwas genauer unter die Lupe nehmen.
+
+<strong>Ein zusätzlicher Validator</strong>
+
+(code lang: javascript)
+var pattern = '^(?=.*\\d)(?=.*[A-Z])(?=.*[!@#\\$%\\^&\\*()_\\+\\-={}\\[\\]\\\\:;"'+"'"+'<>,./]).{8,20}$';
+if (Validation) {
+  Validation.addAllThese([
+  [
+    'validate-password',
+    'Your password must contain at least a letter, a number and a specialcharacter. I needs to contain 8-20 characters and cannot be the same as your first or last name',
+      {
+        pattern: new RegExp(pattern)
+      }
+    ]
+  ])
+};
+(/code)
+
+Was haben wir hier vor uns? Im Prinzip nicht viel - ein <em>pattern</em>,<em> </em>das ausgelagert wurde, da die Übergabe in den RegExp-Konstruktor mit den verschiedenen Anführungszeichen nicht zurechtkommt und das stark maskiert wurde, um die Funktion des RegExps zu gewährleisten. Dazu kommt eine Prüfung, ob das <em>Validation-</em>Objekt bereits existiert. Im positiven Falle wird über die <strong>addAllThese()</strong>-Methode ein weiterer Validator zur Validierung hinzugefügt. Da wir hier <em>validate-password</em> verwenden, wird die bestehende Passwort-Validierung schlicht überschrieben.
+
+Weiterhin übergeben wir einen Text, der im Falle einer fehlgeschlagenen Validierung ausgegeben wird und wir übergeben die Validierungsregel <strong>pattern</strong>, die unser RegExp enthält.
+
+<h2>Was kann validation.js noch?</h2>
+
+Mit <em>REFV</em> ist man in der Lage, beliebige Felder in Formularen nach bestimmten Regeln zu validieren. Hier ein kleiner Auszug aus der Github-Seite von <em>REFV</em>:
+
+(code lang: javascript)
+Validation.add('class-name', 'Error message text', {
+     pattern : new RegExp("^[a-zA-Z]+$","gi"), // only letter allowed
+     minLength : 6, // value must be at least 6 characters
+     maxLength : 13, // value must be no longer than 13 characters
+     min : 5, // value is not less than this number
+     max : 100, // value is not more than this number
+     notOneOf : ['password', 'PASSWORD'], // value does not equal anything in this array
+     oneOf : ['fish','chicken','beef'], // value must equal one of the values in this array
+     is :  '5', // value is equal to this string
+     isNot : 'turnip', //value is not equal to this string
+     equalToField : 'password', // value is equal to the form element with this ID
+     notEqualToField : 'username', // value is not equal to the form element with this ID
+     include : ['validate-alphanum'] // also tests each validator included in this array of validator keys (there are no sanity checks so beware infinite loops!)
+});
+(/code)
+
+Hier sind die verschiedenen Parameter, die man zum Validieren verwenden kann einmal kurz erklärt. Um einen ganz eigenen Validator zu erstellen und zu verwenden, benötigt man ein <form>-Element auf der Seite, auf der auch <em>validation.js </em>eingebunden ist. Wenn man die Form-ID in den <strong>Validation()</strong>-Konstruktor gibt, hängt <em>REFV</em>  sich per Observer auf den im Formular verwendeten Submit-Button. Um die Felder vor dem Abschicken zu validieren, müssen sie mit CSS-Klassen versehen werden, die aussagen, welcher Validator verwendet werden soll, zum Beispiel <em>validate-password</em><em>. </em>Solange per <strong>add()</strong> oder <strong>addAllThese()</strong> ein Validator mit dem entsprechenden Namen an das Validation-Objekt gehängt worden ist, wird das entsprechende Feld mit dem entsprechenden Validator geprüft.
+
+Diese Validatoren können entweder nach Namen und Fehlermeldung als drittes Argument eine anonyme Funktion enthalten, die die Validierung vornimmt, oder man kann eine Liste von Parametern nach obigem Beispiel anhängen, um auf bereits bestehende Mechanismen zur Validierung zurückzugreifen. Beim Verwenden einer anonymen Funktion muss darauf geachtet werden, dass diese natürlich <strong>true </strong>oder <strong>false</strong> zurück liefert. ;)
+
+<h2>Fazit</h2>
+
+Really Easy Field Validation ist ein mächtiges Werkzeug zum Validieren von Formularen und durch seinen Aufbau sehr flexibel. Es ist leicht, bestehende Validierungen zu überschreiben und neue hinzuzufügen. Durch ausgefeilte Validierungen ist es zum Beispiel nicht nur möglich, Richtlinien für Zertifizierungen einzuhalten, sondern unter anderem auch Spam-Anmeldungen im Kundenbereich zu reduzieren. Der Großteil solcher Bots kann bei entsprechenden Maßnahmen, wie Passwort-Mustern oder Nutzernamen-Mustern nicht mithalten.
+
+Davon abgesehen ist es auch möglich, <em>validation.js</em> auf der EPA (Einzelproduktansicht) zu verwenden, um beispielsweise zulässige Werte für Freifeld-Optionen zu gewährleisten oder ähnliches. Alles in Allem ist die <em>validation.js</em> ein schönes kleines Tool innerhalb von Magento.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3752

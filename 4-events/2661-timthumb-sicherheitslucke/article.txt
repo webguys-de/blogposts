@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: TimThumb Sicherheitslücke
+
+----
+
+Date: 2012-02-14
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: guido
+
+----
+
+Article-content: 
+
+----
+
+Intro: <p>Durch eine Sicherheitslücke in der Datei timthumb.php, die bei vielen freien und auch Premium WordPress Themes eingesetzt wird, gibt es eine eklatante Sicherheitslücke. Viele WordPress Systeme wurden bisher schon gehackt! Lassen wir es nicht so weit kommen und überprüfen ganz einfach, ob unsere WordPress-Instanz noch anfällig ist.</p>
+
+
+----
+
+Text: 
+Dazu installieren und aktivieren wir einfach das Plugin "<em><a href="http://wordpress.org/extend/plugins/timthumb-vulnerability-scanner/">Timthumb Vulnerabilty Scanner</a></em>" (http://wordpress.org/extend/plugins/timthumb-vulnerability-scanner/) auf dem WordPress System.
+
+
+Anschließend finden wir unter "<em>Werkzeuge - Timthumb Scanner</em>" eine Schaltfläche mit der das Plugin den gesamten Inhalt vom Ordner wp-content nach der entsprechenden Datei "<em>timthumb.php</em>" durchsucht und uns die installierte Version anzeigt. Sollte eine der gefundenen Dateien die Sicherheitslücke aufweisen, können wir ein Update der betroffenen Datei auf die aktuellste und sichere Version vornehmen.
+
+
+Bei dem aktivierten Plugin lässt sich über die Optionen des Plugins einstellen, ob das Plugin täglich nach einer neuen Version für "<em>timthumb.php</em>" prüfen soll. 
+
+
+Mithilfe des Plugins "<em>Timthumb Vulnerabilty Scanner</em>" konnten wir durch ein Update der Datei "<em>timthumb.php</em>" auf die aktuellste Version Wordpress etwas sicherer machen. Weitere Tipps, wie Sie Ihre WordPress-Instanzen noch sicherer machen finden Sie <a href="http://wordpress-buch.bueltge.de/wordpress-sicherer-machen/30/">im Artikel</a> von <a href="http://bueltge.de/">Frank Bültge</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2661

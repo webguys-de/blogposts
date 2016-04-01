@@ -1,0 +1,80 @@
+Article-meta: 
+
+----
+
+Title: Türchen 15: OpenID für das Magento-Backend
+
+----
+
+Date: 2011-12-15
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender,openid
+
+----
+
+Author: david-fuhr
+
+----
+
+Article-content: 
+
+----
+
+Intro: <p>Gerade wenn man als Dienstleister mit vielen Magento-Installationen zu tun hat, stößt man früher oder später auf eine oder mehrere der folgenden Fragen:</p>
+<ol>
+<li>Wie war nochmal der Benutzername und das Passwort für genau diesen Shop?</li>
+<li>Verwende ich die Zugangsdaten von diesem Shop auch bei einem anderen Shop? Und falls ja, wie stelle ich sicher, dass das niemand ausnutzt?</li>
+<li>Habe ich den Login für den Kollegen/Angestellten/Freelancer, der nicht mehr am Projekt arbeitet, auch überall deaktiviert?</li>
+</ol>
+<p>Zumindest die beiden ersten Probleme kann man mit der Integration eines zentralisierten Login-Systems wie <a href="http://www.openid.net/">OpenID</a> in Magento direkt lösen.</p>
+<p>
+
+----
+
+Text: <h2>OpenID</h2>
+(image: 200px-OpenID_logo.svg_.png)OpenID ist inzwischen nichts Neues mehr und die meisten haben wahrscheinlich schonmal davon gehört. Version 1.0 der Spezifikation wurde bereits 2005 veröffentlicht. Zwei Jahre später folgte dir Gründung der OpenID Foundation sowie der Verabschiedung von Version 2.0.
+Bei OpenID registriert man sich nicht mehr mit Benutzername und Passwort bei jeder Seite (<em>Relying Party</em>) einzeln, sondern identifiziert sich mit seiner OpenID-Kennung (<em>OP Identifier</em>). Die Authentifizierung wird dabei durch den Identitätsanbieter (<em>OpenID Provider</em>) wie zum Beispiel <a href="https://www.myopenid.com/">myOpenID</a> oder <a href="http://code.google.com/intl/de/apis/accounts/docs/OpenID.html">Google</a> vorgenommen.
+<blockquote cite="http://de.wikipedia.org/wiki/Authentifizierung"><strong>Authentifizierung</strong> [...] ist der Nachweis (Verifizierung) einer behaupteten Eigenschaft einer Partei, die beispielsweise ein Mensch, ein Gerät, ein Dokument oder eine Information sein kann [...]. – <a href="http://de.wikipedia.org/wiki/Authentifizierung">Wikipedia</a></blockquote>
+Daraufhin kann die Seite - abhängig von den jeweiligen Berechtigung - den Zugriff auf bestimmte Inhalte autorisieren oder eben nicht. Der <a href="http://framework.zend.com/manual/de/zend.openid.introduction.html#zend.openid.introduction.how">genaue Ablauf</a> ist in der Zend-Framework-Dokumentation recht gut erläutert.
+<blockquote cite="http://de.wikipedia.org/wiki/Autorisierung"><strong>Autorisierung</strong> ist im weitesten Sinne eine Zustimmung, spezieller die Einräumung von Rechten gegenüber Anderen, ggf. zur Nutzung gegenüber Dritten. – <a href="http://de.wikipedia.org/wiki/Autorisierung">Wikipedia</a></blockquote>
+Wichtig ist in diesem Zusammenhang die Unterscheidung der beiden ähnlichen Begriffe Authentifizierung (<em>Authentication</em>) und Autorisierung (<em>Authorization</em>), die vor allem im Englischen oftmals auf <em>Auth</em> verkürzt werden und dadurch eine Unterscheidung ohne Kenntnis des Kontextes unmöglich machen. <a href="http://de.wikipedia.org/wiki/OAuth">OAuth</a> ist beispielsweise primär für die Autorisierung zuständig, nicht für die Authentifizierung.
+<h2>Magento-Integration</h2>
+Obwohl der Standard inzwischen vier Jahre alt ist, habe ich kein ordentliches Magento-Modul gefunden, dass die OpenID-Unterstützung nachrüstet. Lediglich <a href="http://www.magentocommerce.com/magento-connect/rpx-sign-in.html">eine Extension</a> bietet den OpenID-Login über einen Drittanbieter an.
+Somit ergab sich wieder einmal: selbst entwickeln. Die eigentliche <a href="http://framework.zend.com/manual/en/zend.openid.html">OpenID-Authentifizierung ist in ZendFramework bereits implementiert</a>, muss also "nur" noch in Magento integriert werden. Leider bietet Magento kaum Erweiterungsmöglichkeiten im Admin-Login. Daher muss man entweder den (code)Adminhtml_IndexController(/code) überschreiben, oder sich in den (code)core_block_abstract_to_html_after(/code)-Event einklinken, um die Login-Seite zu ändern:
+(image: magento-login.png)
+Auf der OpenID-Login-Seite gibt es lediglich ein Eingabefeld für die <em>OP Identifier</em>:
+(image: magento-openid.png)
+Nach Klick auf "Login" wird man zum <em>OpenID Provider</em> weitergeleitet, um sich dort zu authentifizieren:
+(image: myopenid-login-650x356.png)
+Anschließend an die erfolgreiche Authentifizierung beim Provider gleicht das Magento-Modul den <em>OP Identifier</em> mit den Benutzerdaten ab und loggt den Benutzer ein. Dafür wurde ein Feld beim Benutzer eingefügt:
+(image: magento-permissions-user-openid-650x434.png)
+Der Abgleich mit den Benutzerdaten aus Magento erfolgt erst nach der Authentifizierung, da man sonst leicht feststellen könnte, welche <em>OP Identifier</em> überhaupt hinterlegt sind. Das <a href="http://www.github.com/Flagbit/magento-openid/">Modul steht auf Github</a> und ist derzeit nur für Magento CE >= 1.6.0.0 getestet. Leider klappt die Authentifizierung über den Google Federated Login noch nicht, myOpenID funktioniert aber. Hat das jemand mit den ZendFramework-Komponenten schonmal realisiert oder muss man für Google eine Speziallösung stricken? Auch sonstige Beiträge/Verbesserungsvorschläge sind natürlich immer gerne gesehen :)
+<h2>Ausblick</h2>
+Wie bereits angesprochen werden damit die ersten beiden Fragen gelöst, die dritte Frage lässt sich mit einigen Erweiterungen auch beantworten:
+<ol><li>Man identifiziert sich in jedem Shop mit dem gleichen <em>OP Identifier</em> - unabhängig vom tatsächlichen Benutzernamen.</li>
+<li>Die tatsächlichen Credentials liegen nicht mehr beim Shop, sondern beim <em>OpenID Provider</em>. Wenn man noch einen Schritt weiter gehen will, kann man selbst einen <em>OpenID Provider</em> aufsetzen (zum Beispiel mit <a href="http://simpleid.sourceforge.net/">SimpleID</a>). Dann muss man keiner externen Instanz mehr vertrauen und hat alle Authentifizierungsdaten selbst in der Hand.</li>
+<li>Mit dem Aufsetzen eines eigenen OpenID Providers kann man auch die dritte Frage lösen. Wird der Account auf dem <em>OpenID Provider</em> deaktviert kann man sich damit auch nicht mehr Shop einloggen. Um auch einen Login mittels Passwort zu verhindern, müsste das Modul noch dahingehend erweitert werden, dass bei vorhandenem <em>OP Identifier</em> kein Passwort-Login mehr möglich ist oder alternativ eine Login-Möglichkeit pro Benutzer oder Rolle vorgeschrieben werden kann. Ideen, Präferenzen, Anmerkungen hierzu bitte in die Kommentare :)</li>
+</ol>Wie in den <a href="/magento/turchen-12-doppelt-halt-besser-magento-backend-login-mit-google-authenticator/#li-comment-5727">Kommentaren zu Jörgs Beitrag</a> bereits angesprochen wollen wir noch einen Schritt weiter gehen und mittelfristig den <em>OpenID Provider</em> an das Microsoft <abbr title="Active Directory">AD</abbr> anbinden. Damit müsste man Benutzer nicht mehr getrennt im <em>OpenID Provider</em> und AD anlegen. Außerdem könnte man damit ein Throttling der Anfagen an das AD realisieren, um Bruteforce-Attacken auf das AD von außen zu erschweren.
+Bisher haben sich mit Karl und Claas zwei weitere Interessierte gefunden, die eine Lösung für alle drei Fragen vorantreiben wollen. Wir werden die Ergebnisse auf Github veröffentlichen und freuen uns natürlich über weitere Unterstützung :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2392

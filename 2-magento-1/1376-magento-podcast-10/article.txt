@@ -1,0 +1,72 @@
+Article-meta: 
+
+----
+
+Title: Magento Podcast #10
+
+----
+
+Date: 2011-02-01
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: <em>"Es wird etwas passieren"</em> veröffentlichte Roman Zenner am 15. Dezember 2010 auf der Webseite des Magento-Podcast. Und wirklich, es ist etwas passiert. Darauf bin ich, kann man nicht anders sagen, trotz meiner hohen Stimme ziemlich stolz und freue mich total. Wirklich richtig "dolle sehr".  Warum?
+
+
+
+----
+
+Text: Ganz einfach. Wegen mangelnder Zeit haben Rico und Roman, die bisherigen Sprecher des Podcasts, diesen an uns, also Damian Luszczymak und mich abgegeben. Für uns beide war das der erste Podcast unseres Lebens aber wir finden beide: Das haben wir doch schon mal ganz gut hinbekommen.
+<h2>Unsere Themen</h2>
+<ul><li>Vorstellung des neuen Podcast-Teams</li>
+	<li>Konzept unseres Podcasts</li>
+	<li>Neuerungen in Magento 1.5</li>
+	<li>Magento-Stammtische</li>
+	<li>Ausblick</li>
+</ul>
+Der Podcast soll nun alle 2 Monate ( date('m') % 2 == 0 ) erscheinen. Themenvorschläge nehmen wir, wie immer, gerne auf.
+
+<strong><a href="http://www.magento-podcast.de/">Weiter geht es unter Magento-Podcast.de</a></strong>
+<h3>Making Of</h3>
+Mir hat die Aufnahme wirklich viel Spaß gemacht. Auch wenn ich bestimmt ein paar "Ehms" und "Ähs" zu viel eingestreut habe :) Ein großes Danke geht auch an Andreas Hermann, unseren Tontechniker, und  an das <a href="http://www.dasjugendcafe.de">Jugendcafe Kirchlengern</a> das uns die Aufnahme ermöglichte.
+
+Damian und Tobi nehmen auf
+(image: IMG_20110130_154550-375x500.jpg)
+
+Aufnahme außerhalb der "Kammer"
+(image: IMG_20110130_160430.jpg)
+
+Unser Tontechniker Andreas Hermann
+(image: IMG_20110130_160745-650x487.jpg)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1376

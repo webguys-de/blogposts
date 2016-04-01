@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Meet-Magento: Ticket zu verlosen
+
+----
+
+Date: 2011-04-08
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: .. und schon war es passiert, wir hatten ein Ticket zu viel. Damit es hier nicht so alleine ist ein kleines Spiel: Unter allen Kommentaren küren wir den <strong>besten Grund</strong> warum genau <strong>Du</strong> das Ticket haben darfst. Ob <strong>lustig oder ernst</strong> überlegen wir uns nachher :)
+
+"Einsendeschluss" ist der 17. April 2011. Also los!
+
+
+
+----
+
+Text: (image: ticket-meet-magento.png)<small>(Falls es zu Problemen bei der Übertragung des Tickets kommt besteht kein Anspruch auf ein Ticket)</small>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1591

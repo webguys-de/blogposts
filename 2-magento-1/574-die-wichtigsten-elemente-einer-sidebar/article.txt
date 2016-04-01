@@ -1,0 +1,80 @@
+Article-meta: 
+
+----
+
+Title: Die wichtigsten Elemente einer Blog Sidebar
+
+----
+
+Date: 2009-05-05
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Sidebar sollte Elemente enthalten, um dem Benutzer einen bestmöglichen Überblick über die Seite zu ermöglichen. Jedoch ist nicht nur das Vorhandensein der jeweiligen Elemente,  sondern auch die Positionierung. Für die Leserichtung gilt: von oben nach unten, von links nach rechts. Daher werden wichtige Elemente weiter oben plaziert. In diesem Zusammenhang unterscheidet man zwischen primären und sekundären Informationsträgern.
+
+
+----
+
+Text: Um sich bei der richtigen Positionierung der Elemente leiten zu lassen, versetzen sie sich in die Lage des Benutzers. Wichtig dabei ist: Usability ist vorallem für Erstbesucher wichtig, da man bei wiederkehrenden Benutzern davon ausgehen kann, das diese die Seitenelemente schon kennen. Um die Benutzer nicht nicht unnötig zu verwirren, richten Sie sich an gängigen Plazierungen. In der Marketingabteilung formuliert man dies so: "Der Benutzern lernt das Surfen im Netz und nicht auf Ihrer Seite".
+
+Die folgende Reihenfolge hat sich bei den meisten Seiten bewährt:
+
+<strong>1. Neueste Artikel
+</strong>Eine Übersicht über die neusten Artikel, um dem Benutzer schnellen Zugriff zu gewähren
+
+<strong>2. Tags
+</strong>In der sogenannten Tag-Cloud sind alle Tags der Seite aufgelistet, die Größe spiegelt die Relevanz wieder
+
+<strong> 3. Kategorien
+</strong>Auflistung aller Kategorien innerhalb des Blogs. Dies ermöglicht dem Benutzern einen schnellen Überblick über die Inhalte der Webseite<strong>
+</strong>
+
+<strong>4. Blogroll
+</strong>Links zu anderen Webseiten oder Blogs<strong></strong>
+
+<strong>5. Letzte Kommentare
+</strong>Um eine Diskussion am Leben zu halten ist es wichtig und den Besuchern einen schnellen Einstieg in die Diskussion zu ermöglichen.<strong></strong>
+
+<strong>6. RSS-Feed Links
+</strong>Links zu dem Feed des Blogs<strong></strong>
+
+<strong>7. Archiv
+</strong>Auflistung der Beiträge nach Jahr und Monat<strong></strong>
+
+<strong>8. Suche
+</strong>Die Möglichkeit einer Freitextsuche um dem Benutzer eine gezielte Suche zu ermöglichen.
+<strong>
+</strong>Dies ist jedoch kein Garant für die Popularität einer Seite, wichtig sind nach wie vor die Inhalte. Bei einer bestehenden Seite mit reglemäßigen Zugriffen lohnt sich der Einsatz eines Analsysetools wie Google Analytics, um das Benutzerverhalten zu beobachten. So kann man gezielt Bereiche einer Webseite verbessern und auf die Bedürfnisse der Benutzer Rücksicht nehmen.<strong>
+</strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 574

@@ -1,0 +1,72 @@
+Article-meta: 
+
+----
+
+Title: Configurable Product: Optionen per URL auswählen
+
+----
+
+Date: 2011-01-11
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Konfigurierbare Produkte, also z.B. ein T-Shirt bei dem Farbe und Größe noch gewählt werden muss, sind schon eine tolle Sache. Leider ist es nicht möglich Kunden direkt auf ein vorkonfiguriertes konfigurierbares Produkt zu leiten - so dachte ich. Ein Irrtum.
+
+
+----
+
+Text: In Wirklichkeit bietet Magento bereits in der<em> product.js</em> diese Möglichkeit ein. Die benötigte Funktion sieht dabei wie folgt aus:
+
+(code)
+var separatorIndex = window.location.href.indexOf('#');
+if (separatorIndex!=-1) {
+    var paramsStr = window.location.href.substr(separatorIndex+1);
+    this.values = paramsStr.toQueryParams();
+    console.log( this.values  );
+    this.settings.each(function(element){
+        var attributeId = element.attributeId;
+        element.value = (typeof(this.values[attributeId]) == 'undefined')? '' : this.values[attributeId];
+        this.configureElement(element);
+    }.bind(this));
+}
+(/code)
+
+Um nun also z.B. Größe und Gender bei einem Direktlink vorher auszuwählen muss dem Link eine Raute (#) gefolgt von Attribute-Gruppen-Id = Attribute-Value-Id angehängt werden. Bei ein <a href="http://demo.magentocommerce.com/cn-clogs-beach-garden-clog-1.html">paar hübschen Gartenschuhen aus dem Magento-Demo-Store</a> sieht das wie folgt aus:
+
+<a href="http://demo.magentocommerce.com/cn-clogs-beach-garden-clog-1.html#501=36&502=39">http://demo.magentocommerce.com/cn-clogs-beach-garden-clog-1.html#501=36&502=39</a>
+
+Als Ergebnis sind, wie folgender Screenshot erkennen lässt, unsere Attribute bereits beim Aufruf ausgewählt.
+
+(image: CN-Clogs-BeachGarden-Clog-Magento-Commerce-Demo-Store_1294752798206.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1325

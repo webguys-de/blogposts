@@ -1,0 +1,427 @@
+Article-meta: 
+
+----
+
+Title: Türchen 10: Die Magento-Konfigurations-XML-Dateien
+
+----
+
+Date: 2012-12-10
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: carmen-wingenbach
+
+----
+
+Article-content: 
+
+----
+
+Intro: In diesem Türchen darf man durchs Schlüsselloch gucken und sich einen gaaanz groben Einblick von der XML-Struktur von Magento verschaffen.
+
+Magento verwendet aus Gründen der Flexibilität und Erweiterbarkeit des Systems XML-Konfigurations-Dateien. Diese liegen an vorgegebenen Stellen im System und werden nach einer bestimmten Reihenfolge abgearbeitet und zu einer großen Baumstruktur zusammengefasst. Am Ende verfügt Magento über einen einzigen (zugegebenermaßen ziemlich großen) Konfigurations-Baum, zusammengebaut aus allerlei Ästen.
+
+
+
+----
+
+Text: In diesem Beitrag soll es nur um diese Config-Files gehen, nicht um die Layout-Files. Bei diesen handelt es sich zwar ebenfalls um XML-Files, aber nicht um Konfigurationsdateien im eigentlichen Sinn. Layout-XMLs werden also bei dem nun folgenden Einsammelprozess nicht berücksichtigt.
+<h2>Mage::run()</h2>
+Magento beginnt sehr früh damit, XML einzusammeln, bzw. sich auf's Einsammeln vorzubereiten. Es beginnt der "index.php". Dort wird nach dem Laden der "app/Mage.php" "Mage::run()" aufgerufen.
+
+(code lang: php)
+# /app/Mage.php
+/**
+     * Front end main entry point
+     *
+     * @param string $code
+     * @param string $type
+     * @param string|array $options
+     */
+    public static function run($code = '', $type = 'store', $options = array())
+    {
+        try {
+            Varien_Profiler::start('mage');
+            self::setRoot();
+            ...
+            self::$_app    = new Mage_Core_Model_App();
+            ...
+            self::$_events = new Varien_Event_Collection();
+            self::_setIsInstalled($options);
+            self::_setConfigModel($options); /* CE 1.7 */
+            self::$_config = new Mage_Core_Model_Config($options); /* CE < 1.7 */
+            self::$_app->run(array(
+                'scope_code' => $code,
+                'scope_type' => $type,
+                'options'    => $options,
+            ));
+            Varien_Profiler::stop('mage');
+        }
+         ...
+(/code)
+
+In dieser Methode wird also Mage_Core_Model_Config instanziert. Damit hat man nun die Klasse geladen, die XML einsammeln und bearbeiten kann, da die Mage_Core_Model_Config in zweiter Instanz die Varien_Simplexml_Config beerbt.
+
+Nun kann Magento zwar XML verstehen, hat aber noch nix eingesammelt zum Verstehen...
+<h2>Mage_Core_Model_App::run()</h2>
+In derselben Methode wird daher auch "Mage_Core_Model_App::run()" aufgerufen, wo nun die Konfiguration geladen wird. Dort wird "baseInit($options)" augerufen, in welcher wiederum "_initBaseConfig()"aufgerufen wird, in welcher wiederum "$this->_config->loadBase();" aufgerufen wird (das war jetzt der Schnelldurchlauf).
+<h2>Mage_Core_Model_Config::loadBase()</h2>
+Die loadBase()-Methode lädt nun erstmals XML-Daten. Hier werden die "local.xml" und "config.xml" Dateien im "app/etc" Verzeichnis eingelesen.
+
+(code lang: php)
+/**
+     * Load base system configuration (config.xml and local.xml files)
+     *
+     * @return Mage_Core_Model_Config
+     */
+    public function loadBase()
+    {
+        $etcDir = $this->getOptions()->getEtcDir();
+        $files = glob($etcDir.DS.'*.xml');
+        $this->loadFile(current($files));
+        while ($file = next($files)) {
+            $merge = clone $this->_prototype;
+            $merge->loadFile($file);
+            $this->extend($merge);
+        }
+        if (in_array($etcDir.DS.'local.xml', $files)) {
+            $this->_isLocalConfigLoaded = true;
+        }
+        return $this;
+    }
+(/code)
+
+Ausgehend von keiner gecachten oder kompilierten oder sonstwie aus- und umgelagerten Installation, werden also nun diese Dateien eingelesen:
+
+app/etc/config.xml
+app/etc/local.xml
+(auf die Enterprise-Edition gehe ich nicht ein, sonst würde hier noch die enterprise.xml auftauchen).
+
+In der "app/etc/local.xml" kann man schon allerlei konfigurieren oder umkonfigurieren, wenn die Konfigurationen aus der Installation geändert werden sollen. Der erste "config"-Knoten wird also gelesen...
+
+Tipp am Rande des Geästs: niemals eine eigens benannte staging.local.xml oder sowas ähnliches dort "parken", diese wird von Magento auch geladen und interpretiert und kann zu verwirrenden parallelen Datenbankzugriffen (oder zu gar nix mehr) führen. Das liegt daran, dass in der loadBase()-Methode alle xml-Dateien gelesen werden, nicht nur die, die "local.xml" oder "config.xml" heißen.
+
+Noch ein Hinweis am Rande des Geästs: Es gibt eine nette Zeile in der "local.xml":
+
+(code lang: php)
+<disable_local_modules>false</disable_local_modules>
+(/code)
+
+Dieses kann man zum debuggen nutzen. Statt mühsam alle Module einzeln zu deaktivieren, kann man in einem Aufwasch alle Module im local-Verzeichnis ausschalten.
+
+So. Magento kann nun XML verstehen und hat die XMLs im app/etc-Verzeichnis eingelesen.
+<h2>Mage_Core_Model_Config::loadModules();</h2>
+Ebenfalls in Mage_Core_Model_App::run() der wird $this->_initModules() aufgerufen, die via Mage_Core_Model_Config::loadModules(); die Modulkonfiguration lädt.
+
+Wichtig zu wissen ist, dass in der "app/Mage.php" auch die Reihenfolge der zu ladenden Codepools festgelegt ist.
+
+(code lang: php)
+$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'local';
+$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'community';
+$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'core';
+$paths[] = BP . DS . 'lib';
+(/code)
+
+Erst "local", dann "community", dann "core", dann "lib". Legt man also (was man ja umgehen sollte, aber es kommt vor) ein "Mage"-Verzeichnis im "local"-Pool an, so wird die Klasse im local-Folder gewinnen, also interpretiert, auch wenn die Klasse im "core"-Verzeichnis denselben Namen trägt und ja auch eigentlich "core" ist...
+<h2>Mage_Core_Model_Config ::_loadDeclaredModules()</h2>
+Die loadModules() sammelt über $this->_loadDeclaredModules() erstmal die Registrierungen ein.
+
+Magento gräbt sich also in "app/etc/modules". Dort liegen nach dem Schmema Namespace_Modulname.xml die Modul-Registrierungen - via XML natürlich. Hier wird noch nix so wirklich im Moduldetail konfiguriert, hier wird nur "hallo, ich bin da" (active) und "Du findest mir hier" (codePool) und "das brauch ich unbedingt" (depends) gesagt.
+
+Magento gräbt sich in alphabetischer Reihenfolge durch die local- oder community-Modul-XML-Dateien. In alphabetischer Reihenfolge ist insofern wichtig, als dass man bei Modulkonflikten durch z.B. identische Rewrites, sicher sein kann, dass der "erste" gewinnt. Es kann also auch sein, dass ein Rewrite eine zeitlang klappt, aber dann kommt ein neues Modul und jemand benutzt mit dem Namespace "Aaaanfang" denselben Rewrite und dann klappt der eigene nicht mehr... An diese Stelle würde eine kleine Eloge über Event-Observer passen... Vielleicht nächstes Jahr....
+
+In der Modul-Registrierung geht es um wenig, aber das wenige muss gesagt werden.
+Wenn man den Baum, der am Ende entstehen soll, im Auge behält, ist das wohl noch der Stamm...
+
+(code lang: php)
+<config>
+    <modules>
+        <Namespace_Modulname>
+            <active>true</active>
+            <!-- beachten: großes P -->
+            <codePool>local</codePool>
+            <!-- keine Pflichtangabe, nur wenn Abhängigkeiten bestehen-->
+            <depends>
+                <AnotherNameSpace_AnotherModule/>
+            </depends>
+        </Namespace_Modulname>
+    </modules>
+</config>
+(/code)
+
+Magento weiß nun schon allerhand. Die Äste beginnen zu wachsen. Je nachdem wird hier auch bestimmt, welche Äste gewachsen sein müssen, bevor ein anderer wächst. Und natürlich, ob sie überhaupt wachsen sollen...
+
+(code lang: php)
+<config>
+    <modules>
+        <AnotherNamespace_Modulname>
+        <active>true</active>
+        <codePool>local</codePool>
+        </AnotherNamespace_Modulname>
+        <JustAnotherNamespace_Modulname>
+            <active>true</active>
+            <codePool>local</codePool>
+        </JustAnotherNamespace_Modulname>
+        <LastNamespace_Modulname>
+            <active>true</active>
+            <codePool>local</codePool>
+        </LastNamespace_Modulname>
+    </modules>
+</config>
+(/code)
+
+Nach dem Einsammeln dieser Modul-Registrierungen, weiß Magento, wo es nun weiter geht - auf der Suche nach weiteren XML-Dateien...
+<h2>Mage_Core_Model_Config:: loadModulesConfiguration();</h2>
+Auf geht's ins "app/code/"-Verzeichnis. Je nach Angabe des codePools geht's dann ins "local" oder "community"-Verzeichnis und dann ins "Namespace"-Verzeichnis, dort in das "Modulname"-Verzeichnis und letztlich wieder ab ins "etc"-Verzeichnis des Moduls - in Erwartung einer "config.xml". Die ist Pflicht. Ohne die läuft kein Modul.
+
+app/code/[codepool]/[Namespace]/[Modulname]/etc/config.xml
+
+Dort angekommen, sammelt Magento nun die Informationen in der Modul-config.xml ein. Hier gibt es wieder einen modules-Knoten:
+
+(code lang: php)
+<config>
+    <modules>
+        <Namespace_Modulname>
+	<!-- Angabe v.a. bei SQL-Setups wichtig,
+            dieser Wert wird in der core_resource Tabelle gespeichert.-->
+            <version>0.1.0</version>
+        </Namespace_Modulname>
+    </modules>
+...
+</config>
+(/code)
+
+D.h., dass Magento am Ende dieser config.xml seinen Baum erweitert:
+
+(code lang: php)
+<config>
+    <modules>
+        <AnotherNamespace_Modulname>
+        <active>true</active>
+        <codePool>local</codePool>
+        <version>0.1.0</version>
+        <AnotherNamespace_Modulname>
+        <JustAnotherNamespace_Modulname>
+            <active>true</active>
+            <codePool>local</codePool>
+            <version>0.0.7</version>
+        </JustAnotherNamespace_Modulname>
+        <LastNamespace_Modulname>
+            <active>true</active>
+            <codePool>local</codePool>
+            <version>0.1.1.4</version>
+            <depends>
+                <JustAnotherNamespace_Modulname/>
+            </depends>
+        </LastNamespace_Modulname>
+    </modules>
+</config>
+(/code)
+
+Das war's dann auch erstmal mit dem "modules" Ast.
+
+In der config.xml werden dann alle Infos zum Modul angegeben. Welche Klassen benötigt werden, welche Event-Observer genutzt werden, ob es eigene Datenbanktabellen oder Übersetzungen gibt, eigene Attribute, ....
+
+Ausgehend von der "config"-Wurzel gibt es allerlei Geäst. Folgende Elemente stehen der Config.xml zur Verfügung:
+
+<strong>modules</strong>: Modulkonfiguration (mit den eben beschriebenen Elementen codePool, active, depends und version)
+
+<strong>global</strong>: Hier werden Dinge gesagt, alle für alle Bereiche (frontend und adminhtml) gelten
+(models, resources, blocks, helpers, fieldsets, template, cache, events, eav_attributes,[modulname])
+
+<strong>frontend</strong>: Hier wird alles gesagt, was nur für den Gültigkeitsbereich Frontend gelten soll: Angaben für Übersetzungen oder Layout-Updates, etc. (secure_url, events, routers, translate, layout)
+
+<strong>adminhtml</strong>: Hier wird alles gesagt, was nur für's Backend gelten soll (events, global_search, translate, layout,[modulname])
+
+<strong>admin</strong>: Angaben zu Backend-Routern und Fieldsets (attributes, fieldsets, routers)
+
+Die Angaben zu "default", "stores" und "websites" sind quasi analog zu den Angaben in der core_config_data-Tabelle und deren "Scopes", also Gültigkeitsbereichen.
+
+<strong>default</strong>: Hier stehen auch Konfigurationsangaben zu Modulen (design, dev, system, trans_email, web, admin, general, hints, currency, cms, catalog, sales, payment, sales_email, sales_pdf, dashboard, cataloginventory, shipping, carriers, promo, checkout, paypal, google, log, reports, tax, wishlist, contacts, sendfriend, sitemap, api, oauth, captcha, newsletter, persistent, screen_size, xmlconnect, uvm.)
+
+<strong>stores</strong>: Konfigurationen für den Scope "stores". (default, admin, [eigene])
+
+<strong>websites</strong>: Hier geht's um Konfigurationen für die Website-Codes wie z.B. die Angabe einer unsecure_url. (admin, base, [eigener])
+
+<strong>install</strong>: Hier findet man alles, was die (Erst)Installation betrifft. (translate, databases, layout, events)
+
+<strong>crontab</strong>: was hier passiert, muss ich nicht groß sagen, denke ich. (jobs, events)
+
+[<strong>modulname</strong>]: eigene Konfigurationen kann man auch vornehmen...
+
+Alle XML-Verästelungen an dieser Stelle aufzuführen, würde ein Buch bedeuten (Verlage? - Interesse?) und daher gibt's ein paar Links am Ende, zum Nachschlagen.
+
+Nur einen Ast möchte ich kurz langklettern: innerhalb des "global/models"-Elements werden Klassennamen und Aliasse angegeben. Wichtig sind hier zunächst, die verwendeten Klassen und die dazugehörigen Aliasse für das "Refactoring".
+
+Bsp.:
+
+(code lang: php)
+<global>
+    <models>
+        <namespace_modulname>
+            <class>Namespace_Modulname_Model</class>
+        </namespace_modulname>
+    </models>
+    <blocks>
+        ...
+    </blocks>
+    <helpers>
+        ...
+    </helpers>
+</global>
+(/code)
+
+Dadurch ergibt sich dann der Zugriff auf eine Modelklasse (Classname.php) im "Model"-Verzeichnis des "Modulname"-Moduls:
+$modulName = Mage::getModel('namespace_modulname/classname');
+also: Namespace_Modulname_Model_Classname
+
+Der Alias "namespace_modulname" wird dabei als String behandelt. Der Underscore an dieser Stelle wird nicht in ein "/" umgewandelt (es sei denn, es gibt kein "/", aber dies nur zur Verwirrung), nach dem "/" wird das "_" als Trenner für die Pfadangabe zur Klasse interpretiert und im Rahmen des Autoloadings durch "/" bzw "\" ersetzt. Das führt oftmals zu Verwirrungen. Daher erwähn ich es hier einfach mal. Zur Entwirrung. Hat es funktioniert?
+
+Hat Magento also ein paar Module eingelesen, sieht der Baum folgendermaßen aus:
+
+(code lang: php)
+<config>
+    <modules>
+        <AnotherNamespace_Modulname>
+           <active>true</active>
+           <codePool>local</codePool>
+           <version>0.1.0</version>
+        </AnotherNamespace_Modulname>
+        <JustAnotherNamespace_Modulname>
+            <active>true</active>
+            <codePool>local</codePool>
+            <version>0.0.7</version>
+        </JustAnotherNamespace_Modulname>
+        <LastNamespace_Modulname>
+            <active>true</active>
+            <codePool>local</codePool>
+            <version>0.1.1.4</version>
+            <depends>
+                <JustAnotherNamespace_Modulname/>
+            </depends>
+        </LastNamespace_Modulname>
+    </modules>
+    <global>
+        <models>
+            <anothernamespace_modulname>
+                <class>AnotherNamespace _Modulname_Model</class>
+            </anothernamespace_modulname>
+            <justanothernamespace_modulname>
+                <class>JustAnotherNamespace _Modulname_Model</class>
+            </justanothernamespace_modulname>
+            <lastnamespace_modulname>
+                <class>LastNamespace _Modulname_Model</class>
+            </lastnamespace_modulname>
+        </models>
+    </global>
+</config>
+(/code)
+
+Jetzt wird vielleicht auch deutlich, warum es je nach Alias und sonstigem Geäst günstiger ist, den Namespace in den Alias mitzuübernehmen. Und statt:
+
+(code lang: php)
+<modulname>
+<class>LastNamespace _Modulname_Model</class>
+</modulname>
+(/code)
+
+Die eindeutigere Ast-Variante zu nehmen:
+
+(code lang: php)
+<lastnamespace_modulname>
+<class>LastNamespace _Modulname_Model</class>
+</lastnamespace _modulname>
+(/code)
+<h2>Mage_Core_Model_Config::loadModules()
+Prevent local.xml directives overwriting</h2>
+Wichtig zu wissen ist, dass die "local.xml" im app/etc-Verzeichnis zweimal gelesen wird. Am Anfang und am Ende der Modulkonfiguration. Grund ist, dass kein Modul es sich erlauben darf, die Basiskonfiguration zu überschreiben. In loadModules(), nachdem das ganze XML-Geäst eingesammelt wurde, wird also die local.xml nochmals eingelesen:
+
+$this->_isLocalConfigLoaded = $mergeConfig->loadFile($this->getOptions()->getEtcDir().DS.'local.xml');
+<h2>Mage_Core_Model_Config::loadDb()</h2>
+Immer noch nicht genug des XMLs lädt Magento, nachdem es die ganzen Modulkonfigurationen eingesammelt hat, noch die Einträge in der "core_config_data"-Tabelle - und wandelt sie in XML-Äste um. Dies geschieht in der loadDb()-Methode in Mage_Core_Model_Config:
+
+(code lang: php)
+/**
+     * Load config data from DB
+     *
+     * @return Mage_Core_Model_Config
+     */
+    public function loadDb()
+    {
+        if ($this->_isLocalConfigLoaded && Mage::isInstalled()) {
+            Varien_Profiler::start('config/load-db');
+            $dbConf = $this->getResourceModel();
+            $dbConf->loadToXml($this);
+            Varien_Profiler::stop('config/load-db');
+        }
+        return $this;
+    }
+(/code)
+
+Wie oben schonmal erwähnt, entspricht jeder Eintrag in der core_config_data einem Config.xml-Eintrag im Gültigkeitsbereich oder "Scope"-Element "default", "stores" oder "websites". Jeder Eintrag in der core_config_data besitzt auch Angaben zum "scope". Lautet dieser z.B. "default", so gibt der Wert im Feld "path" den weiteren Weg ins Geäst an. Z.B scope = "default" und path= "web/seo/use_rewrites" führt zum Knoten:
+
+(code lang: php)
+<config>
+    <default>
+        <web>
+            <seo>
+                <use_rewrites>1</use_rewrites>
+            </seo>
+        </web>
+    </default>
+</config>
+(/code)
+<h2>Gucken?</h2>
+Wer mal einen Blick in den Baum hinein werfen will, kann dieses einmal mit "->loadModulesConfiguration('config.xml')" und einmal ohne ausprobieren:
+
+(code lang: php)
+<?php
+$mageFilename = 'app/Mage.php';
+require_once $mageFilename;
+Mage::setIsDeveloperMode(true);
+ini_set('display_errors', 1);
+umask(0);
+Mage::app('admin');
+header('Content-Type: text/xml');
+echo $config = Mage::getConfig()
+->loadModulesConfiguration('config.xml')
+->getNode()
+->asXML();
+exit;
+(/code)
+<h2>Fertig.</h2>
+Und dann ist Magento fertig. Mit seinem riesigen XML-Baum. Und ich auch. Ihr findet mich im Baumhaus oben links. Steht "Neoshops" an der Tür.
+<h2>Weiterlesen?</h2>
+Config.xml Referenz:
+<a href="http://www.magentocommerce.com/wiki/5_-_modules_and_development/reference/module_config.xml">http://www.magentocommerce.com/wiki/5_-_modules_and_development/reference/module_config.xml</a>
+
+Magento module configuration file reference (sehr nett, zum Draufklicken für Beschreibungen):
+<a href="http://www.ecomdev.org/2010/08/31/magento-module-configuration-file-reference.html"> http://www.ecomdev.org/2010/08/31/magento-module-configuration-file-reference.html</a>
+
+Developer-Tools mit Allerlei zum Ansehen, auch die XML-Daten:
+<a href="https://github.com/netz98/n98-magerun"> https://github.com/netz98/n98-magerun</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2995

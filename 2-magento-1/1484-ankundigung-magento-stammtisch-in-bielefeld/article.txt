@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Ankündigung: Magento Stammtisch in Bielefeld
+
+----
+
+Date: 2011-03-08
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Bitte nicht vergessen: Am 15. März ist wieder Magento-Stammtisch in Bielefeld. Um 19 Uhr treffen wir uns in der Mühlenstraße 2 bzw. der Tagente - ich freue mich euch dort zu sehen :)
+
+Weitere tolle Magento-Stammtische gibt es wie immer unter <a href="http://www.magento-stammtisch.de/">www.magento-stammtisch.de</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1484

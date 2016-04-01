@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Ankündigung: Magento Adventskalender 2012
+
+----
+
+Date: 2012-11-25
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nachdem sich ein paar Anfragen zum Thema "Macht ihr den Magento Adventskalender dieses Jahr auch?" gesammelt haben ein ganz klares: <strong>Ja!</strong> Natürlich total gerne und ich freue mich bereits jetzt auf alle tollen Gastautoren die sich auch dieses Jahr wieder super spannende Themen ausgesucht haben. Vielen vielen Dank allen freiwilligen hier schon einmal :-)
+
+Für alle die sich noch ein paar Tage über die Zeit retten wollen können gerne einen Blick in den <a title="Türchen 24: Frohe Weihnachten" href="http://www.webguys.de/magento/turchen-24-frohe-weihnachten-2/">Adventskalender 2011</a> und <a title="Türchen 24: Frohe Weihnachten" href="http://www.webguys.de/magento/turchen-24-frohe-weihnachten/">2010</a> werfen.
+
+
+
+----
+
+Text: 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2957

@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Nach Import über Import/Export sind keine Bilder vorhanden
+
+----
+
+Date: 2013-08-16
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wenn es vorkommt das nach dem Produktimport über das Import/Export-Modul von Magento keine Bilder im Admin angezeigt wird kann folgendes SQL-Script sehr behilflich sein.
+
+
+
+----
+
+Text: (code lang: sql)
+INSERT INTO catalog_product_entity_media_gallery (attribute_id, entity_id, `value`)
+  SELECT ga.attribute_id, v.entity_id, v.value
+  FROM catalog_product_entity_varchar v
+  INNER JOIN eav_entity_type et ON et.entity_type_code='catalog_product'
+  INNER JOIN eav_attribute va ON va.entity_type_id=et.entity_type_id AND va.frontend_input='media_image' AND va.attribute_id=v.attribute_id
+  INNER JOIN eav_attribute ga ON va.entity_type_id=et.entity_type_id AND ga.attribute_code='media_gallery'
+  LEFT JOIN catalog_product_entity_media_gallery g ON g.entity_id=v.entity_id AND g.value=v.value
+  WHERE v.value<>'no_selection' AND v.value<>'' AND g.value IS NULL
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3464

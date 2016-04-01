@@ -1,0 +1,104 @@
+Article-meta: 
+
+----
+
+Title: Magento Coding Standards mit phpcs prüfen
+
+----
+
+Date: 2015-03-12
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Kennt ihr den Dienst <a href="http://triplecheck.io/" target="_blank">Triplecheck.io</a>? Hier werden alle Magento-Extensions unter Magento-Connect mit den <a href="https://github.com/magento-ecg/coding-standard" target="_blank">ECG Coding-Standards</a> geprüft und entsprechend bewertet. Natürlich sagt die Wertung nicht über die eigentlich Qualität einer Extension aus, sondern eher, ob hier keine verrückte Dinge getan wurden und sich die Entwickler wenigstens an die Standards aus dem Magento-Universum halten.
+
+----
+
+Text: <blockquote>The scores are calculated based on the results of PHPCS and the <strong>Magento ECG Coding Standards</strong>. All the PHP and PHTML files inside each extension are analyzed, rated and the overall score is calculated using a GPA (Grade point average) ranging from 0 to 5.</blockquote>
+
+(image: Triplecheck-io.png)
+
+Dennoch bekommt man einen guten Eindruck, ob man sich generell an die Extension wagen kann. Meiner Meinung nach sollte man von C-, D- oder F-Wertungen einfach mal Abstand nehmen - das kann auf Dauer nichts Gutes bedeuten. <a href="http://triplecheck.io/details/1459" target="_blank">Selbst meine Extension</a>, welche ich vorher nie nach diesen Kriterien geprüft habe, hat es zu einem A gebracht. Man muss also schon viel Mist machen, um so schlecht bewertet zu werden.
+
+<h2>Lokale Entwicklungsumgebung</h2>
+
+Wer lokal entwickelt mit <strong>PHPStorm</strong> entwickelt, kann <strong>phpcs ebenfalls sehr gut in seinen Workflow integrieren</strong>. Dazu wird dann automatische jede Datei gescannt, welche man verändert. So bekommt man nicht erst nach einem commit + push auf die Finger, sondern sieht direkt was man nicht tun sollte.
+
+Für eine Installation wechselt man in das jeweilige bin-Verzeichnis der PHP-Version von MAMP, welche man gerade benutzt. Dort installiert man mittels pear den Code-Sniffer (phpcs). Dann wird in das Standards-Verzeichnis gewechselt und dort der ECG-Standard mit git hingefügt.
+
+(code)
+cd /Applications/MAMP/bin/php/php5.5.18/bin
+./pear install PHP_CodeSniffer-2.3.0
+cd /Applications/MAMP/bin/php/php5.5.18/lib/php/PHP/CodeSniffer/Standards
+git clone git@github.com:magento-ecg/coding-standard.git ECG
+(/code)
+
+Das war auch schon alles an Installation. Damit man nicht immer die kompletten Pfade für <em>phpcs</em> hinterlegen muss, empfiehlt es sich, das bin-Verzeichnis zum Include-Path hinzufügen (<em>für die Verwendung innerhalb PHPStorm nicht notwendig</em>).
+
+(code)
+export PATH=/Applications/MAMP/bin/php/php5.5.18/bin:/usr/local/sbin:$PATH
+(/code)
+
+In den Projekteinstellungen von PHPStorm (PHP -> Code Sniffer) konfiguriert man dann einfach den Pfad. Mit einem Klick auf "Validate" bekommt man Rückmeldung, ob alles geklappt hat.
+
+(image: PHPStorm-phpcs.png)
+
+Danach muss man natürlich noch den entsprechenden Coding-Standard festlegen. Dazu geht man in den Projektsettings auf Inspections -> PHP -> PHP Code Sniffer. Diesen Punkt versieht man mit einem Haken und stellt den Coding-Standard auf ECG. Falls der Punkt in dem Dropdown nicht verfügbar sein sollte, einfach ein paar mal auf aktualisieren klicken - scheint noch etwas fehlerhaft zu sein das Ganze.
+
+(image: PHPStorm-Inspections.png)
+
+Damit man das nicht immer wieder machen muss, kann man natürlich auch die <a href="http://mkleine.de/blog/2014/08/12/phpstorm-standardeinstellungen-fuer-projekte/" target="_blank">Standard-Settings für Projekte bearbeiten</a>. Diese gelten allerdings nur für neue Projekte, welche ihr noch nicht mit PHPStorm geöffnet habt.
+
+Zudem würde ich empfehlen, die "Undefined Method"-Warnings auszuschalten. Das macht unter Magento eh relativ wenig Sinn, da viel zu viele magische Funktionen aufgerufen werden. Ansonsten sieht die richtigen Fehler zwischen den ganzen Warnings gar nicht mehr.
+
+Damit man nicht komplett mit Warnings zugeschmissen wird, würde ich ebenfalls den Haken bei "Show warnings as: ..." rausnehmen. Aber das ist Geschmacksache.
+
+<h2>Alternative Standards für Magento</h2>
+
+<a href="http://firegento.com/" target="_blank">FireGento</a> hat ebenfalls einen <a href="https://github.com/firegento/phpcs" target="_blank">Standard für Module</a> auf den Weg gebracht - dieser lässt sich nur leider mit meiner aktuellen phpcs-Version nicht ausführen und wirft Exceptions.
+
+<h2>Integration in CI-Umgebung</h2>
+
+Wenn man alle Standards befolgt und alles grün ist, dann kann man phpcs auch gerne aus der CI-Umgebung bei jedem Commit anstoßen. Dazu sollte man allerdings von Anfang an ordentlichen Arbeiten, ansonsten wird man ewig damit beschäftigt sein, die entsprechenden Sources aufzuräumen. Warnings würde ich dabei nicht als kritisch einstufen - diese bekommt man immerhin schon bei jedem genutzten "echo" in Template-Dateien - nervt. Daher sieht mein Aufruf folgendermaßen aus:
+
+(code)
+phpcs -pnv --standard=ECG --extensions=php,phtml .
+(/code)
+
+<h2>Fazit</h2>
+
+Jeder aufmerksame Entwickler wird die meisten Fehler automatisch vermeiden - aber niemand ist perfekt und jeder macht mal Fehler. Daher ist die Integration von phpcs grundsätzlich ratsam. Das Ganze macht natürlich nur Sinn, wenn alle im Team mitziehen. Ansonsten arbeitet man an Dateien weiter, welche von anderen schon mit Fehlern überstreut wurden.
+
+Wie handhabt ihr die Thematik für Euch?
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4235

@@ -1,0 +1,99 @@
+Article-meta: 
+
+----
+
+Title: Layout-Updates über die local.xml
+
+----
+
+Date: 2010-09-03
+
+----
+
+Description: 
+
+----
+
+Tags: themes-magento
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento bietet die Möglichkeit über sein Layout-XML die einzelnen Blöcke nachträglich zu aktualisieren. Dabei kommt es natürlich darauf an das die eigenen Änderungen möglichst spät geladen werden damit diese nicht durch Module wieder überschrieben werden können. 
+
+----
+
+Text: Hierzu bietet Magento von Haus aus die Option an eine Datei mit dem Namen <em>local.xml</em> in <em>app/design/frontend/<Dein Interface>/default/layout</em> anzulegen. Die Layout-Updates dieser Datei werden dabei zum Schluss geladen. Die Datei kann z.B. genutzt werden um einige unnötige Blöcke in Magento restlos zu entfernen. Ganz Hoch im Kurs steht dabei sicherlich der 1800-Callout Block - der muss einfach weg :)
+
+(code lang: xml)
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+	<default>
+	        
+	        <reference name="right">
+	            
+	            <!-- Mage_Poll enfernen -->
+	            <remove name="right.poll" />                          	
+	       
+	       		<!--  Paypal Werbung -->
+	       		<remove name="paypal.partner.right.logo" />
+	       			       		
+	       		<!-- Callouts: Oder auch der 1800 Werbeblock raus -->
+	       		<remove name="right.permanent.callout" />
+	       		
+	       		<!-- Mage_Reports raus: Kürzlich angesehe Produklte -->
+	            <remove name="right.reports.product.viewed" />
+	            <remove name="right.reports.product.compared" />
+	       
+	        </reference>
+	        
+	        <reference name="left">
+	        	
+	        	<!-- Callouts raus -->
+	        	<remove name="left.permanent.callout" />
+	        	
+	        	<!--  Tags raus -->
+	        	<remove name="tags_popular"/>
+	        	
+	        </reference>
+	        
+	</default>   
+
+	<checkout_cart_index>
+        
+        <!-- Versandkosten schätzen im Warenkorb raus -->
+        <remove name="checkout.cart.shipping" />
+        
+        <!-- Multishipping raus -->
+        <remove name="checkout.cart.methods.multishipping" />
+        
+    </checkout_cart_index>  
+        
+</layout>
+(/code)
+
+Bitte die local.xml im Theme Order nicht mit der local.xml in app/etc verwechseln. Das sind zwei völlig unabhängige Dateien.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 735

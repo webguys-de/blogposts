@@ -1,0 +1,134 @@
+Article-meta: 
+
+----
+
+Title: Türchen 15: MySQL 5.6 für Magento Entwickler
+
+----
+
+Date: 2014-12-15
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: anna-voelkl
+
+----
+
+Article-content: 
+
+----
+
+Intro: Seit der im November 2014 veröffentlichten Magento Community Edition 1.9.1.0 bzw. Enterprise Edition 1.14.1.0 bietet Magento die Unterstützung von MySQL 5.6 an.
+
+In den Release Notes der beiden Magento Versionen wird der Support folgendermaßen angekündigt: „Magento Community (Enterprise) Edition erhöht die Performance und Sicherheit durch den Support für MySQL 5.6 und PHP 5.5. Mit MySQL 5.6 profitiert man von einer verbesserten Seitengeschwindigkeit und Skalierbarkeit, weniger Speicherverbrauch des Datenbankservers und erweiterten Debugging-Tools.“ In der täglichen Arbeit sind Magento-Entwickler meist sehr auf ihren Programmcode bzw. dessen Handling fokussiert. Ein sehr spannender, wichtiger und sehr grundlegender Bestandteil eines Magento-Shops kommt dabei manchmal zu kurz: Die Datenbank. <a name="_GoBack"></a>Welche coolen Features von MySQL, und im Speziellen von MySQL 5.6, für die Magento-Entwicklung nützlich und interessant sind, gibt’s in diesem Blogpost zu entdecken.
+
+
+
+----
+
+Text: <h1><a name="idm140721545146304"></a><a name="idm140721545138880"></a> MySQL 5.6 Features</h1>
+
+MySQL 5.6 wurde im Februar 2013 veröffentlicht. Die aktuelle Version ist 5.6.22, veröffentlicht am 1. Dezember 2014. Ziel von MySQL 5.6 ist eine verbesserte Performance und Skalierbarkeit. Seit MySQL 5.5 ist InnoDB die standardmäßige Storage-Engine, welche MyISAM damit abgelöst hat. InnoDB unterstützt viele Funktionen, die ein zeitgemäßes Datenbankmanagementsystem benötigt: Transaktionen auf ACID Basis, referentielle Integrität und Wiederherstellungsmechanismen. Wir kennen diese Funktionen bereits, nicht zuletzt deshalb, weil Magento bereits von Beginn an auf InnoDB setzt (7 Treffer zu ENGINE=MyISAM in alten Setup Skripten ausgenommen).
+
+<h2>InnoDB & Transaktionen</h2>
+
+Im Rahmen des ACID-Prinzips gibt es einige coole Mechanismen, die MySQL zur Anwendung bringt. ACID steht dabei für das Prinzip der Atomicity (Atomarität), Consistency (Konsistenz), Isolation und Durability (Dauerhaftigkeit) von Transaktionen.
+
+<h3>A – Atomicity (Atomarität)</h3>
+
+Transaktionen werden als kleinste nicht mehr weiter teilbare (atomare) Einheit behandelt d.h. entweder alle Aktionen der Transaktion werden durchgeführt oder keine. Die MySQL InnoDB Transaktionen entsprechen diese Anforderung durch die COMMIT- und ROLLBACK-Funktionalität.
+
+<h3>C- Constistency (Konsistenz)</h3>
+
+Die Daten sind nach einer Transaktion in einem gültigen, erlaubten Zustand. Andernfalls wird die Operation vollständig zurückgesetzt. Zwischenzustände während einer laufenden Transaktion dürfen in einem nicht-konsistenten Zustand sein. Erst nach Ende der Transaktion müssen die definierten Kriterien (z.B. referentielle Integrität) erfüllt sein. MySQL InnoDB verwendet dazu einen doublewrite-Puffer: Die Daten werden seitenweise, bevor sie auf der Festplatte landen, zuerst in den Doublewrite-Puffer geschrieben und erst dann in den Speicherbereich, in den sie tatsächlich gehören. Damit wird sichergestellt, dass jeder Schreibvorgang atomar und dauerhaft ist. Passiert ein Crash, werden bei InnoDB Tabellen nicht fertiggestellte Transaktionen vom Redo Log wiederhergestellt. Daten, die bereits committed, aber noch nicht dauerhaft geschrieben wurden, werden aus dem Doublewrite-Puffer wiederhergestellt.
+
+<h3>I – Isolation</h3>
+
+Diese Anforderung besagt, dass parallel ablaufende Transaktionen sich nicht gegenseitig beeinflussen. Jede Transaktion läuft (für sich) so ab, als wäre sie die einzige Transaktion. In diesem Zusammenhang sind die möglichen Isolation Level von Interesse mit welchen definiert werden kann, in wie weit sich Transaktionen gegenseitig beeinflussen können. Die vier Isolationsebenen lauten: Read Uncommitted (niedrigste Stufe, Daten einer nicht abgeschlossenen Transaktion können gelesen werden), Read Committed, Repeatable Read und Serializable (höchste Stufe, das Verhalten entspricht zwei hintereinander ablaufenden Transaktionen). Abhängig vom eingestellten Level, können dabei verschiedene Probleme auftreten. Das Standard Isolation-Level von MySQL ist Repeatable Read mit welchem sichergestellt ist, dass wiederholte Leseoperationen auch die gleichen Ergebnisse liefern.
+
+<h3>D – Durability (Dauerhaftigkeit)</h3>
+
+<h4><a name="idm140721545155600"></a>Die von Transaktionen durchgeführten Änderungen bleiben dauerhaft in der Datenbank bestehen. MySQL bietet hier – abhängig von der Hardware - verschiedene Mechanismen, um die Dauerhaftigkeit zu gewährleisten: Puffer (z.B. den Doublewrite-Puffer, Schreib-Puffer), Logs (Synchronisation des Binlogs), Caches sowie der Unterstützung verschiedener Backup-Strategien.</h4>
+
+<h2>Performance und Skalierbarkeit mit MySQL 5.6</h2>
+
+Die List der Verbesserungen umfasst eine bessere Abarbeitung für WHERE-Bedingungen sowie Abfragen, die ORDER BY und LIMIT kombinieren. Außerdem gab es Optimierungen bei Random Lesezugriffen, was vor allem bei der Anwendung auf Magnetfestplatten Geschwindigkeit bringt.
+
+<h2>Online DDL (Data Definition Language)</h2>
+
+Verschiedene ALTER TABLE Operationen, die die Datenbankstruktur verändern, sind nun ohne kopieren der Tabellen möglich. Somit werden INSERTS, UPDATES und DELETES nicht weiter geblockt. In Zusammenhang mit Magento Setup- bzw. Upgrade-Scripts kann sich hierbei in Live-Shops eine Verbesserung durch eine schnellere Abarbeitung ergeben.
+
+<h2>FULLTEXT Index</h2>
+
+Es ist nun möglich, einen FULLTEXT Index für InnoDB Tabellen zu setzen: Dieser kann auf CHAR, VARCHAR und TEXT-Spalten angewendet werden. Dieser Index ist Teil der Full-Text Search (FTS) Funktion. Die Volltext-Suche kann mit MATCH()…AGAINST in der WHERE Bedingung durchgeführt werden. Diese Funktion verwendet Magento im Suchmodus Fulltext bzw. Combine (Like and Fulltext): class Mage_CatalogSearch_Model_Resource_Helper_Mysql4 extends Mage_Eav_Model_Resource_Helper_Mysql4 { public function chooseFulltext($table, $alias, $select) { $field = new Zend_Db_Expr('MATCH ('.$alias.'.data_index) AGAINST (:query IN BOOLEAN MODE)'); $select->columns(array('relevance' => $field)); return $field; } ... } Funfact: Die Spalte data_index (Typ longtext) der Tabelle catalogsearch_fulltext ist dabei ein FULLTEXT KEY, allerdings mit MyISAM Storage Engine. 
+
+Siehe app/code/core/Mage/CatalogSearch/sql/catalogsearch_setup/mysql4-upgrade-0.7.5-0.7.6.php:
+
+(code)
+CREATE TABLE `{$installer->getTable('catalogsearch_fulltext')}`(
+`product_id` int(10) unsigned NOT NULL,
+`store_id` smallint(5) unsigned NOT NULL,
+`data_index` longtext NOT NULL,
+PRIMARY KEY (`product_id`,`store_id`), FULLTEXT KEY `data_index` (`data_index`) )
+ENGINE=MyISAM DEFAULT CHARSET=utf8;
+(/code)
+
+<h2>Filebasierte Tablespaces</h2>
+
+Die Storage-Engine InnoDB unterstützt nun flexible Tablespaces auf „file-per-table“ (Link zu: http://dev.mysql.com/doc/refman/5.6/en/glossary.html#glos_file_per_table) Basis. Seit MySQL 5.6.7 ist diese Option innodb_file_per_table standardmäßig aktiviert. Damit kann man also sehr flexibel die Daten von hoch frequentierten Tabellen einzeln in eigenen Dateien ablegen (und diese könnten wiederum gezielt auf ein schnelles Speichermedium, z.B. SSD, gelegt werden). Auch TRUNCATE TABLE soll damit schneller sein. Das Speicherziel muss allerdings beim Anlegen der Datenbanktabelle mittels DATA DIRECTORY angegeben werden (für ALTER TABLE ist diese Option nicht verfügbar). Könnte eine coole Erweiterung für das Magento Setup sein.
+
+<h2>Optimierung von Read-Only Transaktionen</h2>
+
+Eine Reihe an Optimierungen, die Read-Only Transaktionen betreffen, verbessern die Geschwindigkeit und Nebenläufigkeit (concurrency) für Abfragen. Die Optimierungen werden nach Möglichkeit automatisch angewendet bzw. können explizit über START TRANSACTION READ ONLY spezifiziert werden. Debugging Das EXPLAIN Statement (zur Optimierung von SQL-Queries; auch als DESCRIBE bekannt) enthält nun Ausführungsinformationen über DELETE, INSERT, REPLACE und UPDATE Statements. Diese Informationen waren zuvor nur für SELECT-Statement verfügbar. Auch eine Ausgabe im JSON-Format ist nun möglich. Wissenswertes
+
+<h2>Mikrosekunden</h2>
+
+TIME, DATETIME, and TIMESTAMP können nun Mikrosekunden bis zu 6 Nachkommastellen beinhalten, z.B. ‘2014-12-06 13:32:09.019473‘. Aufgepasst: NOW() liefert derzeit noch keine Mikrosekunden zurück!
+
+<h2>Mehrere TIMESTAMP-Spalten mit automatischer Initialisierung</h2>
+
+Bisher konnte maximal eine TIMESTAMP-Spalte pro Tabelle automatisch mit dem aktuellen Datum und der aktuellen Uhrzeit initialisiert bzw. aktualisiert werden. Diese Restriktion wurde aufgehoben.
+
+<h1>Security</h1>
+
+Für die Serveradmins unter euch sind wohl noch diese Neuerungen interessant:
+
+<h2>SHA-256</h2>
+
+Mit dem sha256_password Plugin ist nun das SHA-256 Passwort-Hashing für MySQL User möglich.
+
+<h2>Passwortablauf</h2>
+
+Es besteht nun die Möglichkeit, MySQL User Passwörter ablaufen zulassen. Grundsätzlich bin ich ja ein Befürworter dieser Funktion. Wenn aber irgendwann in Zukunft ein Live-Shop stillsteht, weil das Datenbank-Passwort abgelaufen ist, ist das vermutlich eher unangenehm ;-)
+
+<h2>Logging</h2>
+
+Im Query Log, Slow Query Log und Binary Log werden Passwörter bei Verwendung von CREATE USER, GRANT, SET PASSWORD (betrifft MySQL-User), sowie bei Verwendung der PASSWORD()-Funktion mehr im Klartext geloggt.
+
+<h1>Resümee</h1>
+
+Es gibt eine Vielzahl an implementierten Funktionen, die die Geschwindigkeit und Skalierbarkeit von Datenbanken in MySQL 5.6 erhöhen. Das bietet eine gute Basis für den Betrieb eines Magento-Shops sowie dessen Datenbank-Skalierung. Wie immer, kommt es aber auf das server- bzw. shopspezifisiche Setup an. Ich selbst habe leider noch keine Erfahrungswerte mit einem CE 1.9.1.0 Shop und MySQL 5.6 und freue mich daher auf eure Erfahrungsberichte.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4103

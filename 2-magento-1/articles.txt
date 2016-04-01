@@ -1,0 +1,17 @@
+Articles-meta: 
+
+----
+
+Title: Magento 1
+
+----
+
+Description: 
+
+----
+
+Articles-content: 
+
+----
+
+Text: 

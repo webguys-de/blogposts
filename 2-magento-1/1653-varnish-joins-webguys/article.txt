@@ -1,0 +1,64 @@
+Article-meta: 
+
+----
+
+Title: Varnish "joins" Webguys
+
+----
+
+Date: 2011-06-02
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,html-css-javascript-seo,development-wordpress
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Webguys läuft nun mit Varnish. Und nein, wir haben nicht so viel Traffic das sich das ganze wirklich lohnen würde. Aber spannend ist es auf jedenfall. Wie ich vorgegangen bin?
+
+
+
+----
+
+Text: Vorab: Varnish ist eine Art Proxy-Server der darauf ausgelegt ist HTTP-Abfragen hochperformant zu beantworten. Dabei fallen Overheads von PHP und Apache-Modulen komplett weg. Selbst die Konfiguration wird in C übersetzt und kompiliert. Mehr Informationen gibt es im übrigen unter <a href="http://www.varnish-cache.org">varnish-cache.org</a>
+
+Zuerst einmal läuft mein VRoot-Server auf Ubuntu. Somit konnte ich sehr einfach mittels <em>apt-get install varnish</em> die Installation abschließen. Danach habe ich das Wordpress-Modul Wordpress_Varnish (<a href="http://github.com/pkhamre/wp-varnish">http://github.com/pkhamre/wp-varnish</a>) verwendet. Es kümmert sich dabei darum bei neuen Artikeln, Kommentaren usw. direkt einen Purge in Varnish durchzuführen. Macht einen soliden Eindruck. Auch die VCL aus dem Projekt konnte ich fast 1:1 übertragen. Eine Kleinigkeit habe ich jedoch im Teil "vcl_recv" ergänzt:
+
+(code)
+if ( req.http.host ~ "www.webguys.de" ) {
+    remove req.http.cookie;
+    return (lookup);
+}
+return (pass);
+(/code)
+
+Das sorgt ganz einfach dafür das Varnish nur cached wenn der http-Host www.webguys.de entspricht. Alle anderen Seiten werden direkt an den Apache weitergeleitet :) Absolut gespannt bin ich jetzt ob Google die Reaktionszeiten und Geschwindigkeit der Webseite nun besser bewertet als zuvor und welche Probleme durch Wordpress eventuell noch auf mich zukommen könnten.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1653

@@ -1,0 +1,102 @@
+Article-meta: 
+
+----
+
+Title: Türchen 12: Events in Magento erstellen
+
+----
+
+Date: 2010-12-12
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento ist ein mächtiges Werkzeug und gibt durch die durchdachte Klassenstruktur dem Entwickler viel Freiheiten. Diese Freiheit wird jedoch in Grenzen gehalten. Es ist nicht möglich, einen Klasse mehrmals zu überschreiben - dies kann nur einmal geschehen. Darum gibt es neben der Möglichkeit, Klassen zu überschreiben, Aktionen an Events zu delegieren und auch neue Events zu registrieren.
+
+
+----
+
+Text: Events bieten die Möglichkeit, den Funktionsumfang von Magento zu erweitern, ohne die Flexibilität zu verlieren und sich keine Gedanken darum machen zu müssen, ob andere Extensions auf die gleichen Klassen zugreifen. Dazu ist es nötig zu wissen, wie ein Event ausgelöst und wie man darauf reagiert.
+
+<strong>1. Schritt: Events auslösen</strong>
+Innerhalb von Magento wird durch diese Zeile (code lang: php)
+Mage::dispatchEvent('webguys_event', array('object'=>$this));
+(/code) ein Events ausgelöst. Dabei repräsentiert 'object' vom Kontext abhängige Variablen. Diese können z.B. auch Controller, Order oder ähnlich heißen. 
+
+<strong>2. Schritt: Auf Events reagieren</strong>
+An dieser Stelle hat man zwei Möglichkeiten, entweder man implementiert die Reaktion in ein bestehendes Modul oder erstellt ein neues. Für den Adventskalender erstellen wir ein neues.
+Zuerst die <em>etc/config.xml</em>:
+(code lang: xml)
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Webguys_Advent>
+            <version>0.0.1</version>
+        </Webguys_Advent>
+    </modules>
+    <global>
+        <helpers>
+            <advent>
+                <class>Webguys_Advent_Helper</class>
+            </advent>
+        </helpers>
+    </global>
+    <frontend>
+        <events>
+            <webguys_advent>
+                <observers>
+                     <custom_event_handler>
+                         <type>model</type>
+                         <class>webguys_event/observer</class>
+                         <method>adventObserverAction</method>
+                   </custom_event_handler>
+                </observers>
+            </webguys_advent>
+        </events>
+    </frontend>
+</config>
+(/code)
+
+Natürlich benötigen wir noch die verarbeitende Klasse <em>Webguys_Advent/Model/Observer.php</em>:
+(code lang: php)
+class Webguys_Event_Model_Observer {
+    public function adventObserverAction(Varien_Event_Observer $observer) {
+        $object = $observer->getEvent()->getObject();
+        /*  magic */
+        return $this;
+    }
+}
+(/code)
+
+Am Ende noch schnell einen leeren Helper <em>Webguys_Advent/Helper/Data.php</em> erstellen, dann kann es schon losgehen. 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1142

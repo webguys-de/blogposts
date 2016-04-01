@@ -1,0 +1,62 @@
+Article-meta: 
+
+----
+
+Title: Türchen 15: Globale Variablen
+
+----
+
+Date: 2010-12-15
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Globale Variablen in Magento oder auch das Mage-Registry-Konzept ist der Inhalt von Türchen 15. An vielen Stellen stolpert man teilweise über Variablen die aus dem Nichts abgerufen werden. Wo sie gesetzt werden ist im Anfang ein Rätsel. Dabei kann es doch so einfach sein..
+
+
+----
+
+Text: In vielen Fällen registrieren Controller die angefragten Models zusätzlich in der globalen Welt. Dazu rufen sie die Methode <em>Mage::register</em> auf. Dazu ein Beispiel:
+(code lang: php)
+Mage::Register('name_der_variable', $wert);
+(/code)
+
+Blöcke, andere Controller - jeder eigentlich - kann nun mittels <em>Mage::Registry</em> auf die Variable zugreifen. Auch hier zu ein kleines Beispiel:
+
+(code lang: php)
+echo Mage::Registry('name_der_variable');
+(/code)
+
+In diesem Fall gibt unser Script den Wert der Variable <em>$wert</em> aus. Dies hat den Vorteil das weiterhin ganz klar definiert ist das ausschließlich Controller externe Variablen verarbeiten und diese an Models weitergeben. Nach der Weitergabe an das Model wird dieses in der Registry registriert. Hier hat nun der Block problemlos Zugriff und kann die Daten des Models aufbereiten und an die Templates übergeben. 
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1165

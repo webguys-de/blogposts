@@ -1,0 +1,89 @@
+Article-meta: 
+
+----
+
+Title: CMS Projekte intelligent aufbauen
+
+----
+
+Date: 2010-04-16
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,templates,reddot,projektaufbau
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ein CMS Projekt kann auf unterschiedliche Weise erstellt werden. Um ein Projekt jedoch langfristig wartbar zu gestalten, lohnt es sich bereits vor Beginn der Arbeit Gedanken über die spätere Struktur zu machen.Wichtig ist es, die eigene Sicht nicht auf die eigene  Projektrolle zu beschränken, sondern auch die Sichten der Redakteure einnehmen, um so zielgerichtet Workflows und Content-Klassen zu erstellen, die der Arbeitweise der Benutzer entsprechen. Quasi-Standard  ist der Einsatz des Navigationmanagers und Rendertags.
+
+
+
+----
+
+Text: <strong>Grundlage eines Projekts</strong>
+In allen Projekten gibt es eine Einstiegsseite für den Redakteur, dort werden, neben Shortcuts zu wichtigen Seiten und/oder Funktionalitäten, Links zu wichtigen, globalen Seiten dargestellt. Der Redakteur soll schließlich schnell und unkompliziert navigieren können, ohne sich durch eine lange Liste in der Ablage zu wühlen.
+
+<strong>Der Aufbau</strong>
+Diese Seiten sollten auf jeden Fall vorhanden sein:
+<ul><li>CSS</li>
+	<li>Javascript</li>
+	<li>Translation Page</li>
+	<li>Settings</li>
+	<li>Startseite</li>
+</ul><strong>CSS</strong>
+Über den besten Einsatz von CSS innerhalb von RedDot Projekten wurde bereits viel und ausgiebig diskutiert, es leider keinen endgültige Lösung. Während des Aufbaus eines Projektes ist es von Vorteil, das CSS von einer externen Quelle zu laden, um so unnötige Arbeit an den Content-Klassen zu ersparen. Ob es nach einer Abnahme durch den Kunden in das CMS integriert wird, hängt von der jeweiligen Präferenz ab.
+
+<strong>Javascript</strong>
+Hier kommen alle Bibliotheken rein, die das Projekt benötigt, dabei ist es wichtig, sich auf ein Framework zu beschränken und die Funktionalitäten an den SmartEdit Modus anzupassen.
+
+<strong>Translation Page</strong>
+Die Basis eines effektiven CMS Projekts bilden Rendertags. Diese sind in Version 7.5 in das RedDot CMS integriert worden und ermöglichen es, unkompliziert auf nahezu beliebige Inhalte zuzugreifen. Rendertags ermöglichen es, Elemente aus verschiedenen Content-Klassen an einem zentralen Punkt zu pflegen - der Translation Page.  Dies sei am Beispiel einer Newsliste erklärt:
+
+(code lang: xml)
+<div id="newslist">
+	<ul>
+		<!IoRangeList>
+			<li>
+				<a href="<%lst_news%>"><%hdl_headline%></a><br>
+				<%!! Context:Pages.GetPage(Guid:TranlationPage).Elements.GetElement(stf_newslist_more).Value !!%>
+			</li>
+		<!/IoRangeList>
+	</ul>
+</div>
+(/code)
+
+Auch wenn es nur ein kleines Beipiel für den Einsatz darstellt, ist der Sinn schnell ersichtlich. Der Entwickler/Redakteur muss nicht mehr in jeder Content-Klasse einzelne Elemente pflegen, sondern kann dies übersichtlich auf einer einzelnen Seite erledigen. Ich bin dazu übergegangen, den Namen des Zielelements zu benutzen - um es übersichtlicher zu gestalten und Namenskonflikte zu vermeiden besteht der Name aus drei Bestandteile: der Typ, der Einsatzbereich und der eigentliche Bezeichner. Diese Vorgehensweise benötigt mehr Disziplin als der Einsatz normaler Elemente, belohnt dies jedoch mit einer ungeahnten Flexibilität und Übersichtlichkeit.
+
+<strong>Settings</strong>
+Analog zu der Translation Page wird eine weitere Seite erstellt, um spezielle Einstellungen global vornehmen zu können. Dazu zählen Google-Maps-Api-Key, Analytics-Code, globale Vorbelegungen für Meta-Keys und Meta-Description sowie weitere Einstellungen, die nicht unbedingt jeder Redakteur vornehmen können muss.
+
+<strong>Startseite</strong>
+Dieser Link stellt dem Redakteur einen Shortcut zur Startseite bereit, ohne sich durch eine etwaige Hilfskontruktion klicken zu müssen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 251

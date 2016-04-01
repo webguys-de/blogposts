@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Dateityp mit Rendertags erkennen
+
+----
+
+Date: 2009-12-03
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,templates,reddot,rendertags
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: In zahlreichen Projekten steht neben einem Download immer die Dateigröße, sowie der dazugehörige Typ. Die Dateigröße stellt mit RedDot-Bordmitteln keine Hürde dar, dafür gibt es die Attribute, lediglich den Dateityp zu erkennen stellte bislang eine Hürde dar, die man sonst nur mit Scriptsprachen zu überwinden konnte. Bis jetzt.
+
+----
+
+Text: Ich habe ein wenig mit den Rendertags herumgespielt und diesen Schnipsel erstellt:
+
+(code language:xml)
+<%!!
+Context:CurrentPage.Elements.GetElement(med_file).GetHtml().ToString().Split(.)[1].ToUpper()
+!!%>
+(/code)
+
+Da Substring immer einen Anfang benötigt und nicht mit negativen Werten umgehen kann, bin ich auf Split ausgewichen und hoffe in diesem Fall darauf, dass der Punkt vor dem Suffix der einzige im Dateinamen ist. Mir ist es immer zu lästig, dafür auf asp oder php zurückzugreifen - alleine schon, um die Übersicht über die Projekte nicht zu verlieren. Gibt es Anregungen zu diesem Beispiel? Wie findest Du, lieber RedDotler, den Dateityp heraus?
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 46

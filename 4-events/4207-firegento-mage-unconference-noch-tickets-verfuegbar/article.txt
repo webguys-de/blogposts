@@ -1,0 +1,78 @@
+Article-meta: 
+
+----
+
+Title: Firegento Mage Unconference - Noch Tickets verfügbar
+
+----
+
+Date: 2014-12-28
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Lieber Magento-Enthusiast,
+
+das FireGento-Team freut sich, die erste FireGento Mage Unconference ankündigen zu können. Die Community lädt weltweit Dich und viele andere Menschen ein, an dieser großartigen und einmaligen Veranstaltung 2015 in Berlin teilzunehmen!
+
+
+
+----
+
+Text: <h2>Ein Unconfer…WAS?</h2>
+
+Du weißt nicht, was eine Unconference ist? Keine Sorge, wir hatten früher auch keine Ahnung :-) Bei einer Unconference geht es hauptsächlich um Menschen - und mit Menschen meinen wir nicht nur Entwickler. Wir sprechen von Kunden, Händlern, Anbietern, Agenturen und Providern – und ja - natürlich auch Entwicklern. Der Inhalt der Unconference wird ganz alleine von Dir und den anderen Teilnehmern festgelegt. Und wir räumen Diskussionen und Gesprächen jede Menge Zeit ein. Wir bieten Dir eine Veranstaltung, bei der Du Wissen sammeln und teilen kannst. Falls Du also dein Wissen nicht gerne teilst, dann ist eine Unconference nicht das Richtige für Dich!
+
+<h2>Ablauf deiner Unconference</h2>
+
+Wir treffen uns am Morgen, um die Themen zu sammeln, über die die Teilnehmer sprechen oder zu denen sie etwas hören möchten. Anschließend basteln wir daraus eine bunt gemischte Themenwiese, über die Du und alle anderen Teilnehmern abstimmen dürfen - sei es, weil Dich ein Thema interessiert oder weil Du selbst zu einem Thema etwas sagen möchtest.
+
+<h2>Wann und wo darf ich hin?</h2>
+
+Wir laden Dich ein, Teil der weltweit ersten <a href="http://www.mageunconference.org/">Unconference zu Magento</a> in Berlin vom 7. bis 8. März 2015 zu sein.
+
+<h2>Als was darf ich teilnehmen?</h2>
+
+Verbringe mit uns ein Wochenende, egal was Dich mit Magento verbindet. Wir wünschen uns Gespräche mit Händlern, Agenturen, Entwicklern, Designern, Kunden und Service-Anbietern für Zahlungs- und Versandarten. 
+
+Jeder Teilnehmer ist ein wichtiger Mitspieler. Es ist wichtig, dass wir uns alle einig sind, was wir erreichen wollen:
+
+<ul><li>Glückliche Menschen</li>
+<li>Steigende Umsätze</li>
+<li>Geniale und leicht bedienbare Shops</li>
+<li>Ausbaufähigen, ordentlichen Programmcode</li>
+</ul><a href="https://www.mage-hackathon.de/upcoming/mage-unconference.html">Mach mit! Sei Teil der Community!
+7.-8. März 2015 in Berlin</a>
+
+P.S. Post aus den FireGento Unconference Marketing-Unterlagen :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4207

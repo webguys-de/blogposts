@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Magento Hackathon: Gemeinsam mehr bewegen!
+
+----
+
+Date: 2012-02-04
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich freue mich immer sehr auf und über Magento-Events. So auch beim Magento-Hackathon in dessen Mit-Organisation mein Podcast-Kollege Damian Luszczymak viel Zeit und Mühe investiert hat. Aber was ist der Magento Hackathon?
+
+
+
+----
+
+Text: Erst mal ist es ein reines Coding-Event. Es richtet sich also an die Magento Entwicker wie dich und mich. Wir kommen zusammen, arbeiten an der Community und stellen gemeinsam ein paar Dinge auf die Beine. Dabei kommen in der Regel wirklich tolle Dinge bei herum. Was entwickelt wird? Das Entscheiden wir zusammen: <a href="http://magento-hackathon.mixxt.com/networks/wiki/index">Aber natürlich gibt es schon ein paar Ideen.</a>
+
+Neben den Entwickler-Gruppen gibt es auch ein paar zentrale Vorträge. Zu dem Rednern gehört z.B. der bekannte Autor des Buches "Magento - das Handbuch für Entwickler" Vinai Kopp. Man darf also gespannt sein :)
+<h2>.. und jetzt? Hin!</h2>
+Der Hackathon findet am <strong>31.03.2012 bis 01.04.2012</strong> in München. <a href="http://magento-hackathon.mixxt.com/networks/events/show_event.54020">Anmeldung unter mixxt</a> und das Ticket kostet auch nur <strong>31,84 €</strong>. <em>(Ob der Preis wohl eine Anspielung auf die Rundungsfehler von Magento in der ersten Version ist?)</em>
+
+Bis bald!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2644

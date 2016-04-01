@@ -1,0 +1,55 @@
+Article-meta: 
+
+----
+
+Title: Magento Checkout ohne JavaScript/ Ajax
+
+----
+
+Date: 2010-10-09
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich sitze gerade daran das irritierende Ajax bzw. Java-Script aus dem Checkout Prozess zu entfernen. Der aktuelle Stand ist zwar noch eine sehr sehr frühe Alpha dennoch möchte ich ihn in Form eines Videos veröffentlichen.
+
+----
+
+Text: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="640" height="505" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="allowFullScreen" value="true"><param name="allowscriptaccess" value="always"><param name="src" value="http://www.youtube.com/v/grjGUIVQGyk?fs=1&hl=de_DE"><param name="allowfullscreen" value="true"><embed type="application/x-shockwave-flash" width="640" height="505" src="http://www.youtube.com/v/grjGUIVQGyk?fs=1&hl=de_DE" allowscriptaccess="always" allowfullscreen="true"></embed></object>
+
+Ich gehe davon aus das sich, dadurch das der Checkout-Prozesse ohne JavaScript deutlich mehr State-Of-The-Art ist, sich die Conversion-Rate noch einmal steigern lässt. Er ist dann weniger fehleranfällig sollten einmal andere Java-Script Probleme auftauchen oder die Verbindung zwischendurch schlapp machen. Genauso kann der User endlich die gewohnten Vor/ Zurück-Buttons verwenden.
+
+<strong>Ein wenig technisch:</strong> Jeder Schritt ist eine einzelne Action im SimpleCheckoutController. Zur Datenverarbeitung werden die Magento-Kern-Models verwendet. Den Source-Code dazu gibt es nun in einem Google-Project unter <a href="https://code.google.com/p/simplecheckout/">https://code.google.com/p/simplecheckout/</a>
+<h3>Weiterentwicklung</h3>
+Die Weiterentwicklung der Magento Erweiterung um Java-Script aus dem Checkout aus Magento zu entfernen habe ich bis auf weiteres eingestellt. Sollte hier größeres Interesse bestehen können wir jedoch gerne über <a href="http://www.webguys.de/magento-support/">Sponsoring das Modul</a> finalisieren. <a href="http://www.webguys.de/magento-support/">Fragen Sie uns einfach nach weiteren Informationen</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 876

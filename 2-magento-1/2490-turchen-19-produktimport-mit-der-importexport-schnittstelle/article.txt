@@ -1,0 +1,340 @@
+Article-meta: 
+
+----
+
+Title: Türchen 19: Produktimport mit der ImportExport-Schnittstelle
+
+----
+
+Date: 2011-12-19
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: andreas-von-studnitz
+
+----
+
+Article-content: 
+
+----
+
+Intro: In diesem Beitrag geht es um die Bedienung der mit Magento 1.5 (CE) bzw. 1.10 (PE und EE) eingeführten neuen Schnittstelle namens ImportExport. Dabei zeige ich den Import von Produktdaten über CSV-Dateien und gehe auf die Besonderheiten des Datenformats ein. Schwerpunkt dieses Beitrags sind dabei Funktionalitäten, die über den Import von einfachen Produkten hinausgehen: Mehrsprachigkeit, Kategorien, Staffelpreise, Produktbilder, Produktverknüpfungen und Gruppierte Produkte.
+
+----
+
+Text: Als weiterführende Lektüre empfehle ich die Unterlagen zum Vortrag „<a href="http://www.meet-magento.de/fileadmin/user_upload/meet-magento.de/pdf/ImportExport_Vinai.pdf" target="_blank">Anpassen des neuen ImportExport Moduls für eigene Erweiterungen</a>“. Dort ist auch der Import von Konfigurierbaren Produkten und individuellen Optionen beschrieben, die ich daher nicht noch einmal aufführe. Auch geht es um die Erstellung eigener Adapter für andere Dateiformate.
+<h3>Die ImportExport-Schnittstelle</h3>
+Das <strong>ImportExport</strong>-Modul ersetzt das alte <strong>Dataflow</strong>-Modul, das in älteren Versionen zum Import und Export von Daten eingesetzt wurde. Beide Module ermöglichen ausschließlich den Import und Export von Produkt- und Kundendaten in und aus Textdateien. Beide Module sind sowohl über das Backend als auch innerhalb von eigenen Modulen nutzbar. Der Hauptvorteil des ImportExport-Moduls ist die <strong>deutlich gesteigerte Geschwindigkeit</strong>. So können nun mehrere hundert Produkte pro Sekunde importiert werden, während es mit dem alten Modul nur wenige Produkte pro Sekunde waren.
+
+(image: admin_import.png)
+
+Im Magento-Administrationsbereich findet sich die Importmöglichkeit unter System -> Import/Export -> Import.
+
+Die Produktdaten müssen für den Import mit dem ImportExport-Modul in einer vorgegebenen Struktur vorliegen. Im Standard importiert das Modul ausschließlich CSV-Dateien. Mit meinem kleinen Modul <a href="http://www.avs-webentwicklung.de/nc/blog/artikel/magento-import-mit-der-neuen-schnellen-import-schnittstelle-fuer-produkte-und-kunden.html" target="_blank">FastSimpleImport</a> können mit einem einfachen Funktionsaufruf alternativ PHP-Arrays importiert werden, die im Rahmen eines eigenen Moduls aus beliebigen Datenquellen per PHP generiert werden können. Ein Aufruf sieht dabei wie folgt aus:
+
+<em>Mage::getSingleton('fastsimpleimport/import')->processProductImport($productData);</em>
+
+Details dazu finden sich im zum Modul gehörenden <a href="http://www.avs-webentwicklung.de/nc/blog/artikel/magento-import-mit-der-neuen-schnellen-import-schnittstelle-fuer-produkte-und-kunden.html" target="_blank">Blogbeitrag</a>.
+<h3>Die Datenstruktur</h3>
+Die Daten müssen für den Import in einem vordefinierten Format vorliegen. Für die Beispiele verwende ich hier das CSV-Format aus dem Standard. Die gleichen Strukturen können auch bei anderen Import-Methoden verwendet werden.
+
+Grundsätzlich gilt, dass sich viele Details des Formats daraus erschließen lassen, dass man bestehende Produktdaten exportiert und sich die exportierte CSV-Datei ansieht. Das Format für den Import ist praktisch identisch – es werden im Export allerdings nicht alle Funktionalitäten unterstützt, die im Import existieren, wie z.B. Gruppierte Produkte.
+
+Für CSV ist das Format wie folgt:
+
+- Spaltennamen in der ersten Zeile
+
+- Spaltentrenner: Komma
+
+- Texttrennzeichen: doppelte Anführungszeichen (optional)
+
+- Zeichensatz: UTF-8
+
+Eine Datei für den Import von Basisdaten eines Produktes sieht beispielsweise wie folgt aus:
+
+sku,_type,_attribute_set,_product_websites,name,price,description,short_description,weight,status,visibility,tax_class_id,qty
+
+1234567,simple,Default,base,Default,0.99,Default,Default,0,1,4,2,76
+
+Der besseren Übersicht wegen stelle ich die Daten im Tabellenformat dar:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_type</strong></td>
+<td><strong>_attribute_set</strong></td>
+<td><strong>_product_websites</strong></td>
+<td><strong>name</strong></td>
+<td><strong>price</strong></td>
+<td><strong>description</strong></td>
+<td><strong>short_description</strong></td>
+<td><strong>weight</strong></td>
+<td><strong>status</strong></td>
+<td><strong>visibility</strong></td>
+<td><strong>tax_class_id</strong></td>
+<td><strong>qty</strong></td>
+</tr><tr><td>1234567</td>
+<td>simple</td>
+<td>Default</td>
+<td>base</td>
+<td>Default</td>
+<td>0.99</td>
+<td>Default</td>
+<td>Default</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+<td>2</td>
+<td>76</td>
+</tr></tbody></table></div>
+Hier sind nur die <strong>Pflichtfelder</strong> für neue Produkte aufgeführt. Bei bestehenden Produkten kann auf einzelne Felder auch verzichtet werden – unverzichtbar ist lediglich das Feld <strong>sku</strong> (Artikelnummer), das der Identifizierung des zu bearbeitenden Produktes dient.
+
+Die Aktualisierung der Lagerbestände von zwei Produkten könnte also wie folgt aussehen:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_type</strong></td>
+<td><strong>_attribute_set</strong></td>
+<td><strong>_store</strong></td>
+<td><strong>qty</strong></td>
+</tr><tr><td>1234567</td>
+<td></td>
+<td></td>
+<td></td>
+<td>74</td>
+</tr><tr><td>1234568</td>
+<td></td>
+<td></td>
+<td></td>
+<td>12</td>
+</tr></tbody></table></div>
+Grundsätzlich gilt allerdings: Die Spalten <strong>_type</strong>, <strong>_attribute_set</strong> und <strong>_store</strong> müssen auch bei Produktaktualisierungen vorhanden sein, die Felder können aber den Wert <strong>null</strong> haben, sofern man den bestehenden Wert nicht überschreiben will. Der Übersicht halber lasse ich diese in den folgenden Beispielen weg.
+
+Optionale Attribute (wie z.B. <strong>cost</strong> oder <strong>special_price</strong>) können als zusätzliche Spalten einfach angehängt werden. Das gleiche gilt für selbst angelegte Attribute (z.B. <strong>color</strong> oder <strong>manufacturer</strong>).
+<h3>Auswahlfelder</h3>
+Als Auswahlfelder bezeichne ich Felder, die vorgegebene Werte haben. Beispiele sind <strong>status</strong> (Aktiviert oder Deaktiviert) oder <strong>color</strong> (eigene Werte). Während die oben aufgeführten Felder <strong>status</strong>, <strong>visibility</strong> und <strong>tax_class_id</strong> die IDs erwarten, muss man für andere Attribute den Optionstext einfügen:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>color</strong></td>
+<td><strong>is_imported</strong></td>
+</tr><tr><td>1234567</td>
+<td>red</td>
+<td>yes</td>
+</tr><tr><td>1234568</td>
+<td>blue</td>
+<td>yes</td>
+</tr></tbody></table></div>
+Zu beachten ist noch, dass hier die globalen Optionswerte stehen müssen, keine lokalisierten.
+
+Ein Nachteil ist, dass die Schnittstelle nicht in der Lage ist, noch nicht vorhandene Optionen selbst anzulegen. Dies muss also in einem vorgelagerten Schritt passieren.
+<h3>Mehrsprachigkeit</h3>
+Für den Import mehrsprachiger Texte muss pro StoreView eine eigene Zeile erstellt werden. Das sieht dann z.B. wie folgt aus:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_store</strong></td>
+<td><strong>name</strong></td>
+<td><strong>Description</strong></td>
+</tr><tr><td>1234567</td>
+<td></td>
+<td>Standard</td>
+<td>Standard-Beschreibung</td>
+</tr><tr><td></td>
+<td>de</td>
+<td>Standard</td>
+<td>Standard-Beschreibung deutsch</td>
+</tr><tr><td></td>
+<td>en</td>
+<td>Default</td>
+<td>Default Description</td>
+</tr></tbody></table></div>
+In der Spalte <strong>_store</strong> wird dabei der Code des StoreViews eingetragen.
+
+Wichtig ist hier, dass das Feld <strong>sku</strong> nur in der jeweils ersten zum Produkt gehörigen Zeile angegeben wird. Alle weiteren werden automatisch dem gleichen Produkt zugeordnet. Dieser Mechanismus wird auch für andere Felder, die mehrere Werte haben können, verwendet. Diese führe ich im Folgenden auf.
+<h3>Mehrere Websites</h3>
+Auch mehrere Websites werden in mehreren Zeilen angegeben:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_product_websites</strong></td>
+</tr><tr><td>1234567</td>
+<td>website_code_1</td>
+</tr><tr><td></td>
+<td>website_code_2</td>
+</tr></tbody></table></div>
+<h3>Kategorien</h3>
+Für Kategorien werden die Namen (Standardwerte) verwendet, mit komplettem Pfad, getrennt durch Schrägstriche. Das sieht beispielsweise wie folgt aus:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_category</strong></td>
+</tr><tr><td>1234567</td>
+<td>Electronics/Cameras/Digital Cameras</td>
+</tr><tr><td></td>
+<td>Apparel/Shoes/Mens</td>
+</tr></tbody></table></div>
+Auch hier werden mehrere Einträge in eigene Zeilen geschrieben.
+<h3>Staffelpreise</h3>
+Für Staffelpreise gibt es eine Reihe spezieller Felder, die man befüllen kann. Den Import von Staffelpreisen kann man am einfachsten anhand eines Beispiels erläutern:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_tier_price_website</strong></td>
+<td><strong>_tier_price_customer_group</strong></td>
+<td><strong>_tier_price_qty</strong></td>
+<td><strong>_tier_price_price</strong></td>
+</tr><tr><td>1234567</td>
+<td>all</td>
+<td>1</td>
+<td>10</td>
+<td>0.89</td>
+</tr><tr><td></td>
+<td>all</td>
+<td>1</td>
+<td>20</td>
+<td>0.79</td>
+</tr><tr><td></td>
+<td>all</td>
+<td>2</td>
+<td>10</td>
+<td>0.85</td>
+</tr><tr><td></td>
+<td>all</td>
+<td>2</td>
+<td>20</td>
+<td>0.70</td>
+</tr><tr><td>1234568</td>
+<td>website_code_1</td>
+<td>all</td>
+<td>10</td>
+<td>16.50</td>
+</tr></tbody></table></div>
+„all“ ist hierbei der Standardwert für „Alle Websites“ bzw. „Alle Kundengruppen“.
+<h3>Produktbilder</h3>
+Der Import von Produktbildern ist erst seit der Magento-Version 1.6 (CE) bzw. 1.11 möglich. Die zu importierenden Bilder müssen im Verzeichnis media/import liegen. Der entsprechende Teil der Importdatei muss wie folgt aussehen:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_media_image</strong></td>
+<td><strong>_media
+_attribute_id</strong></td>
+<td><strong>_media
+_is_disabled</strong></td>
+<td><strong>_media
+_position</strong></td>
+<td><strong>_media
+_lable</strong></td>
+<td><strong>image</strong></td>
+<td><strong>small
+_image</strong></td>
+<td><strong>thumbnail</strong></td>
+</tr><tr><td>1234567</td>
+<td>img1.jpg</td>
+<td>77</td>
+<td>1</td>
+<td>1</td>
+<td>Bild 1</td>
+<td>img1.jpg</td>
+<td>img2.jpg</td>
+<td>img2.jpg</td>
+</tr><tr><td></td>
+<td>img2.jpg</td>
+<td>77</td>
+<td>0</td>
+<td>2</td>
+<td>Bild 2</td>
+<td></td>
+<td></td>
+<td></td>
+</tr><tr><td></td>
+<td>Img3.jpg</td>
+<td>77</td>
+<td>0</td>
+<td>3</td>
+<td>Bild 3</td>
+<td></td>
+<td></td>
+<td></td>
+</tr></tbody></table></div>
+Einige Erläuterungen hierzu:
+
+- Unter <strong>_media_image</strong> wird der Dateiname des zu importierenden Bildes eingetragen
+
+- Die <strong>_media_attribute_id</strong> ist die ID des Produktattributes „image_gallery“ einzutragen. Man erhält sie entweder über den Administrationsbereich oder in eigenen Modulen über den folgenden Ausdruck:
+Mage::getSingleton('catalog/product')->getResource()->getAttribute('media_gallery')
+->getAttributeId();
+
+- Der Schreibfehler bei <strong>_media_lable</strong> ist beabsichtigt und in Magento eingebaut
+
+- Bei <strong>image</strong>, <strong>small_image</strong> und <strong>thumbnail</strong> werden in der ersten Zeile die Dateinamen der entsprechenden Hauptbilder eingetragen.
+
+- Vorhandene Bilder können leider über das Modul nicht gelöscht werden.
+<h3>Up-Selling, Cross-Selling, Ähnliche Produkte</h3>
+Auch Produktverknüpfungen können importiert werden. Hierfür gibt es jeweils zwei Felder:
+
+- <strong>_links_related_sku </strong>und<strong> _links_related_position</strong>
+
+- <strong>_links_crosssell_sku </strong>und<strong> _links_crosssell_position</strong>
+
+- <strong>_links_upsell_sku </strong>und<strong> _links_upsell_position</strong>
+
+Das sieht wie folgt aus:
+<div class="scroller">
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_links_upsell_sku</strong></td>
+<td><strong>_links_upsell_position</strong></td>
+<td><strong>_links_crosssell_sku</strong></td>
+<td><strong>_links_crosssell_position</strong></td>
+</tr><tr><td>1234567</td>
+<td>1234568</td>
+<td>1</td>
+<td>1234569</td>
+<td>1</td>
+</tr><tr><td></td>
+<td>1234569</td>
+<td>2</td>
+<td></td>
+<td></td>
+</tr></tbody></table><h3>Gruppierte Produkte</h3>
+Gruppierte Produkte können ebenfalls importiert werden. Sollen jetzt dem gruppierten Produkt zwei Unterprodukte zugewiesen werden, sieht das wie folgt aus:
+<table><tbody><tr><td><strong>sku</strong></td>
+<td><strong>_type</strong></td>
+<td><strong>_associated_sku</strong></td>
+<td><strong>_associated_position</strong></td>
+<td><strong>_associated_default_qty</strong></td>
+</tr><tr><td>1234567</td>
+<td>grouped</td>
+<td>1234568</td>
+<td>1</td>
+<td>1</td>
+</tr><tr><td></td>
+<td></td>
+<td>1234569</td>
+<td>2</td>
+<td>1</td>
+</tr></tbody></table></div>
+Entgegen der Funktionalität im Administrationsbereich von Magento lassen sich so auch Produkttypen im Nachhinein verändern.
+<h3>Konfigurierbare Produkte und Individuelle Optionen</h3>
+Auch diese Funktionen werden unterstützt. Da Vinai diese in seinem Vortrag jedoch bereits ausführlich vorgestellt hat, verweise ich hier auf seine <a href="http://www.meet-magento.de/fileadmin/user_upload/meet-magento.de/pdf/ImportExport_Vinai.pdf" target="_blank">Vortragsunterlagen</a>.
+<h3>Indizierung</h3>
+Zu beachten ist, dass beim Import mit dem ImportExport-Modul die Indizes nicht aktualisiert werden. Sie werden hingegen als invalide markiert und müssen anschließend über den Administrationsbereich bzw. ein eigenes Modul aktualisiert werden.
+<h3>Fazit</h3>
+Das ImportExport-Modul ist ein wichtiger Fortschritt für Magento, da es endlich im Standard das <strong>schnelle</strong> und <strong>zuverlässige</strong> Importieren von Produkten ermöglicht. Ich persönliche mache alle Produktimporte (und Kundendatenimporte) mittlerweile ausschließlich über dieses Modul, da es viele Funktionalitäten bereits von Haus aus bereitstellt und (v.a. mit Hilfe meines kleinen Moduls <a href="http://www.avs-webentwicklung.de/nc/blog/artikel/magento-import-mit-der-neuen-schnellen-import-schnittstelle-fuer-produkte-und-kunden.html" target="_blank">FastSimpleImport</a>) auch recht einfach zu bedienen ist. Über manche kleine Schwachstelle oder Unschönheit muss man dabei hinwegsehen.
+
+Ich hoffe, mit diesem Beitrag einen Beitrag zum besseren Verständnis und zur besseren Bedienbarkeit des Moduls beigetragen zu haben.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2490

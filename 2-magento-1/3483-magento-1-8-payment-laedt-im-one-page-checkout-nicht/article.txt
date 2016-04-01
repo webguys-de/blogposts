@@ -1,0 +1,71 @@
+Article-meta: 
+
+----
+
+Title: Magento 1.8 - Payment lädt im One-Page-Checkout nicht
+
+----
+
+Date: 2013-10-25
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nachdem die ersten Magento-Instanzen auf 1.8 umgestellt wurden und man die ersten Kontakte mit der neuen Version hatte, stellt man früher oder später fest, dass <strong>der One-Page-Checkout den Payment-/Zahlart-Step nicht mehr lädt</strong>. Mit ein wenig Debugging kommt man auch nicht so viel weiter. Nichts im Exception-Log, der Ajax-Response sieht auch sauber aus und die Browser-Konsole schmeißt auch keine Fehlermeldungen.
+
+----
+
+Text: Grund dafür ist eine Änderung im folgenden Template, welche dafür sorgt dass das JavaScript ein Element nicht mehr finden kann und so der Step nicht gewechselt wird.
+<blockquote>app/design/frontend/base/default/template/checkout/onepage/payment.phtml</blockquote>
+Falls das Template bereits durch Euer Custom-Theme überschrieben wurde, habt ihr Glück dass der Checkout weiterhin problemlos funktioniert. Andernfalls kopieren wir dieses Template in unser Theme und schauen uns Zeile 36 an:
+
+(code lang: xml)
+<form action="" id="co-payment-form">
+ <fieldset>
+ <?php echo $this->getChildHtml('methods') ?>
+ </fieldset>
+</form>
+(/code)
+
+Wir stellen fest, dass das Fieldset keine id besitzt, also kann dieses vom JavaScript auch nicht gefunden werden. Was wir nun brauchen, ist folgende Änderung:
+
+(code lang: xml)
+<form action="" id="co-payment-form">
+ <fieldset id="checkout-payment-method-load">
+ <?php echo $this->getChildHtml('methods') ?>
+ </fieldset>
+</form>
+(/code)
+
+Nun sollte der Checkout wieder wie gewohnt funktionieren. Mir kommt es jedenfalls so vor, als ob dieser nie getestet wurde - andernfalls wäre der Fehler definitiv aufgefallen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3483

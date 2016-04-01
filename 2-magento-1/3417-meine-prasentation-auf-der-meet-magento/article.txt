@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Meine Präsentation auf der Meet-Magento
+
+----
+
+Date: 2013-06-05
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Meine Präsentation der Meet-Magento zum Thema Layered Navigation findet ihr nun als Reveal.js Version hier im Blog:
+
+
+
+----
+
+Text: <iframe style="border: 0; height: 480px; width: 640px;" src="http://www.webguys.de/praesi/magento-layered-navigation" height="240" width="320"></iframe>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3417

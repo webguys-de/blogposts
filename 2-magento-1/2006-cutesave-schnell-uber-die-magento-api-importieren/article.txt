@@ -1,0 +1,106 @@
+Article-meta: 
+
+----
+
+Title: CuteSave - Schnell über die Magento Api importieren
+
+----
+
+Date: 2011-11-14
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Auf dem <a title="Fodcamp – Ein Rückblick" href="http://www.webguys.de/magento/fodcamp-ein-ruckblick/">Fodcamp </a>kam die Idee einen schnellen Importer zu bauen. Dabei war der erste Einfall das Model <em>catalog/product</em> in das Format des Import/Export zu konvertieren. In meinem ersten <a href="https://github.com/tobi-pb/cutesave">GitHub-Fork</a> gehe ich jetzt einen ähnlichen Weg mit dem Ziel die SOAP-API zu optimieren.
+
+
+
+
+----
+
+Text: Der Name Cutesave stammt eigentlich vom Begriff Queued und Save. Zu deutsch: Schlange stehen beim Speichern.  Und genau hier ist der Trick: Beim Speichern eines Produktes müssen viele Tabellen Stück für Stück befüllt werden. Das ist in der Regel über die aktuellen Resource-Models nicht sonderlich schnell. Der Import/Export von Magento fast diese Anfragen zusammen und pumpt so innerhalb von 10 Sekunden ca. 1000 Produkte in die Datenbank. Auf optimieren Server-Kisten natürlich noch viel mehr.
+
+Genau so funktioniert unsere Importer-Api auch. Jeder Aufruf schreibt das Produkt-Array zunächst in eine lokale Queue in der Session und beim Aufruf von <em>write</em> erst in die Datenbank. Zusätzlich bin ich dabei auch Bild-Übertragungen etc. zu optimieren um eine möglichst gute API zu schaffen.
+<h3>Ein paar Beispiele</h3>
+(code lang: php)
+$client = new SoapClient('http://localhost.magento/magento161/api/soap?wsdl');
+(/code)
+
+Jetzt holen wir uns ein Vorlage-Array für Produkte
+
+(code lang: php)
+$basicattributes = $client->call( $session, 'fodcamp_cutesave_product.getbasicattributes');
+(/code)
+
+Mit den Basic-Attributes wissen wir welche Felder Magento haben möchte, diese befüllen wir jetzt logisch
+
+(code lang: php)
+$new_product['sku'] = '1234';
+$new_product['name'] = 'Promidata-Test';
+$new_product['price'] = '9.95';
+$new_product['status'] = '1'; // 1 = Enabled, 0 = Disabled
+$new_product['description'] = 'Ich bin ein langer Text';
+$new_product['short_description'] = 'Kurzbeschreibung';
+$new_product['categories'] = array( 'Kategorie1' );
+(/code)
+
+Wenn wir ganz viele Produkte hinzufügen ist es aber gute Idee viele Soap-Request zu machen. Dazu gibt es in Magento Multi-Calls:
+
+(code lang: php)
+$calls = array();
+
+for($i=0; $i<5; $i++) {
+
+    $multi_new_product = $new_product; // Wenn nehmen das new_product von oben als Vorlage
+    $multi_new_product['sku'] = 'test-sku'.$i; // Und ändern nur die Artikel-Nr :)
+
+    $calls[] = array('fodcamp_cutesave_product.addsimple', array( $multi_new_product) );
+
+}
+$client->multiCall( $session, $calls );
+(/code)
+
+Das müssen wir nun noch alles in die Datenbank schreiben
+
+(code lang: php)
+print_r( $client->call($session, 'fodcamp_cutesave_product.write' ) );
+(/code)
+
+Ganz am Ende müssen wir noch die Indizes aktualisieren
+
+(code lang: php)
+$client->call($session, 'fodcamp_cutesave_product.reindex' );
+(/code)
+<h3>Quellcode?</h3>
+Natürlich gibt es den Quelltext dazu auf <a href="https://github.com/tobi-pb/cutesave">Github</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2006

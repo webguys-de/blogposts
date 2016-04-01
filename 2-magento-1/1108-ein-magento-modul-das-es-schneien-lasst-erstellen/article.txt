@@ -1,0 +1,129 @@
+Article-meta: 
+
+----
+
+Title: Türchen 09: Ein Magento Modul das es schneien lässt erstellen
+
+----
+
+Date: 2010-12-09
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 09 ist ein wenig gemütlich weihnachtlich. Es zeigt wie es mit ein paar wenigen Zeilen möglich ist fertige Java-Scripts zu verwenden die es im Webshop schneien lassen. Was brauchen wir? Am besten ein fertiges Java-Script das die Schneeflocken irgendwie schön rieseln lässt und natürlich ein Bild einer Schneeflocke. Natürlich erstellen wir das ganze als vollständiges Modul.
+
+----
+
+Text: (image: Home-page_1291750731869-650x344.png)
+
+Mein <a href="http://www.peters1.dk/webtools/javascript/sne.php?sprog=de">Schneescript</a> habe ich recht schnell unter <a href="http://www.peters1.dk/webtools/javascript/sne.php?sprog=de">Peters1.dk</a> gefunden. Zudem gab es da direkt ein paar Schneeflocken die man mit dem JavaScript verwenden konnte. Ich fand die nicht so toll und habe kurzerhand noch eine eigene etwas, wie ich finde, schönere erstellt :)
+
+Also schnell das Script herunterladen und in den Skin-Ordner kopiert. Dabei sind die beiden Dateien <em>snow.js</em> von Peters1.dk und <em>snow.gif</em> im Ordner <em>skin/frontend/default/base/schnee</em> gelandet. Damit können wir sie über  die Magento-Methode <em>getSkinUrl</em> gut erreichen.
+
+Nun ist es doch naheliegend ein kleines Modul zu erstellen welches, wenn es aktiv ist, sich darum kümmert im aktuellen Theme Schnee zu fabrizieren. Also zuerst einmal eine Modul-Config in <em>app/etc/modules/Webguys_Schnee.xml</em> erstellen:
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Webguys_Schnee>
+			<active>true</active>
+			<codePool>community</codePool>
+            		<depends>
+				<Mage_Page />
+			</depends>
+		</Webguys_Schnee>
+	</modules>
+</config>
+(/code)
+
+Damit kennt Magento unser Modul. Zudem müssen wir ihm noch mitteilen das unser Modul ein eigenes Layout.xml besitzt welches wir auch nutzen möchten. Dazu benötigt das Modul selbst noch einmal eine kleine Konfiguration in <em>app/code/community/Webguys/Schnee/etc/config.xml</em>
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Webguys_Schnee>
+			<version>0.0.1</version>
+		</Webguys_Schnee>
+	</modules>
+
+    <frontend>
+        <layout>
+            <updates>
+                <webguys_schnee>
+                	<!-- Hier registrieren wir unser eigenes Layout-XML -->
+                	<file>schnee.xml</file>
+                </webguys_schnee>
+            </updates>
+       </layout>
+    </frontend>
+</config>
+(/code)
+
+So. Nun können wir Einfluss auf das Magento-Layout nehmen. Eigentlich würde man nun ein externes Java-Script mittels Magento-Block-Methoden des Head-Blocks hinzufügen. Das geht jedoch in unserem Fall nicht so einfach da das herausgesuchte <em>Snow.js</em> erwartet das es unten im Footer der Seite installiert wird. Wir sagen also durch unsere neue Layout-XML in <em>app/design/frontend/base/default/layout/schnee.xml</em> das wir im Magento-Footer ein zusätzliches Template benötigen welches unseren Schnee einbindet.
+
+(code lang: xml)
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="footer">
+            <block type="core/template" name="schnee" template="schnee/flocken.phtml" after="-">
+            	<action method="setFlocken"><flocken>15</flocken></action>
+            </block>
+        </reference>
+    </default>
+</layout>
+(/code)
+
+Kurz gesagt: Im Bereich "default", also überall, beziehen wir uns auf "footer" und fügen dort ganz am Ende (after="-") einen neuen Block mit dem Namen "schnee" hinzu der das Template <em>schnee/flocken.phtml</em> verwendet. Auf diesen Block rufen wir zusätzlich die Methode setFlocken auf mit der wir per Layout-XML die Anzahl der Flocken bestimmen können.
+
+Im Template <em>app/design/frontend/base/default/template/schnee/flocken.phtml</em> passiert nun nicht mehr viel. Die Hauptarbeit hat uns schließlich das Layout-XML abgenommen:
+
+(code lang: php)
+<script type="text/javascript">
+	var SNOW_Picture = '<?php echo $this->getSkinUrl("schnee/snow.gif") ?>';
+	var SNOW_no = <?php echo ( is_numeric( $this->getFlocken() ) ? $this->getFlocken() : 10 ); ?>
+</script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('schnee/snow.js') ?>"></script>
+(/code)
+
+Die Snow.js enthält in ihrem Urzustand zwei Variablen zur Konfiguration die bestimmen wie viele Schneeflocken es gibt welches Bild als Schneeflocke verwendet werden soll. Beide Variablen habe ich aus der Snow.js entfernt und vor dem Laden des JavaScripts im Template gesetzt. So habe ich noch die Möglichkeiten die Magento-Methode <em>getSkinUrl</em> für das Bild zu verwenden sowieso die Anzahl der Flocken des Layout-XMLs abzufragen.
+
+Mein Ergebnis könnt ihr unter <a href="http://dev.webguys.de/schnee">dev.webguys.de/schnee </a>bewundern.
+<h3>Download der fertigen Extension?</h3>
+Selbstverständlich kann man sich (file: schnee.zip text: das fertige Script um den Magento-Shop weihnachtlich zu gestalten auch direkt herunterladen).
+
+Viel Spaß beim Schneemann bauen!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1108

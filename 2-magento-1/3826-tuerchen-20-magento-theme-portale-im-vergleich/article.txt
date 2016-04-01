@@ -1,0 +1,88 @@
+Article-meta: 
+
+----
+
+Title: Türchen 20: Magento Theme Portale im Vergleich
+
+----
+
+Date: 2013-12-20
+
+----
+
+Description: 
+
+----
+
+Tags: themes-magento,adventskalender
+
+----
+
+Author: nickweisser
+
+----
+
+Article-content: 
+
+----
+
+Intro: <p dir="ltr">Bei den 10 bekanntesten Magento Theme Portalen findet man insgesamt über 1300 teils sehr ansprechende und professionell anmutende Magento Themes. Aus Händlersicht sind das paradiesische Zustände, aus Entwicklersicht stellt sich allerdings die Frage, ob es auch hinter der Fassade der hübschen Beispieldaten und perfekt abgestimmten Dimensionen und Farben auf PHTML-, CSS- und XML-Ebene sexy aussieht?</p>
+<p dir="ltr">
+
+----
+
+Text: <p dir="ltr">Da die grossen Portale mit sehr viel verschiedenen Entwicklern zusammen arbeiten, wird es hier generell schwierig sein, pauschale Aussagen zu treffen, was bedeutet, dass man nach dem Kauf wohl immer ein paar grundlegende Qualitätsmerkmale überprüfen sollte.
+<p dir="ltr">Ein gravierender Unterschied der beiden bei Google best platzierten Anbieter ist die Anzahl der Downloads. Das Ultimo Theme bei Themeforest wurde 5804 mal gekauft, das Shopper Theme beim gleichen Anbieter 3355 mal. Wenn man bei Template Monster nach Anzahl der Downloads sortiert, liegen die am meisten herunter geladenen Themes bei gerade mal 9 oder 10 Downloads.
+<p dir="ltr">Die reinen Verkaufszahlen sind aber natürlich nicht der einzige Indikator für die tatsächliche Code-Qualität.
+
+<h2 dir="ltr">HTML Validierung</h2>
+<p dir="ltr">Bereits vor dem Kauf ist es möglich, im Demo Shop des gewünschten Themes das HTML und CSS mit dem <a href="http://validator.w3.org/">W3C Markup Validation Service</a> zu validieren. Ich habe hier mal 3 verschiedene Themes herausgepickt und je eine Kategorie- und eine Produktseite validiert.
+
+<h3 dir="ltr">Kategorieseite</h3>
+<p dir="ltr">Ultimo: 2 Fehler, 1 Warnung
+<p dir="ltr">Furniture For Comfort: 1 Fehler, 1 Warnung
+<p dir="ltr">Hello Nevada: 3 Fehler, 1 Warnung
+
+<h3 dir="ltr">Produktdetailseite</h3>
+<p dir="ltr">Ultimo: 7 Fehler, 2 Warnungen
+<p dir="ltr">Furniture For Comfort: 22 Fehler, 8 Warnungen
+<p dir="ltr">Hello Nevada: 3 Fehler, 1 Warnung
+
+<h2 dir="ltr">Code/Core Overrides</h2>
+<p dir="ltr">Das Überschreiben von Magento Core Funktionen (Core Overrides) in app/code/local/Mage sollte definitiv vermieden werden. Stichproben bei diversen Anbietern haben allerdings ergeben, dass dies häufig der Fall ist. Core Overrides können Probleme verursachen, wenn die eingesetzte Magento Version sich von derjenigen unterscheidet für die das Theme entwickelt wurde oder bei Upgrades zu einem späteren Zeitpunkt.
+
+<h2 dir="ltr">Zusätzliche Extensions</h2>
+<p dir="ltr">Es kommt auch öfters vor, dass Theme Anbieter in Ihrem Theme eine oder mehrere Extensions mit liefern, z.B. um einen Banner-Slider zu verwirklichen oder um neue Produkte auf der Startseite zu listen. Ob man dies gut oder schlecht finden soll, sei dahin gestellt, es erfordert auf jeden Fall Einarbeitungszeit, wenn man solche Extensions gemäss Kundenwunsch anpassen soll.
+
+<h2 dir="ltr">Lokale Layout Datei</h2>
+<p dir="ltr">Seit Magento 1.4 ist der Einsatz der lokalen Layout Datei local.xml in app/design/frontend/<your_package>/<your_theme/layout möglich und für alle Frontend Verbesserer auch empfohlen. Auf diese Weise kann das direkte Überschreiben der Standard Layout XML Dateien (im local-Scope) vermieden werden, was wiederum Magento Upgrades sehr viel einfacher gestaltet, da weniger intrusiv.
+<p dir="ltr">Obwohl einige der kommerziellen Themes diese local.xml Datei nutzen, werden gleichzeitig auch diverse Layout XML Dateien überschrieben. Nicht empfohlen.
+
+<h2 dir="ltr">Theme-spezifische Übersetzung</h2>
+<p dir="ltr">Eine empfohlene Praxis ist hingegen die Verwendung einer translate.csv Datei innerhalb des Themes. Wenn diese vorhanden ist, wurden abweichende Textbausteine ausgelagert und ermöglichen somit eine komfortable Lokalisierung in andere Sprachen. Das kümmert die US-Amerikaner zwar nicht immer, aber uns Europäer macht es das Leben deutlich einfacher.
+
+<h2 dir="ltr">Responsiv und Google Glass tauglich?</h2>
+<p dir="ltr">Dein Kunde möchte, dass sein Shop auch auf Google Glass vernünftig angezeigt wird? Ab Foundation 4 ist das <a href="http://zurb.com/article/1227/want-a-glass-ready-site-foundation-s-got-">kein Problem</a>.
+<p dir="ltr">Die meisten kommerziellen Themes werden mittlerweile als responsiv angepriesen. Persönlich habe ich bisher nur Erfahrung mit dem kostenlosen <a href="http://www.magentocommerce.com/magento-connect/magento-foundation-4741.html">ZURB Foundation Theme</a> von Nandroid, das ich aber noch nicht mit Google Glass testen konnte. Sorry.
+<p dir="ltr">Da sich <a href="http://foundation.zurb.com/">ZURB</a> sehr rasant weiter entwickelt, ist es schwierig hier mit einem Magento Theme Framework Schritt zu halten, die Kollegen von Polarthemes bieten aber zwei kommerzielle auf ZURB basierende Magento Themes an, die auch scheinbar Google-Glass-ready sind. Falls das jemand mit Google Brille mal kurz testen kann, bitte einen Kommentar hinterlassen.
+
+<h2 dir="ltr">Fazit</h2>
+<p dir="ltr">Wer für einen Startup (vor der ersten Finanzierungsrunde) oder ähnliche Online Händler ein hübsches Magento Theme aus dem Boden stampfen möchte, wird möglicherweise kommerzielle Theme Anbieter in Betracht ziehen und anhand der genannten Kriterien eine möglichst nachhaltige Wahl treffen, um vernünftig damit arbeiten zu können und den Aufwand bei Upgrades überschaubar zu halten.
+Wenn die erste Finanzierungsrunde bereits unter Dach und Fach ist, wäre eine Eigenentwicklung, evtl. unter Zuhilfenahme eines ausgereifen responsiven Frameworks wie ZURB oder <a href="https://github.com/EcomDev/mbootstrap">Twitter Bootstrap</a> möglicherweise die spannendere und herausforderndere Wahl.
+Und wenn ihr dann noch das Ergebnis, oder zumindest einen Teil davon, der Community zurück gebt, sind alle glücklich. Und wenn Sie nicht gestorben sind…
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3826

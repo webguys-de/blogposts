@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Tolle Git-Schulung von Jan
+
+----
+
+Date: 2014-02-18
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: In eigener Sache: Unser Jan hat sich viel Mühe bei einem Youtube-Git Video gegeben. Sehr zu empfehlen - gerade für Neueinsteiger :)
+
+<a href="http://programmierenlernen.info/git-schulung-teil-1/">Weiterlesen auf programmierenlernen.info</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3892

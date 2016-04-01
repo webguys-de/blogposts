@@ -1,0 +1,261 @@
+Article-meta: 
+
+----
+
+Title: Türchen 04: Configurable Products und die Basis-Artikel-Nummer
+
+----
+
+Date: 2012-12-04
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Etwas ungewohnt ist es schon in diesem Jahr den Adventskalender nicht eröffnet zu haben aber den Bitten von Fabian um Türchen 01 konnte ich nicht lange widerstehen. Mein Türchen beschäftigt sich mit der Abart von Configurable-Products in Magento. Dabei möchte ich an dieser Stelle ein alternatives, im Moment noch eher theoretisches Konzept, anstelle von Configurable-Products vorstellen: Der Basis-Artikel-Nummer.
+
+----
+
+Text: <h2>Wie es ist: Configurable-Products in Magento</h2>
+Im Normalfall sind Configurable-Products in Magento Produkte die rein virtuell weitere untergeordnete Produkte, die Simple-Products, beinhalten. Wird ein solches Produkt in den Warenkorb gelegt sind, rein technisch, zwei Produkte im Warenkorb: Einmal das übergeordnete Configurable und dann die jeweils ausgewählte Variation, also z.B. genau das T-Shirt in Schwarz und M, als Simple-Product. Configurable-Products besitzt eigene Beschreibungen, eigene Attribute und auch eigene Preise. In der Regel muss das Simple also einfach nur da sein um Warenbestand zu verwalten.
+
+In der Praxis hat sich gerade die fehlende Möglichkeit alle Attribute durch einen Wechsel der Variante einfach zu tauschen als relativ zäh erwiesen. Parallel haben viele Kunden ihre Artikel im ERP auch nicht über einen übergeordneten Artikel gruppiert sondern die Möglichkeit einer Artikel-Gruppe genutzt. In diesem Fall sind alle Varianten eines Artikels einfach in der selben Gruppe. Im Idealfall besitzt die Gruppe zudem noch eine Angabe welche Attribute sich unterscheiden.
+
+Für den Normalfall bedeutet dies das wir manuell ein Configurable-Product erstellen müssen, dieses mit den Daten eines Simples füllen und im nächsten Schritt noch eine Methode implementieren welches alle relevanten Attribute beim Wechsel der Dropdown tauscht. Das klappt zwar ganz gut aber Ideal ist es doch nicht unbedingt, oder?
+<h2>Die Idee: Basisartikelnr</h2>
+Daher kam mir die Idee das Verhalten, welches die meisten ERP-Systeme bereits an den Tag legen, in Magento nachzubilden.
+
+<strong>Keine Configurable-Products!</strong>
+
+Um nun keine Informationen im Simple und Configurable doppelt zu speichern gehen wir einen einfachen Weg: Wir verzichten vollständig auf Configurable-Products. Die Gruppierung der einzelnen Artikel übernimmt ein neues Attribute mit dem Code 'Basisartikelnr'. Alle Artikel welche die selbe Basis-Artikel-Nummer besitzen müssen als ein Produkt in Magento angezeigt. Der User wechselt mittels Dropdown zwischen den Produkten.
+<h2>Umsetzung</h2>
+Nun stand das Konzept der kleinen Idee aus dem die folgende kleine To-Do-Liste entstanden ist:
+<ol><li>Per Installer das Attribute Basisartikelnr erstellen</li>
+	<li>Bei Simple-Products prüfen ob weitere Simple-Products vorhanden sind, wenn ja Unterschiedliche Attribute per Dropdown verfügbar machen. Ändern der Werte führt, genau wie in Magento, zum Produktwechsel. Im Anfang erst mal ohne Ajax.</li>
+	<li>Im Warenkorb ausgewählte Attribute darstellen</li>
+	<li>In der Kategorie-Ansicht nur ein Produkt je Basisartikel-Nummer anzeigen</li>
+</ol>
+Leider bin ich nicht diszipliniert genug mich ordentlich an meine To-Do-Listen zu halten sodass dort schnell ein "Cherry-Picking" entsteht. Ich suche mir also erst die Features raus die ich als möglichst komplex identifiziert habe. Einen Vorteil hat das ganze jedoch: Ich laufe nicht Gefahr ganz viel Fleißarbeit bei Basis-Dingen zu leisten um im Nachgang festzustellen das mein Vorgehen doch eigentlich falsch war.
+<h3>Anpassungen in Catalog_Product_View</h3>
+Wie erwähnt muss, für den Fall das ein Simple-Product in mehreren Varianten verfügbar ist, dieses über die Basis-Artikel-Nummer identifiziert werden. Ein Wechsel der Varianten erfolgt über Dropdowns. Wir benötigen also drei Komponenten
+<ol><li>Ein Java-Script welches beim Dropdown-Wechsel das korrekte Simple-Product läd</li>
+	<li>Einen Block der das Java-Script initialisiert</li>
+	<li>Einen Block der unsere Dropdowns darstellt.</li>
+</ol>
+Der Java-Script Methode zum Wechsel des Dropdowns stellen wir ein JSON-Array bereits welches für alle Dropdown-Attribute (Farbe, Größe, ..) den Wert und den Link zum jeweiligen Produkt enthält. In der Praxis sieht das dann z.B. wie folgt aus:
+
+(code lang: php)
+[
+    {
+        "url":"http:\/\/localhost.magento\/magento-extensions\/htdocs\/index.php\/test\/t-shirt-in-rot.html",
+        "color":"3"
+    },
+    {
+        "url":"http:\/\/localhost.magento\/magento-extensions\/htdocs\/index.php\/test\/t-shirt-in-schwarz.html",
+        "color":"4"
+    }
+]
+(/code)
+
+Anhand der Werte des Schlüssels color weiß unser Java-Script unter welcher URL das T-Shirt in der jeweils anderen Farbe zu finden ist. Dabei spielen die Anzahl der Attribute übrigens keine Rolle denn ein Treffer zählt nur wenn alle Ausprägungen gefunden wurden.
+
+Das Java-Script erhält nun über eine Init-Methode wie folgt die JSON-Daten:
+
+(code lang: php)
+
+<script type="text/javascript">
+    var basisartikelnr = new Basisartikelnr( ..json-data.. );
+</script>
+(/code)
+
+Nun gilt es über den üblichen Magento-Weg unsere Blöcke für Dropdowns und Init hinzufügen. Auch hier bedienen wir uns einem bereits vorhanden Block-Container welcher bereits automatisch alle Kind-Elemente darstellt:
+
+(code lang: php)
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+    <catalog_product_view>
+
+        <!-- Unser Java-Script zum Kopf hinzufügen -->
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/basisartikelnr.js</name>
+            </action>
+        </reference>
+
+        <!-- Die Dropdowns zur Darstellung hinzufügen -->
+        <reference name="product.info.extrahint">
+
+            <block type="codex_basisartikelnr/dropdown"
+                   name="product.switch.color"
+                   template="catalog/product/view/basisartikelnr/dropdown.phtml">
+                <action method="setCode">
+                    (code)color(/code)
+                </action>
+            </block>
+
+            <block type="codex_basisartikelnr/init"
+                   name="product.switch.init"
+                   template="catalog/product/view/basisartikelnr/init.phtml">
+                <action method="setCodes">
+                    (code)color(/code)
+                </action>
+            </block>
+
+        </reference>
+
+    </catalog_product_view>
+
+</layout>
+(/code)
+
+Wie man an der Methode setCode bzw. setCodes erkennt wird hier z.Z. ausschließlich fest verdrahtet eine Dropdown für das Attribute Color hinzugefügt. Gleiches lässt sich natürlich auch für Größe und ähnliches umsetzen. Im nächsten Schritt werde ich mich dann darum kümmern das alle konfigurierten Attribute dort automatisch angezeigt werden - das aber erst später.
+
+Nun haben wir eine Dropdown für Simples-Products erstellt welche automatisch alle Ausprägungen des jeweiligen Attributes mit der selben Basis-Artikel-Nr. anzeigt. (Der (file: magento_extension_basisartikelnr.zip text: kompletten Source befindet sich im ZIP-Archiv))
+
+(image: T-Shirt-in-Rot-TEst-2012-12-02-12-16-55-650x353.png)
+<h3>Anpassungen in Catalog_Category_View</h3>
+Im zweiten Schritt müssen wir nun dafür sorgen dass die Artikel mit identischer Artikel-Basis-Nummer nicht doppelt in einer Produkt-Liste angezeigt werden. MySQL bietet zur Gruppierung jedoch schon ein tolles Basis-Feature an: GROUP BY. Logisch wäre es also unsere Product-Collection einfach um ein Group-By zu erweitern.
+
+Dazu müssen wir jedoch zuerst dafür sorgen dass das Attribute Basisartikelnummer auch in der Produkt-Auflistung verfügbar ist. Aber nichts leichter als das: Schnell den Magento-Admin geöffnet, das Attribute herausgesucht und den Wert von "Used in Product Listing" auf "Yes" geändert. Danach einmal die Indizes neu erstellen und schon ist das Attribute in den Flat-Tables verfügbar - einen Group-BY steht nichts mehr im Wege.
+
+Dazu erstellen wir im ersten Schritt einen Rewrite auf die Product-Resource-Collection:
+
+(code lang: php)
+    <global>
+
+        <models>
+            <codex_basisartikelnr>
+                <class>Codex_Basisartikelnr_Model</class>
+            </codex_basisartikelnr>
+
+            <catalog_resource>
+                <rewrite>
+                    <product_collection>Codex_Basisartikelnr_Model_Productcollection</product_collection>
+                </rewrite>
+            </catalog_resource>
+
+        </models>
+    </global>
+(/code)
+
+Und implementieren die Methoden _beforeLoad und getSelectCountSql neu:
+
+(code lang: php)
+<?php
+
+class Codex_Basisartikelnr_Model_Productcollection extends Mage_Catalog_Model_Resource_Product_Collection
+{
+
+    protected $_disabled = false;
+
+    protected function isEnabled()
+    {
+        return !Mage::app()->getStore()->isAdmin() && !$this->_disabled;
+    }
+
+    public function setDisableGroupBy()
+    {
+        $this->_disabled = true;
+    }
+
+    // Basis-Artikel-Nummer läuft nur mit Flat-Tables stabil, also immer aktivieren
+    public function isEnabledFlat()
+    {
+        if (Mage::app()->getStore()->isAdmin()) {
+            return false;
+        }
+        return true;
+    }
+
+    protected function _beforeLoad()
+    {
+        if ($this->isEnabled()) {
+            if ($this->isEnabledFlat()) {
+
+                $this->getSelect()->group('basisartikelnr');
+                $this->getSelect()->columns(array('basisartikelnr_color_ids' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT color ORDER BY color_value DESC SEPARATOR ',')")));
+
+            } else {
+
+                $this->joinAttribute('basisartikelnr', 'catalog_product/basisartikelnr', 'entity_id');
+                $this->joinAttribute('color', 'catalog_product/color', 'entity_id');
+
+                $this->getSelect()->group('basisartikelnr');
+                $this->getSelect()->columns(array('basisartikelnr_color_ids' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT at_color.value ORDER BY at_color.value DESC SEPARATOR ',')")));
+
+            }
+
+            $this->getSelect()->columns(array('basisartikelnr_count' => new Zend_Db_Expr('COUNT(*)')));
+        }
+        return parent::_beforeLoad();
+    }
+
+    public function getSelectCountSql()
+    {
+        if ($this->isEnabled()) {
+            $this->_renderFilters();
+
+            if ($this->isEnabledFlat()) {
+                $countSelect = $this->_getClearSelect()
+                    ->columns('COUNT(DISTINCT basisartikelnr) AS cnt')
+                    ->resetJoinLeft();
+            } else {
+                $countSelect = $this->_getClearSelect()
+                    ->columns('COUNT(DISTINCT at_basisartikelnr.value) AS cnt')
+                    ->resetJoinLeft();
+            }
+
+            $countSelect->reset(Zend_Db_Select::GROUP);
+
+            return $countSelect;
+        }
+        return parent::getSelectCountSql();
+    }
+
+}
+(/code)
+
+Die Methode lief im Anfang bereits ohne ein überschreiben von getSelectCountSql sehr gut. Leider viel mir später auf das der Pager nicht mehr korrekt funktionierte. Das lag ganz einfach daran das sich Count(*) in Kombination mit GROUP-By anders verhält. Abhilfe schaffte es komplett auf das Group-By zu verzichten und anstelle ein COUNT( DISTINCT ..) zu verwenden: Hier werden nur die unterschiedlichen Basis-Artikel-Nummern gezählt.
+<h2>Ausblick</h2>
+Auch wenn das Modul noch eine frühe Alpha-Version darstellt und nicht unbedingt Produktiv eingesetzt werden kann war ich doch erstaunt mit wie wenig Source man doch ein komplett neues Produkt-Verhalten in Magento implementieren kann. Spannend waren auch die Seiteneffekte: So war es möglich ohne weiteres zutun in der Layered-Navigation nach ROT zu filtern und im selben Zuge auch ausschließlich Rote-Produktbilder zu sehen. Mittels GROUP_CONCAT(color) lässt sich sogar ohne weiteres eine Farb-Vorschau für das jeweilige Produkt einer Basis-Artikel-Nummer erstellen.
+
+Dennoch bleibt einiges zu tun:
+<ul><li>Basis-Artikel-Nummer Attribute per Setup-Script erstellen</li>
+	<li>Die Attribute-Dropdowns automatisch aufbauen, nicht manuell per Layout-XML</li>
+	<li>Dafür sorgen das Produkte ohne Artikel-Basis-Nummer nicht zu einem großen Produkt zusammengefasst werden</li>
+	<li>Testen, testen, testen</li>
+</ul>(file: magento_extension_basisartikelnr.zip text: Alpha-Version als ZIP herunterladen)
+
+Sobald ich Zeit finde geht es mit dem Modul auf Github weiter, in der Zwischenzeit erst einmal intern im Gitlab von <a href="http://www.code-x.de">code-x</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3005

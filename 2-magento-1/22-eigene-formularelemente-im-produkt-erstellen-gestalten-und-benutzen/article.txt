@@ -1,0 +1,203 @@
+Article-meta: 
+
+----
+
+Title: Eigene Formularelemente im Produkt erstellen, gestalten und benutzen
+
+----
+
+Date: 2010-01-30
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,formular
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: In Magento lassen sich über die Attribute-Sets ohne weiteres Felder zum Produkt hinzufügen. Die Typen der Felder sind auf Text Field, Text Area, Date, Yes/No, Multiple Select, Dropdown, Price, Gallery, Media Image und Fixed Product Tax beschränkt. Im folgenden möchte ich zeigen wie ein eigenes Datenfeld gestaltet und und implementiert wird. Das Ziel soll es sein dem Shopbetreiber die Möglichkeit zu geben beliebig viele Datenblätter zu einem Produkt hochzuladen.
+
+
+
+----
+
+Text: (image: Magento-Admin_1263750033896-499x148.png)
+<h3>1. Attribute anlegen</h3>
+Zuerst müssen wir ein einfaches Attribute anlegen. Dazu wählen wir Catalog/ Attributes/ Manage Attributes. Ich gehe bei dem neuen Attribute davon aus das als Code “datenblatt” gewählt wurde. Der Einfachhalt halber verzichte ich darauf die Datenblätter in einer separaten Kreuztabelle zu speichern – stattdessen werden die Zuordnungen direkt in das Datenbankfeld geschrieben. Aus diesem Grund sollte der Typ des Attributes auf “TextArea” stehen. Zusätzlich muss das neue Attribute, damit es sichtbar ist, noch dem Default-Set zugeordnet werden.
+<h3>2. Datenbank anpassen</h3>
+Magento baut die Formulare teilweise anhand der Felder in der Datenbank zusammen. Es nutzt dafür ein sogenanntes <a href="http://www.magentocommerce.com/wiki/development/magento_database_diagram#the_magento_eav_data_model">EAV-Model</a>. Dieses Model sorgt salopp gesagt dafür das wir fast beliebig viele neue Felder schaffen können ohne unser Datenbank-Layout zu verändern. Zudem haben wir die Möglichkeit anzugeben wie die Formularfelder erstellt und gespeichert werden. Hierzu gibt es den Frontend-Input-Renderer (Feldname: <label for="checkbox_row_10">frontend_input_renderer)</label>. Dieser kümmert sich vollständig um die Darstellung der Formularelemente. Das Gegenstück hierzu ist das Backend-Model (Feldname: <label for="checkbox_row_5">backend_model</label>) welches sich um die Speicherung und Validierung der Eingaben kümmert.
+
+Um nun unser Feld “datenblatt” optisch und funktional anzupassen gehen wir wie folgt vor:
+
+Zuerst Datenbank z.B. im phpMyAdmin öffnen. Dann zur Tabelle eav_attribute wechseln und dort den Datensatz mit attribute_code = “datenblatt” heraussuchen und bearbeiten:
+
+<table><tbody><tr><td>backend_model:</td>
+<td>test/product_backend_datenblatt</td>
+</tr><tr><td>frontend_input_renderer:</td>
+<td>Test_Test_Renderer_Datenblatt</td>
+</tr></tbody></table>
+
+In diesem Fall weisen wir Magento an das Model Product/Backend/Datenblatt aus dem Modul Test zum Speichern unserer Daten zu verwenden. Im zweiten geben wir an das die Darstellung über die Class Test_Test_Renderer_Datenblatt erfolgt. Wichtig ist das, warum auch immer, das Backend-Model auf ein Model verweist – es muss also vor dem Slash das Modul stehen. Der Frontend-Input-Renderer dagegen erwartet direkt eine Class!
+
+<h3>3. Frontend-Input-Renderer erstellen</h3>
+Hierzu erstellen wir in app/code/local/Test/Test/Renderer die Datei Datenblatt.php mit folgendem Inhalt:
+
+Datei: app/code/local/Test/Test/Renderer/Datenblatt.php
+
+(code lang: php)
+<?php
+class Test_Test_Renderer_Datenblatt extends Varien_Data_Form_Element_File
+{
+	 /**
+	 * Retrieve Element HTML fragment
+	 *
+	 * @return string
+	 */
+	 public function getElementHtml()
+	 {
+		 $html = '';
+
+		 // Value lesen und Zeilenweise trennen
+		 $data = $this->getData('value');
+		 $lines = explode("\n", $data);
+
+		 $html .= '<table>';
+
+		 $html .= '<col width="110" /> ';
+		 $html .= '<col width="150" /> ';
+		 $html .= '<col /> ';
+
+		 $html .= '    <thead>    <tr> <th>Datenblatt-Nr.</th> <th>Aktuelle Datei</th>  <th>Neue Datei</th> </tr> </thead> ';
+
+		 $html .= '    <tbody>';
+
+		 $i = 0;
+		 foreach( $lines AS $cur ) {
+		 $i++;
+
+		 // pro Zeile wird genau ein Datensatz getrennt mit einem Gleich-Zeichen erwartet
+		 $tmp = explode('=', $cur);
+		 if ( count($tmp) != 2 ) {
+		 	continue;
+		 }
+		 list($nr, $file)  = $tmp;
+
+		 $nr = trim($nr);
+		 $file = trim($file);
+
+		 // Eine leere Datenblatt-Nummer akzeptieren wir nicht
+		 if ( $nr == '' ) {
+			 continue;
+		 }
+
+		 // HTML-Table aufbauen
+		 $html .= '    <tr>';
+
+		 $html .= '        <td> <input type="text" name="'.$this->getName().'[nr]['.$i.']" style="width: 100px" value="'.$this->_escape( $nr ).'" /> </td> ';
+
+		 $html .= '        <td> '.$file;
+		 $html .= '            <input type="hidden" name="'.$this->getName().'[filename]['.$i.']" value="'.$this->_escape($file).'" />';
+		 $html .= '         </td> ';
+
+		 $html .= '        <td> <input type="file" name="datenblatt_file_'.$i.'" style="width: 100px" /> </td> ';
+
+		 $html .= '    </tr>';
+		 }
+		 $html .= '    </tbody>';
+
+		 $html .= '    <tr>';
+		 $html .= '        <td> <input type="text" name="'.$this->getName().'[nr][new]" style="width: 100px" /> </td> ';
+		 $html .= '        <td> Neues Datenblatt </td>';
+		 $html .= '        <td> <input type="file" name="datenblatt_file_new" style="width: 100px" /> </td> ';
+		 $html .= '    </tr>';
+
+		 $html .= '</table>';
+
+		 // und ein kleiner Hinweis wie man Datenblätter löschen kann
+		 $html .= '<small>Entfernen Sie die Datenblatt-Nr. um das Datenblatt zu löschen.</small>';
+
+		 return $html;
+	 }
+}
+(/code)
+
+
+<h3>4. Backend-Model zum Speichern der Daten</h3>
+Wie sich unschwer erkenne lässt können wir unsere Daten nun hübsch darstellen. Was fehlt ist der Teil unserer Anwendung der sich darum kümmert das die Daten in Datenbank bzw. Dateisystem abgelegt werden. Hier kommt das Backend-Model ins Spiel:  Datei: app/code/local/Test/Test/Renderer/Datenblatt.php  (code lang: php)
+<?php
+
+class Test_Test_Model_Product_Backend_Datenblatt extends Mage_Eav_Model_Entity_Attribute_Backend_Abstract
+{
+
+	public function beforeSave($object)
+	{
+		$path = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'datenblatt';
+		$name = $this->getAttribute()->getName();
+
+		$inputs = $object->getData( $name );
+
+		if ( !is_array($inputs['nr']) ) {
+			return;
+		}
+
+		$res = array();
+
+		foreach( $inputs['nr'] AS $i => $nr ) {
+
+			if ( $nr == '' ) {
+				continue;
+			}
+
+			try {
+				$uploader = new Varien_File_Uploader( 'datenblatt_file_'.$i );
+				//$uploader->setAllowedExtensions(array('pdf'));
+				$uploader->setAllowRenameFiles(true);
+				$uploader->save($path);
+
+				$res[] = $nr.'='.$uploader->getUploadedFileName();
+
+			} catch (Exception $e) {
+				if( isset($inputs['filename'][$i]) ) {
+					$res[] = $nr.'='.$inputs['filename'][$i];
+				}
+			}
+
+		}
+
+		$object->setData($this->getAttribute()->getName(),  join("\n", $res) );
+		return;
+	}
+
+}
+(/code)
+
+
+<h3>Fazit</h3>
+In Magento ist es sehr einfach Produkte um weitere Standard-Eingabefelder zu erweitern. Sollen diese Eingaben jedoch besondere Eigenschaften bzw. Features aufweisen wird die Aufgabe ein wenig komplexer ist jedoch durchaus zu bewältigen. Der Aufwand lohnt sich in der Regel jedoch: das Pflegen von Produkten wird durch spezialisierte Eingaben deutlich einfacher und ist weniger fehleranfällig.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 22

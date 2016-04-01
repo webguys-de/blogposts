@@ -1,0 +1,59 @@
+Article-meta: 
+
+----
+
+Title: Magento lokal installieren
+
+----
+
+Date: 2011-08-09
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento auf nur auf einem Webserver zu entwickeln ist nicht praktikabel, es dauert länger und man ist auf eine Internetverbindung angewiesen. Als Alternative lässt man Magento lokal bei sich laufen, alles was man dafür benötigt, ist eine Entwicklungsumgebung. Für den Mac gibt es mehrere Möglichkeiten, ich persönlich setze <a href="www.mamp.info/">MAMP</a> in der Basisversion ein. Bei der Installation von Magento kann man bei der Einrichtung der Url auf diesen Fehler stossen "<i>Please enter a valid URL. Protocol is required (http://, https:// or ftp://)</i>".
+
+
+----
+
+Text: Es gibt drei Möglichkeiten, die Installation ohne Fehler fortzusetzen. Der Fehler erscheint, da Magento die Installation lokal nicht mag und daher Eingaben wie localhost, 127.0.0.1 als nicht gültig akzeptiert.
+
+<strong>1. Eintragen in die /etc/hosts</strong>
+Der beste Weg ist ein neuer Eintrag in die <i>/etc/hosts</i>. Dazu einfach diese neue Zeile hinzufügen:
+
+(code)
+127.0.0.1	localhost.de
+(/code)
+
+Bei der Installation nun als Domain localhost.de/VERZEICHNIS eintragen
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1741

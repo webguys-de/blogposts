@@ -1,0 +1,183 @@
+Article-meta: 
+
+----
+
+Title: Attributes als Attribute-Set im Webshop darstellen
+
+----
+
+Date: 2010-04-26
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: <small><em><a href="http://web-design.sayyor.com/2011/09/29/how-to-display-attribute-group-name-on-product-page/">View this post in english at http://web-design.sayyor.com (short translation)</a></em></small>
+
+In Magento lassen sich, bedingt durch das EAV-Datenmodell, quasi beliebig viele Felder bzw. Attribute zu einem Produkt hinzufügen. Die neuen Attribute lassen sich zusätzlich noch im Administrationsbereich gruppiert darstellen - das schafft beim Pflegen deutlich mehr Übersicht aber warum diese Gruppierung nicht auch im Webshop darstellen? Wie das geht schauen wir uns heute einmal näher an.
+
+
+
+----
+
+Text: <strong>Update:</strong> Die Gruppenansicht von Attributen ist nun per <a href="http://www.magentocommerce.com/magento-connect/t-ob-i/extension/4191/webguys_attributesasgroup">MagentoConnect</a> direkt zum <a href="http://www.magentocommerce.com/magento-connect/t-ob-i/extension/4191/webguys_attributesasgroup">installieren</a> verfügbar.
+
+Vorab ein paar Grundlagen zum Anlegen von Attributen. Einfache Attribute lassen sich über Catalog/ Attributes/ Manage Attributes erstellen. Die einzelnen Attribute können dabei zu Attribute Sets zusammengefasst werden. Das Attribute-Set können wir uns wie einen Baum vorstellen - es gibt viele Äste, die Gruppen, die unsere einzelnen Attribute, die Blätter, tragen. Ein Baum hat dabei natürlich mehr Äste, Zweige und Blätter als unsere einfache Gruppierung in Magento. Im Admin sieht das ganze in der Regel wie folgt aus:
+
+(image: Cameras-Manage-Attribute-Sets-Attributes-Catalog-Magento-Admin_1272314071484.png)
+
+Nun, merken wir uns einmal die Attribute "megapixels", "dimensions", "model" und "manufactor". Für unser Produkt sollen diese Attribute einzeln und tabellarisch auf der Webseite dargestellt werden. Dazu müssen sie mit Hilfe von Catalog/ Attributes / Manage Attributes bearbeitet bzw. geprüft werden. Wichtig ist das überall der Wert von "Visible on Product View Page on Front-end" auf "Yes" steht. Diese Dropdown schaltet die Anzeige im Frontend für das jeweilige Attribute frei. Sind alle Attribute angepasst stellt Magento in das Basis-Installation alle Attribute wie folgt dar:
+
+
+
+So lange nur ein paar Attribute angezeigt werden ist die Übersicht gewährleistet. Wollen wir jedoch eine größere Menge an Informationen zum Produkt auf diesem Wege anzeigen geht sie schnell verloren. Hier wäre es sinnvoll die Darstellung noch einmal in "General" und "Camera Attributes" zu gliedern. Magento gibt die Möglichkeit von Haus aus jedoch nicht her, deswegen erstellen wir unseren eigenen Block.
+<h3>Eigenen Block erstellen</h3>
+Unser Ziel ist es nicht nur die Attribute über den Block darzustellen sondern zusätzlich noch das Attribute-Set. Folgender Code hilft uns dabei weiter:
+
+Datei: code/local/Mage/Catalog/Block/Product/View/Attributesgroups.php
+
+(code lang: php)
+<?php
+class Mage_Catalog_Block_Product_View_Attributesgroups extends Mage_Core_Block_Template
+{
+    protected $_product = null;
+
+    function getProduct()
+    {
+        if (!$this->_product) {
+            $this->_product = Mage::registry('product');
+        }
+        return $this->_product;
+    }
+
+    public function getAdditionalData(array $excludeAttr = array())
+    {
+        $data = array();
+
+        $product = $this->getProduct();
+        $attributes = $product->getAttributes();
+        foreach ($attributes as $attribute) {
+
+            if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
+
+                $value = $attribute->getFrontend()->getValue($product);
+
+                // TODO this is temporary skipping eco taxes
+                if (is_string($value)) {
+                    if (strlen($value) && $product->hasData($attribute->getAttributeCode())) {
+                        if ($attribute->getFrontendInput() == 'price') {
+                            $value = Mage::app()->getStore()->convertPrice($value,true);
+                        } elseif (!$attribute->getIsHtmlAllowedOnFront()) {
+                            $value = $this->htmlEscape($value);
+                        }
+
+                        $group = 0;
+                        if( $tmp = $attribute->getData('attribute_group_id') ) {
+                        	$group = $tmp;
+                        }
+
+                        $data[$group]['items'][ $attribute->getAttributeCode()] = array(
+                           'label' => $attribute->getFrontend()->getLabel(),
+                           'value' => $value,
+                           'code'  => $attribute->getAttributeCode()
+                        );
+
+                        $data[$group]['attrid'] = $attribute->getId();
+
+                    }
+                }
+            }
+        }
+
+        // Noch Titel lesen
+        foreach( $data AS $groupId => &$group ) {
+        	$groupModel = Mage::getModel('eav/entity_attribute_group')->load( $groupId );
+        	$group['title'] = $groupModel->getAttributeGroupName();
+        }
+
+        return $data;
+    }
+}
+(/code)
+
+Im oberen Beispiel wurde der Magento-Kern Code benutzt und in einer eigenständigen Class um die Gruppendarstellung erweitert.
+
+Ein kleiner Tipp am Rande: Die Magento-Controller sorgen dafür das in Mage::registry('product') immer das Produkt, das in dem Moment dargestellt werden soll, hinterlegt ist. So ist es jederzeit möglich Produkt-Darstellung-Blöcke auch in anderen Controller zu verwenden. Es muss durch den Controller nur gewährleistet sein das die Mage-Registry ein Produkt enthält.
+<h3>Template vorbereiten</h3>
+Nun haben wir einen Block der die Funktion beinhaltet alle Attribute gegliedert nach Gruppen zu zurückzugeben. Was wäre naheliegender als diese Funktion in einem Template aufzurufen und deren Informationen darzustellen?
+
+Dabei: app/design/frontend/default/default/template/catalog/product/view/attributesgroups.phtml
+
+(code lang: php)
+<?php
+    $_helper = $this->helper('catalog/output');
+    $_product = $this->getProduct()
+?>
+<?php if($_additionalgroup = $this->getAdditionalData()): ?>
+<div class="box-collateral box-additional">
+    <h2><?php echo $this->__('Additional Information') ?></h2>
+
+	<?php $i=0; foreach ($_additionalgroup as $_additional): $i++; ?>
+		<h3><?php echo $this->__( $_additional['title'] )?></h3>
+		<table class="data-table" id="product-attribute-specs-table-<?php echo $i?>">
+		    <col width="25%" />
+		    <col />
+		    <tbody>
+		    <?php foreach ($_additional['items'] as $_data): ?>
+		        <tr>
+		            <th class="label"><?php echo $this->htmlEscape($this->__($_data['label'])) ?></th>
+		            <td class="data"><?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?></td>
+		        </tr>
+		    <?php endforeach; ?>
+		    </tbody>
+		</table>
+	    <script type="text/javascript">decorateTable('product-attribute-specs-table-<?php echo $i?>')</script>
+	<?php endforeach; ?>
+
+</div>
+<?php endif;?>
+(/code)
+
+Hier fügen wir nun zwischen jeder Gruppe eine neue H3-Überschrift ein. Damit die Möglichkeit der Übersetzung der Überschrift der Sets bei mehrsprachigen Shops bestehen bleibt wird diese durch den Aufruf von echo $this->__(...) ausgeben.
+<h3>Layout aktualisieren</h3>
+Letztlich müssen wir unseren Layout-XML noch sagen das wir unsere Attribute mit einem eigenen Block und einem anderen Template darstellen möchten. Dazu suchen wir in der catalog.xml die Zeile
+
+(code lang: xml)<block type="catalog/product_view_attributes" name="product.attributes" as="additional" template="catalog/product/view/attributes.phtml"/>(/code)
+
+und ersetzen sie durch
+
+(code lang: xml)<block type="catalog/product_view_attributesgroups" name="product.attributes" as="additional" template="catalog/product/view/attributesgroups.phtml"/>(/code)
+
+Schon wird anstelle der alten Produktdarstellung unsere eigene genutzt. Das Ergebnis sieht dann im Demo-Shop beim gleichen Produkt wie folgt aus:
+
+(image: Canon-Digital-Rebel-XT-8MP-Digital-SLR-Camera-with-EF-S-18-55mm-f3.5-5.6-Lens-Black_1272316461177-500x156.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 84

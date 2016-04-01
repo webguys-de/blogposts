@@ -1,0 +1,87 @@
+Article-meta: 
+
+----
+
+Title: SUPEE-6788 und Block-Direktiven - neues Berechtigungskonzept
+
+----
+
+Date: 2015-10-28
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Soeben habe ich den ersten Shop mit dem neuen Patch SUPEE-6788 ausgestattet. Insgesamt also um die 60 geänderte Dateien in die Versionskontrolle aufgenommen, Seite neu geladen und schon war das erste Problem zu erkennen: Auf der Startseite fehlten Inhalte.
+
+Grund dafür ist ein erweitertes Berechtigungs-/Sicherheitskonzept für Block-Direktiven. Was das ist? Das ist die Möglichkeit, in einem Block, einer E-Mail oder auf einer CMS-Seite per Anweisung in geschweiften Klammern neue Blöcke zu erstellen. Manche Magento-Themes bauen ja auch diese Art und Weise das Ganze Design zusammen und sind somit mehr oder weniger schwer von dieser Änderung betroffen.
+
+----
+
+Text: Beispiel:
+
+(code lang: php)
+{{block type="carousel/carousel" block_id="slider" template="webguys/carousel/carousel.phtml"}}
+(/code)
+
+Dieser Block wird nun ohne eine manuelle Erweiterung der Berechtigungen nicht mehr erstellt. Keine Fehlermeldung, nichts. Er wird praktisch einfach ignoriert. Möchte man diesen Blocktyp erlauben, besucht man einfach die neue Admin-Konfigurationsseite unter <strong>System -> Berechtigungen -> Blocks</strong>.
+
+Leider ist diese Eingabemaske nicht besonders intuitiv (für nicht-Entwickler). Daher am besten die Blöcke, welcher der Kunde benutzen soll, am besten direkt vorher pflegen.
+
+(image: SUPEE-6788_Block-Permissions.png)
+
+Die entsprechende Prüfung findet neuerdings an dieser Stelle statt:
+app/code/core/Mage/Core/Model/Email/Template/Filter.php:171
+
+(code lang: php)
+if (isset($blockParameters['type'])) {
+    if ($this->_permissionBlock->isTypeAllowed($blockParameters['type'])) {
+        $type = $blockParameters['type'];
+        $block = $layout->createBlock($type, null, $blockParameters);
+    }
+}
+(/code)
+
+<strong>Wichtig:</strong> Dieses Konzept greift nicht nur bei CMS-Seiten und CMS-Blöcken, sondern eben auch bei E-Mails. Bedeutet, dass MageSetup (ehemals GermanSetup) nach der Installation nicht mehr laufen wird, wenn die Berechtigungen nicht manuell in die Tabelle aufgenommen werden. Da dann im schlimmsten Fall plötzlich ein Shop ohne Widerrufsbelehrung oder AGB online steht, ist das natürlich ein gefundenes Fressen für den ein oder anderen Anwalt, welcher sich auf Abmahnungen spezialisiert hat. Hier ist besondere Vorsicht geboten und bedeutet, dass nach der Installation alles sehr genau geprüft werden sollte.
+
+<h2>Fazit</h2>
+
+Wieder einmal ändert ein Patch einen wichtigen Teil der uns Entwickler viel Zeit beim Patchen abverlangt. Bei den Admin-Routen wurde glücklicherweise ein Kompatibilitätsmodus eingeführt. Bevor man am Ende viel Arbeit hat, sollte man seine Webseite vor dem Patch nach entsprechenden Blöcken durchsuchen. Zum Beispiel mit:
+
+(code lang: php)
+SELECT * FROM `cms_block` WHERE `content` LIKE '%{{block%';
+SELECT * FROM `cms_page` WHERE `content` LIKE '%{{block%';
+SELECT * FROM `core_email_template` WHERE `template_text` LIKE '%{{block%';
+(/code)
+
+Viel Erfolg beim Patchen!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4344

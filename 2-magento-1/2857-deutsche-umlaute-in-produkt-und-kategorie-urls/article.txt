@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Deutsche Umlaute in Produkt und Kategorie-Urls
+
+----
+
+Date: 2012-05-25
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die <a href="http://www.code-x.de/online-marketing/">SEO-Abteilung von code-x</a> wünschte sich die Möglichkeit automatisch, beim Anlegen von Produkten, die Umlaute konvertieren zu können. Aus einem 'ä' wird also ein 'ae' und, wie in Magento, nicht nur ein 'a'. Das Modul, erstellt von unserem Ingo, ist nun auf Github zu finden. Frei nach dem Motto aus dem Meet Magento Barcamp "<strong>wenn es nicht auf Github steht ist es nie passiert</strong>".
+
+
+
+----
+
+Text: Ihr findet das Modul unter <a href="https://github.com/tobi-pb/Permalink-Umlaute">https://github.com/tobi-pb/Permalink-Umlaute</a>. Mit einem Problem kämpfen wir übrigens noch: Wenn die Produkte durch den Import/Export importiert werden greift es leider nicht. Der Import/Export wirft hier leider nirgends ein brauchbares Event - ein kompletter Rewrite scheint uns aber etwas zu hochgestochen zu sein. Vielleicht hast Du ja eine Idee? Wir wären dankbar!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2857

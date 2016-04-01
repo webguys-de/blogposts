@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Spaltenansicht in WordPress
+
+----
+
+Date: 2010-12-26
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das durchaus gute und nicht nur von mir oft eingesetzte Plugin <em>All In One SEO Pack</em> bietet als donate-Ware dem Anwender vielfältige Möglichkeiten, die Seite SEO-technisch zu optimieren. Ein Punkt stört mich jedoch am Plugin - die Darstellung der Artikel- als auch Seitenliste.
+
+
+----
+
+Text: Diese Listen werden um drei weitere Spalten erweitert: 'SEO Title', 'SEO Keywords' und 'SEO Description'. Bei einem normalen Monitor werden die restlichen Spalten arg klein, sodass die Übersicht deutlich abnimmt. Dies kann man auf zweierlei Methoden lösen:
+
+<strong>1. Über Optionen der Seitenübersicht</strong>
+In der Artikelübersicht im Backend gibt es oben einen kleinen Link auf dem  "Optionen einblenden" steht. Dort kann man bequem die Spalten selektieren, die angezeigt werden sollen. Nimmt man hier bei den entsprechenden Optionen den Haken raus, erscheint die originale Liste.  ( Vielen Dank an <a href="http://bog.ppfeufer.de/">H.-Peter Pfeufer</a> )
+
+<strong>2. Hart im Code</strong>
+Dieser Weg ist nicht sinnvoll, der Vollständigkeit halber sei er jedoch erwähnt. In der Datei <em>wp-content/plugins/all-in-one-seo-pack/all-in-one-seo-pack.php</em> werden in Zeile 686 mittels 
+(code lang: php)
+add_action('load-edit.php','addmycolumns',1);
+(/code)
+die Spalten hinzugefügt. Wird diese Zeile auskommentiert, wird die "normale" Liste wieder angezeigt - bei gleichem Funktionsumfang des Plugins.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1182

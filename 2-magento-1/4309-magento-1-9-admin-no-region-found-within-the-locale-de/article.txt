@@ -1,0 +1,58 @@
+Article-meta: 
+
+----
+
+Title: Magento 1.9 Admin: No region found within the locale 'de'
+
+----
+
+Date: 2015-07-16
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,bugfix
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Vor kurzem hatte ich ein sehr seltsames Verhalten in einem Magento-Shop mit Version 1.9:
+
+<ul><li>Die Admin-Sprache wurde nach dem Login immer wieder auf Englisch gestellt</li>
+    <li>Ich konnte keine Veränderungen an den Locale-Einstellungen fürs Frontend machen (alles sprang immer wieder auf Afrikaans und eine ganz andere Zeitzone) - als Workaround habe ich die Einstellungen in der Website überschrieben, das ging komischerweise</li>
+    <li>Mit dem Firefox konnte ich keine Produkte bearbeiten, da ich immer wieder den Fehler "No region found within the locale 'de'" bekam (liegt sicher an der übertragenen Locale, Firefox überträgt hier nicht "de_DE", sondern nur "de")</li>
+</ul><h2>Lösung</h2>
+
+<strong>Aus irgend einem Grund, hat sich in die Tabelle core_config_data ein seltsamer Eintrag eingeschlichen</strong>, welcher als Pfad einfach nur "general" hatte, und den Wert NULL. Macht insgesamt natürlich wenig Sinn und kann ohne Gefahr gelöscht werden. Und siehe da: Alle oben genannten Probleme waren mit einem Schlag gelöst!
+
+Falls Ihr also Probleme mit den Locale-Einstellungen im Admin habt, kontrolliert einfach als erstes die Konfigurationstabelle. Kleines Problem, große Wirkung.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4309

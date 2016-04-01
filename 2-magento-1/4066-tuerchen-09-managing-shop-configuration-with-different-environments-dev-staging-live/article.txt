@@ -1,0 +1,389 @@
+Article-meta: 
+
+----
+
+Title: Türchen 09: Managing shop configuration with different environments (Dev, Staging, Live, ...)
+
+----
+
+Date: 2014-12-09
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: matthias-zeis
+
+----
+
+Article-content: 
+
+----
+
+Intro: <strong>Do you find yourself repeating the same steps over and over again every time you copy a database from one environment (live, staging, QA, dev, ...) to another to adjust the configuration accordingly? We did and that's why we created an extension called <a href="https://github.com/LimeSoda/LimeSoda_EnvironmentConfiguration">LimeSoda_EnvironmentConfiguration</a>.
+</strong>
+
+
+
+----
+
+Text: <h2>What can EnvironmentConfiguration do?</h2>
+
+EnvironmentConfiguration uses the power of <a href="http://magerun.net/">n98-magerun</a> to execute arbitrary commands on a Magento installation. Do whatever is necessary to adjust your configuration to the given environment with one command-line call:
+
+(code)n98-magerun.phar ls:env:configure [environment](/code)
+
+We use our extension for:
+
+<ul><li>configuring several environment stages (development, test, staging, production)</li>
+    <li>configuring several development environments</li>
+    <li>anonymising data</li>
+    <li>activating / deactivating cronjobs</li>
+    <li>activating / deactivating modules</li>
+    <li>changing configuration settings and URLs</li>
+    <li>changing license keys and login data</li>
+    <li>switching between sandbox and production mode for PSP gateways</li>
+    <li>activating / deactivating caches</li>
+    <li>and more.</li>
+</ul>
+
+I'll give you a glimpse on what you can do in this article.
+
+<h2>Installation and Setup</h2>
+
+At first you have to get the code. You can download it from <a href="https://github.com/LimeSoda/LimeSoda_EnvironmentConfiguration/">GitHub</a> and copy it to your Magento installation or install it via <a href="https://github.com/colinmollenhour/modman">modman</a>. Of course you can also opt to use <a href="https://getcomposer.org/">Composer</a>. The extension has been added to the <a href="http://packages.firegento.com/">Firegento Composer Repository</a> and is available at 'limesoda/limesoda_environment-configuration'.
+
+Once the extension is put in place you have to define the name for your environment. We do this in local.xml because this file is used for environment-specific configuration data like database credentials and you probably want to choose a unique name for every instance. You can define the name anywhere you like as long as the information eventually gets merged into the Magento configuration XML.
+
+Let us call our environment "dev01":
+
+(code)
+<config>
+    <global>
+        <limesoda>
+            <environment>
+                <name>dev01</name>
+            </environment>
+        </limesoda>
+    </global>
+</config>
+(/code)
+
+Everything we configure goes into the global > limesoda node. (We namespace our settings to avoid conflicts with other extensions.)
+
+That's the basic setup. Now we can create environment configurations.
+
+<h2>A sample project</h2>
+
+In our example we will create the foundation for what could become a complex project. If you don't want to work with outdated databases or spend hours and hours of re-adjusting databases (and getting problems because you forget to set something manually) you'll have to figure out a way to manage your environments with less effort.
+
+This are the requirements for our sample project:
+
+<ul><li>Developers work in separated working copies.</li>
+    <li>There is a CI environment for automated testing and code analysis, a QA for manual testing and client approval, a staging environment to make sure everything works in a production-like environment and finally the production system.</li>
+    <li>In addition to the default store, we have a German and a French store view.</li>
+    <li>The PayPal sandbox has to be used for non-production systems (obviously).</li>
+    <li>The general e-mail address has to be adjustable per environment so that mails always the right person/team. (In a real project, you'll have to set many more fields, this is an example.)</li>
+    <li>In non-production systems we want to replace the customer e-mail addresses with our own address so no customer can get e-mails. (Again, in a real project you would strip customer data, use a mail catcher, anonymise all customer data or replace the e-mails in all database tables. Just to point out that you shouldn't use this code as-is in any real project!)</li>
+    <li>Some cronjobs should be disabled everywhere because wo don't need them, some should be disabled in non-production systems because they'll flood our mail boxes or they must not be run in these instances for whatever reason.</li>
+    <li>The developers want to have their caches disabled by default but other environments should enable the cache for better performance and to catch issues before they go into production.</li>
+</ul>
+
+We know now what we have to do. Time to get your hands dirty.
+
+<h2>Show me some code!</h2>
+
+At first, let me show you the fully-fledged environment configuration of our example. Take a breath, glance over the XML and don't run away. We'll depict the functionalities in a moment.
+
+(code)
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mzeis_Project>
+            <version>1.0.0</version>
+        </Mzeis_Project>
+    </modules>
+    <global>
+        <limesoda>
+            <environments>
+                <default>
+                    <system_configuration>
+                        <default>
+                            <payment><paypal_standard><sandbox_flag>${paypal_sandbox_flag}</sandbox_flag></paypal_standard></payment>
+                            <trans_email><ident_general><email>${email_localpart}@${email_domainpart}</email></ident_general></trans_email>
+                            <web><unsecure><base_url><![CDATA[http://${domain}]]></base_url></unsecure></web>
+                            <web><secure><base_url><![CDATA[https://${domain}]]></base_url></secure></web>
+                        </default>
+                        <stores>
+                            <german_store>
+                                <web><unsecure><base_url><![CDATA[http://de.${domain}]]></base_url></unsecure></web>
+                                <web><secure><base_url><![CDATA[https://de.${domain}]]></base_url></secure></web>
+                            </german_store>
+                            <french_store>
+                                <web><unsecure><base_url><![CDATA[http://fr.${domain}]]></base_url></unsecure></web>
+                                <web><secure><base_url><![CDATA[https://fr.${domain}]]></base_url></secure></web>
+                            </french_store>
+                        </stores>
+                    </system_configuration>
+                    <variables>
+                        <email_domainpart>yourcompany.com</email_domainpart>
+                        <email_localpart>development</email_localpart>
+                        <paypal_sandbox_flag>1</paypal_sandbox_flag>
+                    </variables>
+                </default>
+                <nonprod parent="default">
+                    <system_configuration>
+                        <default>
+                            <system><cron><disabled_crons>currency_rates_update,catalog_product_alert,newsletter_send_all</disabled_crons></cron></system>
+                        </default>
+                    </system_configuration>
+                    <commands>
+                        <db_sfq>db:execute 'UPDATE sales_flat_quote SET customer_email = "${email_localpart}@${email_domainpart}"'</db_sfq>
+                    </commands>
+                </nonprod>
+                <dev parent="nonprod">
+                    <post_configure>
+                        <cc>cache:disable</cc>
+                        <cf>cache:flush</cf>
+                    </post_configure>
+                </dev>
+                <dev01 parent="dev">
+                    <variables>
+                        <domain>abc.development.tld</domain>
+                        <email_localpart>j.smith</email_localpart>
+                    </variables>
+                </dev01>
+                <dev02 parent="dev">
+                    <variables>
+                        <domain>xyz.development.tld</domain>
+                        <email_localpart>j.doe</email_localpart>
+                    </variables>
+                </dev02>
+                <simulateprod parent="nonprod">
+                    <post_configure>
+                        <cc>cache:enable</cc>
+                        <cf>cache:flush</cf>
+                    </post_configure>
+                </simulateprod>
+                <ci parent="simulateprod">
+                    <variables>
+                        <domain>ci.development.tld</domain>
+                    </variables>
+                </ci>
+                <qa parent="simulateprod">
+                    <variables>
+                        <domain>qa.development.tld</domain>
+                    </variables>
+                </qa>
+                <staging parent="simulateprod">
+                    <variables>
+                        <domain>staging.stagingserver.tld</domain>
+                    </variables>
+                </staging>
+                <live parent="default">
+                    <variables>
+                        <domain>liveshop.com</domain>
+                        <email_domainpart>merchant.com</email_domainpart>
+                        <email_localpart>support</email_localpart>
+                        <paypal_sandbox_flag>0</paypal_sandbox_flag>
+                    </variables>
+                    <system_configuration>
+                        <default>
+                            <system><cron><disabled_crons>currency_rates_update,catalog_product_alert</disabled_crons></cron></system>
+                        </default>
+                    </system_configuration>
+                    <post_configure>
+                        <cc>cache:enable</cc>
+                        <cf>cache:flush</cf>
+                    </post_configure>
+                </live>
+            </environments>
+        </limesoda>
+    </global>
+</config>
+(/code)
+
+<h3>Define environments</h3>
+
+The first thing you'll notice is that the file looks like a config.xml. That's because it is nothing else. You can put the configuration in any configuration XML file in your installation or even split it up in several files if you choose to do so.
+
+We defined several environments and used the <strong>inheritance </strong>feature to build a hierarchy. This is done by declaring a "parent" attribute with the parent environment name as the value:
+
+(code)
+<default />
+<nonprod parent="default">
+<dev parent="nonprod">
+(/code)
+
+and so on. As a project matures you may have to restructure the hierarchy when the requirements and environments change.
+
+In the XML above we created the following tree:
+
+<ul><li>default
+<ul><li>nonprod
+<ul><li>dev
+<ul><li>dev01</li>
+    <li>dev02</li>
+</ul></li>
+    <li>simulateprod
+<ul><li>ci</li>
+    <li>qa</li>
+    <li>staging</li>
+</ul></li>
+</ul></li>
+    <li>live</li>
+</ul></li>
+</ul>
+
+default, nonprod, dev and  simulateprod serve as "containers". They are not meant to be called directly and exist to avoid duplication when several environments need the same settings or variables. It's always a trade-off between readability and maintability/duplication. You have to find your sweet spot.
+
+<h3>Define variables</h3>
+
+You are able to define variables that can be used in commands and system configuration settings. Variables are declared in the <variables> node with the syntax <name>value</name>. They are inherited from parent environments which means that you can define some basic values in superior environments and overwrite them down the line be using the same name.
+
+In the default environment, we declared these variables:
+
+(code)
+<variables>
+    <email_domainpart>yourcompany.com</email_domainpart>
+    <email_localpart>development</email_localpart>
+    <paypal_sandbox_flag>1</paypal_sandbox_flag>
+</variables>
+(/code)
+
+If you scroll down you will see that they are overwritten in the development working copies and the live system.
+
+Please note that you cannot do fancy stuff like nesting variables in each other. So you will not be able to do something like
+
+(code)
+<variables>
+    <email>${email_domainpart}@${email_localpart}</email>
+</variables>
+(/code)
+
+Now we'll see where we can use the variables.
+
+<h3>Adjust the system configuration</h3>
+
+A big part of configuring an environment is setting the correct values in System > Configuration. Therefore we created a special <system_configuration> section.
+
+Let's look at an excerpt of config.xml:
+
+(code)
+<system_configuration>
+    <default>
+        <web><unsecure><base_url><![CDATA[http://${domain}]]></base_url></unsecure></web>
+    </default>
+    <stores>
+        <german_store>
+            <web><unsecure><base_url><![CDATA[http://de.${domain}]]></base_url></unsecure></web>
+        </german_store>
+        <french_store>
+            <web><unsecure><base_url><![CDATA[http://fr.${domain}]]></base_url></unsecure></web>
+        </french_store>
+    </stores>
+</system_configuration>
+(/code)
+
+The structure is the same as in the first level nodes of a config.xml file.
+
+<default> sets values for the global scope, <websites> (not shown here) for the website scope and <stores> for the store view scope. Underneath <websites> and <stores>, you define the website / store view by code or id. In this case, our store views are called "german_store" and "french_store".
+
+The other thing you may have noticed is the first use of a variable, ${domain}. This string is replaced with whatever value is stored for ${domain}.  The XML of all environments is merged and variables are substituted at the very last moment when the commands are generated. That should make sure that the commands and variables defined last for that environment are used.
+
+You can use multiple variables in a setting (<base_url><![CDATA[http://${language}.${domain}]]></base_url>) but you cannot nest the variables (${${language}_domain}).
+
+<h3>Executing arbitrary n98-magerun commands</h3>
+
+The system_configuration section we just got to know actually only is a convenience wrapper for using the command "n98-magerun.phar set:config" because this way of declaring values is more clear when setting many values. In fact, you can execute any n98-magerun command in the <commands> node!
+
+This is what we did with some other commands like:
+
+(code)
+db:execute 'UPDATE sales_flat_quote SET customer_email = "${email_localpart}@${email_domainpart}"'
+(/code)
+
+and:
+
+(code)
+<cc>cache:enable</cc>
+<cf>cache:flush</cf>
+(/code)
+
+Feel free to use built-in or custom actions. n98-magerun is very powerful and the community loves it so we decided to not re-invent the wheel but build on this strong foundation.
+
+As an example for a custom command we included ls:env:configure:ess:m2epro:set-license-key with EnvironmentConfiguration because M2EPro doesn't make it too easy to change the license key. If somebody wants to send us new commands (and they are a better fit for EnvironmentConfiguration than n98-magerun) then we are happy to accept your pull request!
+
+<h3>Command stages</h3>
+
+One apparent disavantage of the XML configuration is that you cannot be totally sure in which order the commands are executed because of the way the commands are declared and merged.
+
+As a light-weight solution, we added three "command stages" a.k.a. "groups of commands where you can put commands in just to be sure that some commands get executed before others".
+
+The stages are called:
+
+<ol><li>pre_configure</li>
+    <li>commands</li>
+    <li>post_configure</li>
+</ol>
+
+You already got to know one of them: we used post_configure to make sure that the cache enabling/disabling/flushing happens after all other commands have been executed.
+
+And with this we walked through all the features of our example. It's not that complicated actually, is it?
+
+<h2>How do I get a better overview of my environments and settings?</h2>
+
+Let's be honest: XML is verbose and with a large configuration is't not always easy to see what will be set or if you missed something. To help with this you can find an overview in the backend menu "System > Environment Configuration":
+
+(image: limesoda_environmentconfiguration_backend-622x500.png)
+
+At the top the environments are presented as a hierarchy. Your environment is highlighted ("Current environment"). Clicking on an environment will give you a list of all commands executed in that environment. Variables not defined for that environment are highlighted (see ${domain} in the screenshot).
+
+<h2>How do I make sure this mess doesn't destroy my production systems?</h2>
+
+In addition to the EnvironmentConfiguration backend we developed a companion extension called <a href="https://github.com/LimeSoda/LimeSoda_LiveGuard">LimeSoda_LiveGuard</a>. It ensures there is no miscommunication between non-prod and prod systems. I'll be honest and tell you that you cannot just take your enviroment configuration data, throw it at LiveGuard and it will check everything automatically for you. At the moment you'll have to write your own guards for different situations you want to check.
+
+<h2>Does it work? Please give me feedback!</h2>
+
+We have EnvironmentConfiguration and LiveGuard running in production now for more than a year now. They have served us very well and we know we can rely on it. We backport our live database to different environments on a regular basis without breaking production systems (internal or external).
+
+However, we would be interested in your experience if you have used one of these extensions in your own projects. Does it work for you? What is good? What isn't? Is this approach viable for multi webserver setups? And so on.
+
+Let me know your thoughts!
+
+<h2>Alternatives</h2>
+
+Since we wrote this extension several Magento tools have popped up providing similar functionality.
+
+Here are a few of them (in alphabetical order):
+
+<ul><li><a href="https://github.com/ctidigital/magento-configurator">Cti_Configurator</a></li>
+    <li><a href="https://github.com/Zookal/HarrisStreet-ImpEx">HarrisStreet ImpEx</a></li>
+    <li><a href="https://github.com/netz98/n98-magerun#n98-magerun-script">n98-magerun Script</a></li>
+</ul>
+
+They have great features and I definitely recommend you to check them out. If I missed your tool please tell me in the comment section and I'll be happy to add it to the list. If we can work something out to make the tools play together nicely and avoid duplicated code/functionality: all the better. Just drop your contact in the comments or via Twitter.
+
+As always the decision which tool you should use depends on your preferences and requirements. You also may choose to not keep the configuration and data management in Magento but use an external tool to inject the configuration in your environment.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4066

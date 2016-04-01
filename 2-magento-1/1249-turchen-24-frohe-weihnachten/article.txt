@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: Türchen 24: Frohe Weihnachten
+
+----
+
+Date: 2010-12-24
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Da ist es schon soweit. Mit vierundzwanzig Türchen konnten wir euch hoffentlich ein wenig die Magento-Adventszeit verkürzen. Wir wünschen euch allen schöne Feiertage; lasst Magento einmal in der Ecke liegen und kümmert euch um Familie und Freunde.
+
+----
+
+Text: Webguys bleiben natürlich am Ball. Wir haben viele tolle neue Ideen wie es mit unserem Blog weitergehen kann und wie weiterhin hoffentlich spannende Inhalte gewährleistet werden können.
+
+Abschließend möchte ich es mir jedoch nicht nehmen lassen und noch einmal die Beiträge der vergangen Tage aufzulisten:
+<h2>Das war unser Adventskalender</h2>
+
+(advent: 2010)
+
+<strong>Frohe Weihnachten!</strong> :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1249

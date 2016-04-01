@@ -1,0 +1,75 @@
+Article-meta: 
+
+----
+
+Title: Warum ist der Produktimport so langsam?
+
+----
+
+Date: 2010-08-15
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Immer wieder eine super spannende Sache: Ein Produktimport. Aber warum ist der Import von Produkten eigentlich so langsam? Hat Magento dort wirklich durch das Model-Konzept in Verbindung mit dem EAV totalen Mist gebaut? Liegt es daran das alle Daten doppelt und dreifach in irgendwelchen Indizes (oder Flat-Tables) gespeichert werden?
+
+----
+
+Text: Vorab: Nein, wirklich Mist gebaut haben sie nicht. :) Ich habe mir das ganze einmal näher angeschaut und habe ein paar Tests durchgeführt.
+<h3>"Benchmarks" zum Import</h3>
+Der Begriff Benchmark ist nicht ganz ernst gemeint. Dafür habe ich zu wenig Tests gemacht - man konnte aber immer grob das Richtige ablesen. Ob ein Produkt nun 0.5 oder 0.6 Sekunden zum Importieren braucht ist letztlich irrelevant - es ist einfach zu langsam. Bei allen Tests waren die Magento-Indizes und Caches inaktiv.
+<blockquote>Simple-Product mit 4 Attributen über das Magento Model:
+0.4-0.6 Sekunden</blockquote>
+<blockquote>Simple-Product mit 4 Attributen über eigene Api mit direkten DB-Zugriff:
+0.3-0.5 Sekunden</blockquote>
+Das war der Punkt wo ich wirklich ein wenig enttäuscht war muss ich sagen. Ich dachte mit direkten Zugriffen auf die Datenbank könnte man wirklich viel an der Performance-Schraube drehen. Aber da hab ich mich wohl geirrt.. Aber ein wenig neugierig war ich nun doch, warum zum Teufel ist das so langsam? Mein nächster Ansatz war es mir die Laufzeiten der SQL-Statements ein wenig näher anzuschauen:
+<blockquote>100 Inserts in catalog_product_entity mit irgendwelchen Beispieldaten:
+3-4 Sekunden</blockquote>
+Langsam kam Bewegung in die Sache. 100 Inserts dauern schon 3 Sekunden? Das kann nicht sein. War aber leider wirklich so. Danach habe ich erst mal alle Indizes der Tabelle "catalog_product_entity" gelöscht und die Fremdschlüssel deaktiviert. Keine Große Veränderung. InnoDB scheint bei einem Insert einfach ziemlich langsam zu sein - zumindest in der Standardkonfiguration von Ubuntu. Läuft es bei euch deutlich schneller?
+
+Dann hab ich erst mal die Tabelle catalog_product_entity dupliziert und auf die  Engine MyIsam umgestellt. Siehe da: <strong>Die Insert-Anweisungen waren super schnell. 10.000 Produkte mit jeweils 4 Attribute gingen in 20 Sekunden durch</strong>. Damit könnte ich leben. Aber liegt es nun an InnoDB direkt oder vielleicht an der komplexen Fremdschlüssel-Struktur? Leicht rauszufinden, Datenbankexport, alle Constraints aus dem SQL löschen und wieder importieren. Hat jedoch leider nicht geholfen:
+<blockquote>100 Inserts in catalog_product_entity mit irgendwelchen Beispieldaten ohne Constraints (InnoDB)
+3-4 Sekunden</blockquote>
+Zurück zu der MyIsam -Lösung. Einen Dump ziehen, alle InnoDB in MyIsam umwandeln und wieder importieren. Constraints fliegen natürlich raus - kann MyIsam ja nicht.
+<blockquote>100 Produkte über eine Alpha-Api mit direkten Datenbank-Zugriff (MyIsam)
+0.3-0.4 Sekunden</blockquote>
+Jetzt natürlich noch ein Test mit der original Magento-Api
+<blockquote>100 Produkte mit dem Model "catalog/product" (MyIsam, ohne Indizes, ohne Cache)
+31-32 Sekunden
+
+100 Produkte mit dem Model "catalog/product" (MyIsam, mit Indizes, mit Cache)
+50-52 Sekunden</blockquote>
+<strong>Erstes Fazit:</strong> Ohne InnoDB und mit eigener Api, die direkt die Datenbank befüllt, könnte es klappen Produkte ziemlich schnell in das Magento-Backend zu laden. Es fehlen natürlich noch eine Vielzahl von Indizes und die Flat-Tables die gerade im Frontend von so hoher Relevanz sind. Dennoch müsste es möglich sein <strong>deutlich</strong> schneller als über das Model "catalog/product" zu sein.
+<h3>Offene Fragen</h3>
+Richtig logisch fühlt sich das nicht an. Vielleicht ist es nur ein Problem meiner Entwicklungsumgebung? Kann jemand meine Erfahrungen mit InnoDB/MyIsam nachstellen? Liegt es nur an meiner Konfiguration oder ist es ein generelles Problem von InnoDB? Anbei meine .
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 544

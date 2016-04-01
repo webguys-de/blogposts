@@ -1,0 +1,50 @@
+Article-meta: 
+
+----
+
+Title: Benutzer-Navigation bearbeiten
+
+----
+
+Date: 2010-09-20
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das Benutzer-Menu konnte bislang nur grob durch de- bzw. aktivieren eines Moduls beeinflusst werden, indem man Module, wie z.B. Tags der Benutzernavigation hinzugefügt oder ausgeblendet hat. Das neue Modul <a href="http://www.magentocommerce.com/magento-connect/ingohill/extension/4565/webguys_customernavigation">CustomerNavigation</a> bietet neue Möglichkeiten um das Benutzer-Menu anzupassen.
+
+
+----
+
+Text: Nach Installation dieser Extension ist es möglich, gezielt einzelne Menupunkte auszublenden, auch wenn das Modul aktiviert ist. Um dem Entwickler jedoch noch mehr Möglichkeiten zu geben, bietet diese Extension die Möglichkeit, die Reihenfolge der Menupunkte zu beeinflussen. <a href="http://www.magentocommerce.com/magento-connect/ingohill/extension/4565/webguys_customernavigation">Hier geht es zum Modul</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 772

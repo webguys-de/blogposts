@@ -1,0 +1,73 @@
+Article-meta: 
+
+----
+
+Title: Türchen 05: Ein Produkt mit individuellem Preis im Warenkorb
+
+----
+
+Date: 2010-12-05
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nein, leider wieder keine Schokolade, sondern auch heute nur Quellcode. Diesmal schauen wir einmal wie man ein Produkt in den Warenkorb legen kann und dazu noch selbst den Preis bestimmt. Der aktuelle Warenkorb ist im Magento im Quote gespeichert. Genauer gesagt als Quote-Item. Das eigentliche Quote enthält nämlich zum Beispiel Informationen zum Empfänger oder Absender.
+
+----
+
+Text: (code lang: php)
+// Zuerst holen wir uns das aktuelle Quote,
+// alternativ kann dies z.B. auch per Event sales_quote_save_before geschehen
+$quote = Mage::getSingleton('checkout/session')->getQuote();
+
+// Wir erstellen ein quoteItem (noch nicht im Warenkorb)
+$quoteItem = Mage::getModel('sales/quote_item')->setProduct($product);
+$quoteItem->setQuote($quote);
+
+// Wie oft soll das Produkt im Warenkorb sein?
+$quoteItem->setQty( 1 );
+
+// Wir müssen den Preis doppelt setzen da Magento 1.4.1.1
+// hier zwei unterschiedliche Werte abfragt
+$quoteItem->setCustomPrice(0);
+$quoteItem->setOriginalCustomPrice(0);
+
+// Zum Schluss legen wir das Item noch in den Warenkorb
+$quote->addItem($quoteItem);
+
+// .. und speichern das Quote
+$quote->save();
+(/code)
+
+Wichtig ist das in der Magento 1.4.1.1 sowohl <em>setCustomPrice</em> als auch <em>setOriginalCustomPrice</em> aufgerufen wird da sonst z.B. Paypal oder die Rechnung nicht die richtigen Werte enthalten.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1071

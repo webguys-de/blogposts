@@ -1,0 +1,160 @@
+Article-meta: 
+
+----
+
+Title: Türchen 06: Zentrales Reporting über die Magento-API
+
+----
+
+Date: 2014-12-06
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wer kennt es nicht? Man besucht eine Seite und kommt an einer bestimmten Stelle aus einem unbekannten Grund nicht weiter. Die Seite lädt gar nicht oder nur teilweise. Höchstwahrscheinlich ist hier ein Fehler aufgetreten. Berichtet man nun nicht direkt dem Seitenbetreiber, wie man diesen Fehler erzeugt hat und reproduzieren kann, <strong>bleibt er sehr wahrscheinlich unentdeckt und somit ungelöst</strong>. Grund dafür ist das unzureichende Reporting der einzelnen Web-Applikationen. Klar, der Fehler wird in die Server-Logs geschrieben und im Falle von Magento wird ein Report erzeugt. Aber im Ernst: Wer schaut schon regelmäßig in diese Verzeichnisse. Der Shop-Betreiber ist am Ende auch nur ein Kunde, welcher von der Technik meistens gar keine Ahnung hat und von der Existenz der Reports sicherlich nicht einmal weiß. Immerhin verlässt sich auf seinen Dienstleister.
+
+----
+
+Text: Jetzt könnte man sagen, dass man einfach ordentlich testen muss und solche Fehler durch automatische Tests nicht auftreten können. Das ist zum einen natürlich teilweise richtig und auch empfehlenswert, aber am Ende ist niemand perfekt. Einen Test zu entwickeln, welcher alle Eventualitäten abdeckt ist nahezu unmöglich und wird sicher von niemandem finanziert. Ein gewisses Restrisiko bleibt am Ende immer.
+
+Dieses Problem kann man als Dienstleister nur lösen, indem man das Log-Management zentralisiert und ein automatisches Reporting einführt. Nur dann kann die Qualität der Shops auf Dauer gewährleistet werden. Im Idealfall löst man so sogar Probleme, <strong>noch bevor der Kunde davon etwas mitbekommt</strong>. Aber wie stellt man das Ganze nun an?
+
+<h2>Die Idee</h2>
+
+Jetzt gibt es zwei (oder sogar drei) Möglichkeiten.
+
+<ul><li>Entweder, man richtet einen Cron ein, welcher regelmäßig die Exception-Logs an eine zentrale Stelle liefert. Diese müsste man in einer Extension konfigurieren, wodurch man wiederum das meiste der Logik auf dem einzelnen System hätte. So werden Updates erschwert und man hat sehr schnell verschiedene Versionsstände im Einsatz. <strong>Möchte man das Zielsystem ändern, muss man alle Shops anfassen.</strong></li>
+    <li>Oder man holt die Informationen regelmäßig von den einzelnen Shops ab. Dies hätte auch den Vorteil, dass man Systeme einfach aus dem Logging ausklinken kann, sobald man nicht mehr für den Kunden arbeitet, oder ein Servicevertrag ausläuft. Hier bietet es sich außerdem an, <strong>die Magento-API zu erweitern</strong>, um so möglichst einfach (und sicher) an die Daten zu kommen.</li>
+    <li>Theoretisch gibt es noch die Möglichkeit, diese direkt in ein anderes System zu Pushen, sobald eine Exception auftritt. Aber im Normalfall muss man nicht binnen Sekunden reagieren, sobald eine Exception aufgetreten ist. Aus Performance-Gründen würde ich diese Möglichkeit daher ignorieren.</li>
+</ul>
+
+In diesem Beitrag möchte ich mich auf die zweite Möglichkeit festlegen. Alle haben ihre Vor- und Nachteile. Es existieren natürlich schon etliche Lösungen am Markt, welche das Remote-Logging möglich machen. Auf diese möchte ich aber nicht weiter eingehen.
+
+<h2>Reports</h2>
+
+Reports werden bei <em>unhandled Exceptions</em> in Magento geschrieben. In der Standard-Konfiguration kann der Kunde die detaillierten Informationen nicht sehen. Geschrieben werden die Reports aber trotzdem. Tritt irgendwo eine unhandled Exception auf, wird diese in der <em>run</em>-Methode der Mage.php gefangen. Dort werden die Informationen an die Funktion printException weitergegeben.
+
+Ist nun der Developer-Mode <strong>nicht</strong> eingeschaltet, wird ein Array mit Informationen für den Report aufgebaut. Enthalten sind:
+
+<ul><li>Die Meldung der Exception</li>
+    <li>Der Exception-Trace als String</li>
+    <li>Die Request-URL ($_SERVER['REQUEST_URI'])</li>
+    <li>Der Script-Pfad ($_SERVER['SCRIPT_NAME'])</li>
+    <li>Der aktuelle Store-Code (um das Design anpassen zu können)</li>
+</ul>
+
+Danach wird die report.php im errors-Verzeichnis eingebunden:
+
+(code lang: php)
+require_once(self::getBaseDir() . DS . 'errors' . DS . 'report.php');
+(/code)
+
+Wie man sieht, hat man hier <strong>nicht sonderlich viele Möglichkeiten, in den Verlauf einzugreifen</strong>. Keine Events und keine genutzten Models, um irgendwo etwas zu überschreiben. Das ist natürlich ärgerlich, da man nicht viel weiter kommt, ohne Dateien vom Core anfassen zu müssen. Und das machen wir ja bekanntlich nicht.
+
+Innerhalb der report.php wird dann der <em>processor</em> genutzt (siehe processor.php). Diese speichert zuerst den Report in folgenden Schritten:
+
+<ol><li>Zufälle Report-ID erzeugen</li>
+    <li>Report-Verzeichnis erstellen (falls nötig)</li>
+    <li>Report-Informationen serialisieren</li>
+    <li>Datei schreiben</li>
+    <li>Dateiberechtigungen anpassen (777)</li>
+</ol>
+
+Danach wird der Report noch angezeigt. Je nach Einstellungen werden dabei entweder alle Informationen ausgegeben, oder nur die Report-ID. Ich würde davon abraten, die Core-Files zu modifizieren um die Logik zu ändern. Viel schlauer wäre es, später auf die entsprechenden Dateien zuzugreifen. Schon allein aus Performance-Gründen.
+
+<h2>Technik / Protokolle</h2>
+
+Für die Umsetzung muss man daran denken, dass diese auch in der Minimalkonfiguration von Magento funktionieren muss. Daher muss man sich auf die "Basis-Protokolle" verlassen (z.B. Mail, FTP oder eben HTTP). Eine Konfiguration per SSH oder ähnliches ist natürlich generell denkbar, aber eben sehr aufwändig einzurichten. So könnte man theoretisch auch alle Dateien per SCP oder RSYNC zentral sammeln. Dann hat man nur wieder das Problem, dass man die Zugangsdaten bzw. Zertifikate/Keys dafür pflegen muss. Bei wenigen Kunden sicher eine tolle Lösung.
+
+<strong>Ich wünsche mir aber ein System, welche mit wenigen Klicks eingerichtet ist und leicht zu warten bleibt.</strong>
+
+<h2>Umsetzung</h2>
+
+Genug Vorgeplänkel. Jetzt geht es an die Implementierung. Wie genau soll die API nun aussehen? Da es sich um eventuell sensible Informationen handelt, welche in den Reports gespeichert werden, <strong>sollte eine Authentifizierung implementiert werden</strong>. Diese kann dabei gerne einfach gehalten werden. Warum sollte man hier einen komplexen OAuth-Weg gehen, wenn es eine einfache HTTP-Authentifizierung auch tut. Natürlich ist es (wie immer) ratsam, dies über eine <strong>verschlüsselte HTTPS-Verbindung</strong> zu erledigen.
+
+Zum Glück bietet hier ebenfalls das Framework bereits eine Möglichkeit, die Benutzerdaten aus dem Request zu prüfen.
+
+(code lang: php)
+/** @var $http Mage_Core_Helper_Http */
+$http = Mage::helper('core/http');
+list($user, $pass) = $http->authValidate();
+(/code)
+
+Fehlen die Authentication-Informationen, wird der Request automatisch abgebrochen und dem Client mitgeteilt, dass die authentifizierung fehlgeschlagen ist. <em>Hier noch ein Hinweis auf <a title="Magento – das Framework komplett nutzen" href="http://www.webguys.de/magento/magento-das-framework-komplett-nutzen/">meinen letzten Beitrag</a> - suchen im Framework lohnt sich eben immer.</em> Falls Daten vorhanden sind, bekommt man diese als Array zurückgeliefert und kann diese ganz einfach auswerten. In diesem Fall möchte ich die Zugangsdaten über das Backend konfigurieren können, sodass man für jeden Shop eigene Daten verwenden kann.
+
+Generell brauchen wir also nur drei ganz einfache Funktionen:
+
+<ul><li>list</li>
+    <li>get</li>
+    <li>delete</li>
+</ul>
+
+Kommuniziert wird per JSON. So spart man sich viel Overhead. Alles soll ja so <strong>einfach und performant</strong> wie möglich gehalten sein. Die List-Funktion soll ein Array mit allen Werten zurückliefern, welche die Report-ID (der Dateiname), den Zeitstempel und die Größe enthält. Danach kann man die komplette Liste durcharbeiten und die Einträge per get-Funktion abholen, indem man die entsprechende Report-ID übergibt. Hier sind dann alle Informationen enthalten, welche auch in der entsprechenden Datei stehen. Deserialisiert und als JSON wieder verpackt.
+
+Wie man sieht ist alles kein Hexenwerk. Das Ganze hat man in wenigen Minuten runtergeschrieben. Meine <a href="https://github.com/webguys-de/reporting-api" target="_blank">Extension zum Artikel liegt auf GitHub</a> für Euch bereit. Seht es mehr als Modulbasis, nicht als fertige Lösung für den Live-Betrieb.
+
+Auf der Gegenseite wird dafür dann nur ein Cron implementiert, welcher die Liste aller Shops durcharbeitet. Dazu braucht man dann eben nur URL, Benutzername und Passwort. Darauf gehe ich nun aber nicht näher ein, dazu ist es zu simpel.
+
+<h2>Fazit</h2>
+
+Meiner Meinung nach ist dies eine super Lösung, um auf mehreren Systemen die Fehler einzusammeln. Gerade, wenn man mehrere Kunden betreut (als Agentur oder Freelancer), könnte einem diese Lösung eine Menge Stress und Zeit sparen.
+
+Möchte man allerdings einen einzelnen Shop überwachen, bieten sich andere Möglichkeiten eher an. Und sei es nur eine Mail an den technischen Ansprechpartner. Dies geht am einfachsten, indem man einfach eine Mailadresse in der local.xml im errors-Verzeichnis hinterlegt und die action auf "email" stellt. Das Ganze sieht dann so aus:
+
+(code lang: xml)
+<config>
+    <skin>default</skin>
+    <report>
+        <action>email</action>
+        <subject>Exception im Shop</subject>
+        <email_address>yourmail@shopdomain.com</email_address>
+        <trash>leave</trash>
+    </report>
+</config>
+(/code)
+
+Außerdem sollte man beachten, dass ein Report erst dann geschrieben wird, wenn alles vorige Handling nicht gegriffen hat oder nicht existent war. <strong>Alles was korrekt gefangen wird und über die normalen Log-Methoden geschrieben wird, ist hiervon unberührt.</strong> Für diese Fälle könnte man sich das exception.log auch einfach per Mail zusenden lassen. Zum Beispiel per Cron:
+
+<pre>0 0 * * * /usr/lib/sendmail yourmail@shopdomain.com < /www/shop/var/log/exception.log;rm /www/shop/var/log/exception.log</pre>
+
+Noch schöner ist es aber sicher, auf die Extension <a href="https://github.com/firegento/firegento-logger" target="_blank">Firegento-Logger</a> zurück zu greifen. Hier kann man mit mehreren Adaptern out of the Box bestehende Systeme anbinden (soweit ich weiß auch E-Mail). Außerdem ist es relativ einfach, neue Adapter zu schreiben. Der Umfang der Extension würde aber den (eh schon viel zu langen) Beitrag noch weiter aufblähen.
+
+Auch schön wäre eine Lösung, welche <a href="https://github.com/magento-hackathon/Hackathon_MageMonitoring" target="_blank">MageMonitoring</a> anbindet. Dann könnte man den kompletten Status des Shops über eine API erfragen und Probleme lokal sammeln. Wie man sieht, sind die Lösungen vielfältig und dieser Beitrag ist nur ein minimaler Denkanstoß für ein Thema, welches man sicher extrem komplex aufziehen könnte.
+
+<ul><li>Wie löst ihr das angesprochene Problem?</li>
+    <li>Habt ihr Euch schon einmal Gedanken dazu gemacht?</li>
+    <li>Welche Gründe sprechen für und gegen so ein System?</li>
+</ul><strong>Ich freue mich über Kommentare und Feedback!</strong>
+
+Danke, dass ich auch dieses Jahr wieder für den Adventskalender schreiben durfte.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4052

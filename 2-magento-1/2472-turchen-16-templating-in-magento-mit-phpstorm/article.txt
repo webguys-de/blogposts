@@ -1,0 +1,151 @@
+Article-meta: 
+
+----
+
+Title: Türchen 16: Templating in Magento mit PhpStorm
+
+----
+
+Date: 2011-12-16
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: timste
+
+----
+
+Article-content: 
+
+----
+
+Intro: <em>Danke an die Webguys für die Anfrage ob auch ich dieses Jahr hier mal einen Beitrag schreiben möchte. Na klar! Bei den prominenten Co-Autoren eine Ehre!</em>
+
+Umsetzung eines fertigen Templates auf Basis einer PNG - Datei (Ja, Aufschrei, kein PSD!). Warum PNG? weil es für einen Templater im Flow wesentlich einfacher ist ein fertiges Shop-Layout umzusetzen als mit einer PSD. Mehr Info könnt Ihr hier lesen: <a href="http://www.reinegger.net/50_gruende_photoshop_nicht_fuer_webdesign_zu_verwenden.html">http://www.reinegger.net/50_gruende_photoshop_nicht_fuer_webdesign_zu_verwenden.html</a>
+
+
+
+----
+
+Text: <h2>Was brauchen wir</h2>
+<ul><li>Magento
+<ul><li>Modul Fabrizio Brancas Magento Advanced Template Hints (<a href="http://www.fabrizio-branca.de/magento-modules.html">http://www.fabrizio-branca.de/magento-modules.html</a>)</li>
+	<li>Minify CSS & JS (<a href="http://store.fooman.co.nz/magento-extension-speedster.html">http://store.fooman.co.nz/magento-extension-speedster.html</a>)</li>
+</ul></li>
+	<li>PhpStorm
+<ul><li>CSS X-Fire</li>
+</ul></li>
+	<li>Firefox (andere Browser gehen bei meinem Tutorial leider nicht, dazu später mehr)
+<ul><li>Firebug für Firefox</li>
+	<li>HTML-Tidy</li>
+</ul></li>
+	<li>Fireworks</li>
+	<li>GIT</li>
+</ul><h2>Grundinstallation Magento / PhpStorm / GIT</h2>
+Auf die Grundinstallation Magento gehe ich hier nicht ein, das sollte jedem von der Hand gehen. Alternativ kann natürlich via GIT aus einem bestehenden Projekt ausgecheckt werden und dies dann als Basis für das Tutorial genommen werden. Ich nehme als Beispiel eine frische 1.6.1.0 Magento CE.
+
+Danach unbedingt die beiden Extensions installieren. Sollte der Magento Connect nicht funktionieren kann ich nur das Projekt <a href="http://connect.icyapp.de/">http://connect.icyapp.de/</a> von Damian Luszczymak empfehlen. Sehr schnelle und übersichtliche Suche nach Extensions mit der Möglichkeit des direkten Downloades der jeweiligen Extension. Sehr gut für Code-Previews, wir wollen ja schließlich wissen was wir installieren.
+
+Eine ausführliche Beschreibung mit den Möglichkeiten von Fabrizio Brancas Extension findet Ihr hier <a href="http://www.fabrizio-branca.de/magento-advanced-template-hints.html">http://www.fabrizio-branca.de/magento-advanced-template-hints.html</a>. Nur ein kleiner Hinweis, wenn Ihr die Template-Hints damit einschaltet zerhaut es Euch nicht das komplette Layout wie bei der Magento eigenen Version. Minify CSS & JS brauchen wir für das eigentliche Templating nicht, aber danach für den Live-Gang. Hier werden die CSS & JS in jeweils eine Datei gemerged und alle Kommentare entfernt, sehr praktisch! Man hat lokal in seiner Kopie die Kommentare und durch die Extension werden diese beim Ausliefern an den Browser entfernt.
+
+PhpStorm könnt Ihr Euch unter <a href="http://www.jetbrains.com/phpstorm/">http://www.jetbrains.com/phpstorm/</a> als 30 Tage Testversion, die keine Einschränkungen hat, herunterladen. PhpStorm gibt es für WIN, MAC und NIX. PS: Falls Ihr Euch PhpStorm kaufen wollt, immer mal nach Promo-Codes Ausschau halten, das macht es dann günstiger.
+
+GIT für den MAC installieren (falls nicht vorhanden), unter WIN habe ich von Problemen gehört, sollte aber machbar sein. Heutiger Ausgang ist ein MAC.
+
+Der nächste und wichtigste Step vor dem ersten GIT commit ist die .gitignore. Nehmen wir uns eine auf Magento optimierte, zu finden hier <a href="http://www.fabrizio-branca.de/magento-advanced-template-hints.html">http://inchoo.net/ecommerce/magento/programming-magento/git-ignore-gitignore-file-for-magento-project/</a>
+
+Hier fügen wir unbedingt noch <strong>.idea</strong> hinzu, das sind die Ordner und Files die PhpStorm innerhalb des Projektes anlegt und nicht ins GIT gehören. Spezielle <strong>.gitignore</strong> Files werden hier mal ausgelassen, ist ja nur ein Beispiel.
+
+Dann wären wir bereit für den ersten <strong>COMMIT</strong>. Auf der Shell in das Verzeichnis wechseln und folgendes ausführen.
+
+(code)
+cd webguys
+git init
+git add .
+git commit -m “first commit“
+(/code)
+
+danach prüfen wir mit
+
+(code)
+git status
+(/code)
+
+ob alles ok ist, es sollte da stehen
+
+(code)
+On branch master
+nothing to commit (working directory clean)
+(/code)
+
+Nun richten wir das Projekt in PhpStorm ein. Wir nehmen den kurzen Weg :-)
+
+PhpStorm starten …
+
+Unter Files / New Project den Namen vergeben und die Directory auswählen und los. Wir bestätigen das das Projekt mit den existierenden Files angelegt werden soll, weiter. Der erste Scan im Projektverzeichnis kann etwas dauern, je nach Rechner. Sobald die Indizierung fertig ist wechseln wir unter PhpStorm -> Preferences in den Tab Directorys. Dort wählen wir alle Ordner die in unserem Templating-Projekt nix zu suchen haben.
+
+(image: 002.png)
+
+Unser Beispiel Template liegt unter <strong>htdocs\webguys\app\designrontend\default\webguys</strong> und unter <strong>htdocs\webguys\skinrontend\default\webguys</strong>. Danach löschen wir aus dem Magento-Root die Dateien die wir auch nicht brauchen um etwas mehr Übersicht zu haben (.htaccess.sample, index.php.sample usw ).
+
+Jetzt installieren wir CSS X-Fire. Den langen Text sparen wir uns hier und schauen uns das Video unter <a href="http://www.youtube.com/watch?v=DpjzC_yvTJs">http://www.youtube.com/watch?v=DpjzC_yvTJs</a> an. Nun wisst Ihr ungefähr schon wo die Reise hingeht :-)
+
+Im Magento Backend unter System - Configuration - General - Design tragen wir unter Themes
+<ul><li>Templates</li>
+	<li>Skin</li>
+	<li>Layout</li>
+	<li>Default</li>
+</ul>
+den Wert unseres neuen Templates, <strong>webguys</strong> ein. Wir wechseln ins Frontend und sehen nun die Ausgangssituation unseres Templating-Projektes.
+
+Anmerkung Ausgangsbasis: Ich habe im Design und Skin Ordner das Blank-Theme kopiert und umbenannt in <strong>webguys</strong>. Alternativ könnt Ihr auch Eure gekauften Templates hier verwenden.
+
+(image: 003.png)
+
+Es kann losgehen, endlich. Was brauchen wir noch? Das Template als PNG. Auf die Feinheiten des Templatings mit Fireworks gehe ich jetzt hier nicht ein, das bitte selber anlesen (<a href="http://www.reinegger.net/50gruendephotoshopnichtfuerwebdesignzu_verwenden.html">siehe Link</a>) und seine eigene Meinung bilden. Ich habe durch jahrelange Agenturarbeit immer wieder Templater fluchen hören die schlechte PSD-Templates bekommen haben und dann nacharbeiten mussten. Das genau eben muss nicht sein wenn Ihr Eure Auftragsarbeiten als PNG aus Fireworks heraus als Zuarbeit bekommt. Es mag sein das Ihr Euch umgewöhnen müsst, aber glaubt mir es lohnt sich!
+
+Nun ein kleines Beispiel wie man eben ganz schnell CSS-Formatierungen ändern kann ohne hin und her zu switchen zwischen 1000.ten Fenstern:
+
+Wir wollen die Farbe und Schriftart der H2 der Startseite ändern. Element anklicken, rechte Maustaste, Element untersuchen.
+
+(image: 004.png)
+
+Im Fenster Styles vom Firebug ändern wir den Farbwert von Schwarz auf den gewünschten Wert. Danach wechseln wir zu PhpStorm und schauen uns unter dem Tab CSS-X-Fire mal an was wir sehen , tata, unsere Änderungen im Firefox. Nun müssen wir nur noch auf <strong>Apply All Changes</strong> klicken und PhpStorm trägt die Änderungen in die lokale CSS ein.
+
+(image: 005.png)<h2>Was bedeutet das für uns:</h2>
+Wenn alle Angaben zum Template vorhanden sind, das Maximum wäre ein perfekt ausgearbeiteter Styleguide vom Auftraggeber inkl. fertigem Template, dann kann man mit einem Rutsch eine Seite im Frontend durchstylen und dann einfach im PhpStorm alle Änderungen übernehmen. Man spart sich das mühsame übertragen der Werte aus dem Firebug in den CSS-Editor, das genau macht CSS-X-Fire für uns. Genial.
+
+Es gibt noch 2 weitere Beispiele auf die ich hier eingehen will.
+<h3>Beispiel 1:</h3>
+PhpStorm erkennt alle verwendeten IDs und Klassen die in Eurem HTML-Templates verwendet werden und schlägt diese auch mit Code-Completition vor wenn ihr direkt im CSS arbeitet. Perfekt wenn man gerade nicht mehr weiß wie man wo was benannt hat.
+<h3>Beispiel 2:</h3>
+Wenn ihr direkt im CSS-File arbeitet und ein Bild als Hintergrund verwenden wollt zeigt Euch PhpStorm an ob dieses Bild vorhanden ist oder nicht. In unserem Fall wollen wir den Header mit einem Background-Image versehen. Das Bild ist aber nicht vorhanden, PhpStorm zeigt Euch das der zu verwendendete Bildname nicht vorhanden ist (rot markiert). Eine sehr schöne optische Kontrolle, man spart sich die Fehlersuche schon vor dem Preview im Browser.
+
+(image: 006.gif)<h2>GIT-Integration</h2>
+Nun haben wir ja Dateien geändert bzw. hinzugefügt. PhpStorm zeigt Euch welche Dateien noch nicht im GIT sind bzw. welche geänderten noch nicht commited. Diese werden entweder <strong>blau</strong> (geändert) oder <strong>rot</strong> (neu hinzugefügt) im Directory-Listing angezeigt. Dazu nun einfach auf den oberen Tab der jeweiligen Datei klicken, Git - Commit File, einen Kommentar dazu schreiben und ab damit ins GIT. Thats It! Somit seit Ihr immer schön sauber und könnt auch schnell mal eine Datei zurückholen wenn was schiefgegangen ist.
+
+(image: 007.gif)<h2>Fazit:</h2>
+Alleine beim Templating mit PhpStorm gewinnt Ihr eine Menge Zeit und Eure Projekte sind schneller fertig. Die Einarbeitungszeit ist sehr gering. Gute bis sehr gute Kenntnisse im Aufbau des Magento-Layouts sind aber zwingende Vorraussetzung. Nicht behandelt haben wir heute das Debugging mit PhpStorm, das würde den Rahmen sprengen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2472

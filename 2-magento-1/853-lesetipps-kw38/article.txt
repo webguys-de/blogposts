@@ -1,0 +1,58 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW38
+
+----
+
+Date: 2010-09-26
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Auf zu den Lesetipps aus KW38. Soeben habe ich den Blog von <a href="http://matthias-zeis.com">Matthias Zeis</a> entdeckt der nun auch direkt mit zwei spannenden Artikel auffährt: Zuerst endlich eine <strong>ausführliche Buchrezension</strong> für "<a href="http://www.matthias-zeis.com/archiv/buchrezension-magento-handbuch-fuer-entwickler">Magento – Das Handbuch für Entwickler</a>" und im Zweiten beschreibt Matthias sehr ausführlich den <a href="http://www.matthias-zeis.com/archiv/magento-1-4-ablauf-page-request">Ablauf eines Page-Requests</a>.
+
+<strong>Vielleicht meldet sich Matthias Zeis, und auch gerne andere Interessenten, für eine kleine Blogroll :)</strong>
+
+Dann möchte ich noch gerne auf das Projekt von Jan Brinkmann mit dem Namen <a href="http://sqlexamples.org">SQLExampes.org</a> verweisen. Jan sammelt einige Beispiele zu SQL-Abfragen, erklärt Techniken und verlost unter <a href="http://sqlexamples.org/take-advantage">eifrigen Autoren einige Amazon-Gutscheine</a>.
+
+Zum Schluss möchte ich noch erwähnen das der <a href="http://www.webguys.de/magento/lesetipps-kw37/">Hosting-Test aus den letzten Lesetipps</a> nun als Gastbeitrag auf <a href="http://www.ecommerce-lounge.de/magento-hosting-test-2806/">Ecommerce-Lounge.de</a> zu finden ist.
+<div id="_mcePaste" style="position: absolute; left: -10000px; top: 0px; width: 1px; height: 1px; overflow: hidden;">
+<h1 class="left larger"><a title="Permanenter Link zu Buchrezension: Magento – Das Handbuch für Entwickler" rel="bookmark" href="http://www.matthias-zeis.com/archiv/buchrezension-magento-handbuch-fuer-entwickler">Magento – Das Handbuch für Entwickler</a></h1>
+</div>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 853

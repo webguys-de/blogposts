@@ -1,0 +1,59 @@
+Article-meta: 
+
+----
+
+Title: Türchen 24: Frohe Weihnachten
+
+----
+
+Date: 2011-12-24
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wow. 23 Türchen liegen hinter uns und die 20 Gastautoren haben einen unglaublichen Job gemacht. Ich bin absolut beeindruckt davon welche Qualität die Beiträge hatten und das beinahe alle zu ihrem Wort gestanden haben und pünktlich ihren Beitrag geliefert haben. Eine, wie ich finde, wirklich richtig tolle Community-Aktion. Vielen vielen Dank allen Gastautoren, Kommentatoren und Lesern. 
+
+----
+
+Text: Traditionell gibt es am 24. kein "besonderes" Magento Türchen sondern ausschließen ein paar Worte: <em>Wir wünschen euch allen schöne Feiertage; lasst Magento einmal in der Ecke liegen und kümmert euch um Familie und Freunde - und nehmt euch auch mal Zeit für euch.</em>
+
+Am Ende möchte ich mich noch bei Mittwald für das kleine Weihnachtsgeschenk bedanken. Die Schokolade war sehr lecker aber der persönliche Text hat mich am meisten gefreut.
+
+(image: 2011-12-20-21.10.41.jpg)
+<h2>Das war unser Adventskalender 2011</h2>
+
+(advent: 2011)
+
+
+P.S. Zur Organisation des Kalenders habe ich 112 Mails erhalten und ca. 150 geschrieben :) Von Diskussionen im Skype einmal abgesehen!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2592

@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: Türchen 24: Frohe Weihnachten
+
+----
+
+Date: 2012-12-24
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Rasend schnell verging die Adventszeit auch dieses Jahr wieder. Durch den Adventskalender hatte ihr, hoffentlich eine genauso kurze Vorweihnachtszeit wie ich. 23 Autoren, mich eingeschlossen, haben uns im dritten Jahr in Folge mit tollen, spannenden und erstaunlichen Magento-Themen überrascht. Ich bin jedes Jahr wieder absolut erstaunt das alle Autoren die Artikel pünktlich, wenn auch manchmal kurz vor knapp, abliefern und, falls es doch einmal zu einer Verspätung kommt, direkt ein anderer Autor schon fertig ist.
+
+
+
+----
+
+Text: <h2>Danke an alle Magento Entwickler</h2>
+Vielen vielen lieben Dank euch allen. Ich selbst freue mich nach der Zeit immer wie ein kleines Kind - wir haben es geschafft. Der Kalender ist nicht abgerissen und beinhaltet wieder wirklich tolle Themen durch die ich viele spannende neue Dinge entdeckt habe.
+
+Traditionell gibt es an Weihnachten aber kein weiteres Türchen sondern, wie jedes Jahr, nur ein paar Worte:
+<blockquote>Genießt die Tage mit Eurer Familie und Euren Freunden. Wir hören nach Weihnachten voneinander.</blockquote>
+Zudem habe ich noch eine <strong>kleine Aufgabe für Dich</strong> zu welcher mit das Magazin <a href="http://www.amazon.de/s/?_encoding=UTF8&site-redirect=de&tag=magentwebguyd-21&linkCode=ur2&camp=1638&creative=19454&field-keywords=Psychologie%20Heute%20&url=search-alias%3Daps" target="_blank">Psychologie Heute</a> inspiriert hat:
+<blockquote>Suche Dir einen ruhigen Fleck, setze dich hin und überlege dir drei Dinge für du am heutigen Tag dankbar warst. Wenn du magst teile es mit uns in den Kommentaren.</blockquote>
+Ich bin gespannt :-)
+
+Frohe Weihnachten und einen guten Rutsch!
+
+Euer Tobi
+<h2>Der Adventskalender 2012 im Überblick</h2>
+
+(advent: 2012)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3351

@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Magento in voller Bandbreite – Das alles kann das Shop-System
+
+----
+
+Date: 2011-05-24
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Heute möchte ich, in eigener Sache, einmal darauf hinweisen das ich, Tobias Vogt, am 28. Juni 2011 einen Vortrag zum Thema "<strong><strong>Magento in voller Bandbreite – Das alles kann das beliebteste Shop-System"</strong></strong> halte. Weitere Informationen gibt es unter <a href="http://www.internet-days.de/id9/">http://www.internet-days.de/id9/</a><strong><strong></strong></strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1646

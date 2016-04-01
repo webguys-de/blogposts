@@ -1,0 +1,75 @@
+Article-meta: 
+
+----
+
+Title: Aus Bestellung automatisch Rechnung generieren
+
+----
+
+Date: 2010-08-03
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: In Magento besteht nicht automatisch zu jeder Bestellung eine Rechnung. Das heißt das zu einer Bestellung erst eine Rechnung erstellt werden muss. Das kann natürlich mit ein paar Code-Zeilen auch automatisch gehen: 
+
+----
+
+Text: (code lang: php)
+$order = Mage::getModel('sales/order_invoice')->loadByIncrementId(100000006);
+
+$invoice = $order->prepareInvoice();
+$invoice->register()->pay();
+$invoice->save();
+
+$pdf = Mage::getModel('sales/order_pdf_invoice')->getPdf( array($invoice) );
+(/code)
+
+Das PDF lässt sich dann natürlich auch noch per E-Mail verschicken:
+
+(code lang: php)
+$mail = new Zend_Mail();
+$mail->setSubject('Order '. $order->getIncrementId() );
+$mail->setBodyText('Test');
+
+$mail->setFrom('mail@absender.test');
+$mail->addTo('mail@empfaenger.test', 'Ein Empfänger');
+
+$attachment = $mail->createAttachment( $pdf->render() );
+$attachment->filename = $order->getIncrementId().'.pdf';
+
+$mail->send();
+(/code)
+
+In Kombination mit dem <a href="http://www.webguys.de/magento/events-in-magento-export-bei-neuer-bestellung/">Artikel Events in Magento: Export bei neuer Bestellung</a> lässt sich so auch automatisch eine Rechnung an den Kunden verschicken. <strong>Ein kleiner Tipp:</strong> Aus Erfahrung übersehen Kunden separate E-Mails mit dem Betreff "Ihre Rechnung zu 100000006" weniger schnell als wenn die Rechnung direkt im Anhang der Bestell-Email verschickt wird.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 440

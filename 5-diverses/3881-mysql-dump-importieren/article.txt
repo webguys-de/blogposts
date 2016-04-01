@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: MySQL-Dump importieren
+
+----
+
+Date: 2014-01-27
+
+----
+
+Description: 
+
+----
+
+Tags: 
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Beim Importieren eines MySQL-Dumps von Magento muss man aufpassen. Hier es ist ganz wichtig das der Dump <em>SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO'</em> enthält. Sonst wird der Admin-Store mit der ID 1, statt 0, importiert was natürlich zu viel Chaos führt :)
+
+
+
+----
+
+Text: P.S. Der Beitrag ist als Gedankenstützen zu verstehen
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3881

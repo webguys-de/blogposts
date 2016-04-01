@@ -1,0 +1,58 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW39/40
+
+----
+
+Date: 2010-10-11
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Huch, da war schon eine Woche herum und die Lesetipps fehlten. Leider ging es bei mir zeitlich ein wenig "drunter und drüber" so das ich jetzt erst zu ein paar Lesetipps komme:
+
+----
+
+Text: Erst mal, von mir völlig übersehen, gibt es seit August schon <a href="http://magentopodcast.de/2010/08/magento-podcast-8/">einen neuen Beitrag</a> des <a href="http://magentopodcast.de/2010/08/magento-podcast-8/">Magento-Podcast</a>.  David Fuhr erklärt, kurz und knapp, ein paar Details zu <a href="http://www.mageblog.de/2010/10/10/namenskonventionen-im-layout-xml/">Magento-Namenskonventionen im XML</a>. <a href="http://www.matthias-zeis.com">Matthias Zeis</a> veröffentlicht wieder einen sehr umfangreichen Beitrag in dem er sich mit der <a href="http://www.matthias-zeis.com">Toplinks von Magento</a> beschäftigt. (Leider ist sein Blog z.Z. nicht erreichbar)
+
+Zudem noch interessant:
+<ul><li><a href="http://www.magelounge.de/2010/09/37-punkte-checkliste-fuer-den-magento-golive/">37 Punkte-Checkliste für den Magento Golive</a></li>
+	<li><a href="http://www.magelounge.de/2010/10/magento-backups-erstellen-und-schneller-importieren/">Magento-Backups erstellen und schneller importieren</a></li>
+	<li><a href="http://blog.magentomagik.com/magento-widgets-start-using-magento-widgets-just-like-wordpress/">Magento Widgets: Start Using Magento Widgets Just Like WordPress </a></li>
+</ul>
+Nebenbei ist zur Zeit, leider ohne mich, noch <a href="http://www.magentocommerce.com/blog/developer-paradise-kick-off/">Magento Developer Paradies</a>. Also unbedingt Twitter mit dem Hash #magedev im Auge behalten!
+
+Abseits von Magento erklärt <a href="http://blog.ppfeufer.de/dont-panic-42-es-ist-nur-ein-datum/">Peter Pfeuer</a> was es eigentlich mit dem <a href="http://blog.ppfeufer.de/dont-panic-42-es-ist-nur-ein-datum/">10.10.10</a> auf sich hat. Zusätzlich zelebriert er den Timestamp "1234567890". Toll :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 886

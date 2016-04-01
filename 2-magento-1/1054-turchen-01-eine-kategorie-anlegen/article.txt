@@ -1,0 +1,58 @@
+Article-meta: 
+
+----
+
+Title: Türchen 01: Eine Kategorie anlegen
+
+----
+
+Date: 2010-12-01
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Jeden Tag einen kleinen Code-Schnipsel bis dann endlich Weihnachten ist. Heute beginnen wir mit dem Anlegen einer Kategorie mittels PHP-Code:
+
+(code lang: php)
+$category = Mage::getModel('catalog/category');
+$category->setPath( '1/2' );
+$category->setName( $name );
+$category->save();
+(/code)
+
+Zuerst holen wir uns das Category-Model. Dort setzen wir mittels <em>setPath</em> den Pfad (also die Parents) unserer neuen Kategorie. Der Pfad beginnt immer mit 1 gefolgt von der Root-Kategorie des Shops. Danach können beliebig viele Oberkategorien zur neuen Kategorie folgen. Mittels <em>setName</em> wird noch der Name der Kategorie gesetzt und letztlich mittels <em>save</em> das ganze gespeichert.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1054

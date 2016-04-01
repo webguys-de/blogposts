@@ -1,0 +1,126 @@
+Article-meta: 
+
+----
+
+Title: Türchen 05: Magento Connect Pakete in der Shell bauen
+
+----
+
+Date: 2012-12-05
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: karl
+
+----
+
+Article-content: 
+
+----
+
+Intro: Als Entwickler steht man so manches mal vor der Herrausforderung Pakete für Magento Connect zu erstellen. Hierfür bietet Magento im Backend ein klickbares GUI. Dazu muss man eine ganze Reihe von Formularen ausfüllen und zum Schluss muss der Entwickler die Pfade zu den Quellen seines Moduls konfigurieren. Im Anschluss daran wird ein Archiv erstellt, welches anschließend zu Magento Connect 2.0 hoch geladen weden kann.
+
+Leider ist es nicht möglich das Profil zu speichern. Lediglich bestehende Pakete können geladen und somit die Felder vorausgefüllt werden. Dieser Vorgang muss nun für jedes Paket, dass man erstellt hat, wiederholt werden. Das ganze ist aufwendig und der gemeine Entwickler schreibt lieber Konfigurationsdateien als etwas zu klicken!
+
+
+
+----
+
+Text: <h2>Geschichte</h2>
+Ich habe diese Script erstellt weil ich eine neue Version der <a href="https://github.com/Flagbit/Magento-FilterUrls" title="Flagbit FilterUrls" target="_blank">Flagbit FilterUrls</a> Extension veröffentlichen wollte. Leider hatte ich nach dem ersten klicken das Archiv gelöscht und hatte wenig Lust das noch mal zu machen. Und so einen Ausflug in den Magento Core macht doch jeder mal gerne oder?
+
+<h2>Was kann es bis jetzt?</h2>
+Das Script basiert auf dem originalen Packager Code. Der Unterschied liegt lediglich in der Quelle der Informationen. Diese werden aus einer <a href="http://getcomposer.org/" title="Composer" target="_blank">Composer</a> Konfiguration gelesen. Was Composer ist und warum man es unbedingt auch für Magento verwenden sollte, lest ihr am besten im <a href="http://www.webguys.de/magento/adventskalender/turchen-02-composer-fur-magento/">Türchen 02: Composer für Magento</a> von Vinai nach.
+
+Das Script liest aus einer ```composer.json``` alle Daten aus und füllt die Packager Klassen mit Informationen. Anschließend wird das Paket gebaut. Dazu muss das Script in Ordner ```shell``` einer Magento-Installation liegen und es benötigt als Parameter den Pfad zur ```composer.json```. Sollte wichtige Informationen fehlen, reagiert der Packager mit Exceptions. 
+
+Ein Beispielaufruf lautet wie folgt:
+
+(code lang: php)
+php packager.php --composer <path to composer.json>
+(/code)
+
+Das fertige Archiv wird in Form einer ```*.tgz``` Datei in ```Pfad zu Magento/var/connect``` abgelegt. Diese Pakete sind allerdings nur mit Magento Connect 2.0 kompatibel.
+
+<h3>Wie muss eine composer.json aussehen?</h3>
+(code lang: javascript)
+{
+    "name":"module_vendor/module_name",
+    "type":"magento-module",
+    "license":"GPL-3.0",
+    "description":"",
+    "homepage":"http://example.com",
+    "minimum-stability":"beta",
+    "authors":[
+        {
+            "name":"Author 1",
+            "email":"author1@example.de"
+        },
+        {
+            "name":"Author 2",
+            "email":"author2@example.de"
+        }
+    ],
+    "extras":{
+        "magento_connect":{
+            "channel":"community",
+            "php_min":"5.3.0",
+            "php_max":"6.0.0",
+            "content":[
+                {
+                    "type":"magecommunity",
+                    "structure":"dir",
+                    "path":"module_vendor/module_name"
+                },
+                {
+                    "type":"mageetc",
+                    "structure":"file",
+                    "path":"modules/module_config_file_name.xml"
+                },
+                {
+                    "type":"mage",
+                    "structure":"file",
+                    "path":"just a random file path"
+                }
+            ]
+        }
+    }
+}
+(/code)
+
+Der aufwendigste Teil ist der content Bereich. Hier müssen die Zielpfade der Quellen des Moduls im Bezug zu Magento hinterlegt werden. Das ist sehr ähnlich zo modman und es drängt sich der Gedanke auf daraus einfach eine modman Datei generieren zu lassen. 
+
+<h2>Was steht auf der Roadmap?</h2>
+
+<ul><li>Generierung einer modman Datei</li>
+	<li>Batchverarbeitung für mehrere composer.json Dateien</li>
+	<li>Unterstützung der fehlenden Optionen Felder aus dem Backend</li>
+</ul>
+
+Ich würde mich über Kommentare und Pullrequests freuen. Viel Spaß beim Packages erzeugen.
+
+Den Quellcode findet ihr GitHub unter: <a href="https://github.com/Flagbit/Magento-Packager" title="Magento Packager" target="_blank">Magento Packager</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3070

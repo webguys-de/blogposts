@@ -1,0 +1,261 @@
+Article-meta: 
+
+----
+
+Title: Türchen 22: Magento EAV Attribute Setup
+
+----
+
+Date: 2013-12-22
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: benmarks
+
+----
+
+Article-content: 
+
+----
+
+Intro: This post on EAV (Entity-Attribute-Value) in Magento intends to help developers understand the mechanics of EAV attribute modification, starting first with a quick description of EAV and then an explanation of the two main arbiters of attribute modification: ```addAttribute()``` and ```updateAttribute()```.
+
+
+
+----
+
+Text: An obvious first question is, "why use EAV in the first place?" Simply put, the EAV storage pattern is a strategy for handling entities with arbitrarily variable sets or properties - something which is common in eCommerce. EAV accomplishes this by decoupling entity attributes from the entity records themselves and storing their configuration metadata and entity relation separately. Developers wishing to avail themselves of the flexibility of EAV in Magento must become experts in the programmatic assignment of attributes and update of their configuration.
+
+(image: Magento-EAV-Attribute-Setup-Fig-00.png)
+
+In the above table, each row is the sole entity record, and each column represents an entity property. This is a typical entity data storage strategy (especially in web apps), and it is often implicitly coupled with the representation of the entity in the application. As implemented in the Magento 1 framework, the EAV storage pattern offers several functional advantages over the flat storage approach. To understand these advantages, compare the two entities above as they might be represented in a simple EAV storage scheme:
+
+(image: Magento-EAV-Attribute-Setup-Fig-01-650x400.jpg)
+
+The schema above demonstrates the decoupled storage which is possible with EAV, though it should be noted that it is not a complete diagram of Magento's EAV schema. <strong>Adding an attribute row (registering an attribute) in an EAV scheme is analogous to adding an extra column onto an entity table in a flat scheme.</strong>. While it can be easy to get lost in the enormity of Magento's EAV implementation (for example, the product entity in Magento 1 involves 18+ tables), there is an important benefit to consider beyond the decoupling of entity properties from data coordinates, and that benefit is <strong>attribute metadata</strong>. The columns in the ```eav_attribute``` table contain these metadata, and they are used for various purposes, such as determining the proper value storage table, providing value transformations for storage, etc.
+
+This introduction brings us to the means for effecting attribute configuration. The EAV setup model - <a href="//github.com/benmarks/magento-mirror/blob/1.7.0.2/app/code/core/Mage/Eav/Model/Entity/Setup.php#L35%E2%80%9D">```Mage_Eav_Model_Entity_Setup```</a> is responsible for both the initial installation of entity types and attributes as well as ongoing modifications to these configurations. This model is involved in the initial installation and configuration of entities and attributes as well as modifications to these configurations which may be needed later on. The two most important and oft-used post-installation functions are <a href="//github.com/benmarks/magento-mirror/blob/1.7.0.2/app/code/core/Mage/Eav/Model/Entity/Setup.php#L648%E2%80%9D">```addAttribute()```</a> and <a href="//github.com/benmarks/magento-mirror/blob/1.7.0.2/app/code/core/Mage/Eav/Model/Entity/Setup.php#L776%E2%80%9D">```updateAttribute()```</a>.
+<h2>```addAttribute()```</h2>
+```addAttribute()``` requires three arguments:
+<ul><li><strong>$entityTypeId</strong> The ```entity_type_id``` or ```entity_type_code``` from ```eav_entity_type``` table.</li>
+	<li><strong>$code</strong> The ```attribute_code``` value for the / from the ```eav_attribute``` table.</li>
+	<li><strong>array $attr</strong> A configuration array for attribute configuration values across multiple EAV tables</li>
+</ul>
+As the method name suggests, ```addAttribute()``` can be used to add an attribute (and its configuration) to a given entity type; again, it's akin to adding an additional column to a table which stores data for a flat entity. Internally, the method performs four distinct functions:
+<ul><li><em><strong>Function #1:</strong></em> Set default attribute configuration values</li>
+	<li><em><strong>Function #2:</strong></em> Determine if the specified attribute exists and if so, update instead</li>
+	<li><em><strong>Function #3:</strong></em> Determine if the attribute should be assigned to all sets</li>
+	<li><em><strong>Function #4:</strong></em> Add attribute options if necessary</li>
+</ul>
+So, this method is doing quite a lot, and as it turns out this method's behavior varies greatly depending on the values which are provided in the configuration array. Before expanding on this, it's essential to understand that the primary role of this method is to update columns in the ```eav_attibute``` table, and that these columns are the metadata which drive attribute behavior.
+<h3>#1: Setting default attribute config values</h3>
+Magento EAV setup uses <a href="//github.com/benmarks/magento-mirror/blob/1.7.0.2/app/code/core/Mage/Eav/Model/Entity/Setup.php#L592%E2%80%9D">```_prepareValues()```</a> for two purposes. The main purpose is the setting of default configuration values via simple ```array_merge()```:
+
+(code lang: php)
+protected function _prepareValues($attr)
+{
+    $data = array(
+        'backend_model'   => $this->_getValue($attr, 'backend'),
+        'backend_type'    => $this->_getValue($attr, 'type', 'varchar'),
+        'backend_table'   => $this->_getValue($attr, 'table'),
+        'frontend_model'  => $this->_getValue($attr, 'frontend'),
+        'frontend_input'  => $this->_getValue($attr, 'input', 'text'),
+        'frontend_label'  => $this->_getValue($attr, 'label'),
+        'frontend_class'  => $this->_getValue($attr, 'frontend_class'),
+        'source_model'    => $this->_getValue($attr, 'source'),
+        'is_required'     => $this->_getValue($attr, 'required', 1),
+        'is_user_defined' => $this->_getValue($attr, 'user_defined', 0),
+        'default_value'   => $this->_getValue($attr, 'default'),
+        'is_unique'       => $this->_getValue($attr, 'unique', 0),
+        'note'            => $this->_getValue($attr, 'note'),
+        'is_global'       => $this->_getValue($attr, 'global', 1),
+    );
+
+    return $data;
+}
+(/code)
+
+
+The universal metadata values which are set via this method are as follows:
+
+- <strong>type = varchar</strong> (attribute will be stored in the entity *_varchar table
+- <strong>input = text</strong> (```<input type="text" />``` will be rendered for editing this value)
+- <strong>required = 1</strong> (true)
+- <strong>user_defined = 0</strong> (false)
+- <strong>unique = 0</strong> (false)
+- <strong>global = 1</strong> (true, although this scope is overridden in extended metadata tables)
+
+So, this is the <em>main</em> purpose for the ``` _prepareValues()``` method. The second "purpose" for ```_prepareValues()``` is the aliasing of metadata column names. For example, ```backend_model``` is aliased to ```backend```, ```frontend_label``` becomes ```label```, etc. While this functionality is deliberate, the aliasing of metadata column names seems unjustifiable and should be considered (at best) as framework esoterica. In other words, it's <em>nuts</em> - don’t try to figure it out!
+
+There is a further consideration which developers should keep in mind when adding attributes to extant EAV entities. Certain modules (<strong>Mage_Catalog</strong>, <strong>Mage_Customer</strong>, and <strong>Enterprise_Rma</strong> actually extend the set of metadata for their attributes! For example, the <strong>Mage_Catalog</strong> entities ```catalog_product``` and ```catalog_category``` are configured in the ```eav_entity_type``` table with an ```additional_attribute_table``` value which points to the ```catalog_eav_attribute``` table, where these additional metadata columns are linked to the canonical ```eav_attribute``` records by foreign key. Dizzying, right? While this is tough to describe and comprehend in natural language, it is easy to visualize in a query browser as the difference between the results of the following two queries:
+<pre style="padding-bottom:1em;padding-left:5em">SELECT * FROM eav_attribute e WHERE e.entity_type_id
+IN (
+    SELECT entity_type_id
+    FROM eav_entity_type
+    WHERE entity_type_code
+    IN('catalog_category','catalog_product')
+)</pre>
+
+versus
+
+<pre style="padding-bottom:1em;padding-left:5em">SELECT * FROM eav_attribute e, catalog_eav_attribute ce
+WHERE e.attribute_id = ce.attribute_id</pre>
+
+The latter of these will be much wider and represents the relationship of the extended attribute metadata table. Essentially, the ```eav_attribute``` table contains generic attribute metadata which applies to all EAV attributes, and each entity has the ability to add additional metadata as appropriate. The reason why this is important is that these additional metadata may be subject to a similar default value scenario as those in the main ```eav_attribute table```. This is typically accomplished via a custom, module-specific EAV setup resource class which subclasses the ```Mage_Eav_Model_Entity_Setup``` and merges its ```_prepareValues()``` column values (and column aliases, damnit!) with those from the parent class; ref. <a href="//github.com/benmarks/magento-mirror/blob/1.7.0.2/app/code/core/Mage/Catalog/Model/Resource/Setup.php#L35%E2%80%9D">```Mage_Catalog_Model_Resource_Setup```</a>:
+
+(code lang: php)
+protected function _prepareValues($attr)
+{
+    $data = parent::_prepareValues($attr);
+    $data = array_merge($data, array(
+        'frontend_input_renderer'=> $this->_getValue($attr, 'input_renderer'),
+    //snip…
+    return $data;
+}
+(/code)
+
+It is therefore proper to use the appropriate module setup resource for the entity which is being modified. For example, when adding an attribute to the product or category entities, use an instance of ```Mage_Catalog_Model_Resource_Setup``` regardless of the module which is actually triggering the migration:
+
+(code lang: php)
+/* @var $installer Mage_Catalog_Model_Resource_Setup */
+$installer = Mage::getResourceModel('catalog/setup','catalog_setup');
+
+$installer->startSetup();
+
+$installer->addAttribute(
+    'catalog_product',
+    'custom_attrib',
+    array(/* ... */)
+);
+
+$installer->endSetup();
+(/code)
+
+This will ensure that the proper default values additional metadata values will be set. While it might seem that failing to use the proper setup class for a given entity's module would result in the omission of additional attribute metadata, the <a href="//github.com/benmarks/magento-mirror/blob/1.7.0.2/app/code/core/Mage/Eav/Model/Entity/Setup.php#L1421%E2%80%9D">```_insertAttributeAdditionalData()```</a> method will in fact check the entity type configuration and ensure that any additional metadata are properly inserted to the additional attribute metadata tables.
+<h3>#2: Determine if the specified attribute exists and if so, update instead</h3>
+One question which should occur to developers is, "What if the entity already has an associated attribute with the same ```attribute_code``` as the one being added?” Well, rather than ignoring the operation or throwing an exception, ```addAttribute()``` checks for this condition and performs an update instead:
+
+(code lang: php)
+protected function _prepareValues($attr)
+{
+    //snip...
+    $attributeId = $this->getAttribute($entityTypeId, $code, 'attribute_id');
+    if ($attributeId) {
+        $this->updateAttribute($entityTypeId, $attributeId, $data, null, $sortOrder);
+    } else {
+        $this->_insertAttribute($data);
+    }
+    //snip...
+}
+(/code)
+
+While it might seem appealing to just always use addAttribute() even when updating attributes, it should be that if an ```addAttribute()``` call results in an attribute update, <strong><em>any attribute metadata with default values which are not explicitly supplied to the method will be set to the default value as a result of ```_prepareValues()```</em></strong>! This could result in unintended overwrites of these attribute configuration values. It is therefore recommended to use ```addAttribute()``` <em>only</em> when adding an attribute. ```Mage_Eav_Model_Entity_Setup::getAttribute()``` can be used to test for attribute existence.
+
+<h3>#3: Determine if the attribute should be assigned to all sets:</h3>
+```addAttribute()``` checks two conditions to determine if an attribute should be added to all sets:
+
+(code lang: php)
+protected function _prepareValues($attr)
+{
+    //snip...
+    if (!empty($attr['group']) || empty($attr['user_defined'])) {
+        //miscellaneous logic to add to sets & groups
+    }
+    //snip...
+}
+(/code)
+
+The ```group``` field is simple: if ```group``` is specified, the attribute is placed "in" that attribute group in all attribute sets - ref. the ```eav_entity_attribute``` table. If the specified group does not exist in a given attribute set, the group is first created. This is the most functionally diverse use of ```addAttribute()```.
+
+The ```user_defined``` field is less obvious. Whereas the admin GUI in Magento potentially provides admin users with the ability to manipulate attribute configuration, the EAV config uses the is_user_defined flag (user_defined in an ```addAttribute()``` call) to determine whether users can remove an attribute from attribute sets. This flag should be set to 0 (for false) when the presence of an attribute in sets is imperative.
+<h3>#4: Add attribute options if necessary</h3>
+The fourth and final function of ```addAttribute()``` is to install attribute options, generally useful (functionally required) for attributes which are have <strong>select</strong> or <strong>multiselect</strong> as the ```frontend_input<span> value:``````
+
+(code lang: php)
+protected function _prepareValues($attr)
+{
+    //snip...
+        if (isset($attr['option']) && is_array($attr['option'])) {
+            $option = $attr['option'];
+            $option['attribute_id'] = $this->getAttributeId($entityTypeId, $code);
+            $this->addAttributeOption($option);
+        }
+    //snip...
+}
+(/code)
+
+I will leave it to you to figure out the array structure which should be used to provide the label-to-value association, sort order, and scoping for option values, or you can wait for the book I'm writing with a friend of mine.
+<h2>```updateAttribute()```</h2>
+<a href="//github.com/benmarks/magento-mirror/blob/1.7.0.2/app/code/core/Mage/Eav/Model/Entity/Setup.php#L776%E2%80%9D">```updateAttribute()```</a> is much less varied in function compared to ```addAttribute()```. It requires three arguments, is really useful with four, and a fifth is optional:
+<ul><li><strong>$entityTypeId</strong>
+The ```entity_type_id``` or ```entity_type_code``` from the ```eav_entity_type``` table</li>
+	<li><strong>$id</strong>
+The ```attribute_id``` or ```attribute_code``` from the ```eav_attribute table```</li>
+	<li><strong>$field</strong>
+The column name (or array of column names) from the ```eav_attribute``` table or "additional" attribute table</li>
+	<li><strong>$value</strong>
+The value (or array of values) to be updated</li>
+	<li><strong>$sortOrder</strong>
+An integer value which is used in the ```eav_entity_attribute.sort_order``` column, which may affect the placement of the attribute edit field in admin views</li>
+</ul>
+The essential footnote here is that when using ```updateAttribute()``` the attribute metadata column names are not passed through ```_prepareValues()```, meaning that the aliasing does not apply! A simple code sample demonstrates the difference:
+
+(code lang: php)
+
+/* @var $installer Mage_Catalog_Model_Resource_Setup */
+$installer = Mage::getResourceModel('catalog/setup','catalog_setup');
+
+$installer->startSetup();
+
+$installer->addAttribute(
+    'catalog_product',
+    'custom_attrib',
+    array('label' => 'Initial Label') //note the column alias must be used!
+);
+
+$installer->endSetup();
+(/code)
+
+versus
+
+(code lang: php)
+/* @var $installer Mage_Catalog_Model_Resource_Setup */
+$installer = Mage::getResourceModel('catalog/setup','catalog_setup');
+
+$installer->startSetup();
+
+$installer->updateAttribute(
+    'catalog_product',
+    'custom_attrib',
+    'frontend_label', //note the full column name must be used!
+    'Initial Label'
+);
+
+$installer->endSetup();
+(/code)
+
+Requiring the full column name is an unfortunate difference between ```updateAttribute()``` and ```addAttribute()```. If the Magento core team wants to give a Christmas present to the developer community, they could remove the column aliasing altogether!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3769

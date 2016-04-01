@@ -1,0 +1,288 @@
+Article-meta: 
+
+----
+
+Title: Türchen 06: Frontend-Tests mit CasperJS
+
+----
+
+Date: 2013-12-06
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: vanhoi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Normalerweise kommt am 6. Advent der Nikolaus, nicht aber bei uns, heute kommt nämlich der Kasper. Und nicht irgendeiner, sondern der CasperJS! Bevor ich jedoch erkläre, was dieses CasperJS ist, möchte ich euch gerne einen Überblick über den folgenden Beitrag geben.
+
+
+
+----
+
+Text: <h2>Vorwort</h2>
+Heute beschäftigen wir uns mit Testautomatisierung im Bereich Frontend. Zum jetzigen Zeitpunkt existieren etliche Tools, um Web-Oberflächen zu testen. Den meisten Lesern hier dürfte <a href="http://www.seleniumhq.org/">Selenium</a> bekannt sein. Vor allem findet Selenium im Bereich der End-to-End Tests Verwendung. Ein typischer Workflow ist die Erstellung der Tests anhand eines Makros und die manuelle erneute Ausführung der Tests, sobald ein Entwickler den Code geändert hat. Natürlich gibt es hier auch die Möglichkeit, die Tests im Rahmen einer Continues-Integration-Strategie zu portieren und zu automatisieren. Dieses Thema würde jedoch den Rahmen dieses Artikels sprengen.
+
+Obwohl diese Tests sehr einfach, sogar mit wenigen, oder gar keinen Programmierkentnissen erstellt und ausgeführt werden können, sind diese Tests sehr oft der Grund dafür, dass sich Entwickler beklagen. Das hat viele Ursachen:
+<ul><li>Der Browser ist langsam. Einfache Tests sind durchaus hilfreich, komplette Testsuites können jedoch bei mehreren Entwickler die Entwicklungszeit drastisch erhöhen.</li>
+	<li>Oberflächentests sind sehr anfällig für Veränderungen. Eine Veränderung am System kann einen ganzen Rattenschwanz an weiteren Veränderungen nachziehen. Das ist zwar auch bei Unit-Tests der Fall, jedoch sind Unit-Tests durch ihre Eigenschaften (Komponententests, lose Kopplung usw.) weniger anfällig für Seiteneffekte.</li>
+	<li>Oberflächentests sind nicht deterministisch. In der Informatik liefern deterministische Abläufe bei fest definierten Zuständen stets die gleiche Ausgabe. Wenn die Datenbank zum Beispiel hängt, oder andere abhängige externe Systeme nicht funktionieren wie sie sollten, so ist dieses Verhalten nur schwer kontrollierbar.</li>
+</ul>
+Viele Entwickler stellen sich also die Frage, welcher Lösungsansatz gewählt werden soll. Jedoch existieren so viele unterschiedliche Testframeworks, so dass die Wahl sehr schwer fällt. Im Folgenden wird ein sehr abstrakter Lösungsansatz beschrieben.
+<h2>Lösungsansatz</h2>
+In der traditionellen Softwareentwicklung wird im Bereich der Qualitätssicherung oftmals auf Vorgehensmodelle wie zum Beispiel das V-Modell verwiesen. Das V-Modell kennt verschiedene Stufen der Testintegration und empfiehlt für spezifische Projektphasen entsprechende Teststrategien.
+
+<img alt="V-Modell" src="http://upload.wikimedia.org/wikipedia/de/thumb/3/3a/V-Modell.svg/450px-V-Modell.svg.png">
+
+Quelle: http://www.wikipedia.de
+
+Dieser Ansatz kann im Rahmen agiler Softwareentwicklung nicht gewählt werden, da eine phasenbasierte Entwicklung zu aufwendig wäre. Einen pragmatischeren Ansatz liefert die Test-Pyramide.<sup id="fnref:1"><a href="1" rel="footnote">1</a></sup> Sie ähnelt sehr dem V-Modell, hat jedoch keinen festen Bezug zu einzelnen Projektphasen. Sie sagt jedoch aus, dass Unit-Tests das Fundament jeder Teststrategie darstellen sollten. Je höher wir die Pyramide erklimmen, um so kleiner wird die Anzahl der zu entwickelnden Tests. Damit steigt jedoch auch die Ausführungszeit der Tests. Um so höher wir also kommen, um so aufwändiger wird es, die Tests zu automatisieren und zu koordinieren. Hierzu gibt es auch einige sehr ausführliche und interessante Blogbeiträge sowie zahlreiche Literatur. <sup id="fnref:2"><a href="2" rel="footnote">2</a></sup><img alt="Testpyramide" src="http://blog.caplin.com/wp-content/uploads/Testing-pyramid.jpg" width="510" height="409">
+Quelle: http://blog.caplin.com
+
+Wir fokussieren uns heute jedoch auf die Frontend-Tests und meiner Meinung nach müssen gute Frontend-Tests folgende Kriterien erfüllen:
+<ul><li>Schnelles Feedback: Wenn ein Entwickler 10 Minuten warten muss, bis ein Testergebnis bereit steht, so ist das nicht mehr effizient. Tests müssen eine kurze Laufzeit haben, um dem Entwickler zügig Feedback geben zu können.</li>
+	<li>Geringer Adaptionsaufwand: Tests, insbesondere UI-Tests scheitern häufig und sind nicht selten bereits wenige Tage nach der Erstellung veraltet. Es muss also einfach sein, diese Tests anpassen zu können.</li>
+	<li>Sinnvoll: Eine Komponente hat andere Qualitätsrichtlinien als eine Weboberfläche. Wenn übertrieben gesagt jeder Pixel im Frontend überprüft wird, so ist das wenig sinnvoll und auch nicht mehr produktiv.</li>
+	<li>Spezifisch: UI-Tests dürfen nicht zu abhängig von der DOM-Struktur sein. Die Wartung von xpath oder hierarchischen CSS-Selektoren basierten Tests ist zu aufwändig. Besser ist der gezielte Einsatz von CSS-IDs oder auch CSS-Klassen.</li>
+</ul>
+Man könnte hier schon einen Schlussstrich ziehen und behaupten, Selenium erfülle keinen Zweck, da es fast jedem angesprochenen Punkt widerspricht. Das stimmt jedoch nicht, da das tatsächliche Testen auf verschiedenen Plattformen und Browser sehr sinnvoll ist. Man benötigt jedoch zur Entwicklungszeit eine schlankere Lösung, die diese Kriterien erfüllt: Headless Website Testing.
+<h2>PhantomJS: Headless Browser</h2>
+Headless Browser, was ist das eigentlich?
+<blockquote>PhantomJS is a headless WebKit scriptable with a JavaScript API. It has fast and native support for various web standards: DOM handling, CSS selector, JSON, Canvas, and SVG.</blockquote>
+Im Grunde genommen und vereinfacht ausgedrückt ist ein Headless Browser ein Browser ohne grafische Oberfläche. Diese Browser können daher ohne großen Aufwand auf einem Server ausgeführt werden und besitzen nur wenige Nachteile gegenüber Browser mit einer GUI, wie zum Beispiel einer fehlenden Flashunterstützung. Aber wer möchte auf dem Terminal schon Flash-Dateien testen?
+
+Eine ohne Gewähr und auf Vollständigkeit überpfüfte, jedoch sehr umfangreiche Liste von Headless Browser und Tools findet sich bei <a href="http://stackoverflow.com/questions/18539491/headless-browser-and-scraping-solutions">Stackoverflow</a>.
+
+<a href="http://phantomjs.org/">PhantomJS</a> basiert auf WebKit und liefert einige nützliche Features:
+<ul><li>Eine umfassende <a href="http://phantomjs.org/api/">API</a>, um den Browser zu steuern</li>
+	<li>viele Helferlein um zum Beispiel Screenshots zu erstellen, oder Third-Party Libraries einzubinden</li>
+	<li>Eine große Community und viele interessante Projekte rund um PhantomJS</li>
+</ul>
+PhantomJS kann einfach direkt von den Quellen installiert werden. Eine ausführliche <a href="http://phantomjs.org/build.html">Installationsanleitung</a> findet sich auf der Homepage. Nach der Installation lässt sich PhantomJS direkt von der Konsole aus starten.
+
+(code lang: php)
+me@home:~$ phantomjs --version
+1.9.2
+me@home:~$ phantomjs
+phantomjs> console.log('Hohoho, liebe Leser!');
+Hohoho, liebe Leser!
+(/code)
+
+Alternativ und im Alltag die bessere Lösung ist einfach das Anlegen einer neuen JavaScript-Datei, die wir zum Beispiel *hohoho.js* nennen.
+
+(code lang: php)
+me@home:~$ echo "console.log('Hohoho, liebe Leser')" > hohoho.js
+me@home:~$ phantomjs hohoho.js
+(/code)
+
+Der aufmerksame Leser und Mitmacher merkt, dass das Skript nicht terminiert. Das liegt daran, dass der Browser explizit geschlossen werden muss. Dazu benötigt man die Funktion *phantom.exit*. Die gesamte [API](http://phantomjs.org/api/phantom/) zum phantom Objekt ist nicht sehr umfangreich und kann auch in der Mittagspause schnell durchgelesen werden.
+
+Das folgende Beispiel öffnet die Seite www.webguys.de und erstellt davon einen Screenshot.
+
+(code lang: php)
+// webguys.js
+var page = require('webpage').create();
+page.open('http://www.webguys.de', function() {
+  page.render('example.png');
+  phantom.exit();
+});
+(/code)
+
+Dass der Screenshot nicht wirklich so aussieht wie unter Chrome, Safari oder Firefox liegt unter anderem daran, dass andere Fonts benutzt werden. Das interessiert uns jedoch nicht sonderlich. Viel eher sind wir an der Struktur der Seite interessiert und dass diese ganz ordentlich aussieht, sehen wir an dem [Screenshot](http://s1.directupload.net/file/d/3460/3sfciepi_png.htm).
+
+Das ist zwar alles ganz schön, hat aber mit dem Testen an sich wenig zu tun.
+
+<h2>CasperJS: Headless Browser Testing</h2>
+Während BrowserJS den Browser zur Verfügung stellt, kann CasperJS als ein Test-Framework gesehen werden, das lediglich den Browser benutzt. In der Tat ist CasperJS so mächtig, dass es ohne großen Herausforderungen möglich ist, einen Crawler auf dessen Basis zu entwickeln. Der Hauptanwendungszweck ist und bleibt jedoch das Testen.
+
+Die <a href="http://casperjs.org/">Installation</a> ist ähnlich einfach wie bei PhantomJS und in wenigen Minuten erledigt. Eine detaillierte Installationsanweisung findet ihr <a href="https://github.com/mothership-gmbh/hackathon-casperjs/blob/develop/SETUP.md">hier</a>. Glücklicherweise verwendet CasperJS in der Standardinstallation PhantomJS, so dass der gesamte Befehlssatz von PhantomJS zur Verfügung steht. Somit lassen sich auch alle PhantomJS-Skripte unter CasperJS ausführen.
+
+(code lang: php)
+me@home:~$ casperjs --version
+1.1.0-DEV
+me@home:~$ casperjs webguys.de
+(/code)
+
+Nun aber mal zu einem einfachen Test. Das folgende Snippet ruft die Seite *http://www.webguys.de* auf und gibt einfach den Titel der Seite aus.
+
+(code lang: php)
+var casper = require('casper').create();
+casper.options.verbose  = true;
+casper.options.logLevel = 'debug';
+
+casper.test.begin('Homepage', function suite(test) {
+
+    // Start page
+    casper.start('http://www.webguys.de', function () {
+
+        this.echo(this.getTitle());
+
+        test.info('Testing Homepage');
+
+    }).run(function () {
+        test.done();
+    });
+});
+(/code)
+
+Output:
+
+(code lang: php)
+casperjs test homepage.js
+Test file: homepage.js
+# Homepage
+Magento Blog für Entwickler und eCommerce-Shops - webguys.de « Magento Blog für Entwickler und eCommerce-Shops – webguys.de
+Testing Homepage
+(/code)
+
+Ich finde diesen Output während der Entwicklung jedoch wenig aufschlussreich, also fügen wir einfach mal zwei Zeilen dazu, die das Debugging vereinfachen.
+
+(code lang: php)
+var casper = require('casper').create();
+
+// diese Zeilen hinzufügen
+casper.options.verbose  = true;
+casper.options.logLevel = 'debug';
+(/code)
+
+Output:
+
+(code lang: php)
+# Homepage
+[info] [phantom] Starting...
+[info] [phantom] Running suite: 2 steps
+[debug] [phantom] opening url: http://www.webguys.de/, HTTP GET
+[debug] [phantom] Navigation requested: url=http://www.webguys.de/, type=Other, willNavigate=true, isMainFrame=true
+[debug] [phantom] url changed to &quot;http://www.webguys.de/&quot;
+[debug] [phantom] Successfully injected Casper client-side utilities
+[info] [phantom] Step anonymous 2/2 http://www.webguys.de/ (HTTP 200)
+Magento Blog für Entwickler und eCommerce-Shops - webguys.de « Magento Blog für Entwickler und eCommerce-Shops – webguys.de
+Testing Homepage
+[info] [phantom] Step anonymous 2/2: done in 3967ms.
+[info] [phantom] Done 2 steps in 3984ms
+(/code)
+<h2>Assertions</h2>
+Sämtliche Assertions werden in CasperJS durch den Prototypen <a href="http://docs.casperjs.org/en/latest/modules/tester.html#the-tester-prototype">Tester</a> zur Verfügung gestellt. Geläufig dürften die Funktionen <em>assert()</em> und <em>assertEquals()</em> sein. Ich empfehle jedem interessierten, sich die API genauer anzuschauen und bei Bedarf einfach zu entscheiden, welche Funktionen sinnvoll sind und welche nicht. Aus meiner Erfahrung kommt man mit den einfachen <em>assert()</em> schon bereits sehr weit.
+
+Wir wollen im folgenden Beispiel den vorherigen Testcase um sinnvolle Asserts erweitern. Zum Beispiel gebe ich bereits den Titel aus. Jetzt weiß ich also auch, wie der Titel lautet und kann diesen erwarteten Wert einfach überprüfen.
+
+(code lang: php)
+ // Start page
+    casper.start('http://www.webguys.de', function () {
+
+        var title = this.getTitle();
+        var expectedTitle = 'Magento Blog für Entwickler und eCommerce-Shops - webguys.de « Magento Blog für Entwickler und eCommerce-Shops – webguys.de';
+
+        test.info('Testing Homepage');
+
+        test.assertTitle(expectedTitle, title);
+    })
+(/code)
+
+Ein weiterer sinnvoller Einsatz von UI-Tests ist die Überprüfung, ob bestimmte Elemente existieren. Ich habe mir einfach mal erlaubt, den DOM zu untersuchen und mir den CSS-Selektor für das Facebook-Icon zu nehmen.
+
+(code lang: php)
+#topSocial > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > img:nth-child(1)
+(/code)
+
+Wahrscheinlich ist das nicht gerade das beste Beispiel, um ein Element zu überprüfen, da ich beim Testen von der Struktur des DOM abhängig bin. Besser wäre es, wenn ich das Element eindeutiger, zum Beispiel anhand einer ID überprüfen könnte.
+<h2>Tipps und Tricks</h2>
+CasperJS bietet viele nette Events. Zum Beispiel hat es sich als nützlich erwiesen, jeden einzelnen Testschritt als Screenshot aufzunehmen. So lässt sich genau nachverfolgen, an welche Stelle im Browser der Test hängt oder fehl schlägt.
+<h3>Screenshots pro Testschritt aufnehmen</h3>
+(code lang: php)
+// On step start
+casper.on(&quot;step.start&quot;, function() {
+    casper.capturePage();
+});
+
+// Capture the current test page
+var captures_counter = 0;
+casper.capturePage = function (debug_name) {
+    var directory = 'captures/' + casper.test.currentSuite.name;
+    if (captures_counter > 0) {
+        var previous = directory + '/step-' + (captures_counter-1) + '.jpg';
+        if (debug_name) {
+            var current = directory + '/step-' + captures_counter + '-' + debug_name + '.jpg';
+        } else {
+            var current = directory + '/step-' + captures_counter + '.jpg';
+        }
+        casper.capture(current);
+
+        // If previous is same as current (and no debug_name), remove current
+        if (!debug_name $$ fs.isFile(previous) $$ fs.read(current) === fs.read(previous)) {
+            fs.remove(current);
+            captures_counter--;
+            casper.log('Capture removed because same as previous', 'warning');
+        }
+    }
+    captures_counter++;
+};
+(/code)
+<h3>Setup und Teardown-Methoden benutzen</h3>
+Setup und Teardown-Methoden erlauben es, Tests vor jedem Durchlauf in einen wohl definierten Zustand zu versetzen. Möglicherweise sollen immer alle Cookies gelöscht werden. Ganz einfach geht das mit folgendem Snippet:
+
+(code lang: php)
+// Set up: nothing
+casper.test.setUp(function () {
+
+  // web request to reset database
+});
+
+casper.test.tearDown(function () {
+    // Clear cookies
+    casper.clearCookies();
+
+    // Reset captures counter
+    captures_counter = 0;
+});
+(/code)
+<h3>Strukturierung</h3>
+Es empiehlt sich, die globale Testkonfiguration in einer eigenen Datei zu verwalten und Variablen zu benutzen, die als Argumente übergeben werden können. Das ist zum Beispiel sehr praktisch wenn ich wissen möchte, ob der Test auf unterschiedlichen Domains richtig durchläuft.
+
+(code lang: php)
+var url = casper.cli.get(&quot;url&quot;);
+(/code)
+
+Wenn alle folgenden Test dann im Ordner /tests liegen, ist der Aufruf sehr simpel:
+
+(code lang: php)
+casperjs --pre=config.js test tests/ --url=&quot;http://my-store.com/&quot;
+(/code)
+<h2>Magento-Testing und der Hackathon</h2>
+Im Rahmen des Magento-Hackathon in München haben wir bereits angefangen, einzelne Seiten einer Magento-Standardinstallation zu überprüfen. Der vollständiger Code befindet sich im <em>develop-branch</em> auf <a href="https://github.com/mothership-gmbh/hackathon-casperjs/tree/develop">Github</a>. Es handelt sich ausdrücklich nur um eine Machbarkeitsstudie. Dementsprechend wird das Repository nicht supportet. Ich hoffe jedoch, dass wir auf dem Hackathon einen kleinen Betrag dazu leisten konnten, die Testqualität in den Magento-Projekten zu verbessern oder zumindest einen neuen Anreiz geliefert zu haben.
+<h1>Zukunft</h1>
+Headless Browser Testing wird immer wichtiger. Im Rahmen von Magento-Projekten können diese Art von Tests in vielen Fällen lediglich UI-spezifische Elemente überprüfen. Der Trend geht jedoch in Richtung sehr JavaScript-lastiger Frontends. Single Page Applications, die beispielsweise mit <a href="http://emberjs.com/">EmberJS</a> oder <a href="http://angularjs.org/">AngularJS</a> erstellt wurden, erfordern eine performante Testinfrastruktur. Durch die Übertragung von immer mehr Anwendungslogik auf dem Client, stellen Headless Browser einen wichtigen Baustein dar.
+<h1>Credits</h1>
+<ul><li><a href="http://jacques.sh/">Jacques Bodin-Hullin</a> für die großartige Hilfe, Inspiration und Zusammenarbeit beim Münchner Hackathon</li>
+	<li>Den Jungs von http://www.webguys.de/ für den tollen Adventsblog</li>
+</ul><ol style="font-size: 0.8em;color: gray"><li id="fn:1">http://martinfowler.com/bliki/TestPyramid.html <a href="1" rev="footnote">↩</a></li>
+	<li id="fn:2">http://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid <a href="2" rev="footnote">↩</a></li>
+</ol>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3614

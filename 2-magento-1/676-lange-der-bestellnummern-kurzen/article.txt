@@ -1,0 +1,55 @@
+Article-meta: 
+
+----
+
+Title: Länge der Bestellnummern kürzen
+
+----
+
+Date: 2010-08-26
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Länge der Bestellnummern lässt sich in Magento nicht direkt einstellen. Manchmal kann es aber von Nöten sein die Anzahl der Stellen zu reduzieren da z.B. das ERP-System von Haus aus nicht genügend Stellen bietet oder eine vorhandene Schnittstelle dort eine Einschränkung besitzt. Einfluss auf die Länge der Bestellnummern nimmt man mit einer einfachen SQL-Anweisung.
+
+----
+
+Text: (code lang: sql)
+update `eav_entity_type`
+set `increment_pad_length`=5
+where `entity_type_code`=’order’;
+(/code)
+
+Das reduziert die Anzahl der Stellen einer Bestellnummer auf Fünf.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 676

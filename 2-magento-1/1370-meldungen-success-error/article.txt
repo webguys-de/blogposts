@@ -1,0 +1,63 @@
+Article-meta: 
+
+----
+
+Title: Meldungen: Success + Error
+
+----
+
+Date: 2011-01-28
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento nutzt Meldungen um dem User-Feedback über ausgeführte Aktionen zu geben. Ruft der User im Grid eine Aktion auf meldet Magento über eine kleine Meldung ob alles geklappt hat - oder auch eben nicht. 
+
+----
+
+Text: In der Praxis sehen diese Meldungen z.B. wie folgt aus:
+
+(image: Magento-Admin_1296211046939-650x71.png)
+
+Wie gewohnt ist rot ein Fehler, grün sagt das alles gut ist. Damit der User die Meldungen, unabhängig von Weiterleitungen der Controller, auch zu Gesicht bekommt werden Sie so lange in der Session gespeichert bis sie einmal angezeigt wurden. Danach werden sie verworfen. Mittels PHP-Code lässt sich somit im eigenen Controller genau eine solche Meldung in gewohnter Optik an die Session anhängen und so an den User weiterreichen:
+
+(code lang: php)
+// Eine positive Meldung erzeugen
+Mage::getSingleton('core/session')->addSuccess($this->__('Alles gut!'));
+
+// Einen Fehler melden
+Mage::getSingleton('core/session')->addError($this->__('Ein Fehler'));
+(/code)
+
+Keine große Kunst aber im Alltag sehr hilfreich.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1370

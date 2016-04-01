@@ -1,0 +1,96 @@
+Article-meta: 
+
+----
+
+Title: Türchen 16: Individuelle Optionen importieren
+
+----
+
+Date: 2010-12-16
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 16 macht alles ein wenig individueller mittels "individueller Optionen" oder auch Custom Options. Diese dienen dazu das der Kunde sich, ohne das es zwanghaft eine neue SKU gibt, Produkte über verschiedene Dropdowns, Radios oder Checkboxen selbst individuell konfigurieren kann. Natürlich lassen sich solche Optionen über das Magento-Model auch mit PHP automatisch importieren.
+
+
+----
+
+Text: Dazu ein wenig Beispiel-Code:
+(code lang: php)
+$product = Mage::getModel('catalog/product')->load( 1234 );
+$sizes = array('S','M','XL');
+
+$opt = Mage::getModel('catalog/product_option');
+$opt->setProduct($product);
+
+$options = array(
+		'is_require' => true,
+		'sort_order' => '1',
+		'title' => 'Größe',
+		'type' => 'drop_down',
+		'values' => array()
+);
+
+foreach( $sizes AS $size ) {
+    $options['values'][] = array(
+        'price' => 0,
+        'price_type' => 'fixed', // 'percent'
+        'sku' => '',
+        'sort_order' => '0',
+        'title' => $size,
+     );
+}
+
+$opt->addOption($options);
+$opt->saveOptions();
+
+$product->setHasOptions(1);
+$product->save();
+(/code)
+
+In diesem Fall holen wir uns zuerst das Model das für individuelle Optionen zuständig ist und setzen mittels setProduct unser Produkt als Referenz. Nun können wir im Options-Array die jeweiligen individuellen Optionen hinzufügen. Dazu gehört es natürlich Preis-Type, Preis und Titel festzulegen.  
+
+<h2>Individuelle Optionen löschen?</h2>
+Natürlich lassen sich die individuellen Optionen auch wieder mittels Model löschen. Auch hierzu ein wenig Beispiel-Code:
+(code lang: php)
+foreach ($product->getOptions() as $option) {
+	$option->getValueInstance()->deleteValue($option->getId());
+	$option->deletePrices($option->getId());
+	$option->deleteTitles($option->getId());
+	$option->delete();
+}
+(/code)
+
+Viel Spaß wieder beim Experimentieren!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1173

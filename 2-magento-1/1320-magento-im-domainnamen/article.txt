@@ -1,0 +1,52 @@
+Article-meta: 
+
+----
+
+Title: Magento im Domainnamen? 
+
+----
+
+Date: 2011-01-06
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Weil es für viele eine Überraschung ist und auch für mich im Anfang nicht bekannt war: Magento Inc erlaubt es nicht Magento im Domainnamen zu verwenden. Auf Magentocommerce unter <a href="http://de.magentocommerce.com/license">http://de.magentocommerce.com/license</a> heißt es
+<blockquote><strong>Kann ich die Magento Warenzeichen und Bezeichnungen in meinen Domains oder URLs verwenden?</strong>
+Nein. Sie dürfen die Magento Warenzeichen oder irgendeine andere Marke, die mit Varien eigenen Angeboten von Magento in Verbindung steht in Ihrer Domain oder URL verwenden. (Zum Beispiel "www.magentohosting.com" ist nicht erlaubt. Mehr dazu im nächsten Abschnitt.)</blockquote>
+Bis dato ist mir niemand bekannt der hier abgemahnt wurde aber ich stelle es mir äußerst ärgerlich vor eine Domain über Monate zu pushen um dann festzustellen das man sie nicht weiter betreiben darf.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1320

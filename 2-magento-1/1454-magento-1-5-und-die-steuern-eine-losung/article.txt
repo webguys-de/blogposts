@@ -1,0 +1,72 @@
+Article-meta: 
+
+----
+
+Title: Magento 1.5 und die Steuern: Eine Lösung?
+
+----
+
+Date: 2011-02-23
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento und Steuern. Ja das war eine Sache für sich. Ich erinnere mich nur ungern an <a href="http://www.webguys.de/magento/magento-und-die-steuern-probleme/">meinen sehr kritischen Beitrag</a> zu diesem Thema zurück. Aber dann ist etwas passiert und ich bin vorsichtig optimistisch. 
+
+----
+
+Text: <a href="http://www.netzarbeiter.de">Vinai Kopp</a> schrieb mir eine Mail die mich positiv stimmte. Er hatte sich die Steuerberechnung mit der neuen Magento 1.5 einmal angesehen und kam dabei zu sehr positiv Ergebnissen. Stellen wir also doch einmal die Fehlrechnungen aus November 2010 einmal mit der aktuellen Magento 1.5.0.1 nach.
+
+Zuvor ist aber, wie Vinai sagte, wichtig die Gutschein-Berechnung auf nach Steuern einzustellen. Sein Screenshot dazu verdeutlicht dies noch einmal:
+
+(image: steuer-einrichtung-650x456.png)
+
+Ob nun für "Tax Calculation Based On" Shipping Address oder Billing Address ausgwählt werden muss spielt für den Testfall hier keine Rolle - das sollte euer Steuerberater genauer wissen :)
+<h2>Problem 1: Ein französischer Kunde</h2>
+Basierend auf meinem damaligen Test mit dem französischen Kunden und dem Rundungsfehler von einem Cent habe ich den Test mit Magento 1.5 wiederholt und siehe da:
+
+(image: Shopping-Cart_1298451685387-650x114.png)
+
+Die Werte stimmen vollständig überein. Auslandsbestellungen sind somit ohne Rundungsfehler möglich.
+<h2>Problem 2: Prozentuale Rabatte</h2>
+Auch den Test mit prozentualen Gutscheinen, der damals leider auch total verwirrende Zahlen lieferte, habe ich mit Vinai einmal nachgestellt. Hierbei haben wir einen 3% Gutschein auf den Warenwert genutzt und siehe da:
+
+(image: Bildschirmfoto-2011-02-10-um-06.43.20.png)
+<ul><li>47 € Warenkorb - stimmt</li>
+	<li>47 * 0.03 (für 3% Gutschein) sind 1.41 - stimmt</li>
+	<li>47 - 1.41  = 45.59 - stimmt vielleicht</li>
+	<li>45.59 + 9.90 Versand = 55,49 Gesamtpreis inkl. Steuern - stimmt!</li>
+	<li>55,49 / 1.19 = 46,63 Gesamtpreis ohne Steuern - stimmt!</li>
+</ul><h2>Fazit</h2>
+Es sieht wahrhaftig so aus als hätte Magento die Steuerproblematik nun endlich in den Griff bekommen oder seit ihr mittlerweile über andere Stellen gestolpert an denen die Berechnung einfach nicht stimmt? Feedback ist unbedingt erwünscht!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1454

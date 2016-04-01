@@ -1,0 +1,109 @@
+Article-meta: 
+
+----
+
+Title: Filter in Wordpress erstellen
+
+----
+
+Date: 2011-03-15
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ab und an kommt man nach der Inhaltspflege auf die Idee, a) entweder Textfragmente zu ersetzen oder b) Textfragmente anders zu formatieren. Dies kann - vor allem da Wordpress als CMS immer beliebter wird - schnell zeitlich ziemlich aufwändig werden. Dies über die Datenbank zu machen stellt einen möglichen Weg dar, jedoch kann man Inhaltsfilter programmieren, die dies übernehmen. Das hat den charmanten Vorteil, das die Änderungen ohne den Redakteur vorgenommen werden - leider jedoch den Nachteil, dass diese Änderungen bei jedem Aufruf vorgenommen werden und sich somit neagtiv auf die Performance auswirken können. Wenn man die Vorteile und Nachteile gegenüber gestellt hat, kann man loslegen.
+
+
+----
+
+Text: Im folgenden Beispiel legen wir einen Filter an, der ein als einem "®"  hochstellt.
+
+Dazu legen wir in der <em>functions.php</em> folgende Funktion an:
+(code lang: php)
+	function filter_content() {
+		$content = get_the_content();  
+		$content = str_replace('<sup>&reg;</sup>','&reg;',$content);  
+		$content = str_replace('<sup>®</sup>','®',$content);  		
+		$content = str_replace('&reg;','<sup>&reg;</sup>',$content);  
+		$content = str_replace('®','<sup>&reg;</sup>',$content);  
+		echo $content;  
+	}
+(/code)
+Jetzt brauchen wir noch den dazugehörigen Hook, den tragen wir ebenfalls in der <em>functions.php</em> ein:	
+(code lang: php)
+	add_filter('the_content', 'filter_content');
+(/code)
+
+Dieser Filter betrifft jetzt nur den Content, beim Einsatz von <em>wp_nav_menu</em> wird der Filter nicht angewendet. Daher kommt nun ein weiterer Hook zum Einsatz:
+(code lang: php)
+	add_filter('wp_nav_menu_items','change_nav_title', 10, 2);
+(/code)
+Die Funktion change_nav_title müssen wir nun ebenfalls in der <em>functions.php</em> erstellen:
+(code lang: php)
+	function change_nav_title( $nav, $args ) {
+               $content = $nav;
+                $content = str_replace('<sup>&reg;</sup>','&reg;',$content);  
+		$content = str_replace('<sup>®</sup>','®',$content);  	
+		$content = str_replace('&reg;','<sup>&reg;</sup>',$content);  
+		$content = str_replace('®','<sup>&reg;</sup>',$content);  
+	       return $content;
+	}
+(/code)
+Da die Funktionen sich in ihrer Funktionalität überschneiden räumen wir noch ein wenig auf, sodass am Ende die Logik gekapselt wird. Am Ende erhalten wir folgenden Code in unserer <em>functions.php</em>:
+(code lang: php)
+function _replaceText($content, $echo, $args = null )
+	$content = str_replace('<sup>&reg;</sup>','&reg;',$content);  
+	$content = str_replace('<sup>®</sup>','®',$content);  		
+	$content = str_replace('&reg;','<sup>&reg;</sup>',$content);  
+	$content = str_replace('®','<sup>&reg;</sup>',$content);  
+	
+	if( $echo ) {
+		echo $content;  
+	else {
+		return $content; 
+	}
+}
+
+function filter_content() {
+	_replaceText( get_the_content(), true );
+}
+
+function change_nav_title( $nav, $args ) {
+	_replaceText( $nav, false, $args );
+}
+
+add_filter('the_content', 'filter_content');
+add_filter('wp_nav_menu_items','change_nav_title', 10, 2);
+(/code)
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1505

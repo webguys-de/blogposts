@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: Fehler identifizieren: Magento Developer Modus
+
+----
+
+Date: 2012-04-27
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Leider kann es manchmal vorkommen, dass eine Änderung in einem laufendem Projekt oder der Initial-Checkout eines Projektes in einer (mehr-oder-weniger bekannten) PHP-Fehlermeldung resultiert, anstatt das korrekte Layout anzuzeigen. Durch das Auftreten den Fehler weiß man zwar dass definitiv ein Fehler vorliegt, jedoch nicht genau, woran es liegt. Es geht aber auch anders.
+
+
+----
+
+Text: Das Einfügen der folgenden Zeile in die <em>.htaccess</em> gibt Magento dem Entwickler die Möglichkeit, eine genauere Fehlermeldung auszugeben, mit dem man auch etwas anfangen kann.
+
+(code)
+SetEnv MAGE_IS_DEVELOPER_MODE true
+(/code)
+
+Durch diese Anweisung gibt Magento zusätzlich zu der PHP-Fehlermelung die Magento-interne Fehlermeldung inklusive Report-Nummer aus. Das hilft in den meisten Fällen auf jeden Fall mehr als die PHP-Fehlermeldung.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2778

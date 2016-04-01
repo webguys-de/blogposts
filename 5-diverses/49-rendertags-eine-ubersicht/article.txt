@@ -1,0 +1,265 @@
+Article-meta: 
+
+----
+
+Title: Rendertags - eine Übersicht
+
+----
+
+Date: 2009-04-25
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,templates,reddot,rendertags
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Rendertags könen vielfältig eingesetzt werden, denn mit ihnen können nicht einfach nur Inhalte ausgelesen, sondern auch manipuliert und in Kontrollstrukturen eingebunden werden. Die folgende gegliederte Auflistung bietet einen Überblick über die Funktionen und Einsatzgebiete.
+
+
+
+----
+
+Text: Als erstes und größtes Einsatzgebiet ist sicherlich die Ausgabe von Inhalten:
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value
+!!%>
+(/code)
+
+Da jedoch die reine Ausgabe alleine nicht lange von Interesse sein wird, bieten Rendertags mehrere Möglichkeiten zur Manipulation von Inhalten.
+
+PadRight()
+Den Inhalt eines eines Elements ausgeben, mit einer festen Länge von 15 Zeichen
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.PadRight(Int:15)
+!!%>
+(/code)
+
+Substring()
+Den Inhalt eines eines Elements mit einer Länge von max. 10 Zeichen
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.Substring(Int:0, Int:10)
+!!%>
+(/code)
+
+Trim()
+Den Inhalt eines Elements ausgeben und überflüssige Leerzeichen entfernen:
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.Trim()
+!!%>
+(/code)
+
+
+<strong>Replace()</strong>
+
+Teile des Inhalts eines Elements ersetzen, in diesem Fall "RedDot" durch "OpenText":
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.Replace(RedDot,OpenText)
+!!%>
+(/code)
+
+ToUpper()
+Umwandlen der Ausgabe in Grossbuchstaben:
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.ToUpper()
+!!%>
+(/code)
+
+ToLower()
+Umwandlung der Ausgabe in Kleinbuchstaben:
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.ToLower()
+!!%>
+(/code)
+
+ToString()
+Umwandlung des Inhalts in einen String:
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.ToString()
+!!%>
+(/code)
+
+Length
+Ausgabe der Länge der Zeichenkette:
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.Length
+!!%>
+(/code)
+
+HtmlEncode()
+Htmlkodierte Ausgabe des Inhalts:
+
+(code)
+<%!!
+Escape:HtmlEncode(Context:CurrentPage.Elements.GetElement(std_elem).Value)
+!!%>
+(/code)
+
+HtmlDecode()
+Htmldekodierte Ausgabe des Inhalts:
+
+(code)
+<%!!
+Escape:HtmlDecode(Context:CurrentPage.Elements.GetElement(std_elem).Value)
+!!%>
+(/code)
+
+Jedoch können mit Rendertags Inhalte nicht nur ausgegeben werden, sondern auch für die weitere Verarbeitung in Kontrollstrukturen genutzt werden.
+
+Equals()
+Prüft Gleichheit zweier String, die Rückgabe ist vom Typ Boolean
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.Equals(STR)
+!!%>
+(/code)
+
+StartsWith()
+Prüft ob der Inhalt mit einem bestimmten Wert beginnt, der Rückgabewert ist vom Typ Boolean:
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.StartsWith(STR)
+!!%>
+(/code)
+
+EndsWith()
+Prüft, ob der Inhalt mit einem bestimmten Wert endet. Der Rückgabewert ist vom Typ Boolean.
+
+(code)
+<%!!
+Context:CurrentPage.Elements.GetElement(std_elem).Value.EndsWith(STR)
+!!%>
+(/code)
+
+Diese Rückgaben kann man, ebenso wie andere Werte, in Kontrollstrukturen verwenden, dazu bietet uns RedDot die if- sowie die if-else-Schleife an.
+
+if
+
+(code)
+<reddot:cms>
+<if>
+<query valuea="Context:CurrentPage.Elements.GetElement(std_elem).Value" operator="==" valueb="String:test">
+<htmltext>
+Wert ist test.
+</htmltext>
+</query>
+</if>
+</reddot:cms>
+(/code)
+
+Eine If-Abfrage kann man auch um einen Else-Teil ergänzen:
+if-else
+
+(code)
+<reddot:cms>
+<if>
+<query valuea="Context:CurrentPage.Elements.GetElement(std_elem).Value" operator="==" valueb="String:test">
+<htmltext>
+Wert ist test.
+</htmltext>
+</query>
+<query type="else">
+<htmltext>
+Wert ist nicht test.
+</htmltext>
+</query>
+</if>
+</reddot:cms>
+(/code)
+
+Ausser den obigen Möglichkeiten bieten Rendertags noch weitere Lösungen an. Eine dieser Möglichkeiten von Rendertags ist der Einsatz zur Ausgabe von Elementen an Strukturelementen und auch ausserhalb von Navigationtemplates zur Ausgabe der Struktur:
+
+foreach
+
+(code)
+<reddot:cms>
+<foreach itemname="item" object="Context:CurrentPage.SubIndexes" countername="counter">
+<htmltext>
+<%!! Store:counter !!%>. <%!! Store:item.Headline !!%><br>
+</htmltext>
+</foreach>
+</reddot:cms>
+(/code)
+
+Jedoch nicht nur die Navigationstruktur kann ausgelesen werden, auch die Strukturelemente einer Seite können mit Rendertags ausgelesen werden, wenn auch - in Version 7.5.x - nicht in der Reihenfolge der Sortierung.
+
+foreach
+
+(code)
+<reddot:cms>
+<foreach itemname="item" object="Context:CurrentPage.Elements.GetElement(lst_elem).Value" countername="counter">
+<htmltext>
+<%!! Store:counter !!%>. <%!! Store:item.Headline !!%><br>
+</htmltext>
+</foreach>
+</reddot:cms>
+(/code)
+
+Abseits dieser und den bereits in der Dokumentation beschriebenen Funktionen gibt es noch weitere, die nicht dokumentiert sind. So ist es bereits möglich, den Namen einer Content-Klasse auszugeben.
+
+Template
+Auslesen des Names der Content-Klasse:
+
+(code)
+<%!!
+Context:CurrentPage.Template.Name
+!!%>
+(/code)
+
+Auslesen der Guid der Content-Klasse:
+
+(code)
+<%!!
+Context:CurrentPage.Template.Id
+!!%>
+(/code)
+
+Auch wenn die Anwendung von Rendertags eventl. noch ungewohnt sind, lohnt sich ein genauerer Blick auf die Techniken und Möglichkeiten auf jeden Fall.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 49

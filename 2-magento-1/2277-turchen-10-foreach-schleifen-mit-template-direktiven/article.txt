@@ -1,0 +1,188 @@
+Article-meta: 
+
+----
+
+Title: Türchen 10: Foreach-Schleifen mit Template-Direktiven
+
+----
+
+Date: 2011-12-10
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: andreas-von-studnitz
+
+----
+
+Article-content: 
+
+----
+
+Intro: <a href="http://www.thebod.de/">Bastian Ike</a> hat im <a href="http://www.webguys.de/magento/turchen-03-magento-template-filter/">Türchen 03 bereits Magento Template Filter</a> behandelt. Ich möchte mich für die Vorarbeit bedanken und nutze die Gelegenheit, auf die Grundlagen nicht weiter einzugehen. Er beschreibt dort unter anderem, wie man die Filter für eigene Zwecke einsetzt.
+
+----
+
+Text: <strong>Wäre es nicht schön, in Emails einfache foreach-Schleifen einsetzen zu können?</strong>
+
+Die Template-Direktiven sind ein mächtiges Werkzeug, die man nicht nur für Emails und Inhaltsseiten nutzen kann. Ich habe sie genutzt, um einen möglichst flexiblen Export zu implementieren. Der Export sollte templatebasiert sein und die Möglichkeit bieten, Inhalt und Form beliebig anzupassen.
+
+Und so könnte dann ein XML-Export-Template aussehen:
+
+(code lang: xml)
+<?xml version="1.0"?>
+<magento>
+    <order>
+        <entity_id><![CDATA[{{var order.entity_id}}]]></entity_id>
+        <!-- ... -->
+    </order>
+    <shipping>
+        {{depend shipping_method.tablerate_bestway}}
+        <label><![CDATA[Tablerate]]></label>
+        {{/depend}}
+        {{depend shipping_method.freeshipping_freeshipping}}
+        <label><![CDATA[Freeshipping]]></label>
+        {{/depend}}
+        <!-- ... -->
+    </shipping>
+    <!-- ... -->
+</magento>
+(/code)
+
+Einfache Variablen lassen sich mit der <em>{{var …}}</em>-Direktive ins Template einbringen, und auch bedingte Anweisungen kann man mit der <em>{{depend ...}}</em>- oder <em>{{if ...}}</em>-Direktive im Template verwenden. Aber möchte man z.B. bestellte Produkte ausgeben, muss die Ausgabe in einer Schleife erfolgen. Dies kann man nur indirekt und wenig elegant mit Magento-Standard-Direktiven lösen.
+
+In einem solchen Fall würde man auf eine <em>{{block …}}</em>-Direktive zurückgreifen und die Ausführung der Schleife dem Block überlassen. Bei kleineren Iterationsausgaben, oder insbesondere im Falle des Exports, erschien mir das zu kompliziert - darum habe ich eine <em>{{foreach …}}</em>-Direktive für solche Aufgaben entwickelt.
+<h2>Implementierung</h2>
+Bei der Implementierung der <em>{{foreach …}}</em>-Direktive habe ich mich für die Elternklasse <em>Mage_Core_Model_Email_Template_Filter</em> entschieden, da diese im Magento-Core bis auf <em>{{widget ..}}</em> alle anderen Direktiven implementiert. Diese Klasse kann man mit einer neuen Klasse ableiten; um die Funktionalität auch in Email-Templates einsetzen zu können, ist zusätzlich ein Rewrite auf das <em>Model core/email_template_filter</em> notwendig.
+
+Um die <em>{{foreach …}}</em>-Direktive in die Klasse zu integrieren, sind mehrere Schritte notwendig:
+Die Methode der foreach-Direktive muss in der Klasse implementiert werden
+zusätzlich muss auch die Methode „filter()“ überschreiben werden, da die <em>{{foreach …}}</em>-Direktive als erstes ausgeführt werden soll, und auch ein etwas anderes Konstruktionsmuster hat.
+
+Die Implementierung der Klasse ist wie folgt:
+
+(code lang: php)
+class John_Doe_Model_Filter extends Mage_Core_Model_Email_Template_Filter
+{
+    const CONSTRUCTION_EACH_PATTERN = '/{{foreach\s(.*?)as\s(.*?)}}(.*?){{\\/foreach\s*}}/si';
+
+    /**
+     *
+     * @param type $value
+     * @return type
+     */
+    public function filter($value)
+    {
+
+        try {
+
+            $pattern = self::CONSTRUCTION_EACH_PATTERN;
+            $directive = 'foreachDirective';
+
+            if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
+                foreach ($constructions as $index => $construction) {
+                    $replacedValue = '';
+                    $callback = array($this, $directive);
+                    if (!is_callable($callback)) {
+                        continue;
+                    }
+                    try {
+                        $replacedValue = call_user_func($callback, $construction);
+                    } catch (Exception $e) {
+                        throw $e;
+                    }
+                    $value = str_replace($construction[0], $replacedValue, $value);
+                }
+            }
+
+            $value = Mage_Core_Model_Email_Template_Filter::filter($value);
+        } catch (Exception $e) {
+            throw new Exception(Mage::helper('doe')->__('The filter can not be applied to the template'));
+        }
+
+        return $value;
+    }
+
+    /**
+     *
+     * @param type $construction
+     * @return type
+     */
+    public function foreachDirective($construction)
+    {
+        if (count($this->_templateVars) == 0) {
+            // If template preprocessing
+            return $construction[0];
+        }
+
+        if ($this->_getVariable($construction[1], '') == '') {
+            return '';
+        } else {
+
+            $value = '';
+            foreach ($this->_getVariable($construction[1]) as $item) {
+                $subFilter = new self;
+                $subFilter->setVariables(array($construction[2] => $item));
+                $value .= $subFilter->filter($construction[3]);
+            }
+
+            return $value;
+        }
+    }
+}
+(/code)
+<h2>Beispiel</h2>
+Erweitern wir das Export-Template von oben um die Ausgabe der bestellten Produkte unter Zuhilfenahme der <em>{{foreach …}}</em>-Direktive, würde dies so aussehen:
+
+(code lang: xml)
+<?xml version="1.0"?>
+<magento>
+    <order>
+        <entity_id><![CDATA[{{var order.entity_id}}]]></entity_id>
+        <!-- ... -->
+    </order>
+    <shipping>
+        {{depend shipping_method.tablerate_bestway}}
+        <label><![CDATA[Tablerate]]></label>
+        {{/depend}}
+        {{depend shipping_method.freeshipping_freeshipping}}
+        <label><![CDATA[Freeshipping]]></label>
+        {{/depend}}
+        <!-- ... -->
+    </shipping>
+    <items>
+        {{foreach items as item}}
+        <item>
+            <item_id><![CDATA[{{var item.item_id}}]]></item_id>
+            <!-- ... -->
+        </item>
+        {{/foreach}}
+    </items>
+    <!-- ... -->
+</order>
+(/code)
+
+Entsprechend muss die Variable, über die die Iteration läuft, ein Array oder eine Collection sein.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2277

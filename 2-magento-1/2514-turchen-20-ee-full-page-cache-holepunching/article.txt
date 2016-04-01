@@ -1,0 +1,205 @@
+Article-meta: 
+
+----
+
+Title: Türchen 20: EE Full Page Cache Holepunching
+
+----
+
+Date: 2011-12-20
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender,cache,ee,fpc
+
+----
+
+Author: vinai-kopp
+
+----
+
+Article-content: 
+
+----
+
+Intro: Tobi war so nett mir eine Gelegenheit wieder einen Post im Adventskalender zu schreiben, und nachdem ich zuerst dachte ich hätte keine Zeit, freue ich mich jetzt doch mit dabei sein zu dürfen :) Ich finde den Community-Adventskalender klasse!
+Diesmal zum Thema Full-Page Cache und Holepunching.
+
+
+----
+
+Text: Eines der Enterprise-Edition Features ist der Full-Page Cache (FPC).
+
+Dieser ermöglicht es Magento die meisten Seiten mit viel weniger Overhead auszuliefern, als es von Haus aus in der CE Version möglich ist. Das ganze funktioniert auch ganz gut, solange keine dynamischen Inhalte in einer Seite angezeigt werden. Zum Glück hat Magento jedoch auch das berücksichtigt: dynamisch Blöcke wie zum Beispiel die zuletzt angesehenen Produkte oder der Mini-Warenkorb werden individuell nach Kunde gecached, und dann in eine Seite aus dem Full-Page Cache während einer Anfrage eingefügt.
+
+Ziel dieses Posts ist es, diesen Prozess zu verdeutlichen, und so Magento-Entwickler zu befähigen, eigene dynamische Blöcke effizient mit dem Full-Page Cache zu verwenden.
+<h2>Der Full-Page Cache Prozess</h2>
+Der Full-Page Cache unterscheidet bei Anfragen verschiedene Fälle:
+<ol><li>Eine Anfrage darf nicht gecached werden</li>
+	<li>Eine Anfrage darf gecached werden, liegt aber nicht gecached vor</li>
+	<li>Eine Anfrage kann aus dem Cache bedient werden und enthält keine dynamischen Inhalte</li>
+	<li>Eine Anfrage kann aus dem Cache bedient werden, die Seite enthält gecachte dynamische Inhalte</li>
+	<li>Eine Anfrage kann aus dem Cache bedient werden, die Seite enthält ungecachte dynamische Inhalte</li>
+</ol>
+Von Interesse für diesen Post  sind Fall 3, 4 und 5, also wenn eine Anfrage aus dem Cache bedient wird. Magento versucht den Prozess so effizient wie möglich zu gestalten. Aus diesem Grund wird der FPC schon sehr früh im Bootstrap Prozess eingeschaltet, bevor die Initialisierung von Magento abgeschlossen ist.
+
+Hier ein Ausschnitt aus <em>Mage_Core_Model_App::run()</em>
+
+(code lang: php)...
+if ($this->_cache->processRequest()) {
+    $this->getResponse()->sendResponse();
+} else {
+    $this->_initModules();
+...(/code)
+
+Sofern also <em>processRequest()</em> <em>true</em> zurückgibt wird das meiste Bootstrapping übersprungen, wie zum Beispiel das Routing und das dispatchen eines Action Controllers.
+
+Eine ganze Seite zu cachen ist, denke ich, nicht weiter spannend. Interessant ist das Einfügen der dynamischen Inhalte in eine gecachte Seite.
+
+Lädt der Full-Page Cache eine Seite aus dem Cache, sucht dieser in dem Seiten-Inhalt nach Platzhaltern für dynamische Blöcke. Sind welche vorhanden, instanziiert Magento für jeden dynamischen Block eine Container-Klasse, welcher die Aufgabe zukommt, die dynamischen Inhalte des Blocks in den Content einzufügen.
+
+Zuerst wird auf dem Block-Container die Methode <em>applyWithoutApp()</em> aufgerufen.
+
+Nun versucht der Container, den Content aus dem Block-Cache zu laden und in den Seiten-Inhalte einzufügen. Für diese Blöcke können auch für Cache-Einträge für individuelle Kunden geschrieben werden.
+
+Konnten die Inhalte für alle Platzhalter von den Containern aus dem Cache geladen werden, liegt die Seite jetzt vollständig vor, <em>processRequest()</em> gibt <em>true</em> zurück und die Seite wird an den Kunden ausgeliefert.
+
+Wurden jedoch nicht alle dynamischen Inhalte von den Containern im Block-Cache gefunden, so beginnt die nächste Phase.
+
+Damit der Content generiert werden kann, benötigen die entsprechenden Blöcke jedoch eine voll aufgesetzte Laufzeit-Umgebung: der Full-Page Cache setzt das Request Objekt auf die Route <em>pagecache/request/process</em> und bestimmt durch das Flag <em>isStraight(true)</em> das keine URL Rewrites geladen werden sollen.
+
+(code lang: php)
+...
+Mage::register('cached_page_content', $content);
+Mage::register('cached_page_containers', $containers);
+Mage::app()->getRequest()
+    ->setModuleName('pagecache')
+    ->setControllerName('request')
+    ->setActionName('process')
+    ->isStraight(true);
+
+$routingInfo = array(
+    'aliases' => $this->getMetadata('routing_aliases'),
+    'requested_route' => $this->getMetadata('routing_requested_route'),
+    'requested_controller' => $this->getMetadata('routing_requested_controller'),
+    'requested_action' => $this->getMetadata('routing_requested_action')
+);
+Mage::app()->getRequest()->setRoutingInfo($routingInfo);
+...
+(/code)
+
+Dann wird von <em>processRequest()</em> <em>false</em> zurückgegeben, und der Magento dispatch Vorgang nimmt seinen Lauf.
+
+Steigen wir wieder ein im dem Action Controller des <em>Enterprise_PageCache</em> Moduls, <em>Enterprise_PageCache_RequestController::processAction()</em>
+
+Hier nun wird auf den noch nicht verarbeiteten Containern aus der Registry die Methode <em>applyInApp()</em> aufgerufen.
+
+Hierbei wird die Block-Klasse instanziiert und <em>toHtml()</em> aufgerufen, und die Ausgabe in den Seiten-Content eingefügt.
+<h2>Dynamische Blöcke einfügen</h2>
+Wenn irgend möglich, sollten ein Block immer gecached werden, damit <em>applyWithoutApp()</em> ausreicht um die Inhalte in die Seite einzufügen.
+
+Wenn <em>applyInApp()</em> auf dem Container verwendet werden muss, fällt ein Großteil des Nutzens des FPC weg, da der ganze dispatch-Process von Magento durchlaufen wird.
+
+Welche Schritte sind nun nötig, um eigene Blöcke dynamisch im Full-Page Cache anzeigen zu lassen?
+
+Um einen Block dynamisch in den Full-Page Cache einzugliedern, muss zuerst in dem <em>etc/</em> Verzeichnis des Moduls eine <em>cache.xml</em> Datei angelegt werden.
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <placeholders>
+        <webguys_example>
+            <block>webguys_example/view</block>
+            <name>product.info.example</name>
+            <placeholder>CACHE_TEST</placeholder>
+            <container>Webguys_Example_Model_Container_Cachetest</container>
+            <cache_lifetime>86400</cache_lifetime>
+        </webguys_example>
+    </placeholders>
+</config>
+(/code)
+
+Der <em><block></em> und der <em><name></em> muss der <em>type=""</em> und des <em>name=""</em> deklaration des Blocks aus  dem Layout XML entsprechen.
+
+(code lang: xml)<block type="webguys_example/view" name="product.info.example" as="example" template="webguys/example.phtml" /> (/code)
+
+Der <em><placeholder></em> ist ein Code welcher einmalig innerhalb einer Magento Installation sein sollte.
+
+Der <em><container></em> ist der Name der Klasse welche verantwortlich ist die Block Ausgaben zu cachen, aus dem Cache zu laden und in dem Inhalt einzufügen.
+
+Und schließlich der <em><cache_lifetime></em> Knoten, der in bisher allen Magento Enterprise Versionen keine Auswirkungen hat. Sofern in der <em>_saveCache()</em> Methode des Containers keine anderen Angaben gemacht werden, wird ein Block für immer gecached bis er invalidiert wird. Es ist sicher eine gute Idee den Knoten trotzdem anzugeben sollte das sich in Zukunft ändern.
+
+Nachdem die <em>etc/cache.xml</em> nun existiert ist der nächste Schritt die Container Klasse anzulegen. Sie muss <em>Enterprise_PageCache_Model_Container_Abstract</em> erweitern. Zumindest eine Methode muss implementiert werden: <em>_renderBlock()</em>. Sie gibt den Inhalt des Blocks zurück in dem Fall das <em>applyInApp()</em> aufgerufen wird. Üblicherweise wird der Block mit <em>new()</em> instanziiert, da das Layout Objekt aus Performance-Gründen besser nicht verwendet wird. Dann wird ganz normal <em>toHtml()</em> aufgerufen um den Block zu rendern. Der Block sollte also so wenig Resourcen wie möglich benutzen, damit der Vorteil des Full-Page Caches nicht verloren geht.
+
+Damit <em>applyWithoutApp()</em> auch funktioniert muss noch <em>_getCacheId()</em> in der Container Klasse implementiert werden. Die Methode liefert, welch Überraschung, den Cache-Identifier für den Block zurück. Wenn jeder Kunde seine eigene Variante des Blocks sehen soll, kann <em>$this->_getCookieValue(Enterprise_PageCache_Model_Cookie::COOKIE_CUSTOMER, '')</em> in die Cache-Id eingefügt werden.
+
+Wenn der Container die Klasse <em>Enterprise_PageCache_Model_Container_Customer</em> extended wird die Cache-Lifetime des Block Caches automatisch auf die Dauer der Kunden-Session gesetzt.
+
+Hier ein Beispiel für einen Container:
+
+(code lang: php)
+class Webguys_Example_Model_Container_Cachetest
+    extends Enterprise_PageCache_Model_Container_Abstract {
+
+    protected function _getIdentifier() {
+        return $this->_getCookieValue(Enterprise_PageCache_Model_Cookie::COOKIE_CUSTOMER, '');
+    }
+
+    protected function _getCacheId() {
+        return 'EXAMPLE_' . md5($this->_placeholder->getAttribute('cache_id') . '_' . $this->_getIdentifier();
+    }
+
+    protected function _renderBlock() {
+        $blockClass = $this->_placeholder->getAttribute('block');
+        $template = $this->_placeholder->getAttribute('template');
+        $block = new $blockClass;
+        $block->setTemplate($template)
+        return $block->toHtml();
+    }
+}
+(/code)
+<h2>Werte durchreichen</h2>
+Wenn der Block beim Rendern Werte aus der Magento Umgebung benötigt, die nicht während einer <em>pagecache/request/process</em> Anfrage zur Verfügung stehen, kann folgender Trick verwendet werden. Von dem von <em>$block->getCacheKeyInfo()</em> zurückgegebenen Array werden alle Werte, die einen String als Key haben, als Placeholder Attribut gespeichert. Hier ein Beispiel für eine Produkt-Id.
+
+In der Block Klasse wird der Wert dem CacheKeyInfo Array hinzugefügt:
+
+(code lang: php)
+public function getCacheKeyInfo()
+{
+    $info = parent::getCacheKeyInfo();
+    if (Mage::registry('current_product')) {
+        $info['product_id'] = Mage::registry('current_product')->getId();
+    }
+    return $info;
+}
+(/code)
+
+In der <em>_getCacheId()</em> und der <em>_renderBlock()</em> Methode des Containers wird die Id dann einfach mit <em>$this->_placeholder->getAttribute('product_id')</em> ausgelesen.
+
+(code lang: php)
+$block = new $blockClass;
+$block->setTemplate($template)
+    ->setProductId($this->_placeholder->getAttribute('product_id'));
+(/code)
+
+Insgesamt ist es also sehr einfach dynamische Inhalte in den Full-Page Cache einzufügen. Mit dem nötigen Know-How und etwas Vorsicht kann dabei die Performance erhalten bleiben. Ein (file: Webguys_Example.zip text: einfaches Beispielmodul) für diesen Beitrag (file: Webguys_Example.zip text: kann zum Testen) heruntergeladen werden.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2514

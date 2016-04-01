@@ -1,0 +1,301 @@
+Article-meta: 
+
+----
+
+Title: Türchen 13: Feldtypen und Formularen im Magento Backend
+
+----
+
+Date: 2011-12-13
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: fabian-blechschmidt
+
+----
+
+Article-content: 
+
+----
+
+Intro: Schön das ihr es zum dreizehnten Türchen des Adventskalenders geschafft habt. Da ich schon lange einmal aufschreiben wollte, welche Möglichkeiten die Formulare im Magento-Backend bieten, fangen wir heute mal mit den Formularen an.
+
+----
+
+Text: Wie man Formulare erzeugt, wisst ihr vermutlich alle, der Vollständigkeit halber aber ein Beispiel:
+
+(code lang: php)
+
+class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Price extends Mage_Adminhtml_Block_Widget_Form
+{
+    protected function _prepareForm()
+    {
+        $product = Mage::registry('product');
+
+        $form = new Varien_Data_Form();
+        $fieldset = $form->addFieldset('tiered_price', array('legend'=>Mage::helper('catalog')->__('Tier Pricing')));
+
+        $fieldset->addField('default_price', 'label', array(
+                'label'=> Mage::helper('catalog')->__('Default Price'),
+                'title'=> Mage::helper('catalog')->__('Default Price'),
+                'name'=>'default_price',
+                'bold'=>true,
+                'value'=>$product->getPrice()
+        ));
+
+        $fieldset->addField('tier_price', 'text', array(
+                'name'=>'tier_price',
+                'class'=>'requried-entry',
+                'value'=>$product->getData('tier_price')
+        ));
+	[...]
+
+        $this->setForm($form);
+    }
+}// Class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Price END
+(/code)
+
+Wenn man seinen Block von Mage_Adminhtml_Block_Widget_Form ableitet und sich an die Standards hält, die Magento vorgibt, passiert das meiste von allein. Wer wissen will, wie man Formulare grundsätzlich baut, schaut mal zu <a href="http://codemagento.com/2011/02/grids-and-forms-in-the-admin-panel/">Ben Robbie</a>, der hat einen Artikel geschrieben, wie man Formulare und Grids baut.
+
+In diesem Artikel möchte ich mich aber auf Feldtypen konzentrieren. Leider gibt es viel zu wenige Artikel dazu, was dazu führt, dass ich immer im Core wühlen muss, welche Typen es gibt und welche Konfigurationsmöglichkeiten sie haben. Ich möchte hier einen Überblick bieten, das führt leider dazu, dass ich nicht in alle Details gehen kann. Aber wenn hier schon der Anfang gelegt ist, seid ihr herzlich eingeladen einen Artikel zu schreiben, ich freue mich auch über Links via Mail.
+
+Bevor wir uns jetzt in die Feldtypen stürzen, eine kurze Beschreibung eines Felds:
+
+(code lang: php)
+	$configuration = array($key => $value)
+	$fieldset->addField($name, $typ, $configuration);
+(/code)
+
+Für die meisten Elemente ist es sinnvoll in der Konfiguration ein Label und einen Namen anzugeben, außerdem kann man den meisten Feldern einen Wert (value) geben. Zusätzlich kann man die Felder als Pflichtfelder definieren, indem man den Wert für "required" auf "true" setzt. Zuletzt kann man die CSS-Klasse via "class" setzen, um z.B die Prüfung auf Text (input-text) zu realisieren. Nicht zu vergessen ist, dass man viele HTML-Attribute über die Konfiguration übergeben kann, welche genau findet ihr in der Methode getHtmlAttributes().
+
+Und ein letzter Tipp: Die Methode addField gibt euch das erzeugte Element zurück, auf diesem können weitere Setter angewendet werden.
+<h2>Feldtypen</h2>
+Die verschiedenen Feldtypen findet man hier:
+
+lib/Varien/Data/Form/Element/
+
+Um sie ein wenig zu sortieren unterscheide ich mutwillig drei Typen: Auswahl von vorgegebenen Antworten, Eintragen eigener Antworten und alles andere ;-). Ursprünglich wollte ich sie nach dem Alphabet sortieren, aber ich habe gerade beschlossen zu probieren, sie sinnvoll zu sortieren.
+
+<h3>Vorgaben machen</h3>
+Wenn man die Antworten gerne vorgeben möchte, stehen folgende Typen zur Verfügung.
+
+<h4>Checkbox.php</h4>
+(image: checkbox.png)
+Fangen wir mit den einfachen Elementen an, der Typ Checkbox ist genau das, eine Checkbox. Ist sie markiert, wird der Wert übertragen, wenn nicht, dann nicht. Wie oben beschrieben, hat sie ein Label, einen Namen und einen Wert.
+
+<h4>Checkboxes.php</h4>
+(image: checkboxes.png)
+Mehrere Checkboxen. Man kann beliebig viele Checkboxes damit erzeugen. Es gibt dabei den Konfigurationsschlüssel "values" => array($value => $label). Damit ist es möglich verschiedene Werte zur Selektion vorzugeben.
+
+<h4>Multiselect.php</h4>
+(image: multiselect.png)
+
+Und da wären wir auch schon beim Multiselect. Ein Multiselect erfüllt auf den ersten Blick den gleichen Zweck wie Checkboxes, der entscheidende Unterschied ist aber, dass man die Optionen sortieren kann und "optgroup"s definieren kann um das ganze Übersichtlicher zu gestalten
+
+Um die Werte zu sortieren, muss der Wert für "values" folgendermaßen angegeben werden:
+
+(code lang: php)
+$values = array(
+			array(
+				'label' => 'optgroup',
+				'value' =>
+					array(
+						array(
+							'value' => 'test',
+							'label' => 'label'
+						)
+//						[…] Hier können beliebig viele Optionen kommen
+					)
+			),
+//			[…] Hier können beliebig viele Optgroups kommen
+		);
+(/code)
+
+Außerdem müsst ihr beachten, dass der value als Array angegeben wird. Aber wie immer gilt: Es gibt nur einen Weg Magento zu lernen, Core lesen!
+
+Tipp: Die Optgroups sind dabei optional.
+<h4>Date.php</h4>
+(image: date.png)
+Der Einfachheit halber, verweise ich hier auf den Artikel von <a href="http://blog.ebene7.com/2011/03/03/magento-datumsfeld-mit-kalender-button-im-admin-formular/">Daniel Barty</a>. Er hat schon schön aufgeschrieben, wie man die Felder benutzt. Ergänzen sollte man nur, dass es einen Konfigurationsschlüssel mit dem schönen Namen "time" gibt, der boolsch ist. Er tut was sein Name sagt und erweitert das Feld um die Zeit, wenn er true ist.
+<h4>Time.php</h4>
+(image: time.png)
+Ich denke die Zeit ist selbsterklärend :-)
+Zu beachten ist die Darstellung in drei Select-Boxen. Ich habe noch nicht danach gesucht, weil ich es bisher nie gebraucht habe, aber ich gehe davon aus, das Magento eine Methode bietet um die Zeit "einfach" weiter zu verarbeiten, ähnlich wie bei Daten (Datums?), und das zusammenfügen nicht händisch machen zu müssen.
+
+… Jetzt habe ich doch gesucht, weil ich nicht mehr wusste, wie die Methode: Mage_Core_Controller_Varien_Action::_filterDates() hieß :-) Daneben gibt es eine Methode: _filterDateTime(), rauszukriegen wie die funktioniert überlasse ich aber euch, insb. weiß ich nicht, ob die nur für DateTime-Kobinationen oder auch nur Zeit funktioniert.
+<h4>Radio.php</h4>
+(image: radio.png)
+Wofür Radio da ist, habe ich noch nicht begriffen, ein einzelner Radio-Button macht in meinen Augen erstmal nicht soviel Sinn.
+<h4>Radios.php</h4>
+(image: radios.png)
+Mehrere davon, ergeben dann aber einen Sinn. Die Werte werden als Array übergeben, jeder Eintrag hat Wert (value) und Label (label).
+
+(code lang: php)
+$values = array(
+ array(
+	 'value' => 'val1',
+	 'label' => 'lab1'
+ ),
+ array(
+	 'value' => 'val2',
+	 'label' => 'lab2'
+ ),
+ array(
+	 'value' => 'val3',
+	 'label' => 'lab3'
+ ),
+);
+(/code)
+<h4>Select.php</h4>
+(image: select.png)
+Ein Select ist ein <select>. Die Werte werden ebenso, wie beim Multiselect angegeben, ausgewählt werden kann aber nur ein Wert.
+<h3>Dem Benutzer die Wahl lassen</h3>
+Wenn man dem Benutzer die Möglichkeit geben möchte, einen Wert einzutragen, so hat Magento auch hier einiges zu bieten.
+<h4>Editor.php</h4>
+Den Editor zu beschreiben wäre wohl ein eigener Artikel. Zum Glück hat sich die Mühe schon jemand gemacht und zwar die <a href="http://www.magentocommerce.com/wiki/5_-_modules_and_development/wysiwyg/a_how-to">Magento Community</a>.
+<h4>File.php</h4>
+(image: file.png)
+Um unseren Benutzern die Möglichkeit zu geben eine Datei auf den Server zu schubsen gibt es den Type File. Das Feld einzufügen ist wie gehabt, Name und Label definieren und los geht es. Die Verarbeitung ist hier der Knackpunkt, aber zu meinem Glück blogge ich ja nicht darüber :-)
+<h4>Gallery.php</h4>
+(image: gallery.png)
+Habe ich um ehrlich zu sein noch nie benutzt. Sieht, wenn man es einfach in ein Formular einbettet ziemlich blöd aus, aber man erahnt, dass es genau das gleiche ist, wie bei den Produkten unter Images zu finden.
+<h4>Image.php</h4>
+(image: image.png)
+Die Möglichkeit um ein Bild hochzuladen. Der Unterschied zu File liegt darin, dass man den Wert (value) setzen kann, dann wird ein Thumbnail vom Bild angezeigt und man kann darauf klicken um das Originalbild zu sehen.
+<h4>Imagefile.php</h4>
+(image: imagefile.png)
+Habe ich leider auch noch nicht benutzt, aber es wirkt wie File. Wenn man sich den Code ansieht, unterscheidet es sich auch nicht groß von File. Ich nehme an, dass es Methoden der Weiterverarbeitung gibt - aber das ist ja "leider" nicht das Thema hier.
+<h4>Link.php</h4>
+(image: link.png)
+
+Wenn man einen Link in sein Formular einfügen möchte, ist das hier euer Typ. Nicht vergessen href in der Konfiguration zu definieren.
+<h4>Multiline.php</h4>
+(image: multiline.png)
+Hört sich an wie eine Textarea, ist es aber nicht. Magento erzeugt hier für uns einzelne <input type="text">. Ein Anwendungsfall diesen Typ der Textarea vorzuziehen ist, z.B. wenn man die Zeilenumbrüche an bestimmten Stellen möchte und die Zeilenlänge begrenzt ist, also z.B. für die Adresse auf der Rechnung. Das Fenster im Kuvert ist ja nur begrenzt lang.
+
+Tipp: Um die Anzahl der Zeilen zu ändern ist lineCount die Eigenschaft die ihr ändern wollt.
+<h4>Note.php</h4>
+(image: note.png)
+Ihr wollt eine Notiz in dem Formular hinterlegen? Benutzt "note"! In die Konfiguration noch "text" hinterlegt und ihr macht eure Benutzer glücklich. Denn sie wissen jetzt, was von ihnen erwartet wird.
+<h4>Obscure.php</h4>
+(image: obscure.png)
+Komischer Name für "Password". Wobei, nicht so ganz. Das Problem bei Passwort-Feldern ist, dass die Eingabe zwar maskiert ist, aber im HTML-Code das Passwort immer noch steht. Um das zu verhindern kann man "obscure" benutzen. Ist ein Wert gesetzt steht in dem Feld *****, ist keiner gesetzt ist es leer.
+
+Achtung: Ich weiß nicht, ob man bei der Weiterverarbeitung mit dem Feld aus Versehen die Daten eines Objekts überschreiben kann, oder das verhindert wird, aber ihr dürft das gerne ausprobieren und in den Kommentaren hinterlassen.
+<h4>Password.php</h4>
+(image: password.png)
+Und nun steigen wir in den HTML-Standard ab und es wird langweilig… Passwort ist bekannt, hoffe ich.
+<h4>Text.php</h4>
+(image: text.png)
+`<input type="text">`, muss ich mehr schreiben?
+<h4>Textarea.php</h4>
+(image: textarea.png)
+Und das ist eine `<textarea>`, ööddeee :-)
+<h4>Und der Rest…</h4>
+Schauen wir uns an, was wir sonst noch so haben.
+<h4>Label.php</h4>
+(image: label.png)
+Wenn ihr nicht wollt, dass der Benutzer den Wert verändern nehmt ihr Label. Label erzeugt links ein Label, wie üblich und zeigt den Wert nur an, ohne die Möglichkeiten zu bieten, ihn zu ändern.
+<h4>Submit.php</h4>
+(image: submit.png)
+Ein Submit-Button, sollte auch bekannt sein.
+<h4>Button.php</h4>
+(image: button.png)
+Gibt eine Button. Für das Formular und die Datenverarbeitung erstmal nicht so interessant, aber mit JavaScript kann man viel Spaß haben.
+<h4>Hidden.php</h4>
+Ein <input type="hidden">. Kann man eigentlich auch in die Session schreiben, wenn man es nach dem Abschicken des Formulars wieder haben will? Vollkommen richtig, ABER ich z.B. benutze es um die Daten eines flexibles Formulars, das mit JavaScript generiert wird als JSON zu speichern und via verstecktem Feld zu übertragen.
+<h2>Danke fürs Lesen</h2>
+Ihr habt bis hierhin durchgehalten? Schön, ich hoffe ich habe euch damit geholfen. Wie immer freuen wir Blogger uns über einen Kommentar. Und in der Hoffnung Tobi schmeißt ihn nicht raus, kann ich jetzt endlich mal einen eigenen Flattr-Button setzen:
+
+<a href="http://flattr.com/thing/450897/Turchen-13-Feldtypen-und-Formularen-im-Magento-Backend" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" border="0"></a>
+
+Du hast Fehler gefunden und weißt viel mehr über Formulartypen? Ich habe wichtige Dinge vergessen? Schreibt es in die Kommentare oder einen eigenen Artikel und postet den Link in die Kommentare!
+
+So jetzt noch der Code-Schnippsel mit dem ich das alles ausprobiert habe, es ist unsortiert und hat für viele Fälle zuviele Konfigurationsschlüssel, aber es nicht anzuhängen, hilft euch vermutlich auch nicht :-)
+
+(code lang: php)
+<?php $fieldtype = array( 	'button', 	'checkbox', 	'checkboxes', 	'column', 	'editor', 	'file', 	'gallery', 	'hidden', 	'image', 	'imagefile', 	'label', 	'link', 	'multiline', 	'multiselect', 	'note', 	'obscure', 	'password', 	'radio', 	'reset', 	'select', 	'submit', 	'text', 	'textarea', 	'time' ); $multiselect = array( 	array( 		'label' =--> 'optgroup',
+		'value' => array(
+			array(
+				'value' => 'test',
+				'label' => 'label'
+			)
+		)
+	)
+);
+foreach ($fieldtype as $f) {
+	$fieldset->addField($f, $f, array(
+			 'label' => $f,
+			 'name' => $f,
+			 'values' => $f == 'multiselect' ? $multiselect : array(
+				 'value1' => 'value1Label',
+				 'value2' => 'value2Label'
+			 ),
+			 'value' => $f == 'multiselect' ? array('value1') : 'value1',
+			 'comment' => 'comment',
+			 'href' => 'http://www.ikonoshirt.de',
+			 'line_count' => 5,
+			 'text' => 'text',
+			 'cols' => 1,
+			 'rows' => 1,
+			 'default_html' => 'test'
+	));
+
+}
+$f = 'radios';
+$fieldset->addField($f, $f, array(
+			 'label' => $f,
+			 'name' => $f,
+			 'values' => array(
+				 array(
+					 'value' => 'val1',
+					 'label' => 'lab1'
+				 ),
+				 array(
+					 'value' => 'val1',
+					 'label' => 'lab1'
+				 ),
+				 array(
+					 'value' => 'val1',
+					 'label' => 'lab1'
+				 ),
+			 ),
+			 'value' => $f == 'multiselect' ? array('value1') : 'value1',
+			 'comment' => 'comment'
+	));
+
+	$fieldset->addField('start', 'date', array(
+	      'name' => 'start',
+	      'label' => Mage::helper('core')->__('Startdate (yyyy-mm-dd)'),
+	      'class' => 'validate-date',
+	      'required' => true,
+	      'format' => 'yyyy-MM-dd hh:mm:ss',
+	      'image' => $this->getSkinUrl('images/grid-cal.gif'),
+				'time' => true
+	    ));
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2350

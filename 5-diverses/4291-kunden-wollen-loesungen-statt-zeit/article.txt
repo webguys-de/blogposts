@@ -1,0 +1,92 @@
+Article-meta: 
+
+----
+
+Title: Kunden wollen Lösungen statt Zeit!
+
+----
+
+Date: 2015-06-13
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Carmen von Neoshops hat eben einen <a href="http://neoshops.de/2015/06/12/warning-simplexml_load_string-libvariensimplexmlconfig-php-line-383-oder-wo-ist-denn-da-der-benefit/">Blog-Post dazu geschrieben</a> dass Sie häufiger mal Anfragen von Kunden bekommt die Sie nicht für <a href="http://neoshops.de/2015/06/12/warning-simplexml_load_string-libvariensimplexmlconfig-php-line-383-oder-wo-ist-denn-da-der-benefit/">das Suchen von fremden Fehlern bezahlen möchte</a>. Der Kunde möchte eine Lösung. Die darf gerne 400 € kosten aber bitte die Lösung - nicht dass Suchen ohne klaren Erfolg. Eigentlich wollte ich Carmen auf Twitter antworten, aber dort war nicht genug Platz. Also, wie kommt man mit dem Kunden zusammen?
+
+
+
+----
+
+Text: Generell hilft es sich einmal zu überlegen wie man sich als Kunde fühlt. Eventuell hilft es hier auch einen Blick in die klassichen Handwerke zu ziehen. Lieber Herr Vogt, natürlich baue ich Ihnen eine Trockenbau-Wand in ihren Altbau. Allerdings sind hier die Wände etwas krum sodass ich Ihnen nicht garantieren kann dass wir in x-Stunden eine Wand für Sie gebaut haben.
+
+Ich persönlich würde verstehen dass er dass so sagt. Immerhin sind die Wände wirklich krum hier. Aber ich würde mich damit auch ziemlich <strong>unsicher und doof fühlen</strong>. Vermutlich wäre ich unglücklich und würde denken: <strong>Der hat doch sicher schon mal eine Wand in ein krummes Haus gebaut? Warum ist dass jetzt so ein Problem?</strong>
+
+Und genau dass denken die Kunden mit dem schlimmen Shops doch vermutlich auch. <strong>Andere haben auch Magento-Shops mit kleinen Fehlern und bei anderen können die doch auch repeariert werden?</strong>
+
+<h2>Das Problem mit der Zeit</h2>
+
+Das Problem ist dass wir als Entwickler einfach nicht wissen wie schlimm der Shop wirklich ist. Und ob nicht, wenn ich Stelle A ändere, Stelle B kaputt geht. Wenn ich dme lieben Kunden also sage "Das zu beheben kostet Sie 400 €" und ich brauche danach 5 Manntage alles richtig hinzubekommen bin ich, als Entwickler, erst mal in einer sehr unangenehmen Situation. Das will ich nicht, das möchte die Carmen ebenso wenig :)
+
+Also beginnen wir damit dem Kunden das Risiko auf die Schultern zu laden. Aktuell weiß  ich übrigens von niemanden der, wenn sein Stundensatz nun keinen Risiko-Anteil mehr enthält, diesen nach unten korrigiert. Liebe Kunden: Wenn ihr schon das <strong>Risiko</strong> tragt: Fragt doch noch <strong>günstigen Stundensätzen</strong>? Das wäre doch nur fair.
+
+Alternativ beginnen wir auch damit uns den Shops anzusehen damit wir es besser schätzen können. Aber dass macht ja auch keinen Spaß: Shop angucken (kein Geld bekommen), Angebot angeben (kein Geld bekommen), realistisch schätzen und dann in einem von 5 Fällen einen Auftrag erhalten. Ich kann mir schönes vorstellen.
+
+<h2>Die Exit-Strategie mit Selbstbewusstsein</h2>
+
+Zur Lösung hilft es sich noch mal in Gedanken zu rufen was unsere Stakeholder eigentlich wollen:
+
+<ul><li>Was will wir Kunde? Eine Lösung für ein Problem</li>
+    <li>Was will der Entwickler? Das Problem für einen adäquat Stundensatz lösen</li>
+</ul>
+
+Was ist naheliegender dem Kunden zu sagen:
+
+Lieber Kunde, einen fremden Shop einzuschätzen ist releativ schwer für mich da hier die Aufwände in Teilen sehr unklar sind. Allerdings bin ich recht sicher dass ich Ihre Probeme lösen kann. Sie kaufen nun ein Zeitbudget von 4/8/16 Stunden bei mir ein. Nach der Zeit zeige ich Ihnen wie weit wir gekommen sind: Welche Dinge sind erledigt, welche noch offen. Nun entscheiden Sie ob Sie diesen Fortschritt bezahlen wollen. <strong>Wenn ja: Bekommen Sie genau diesen Stand für das genannte Budget. Wenn nein bezahlen Sie einfach gar nichts.</strong> Genau gar nichts. Weil wenn Sie nicht zutriefen sind brauchen Sie auch nichts bezahlen. Dann trennen sich allerdings unsere Wege, ich werde nicht mehr für Sie arbeiten und natürlich bekommen Sie keine Lösung von mir. Aber das ist ja auch nicht schlimm denn meine Lösung hat Ihnen ja nicht gefallen. Nein, nur die eine gelöste Aufgabe können Sie nicht bezahlen. Ganz oder gar nicht.
+
+Meiner Meinung nach deckelt dass das Risiko und den Aufwand neue Kunden zu überzeugen dass man doch wirklich ein vertrauenswürdiger Entwickler ist erheblich. Dazu kommt dass man die Entwicklung jederzeit abbrechen kann wenn man feststellt dass man ohnehin nichts liefern könnte was der Kunde bezahlen wollen würde.
+
+Als Entwickler sollte man allerdings ein bisschen darauf achten die Dinge so anzugehen dass man am Ende auch Lösungen präsentieren kann. Wenn man zuerst alle schweren spannenden Probleme angeht ist das eventuell suboptimal :-)
+
+P.S. Ich wohne gar nicht im Altbau
+
+<h2>Update</h2>
+
+Nach einer kleinen Diskussion auf Twitter möchte ich noch folgende Dinge ergänzen:
+
+<ul><li>für Jobs die nur wenige Stunde dauern lohnt das nicht, hier muss Risiko wieder zu Umsatz passen</li>
+    <li>Generell machen viele, genauso wir mein "Aufmacher" Carmen, es ähnlich und transparent</li>
+    <li>Carmen macht einen tollen Job, ihr Blog-Post war nur ein Aufmacher für das Thema</li>
+</ul>
+
+ 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4291

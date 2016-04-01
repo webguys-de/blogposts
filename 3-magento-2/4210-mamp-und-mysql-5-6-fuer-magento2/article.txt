@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: MAMP und MySQL 5.6 für Magento2
+
+----
+
+Date: 2014-12-28
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich programmiere ich der Regel, gerade in kleineren Projekten, ohne Vagrant oder Docker-Stack sondern direkt auf meinem Mac mit MAMP. Leider sind die Magento2 Tests hiermit ein wenig anstrengend da Mamp im Moment kein MySQL 5.6 liefert, Magento2 das aber gerne hätte. Also was tun? Na selbst upgraden.
+
+
+----
+
+Text: Dazu habe ich mir ein kleines Script gebaut welches den Mamp komplett aktualisiert. Es tauscht quasi die MySQL-Version aus und migriert gleichzeitig auf das MySQL 5.6 Datenschema.
+
+<script src="https://gist.github.com/tobi-pb/b9426db51f262d88515c.js"></script>
+
+Einiges davon muss leider als Root ausgeführt werden sodass ein auf Sudo nicht verzichtet werden kann. Bei mir läuft es nach 2h testen stabil - ich hoffe bei euch auch. Zur Sicherheit legt unbedingt ein Backup von eurer Mamp Installation an. In Notfall könnt ihr aber auch eine frische MAMP Installation "drüberbügeln".
+
+Viel Spaß :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4210

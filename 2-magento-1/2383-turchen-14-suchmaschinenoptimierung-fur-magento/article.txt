@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: Türchen 14: Suchmaschinenoptimierung (SEO) für Magento
+
+----
+
+Date: 2011-12-14
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: sulzer
+
+----
+
+Article-content: 
+
+----
+
+Intro: <em>Im heutigen Türchen soll auch etwas einmal für den Shop-Betreiber zu finden sein. So wurde ich in zahlreichen Gesprächen gefragt wie gut sich Suchmaschinen und Magento verstehen. Aus dem Grund habe ich eine der meiner Meinung nach führenden SEO-Agenturen (ABAKUS Internet Marketing GmbH) gebeten hierzu einen kleinen Beitrag zu verfassen (Tobias Vogt).</em>
+
+Einer der größten Vorteile von Magento ist seine volle Konfigurierbarkeit hinsichtlich der Optimierung für Suchmaschinen. Damit ist Magento vielen anderen gängigen freien und kostenpflichtigen Shop-Systemen überlegen.
+
+----
+
+Text: Besonders wichtig ist, dass der Suchmaschinenoptimierer im großzügig angelegten Backend von Magento die wichtigsten Seiten-Elemente hinsichtlich SEO, den Title-Tag und den Description-Metatag, für jede Seite individuell einstellen, und auch jederzeit ändern kann. Selbstverständlich ist auch der Keyword-Metatag von vorneherein vorgesehen, auch wenn er für die Suchmaschinen-Optimierung heutzutage keine Rolle mehr spielt.
+
+Auch andere wichtige Metatags, wie der Robots-Metatag, mit dem der Zugriff von Suchmaschinen-Robotern auf eine Seite und deren Hyperlinks gesteuert werden kann, sind standardmäßig auf jeder Seite bereits enthalten. Weitere Metatags können bei Bedarf jederzeit vom Administrator nach Belieben hinzugefügt werden, so zum Beispiel Link-Rel-Canonical Tags für die Zusammenführung doppelt vorhandener Inhalte oder die propietären Verifikations-Metatags, die für die Einrichtung der Zugänge zu den Webmastertools der großen Suchmaschinen notwendig sind.
+
+Abgesehen von den beschriebenen Einstellungen im Backend, die sich im Head-Abschnitt des HTML-Codes von Haupt-, Kategorie- und Produkt-Seiten niederschlagen, kann auch der Body-Abschnitt sowohl der Templates als auch von Einzelseiten bis auf Quellcode-Ebene editiert und angepasst werden, so dass der Einführung und Verwendung der wichtigen `<h>`-Überschrifts- und sonstigen semantischen Tags, wie `<strong>` oder `<em>`, nichts im Wege steht. Der ```<h1>```-Tag, also die Hauptüberschrift, ist per Default bereits vorgesehen, wenn auch in der Standardeinstellung nur für das Shoplogo, was sich aber jederzeit ändern läßt.
+
+Hinsichtlich der Bild-Optimierung sieht Magento die Vergabe von sprechenden Bild-Dateinamen vor, und läßt natürlich auch die Anpassung des wichtigen alt-Attributes im Image-Tag zu, was den Suchmaschinen den Bildinhalt nahebringt.
+
+Abgerundet wird die suchmaschinentechnische Konfigurierbarkeit von Inhalten in Magento durch die Möglichkeit, für jede Seite frei einen  Dateinamen zu wählen. Das ermöglicht den Einsatz der beliebten, so genannten sprechenden Adressen (URLs), von denen man sich ein verbessertes Ranking verspricht oder mit Hilfe derer man wenigstens doch dem User bereits auf der Suchmaschinen-Ergebnisseite (SERP) die Inhalte, die er erwarten darf, besser präsentieren kann als mit kryptischen URLs. Gesteuert wird dieses Feature durch Magento mit automatischen Rewrite-Einträgen (Rewrite-Redirect) in der .htaccess-Datei.
+
+Auf der Site-weiten Ebene glänzt Magento mit einer automatisch eingerichteten XML-Sitemap, die jeweils per Cron-Job generiert werden kann, und somit jederzeit alle durch Suchmaschinen indizierbaren Seiten auflistet, um den Spidern einen problemlosen Überblick über die Struktur der Website zu verschaffen. Eine standardmäßig eingerichtete robots.txt, mit der der Zugriff der Suchmaschinenroboter gesteuert wird, ist ebenfalls frei editierbar.
+
+Eine Caching-Funktion vermeidet, dass für jeden Seitenaufruf die Datenbank abgefragt werden muss, was die Auslieferung der Inhalte beschleunigt und damit im Zusammenspiel mit den Suchmaschinen wichtig ist, weil diese im Sinne ihrer Nutzer  Wert auf hohe Site-Performance legen.
+
+Magento läßt sich sehr leicht installieren, auch die Konfiguration über das Backend funktioniert bequem. Allerdings bedarf es für die richtige Einrichtung hinsichtlich einer Optimierung für Suchmaschinen doch einiger Fachkenntnise, so dass es sich für den Nicht-Fachmann empfiehlt, eine der zahlreichen Agenturen, die sich auf Magento spezialisiert haben damit zu beauftragen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2383

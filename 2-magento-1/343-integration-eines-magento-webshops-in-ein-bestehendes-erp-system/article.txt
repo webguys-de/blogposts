@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Integration eines Magento-Webshops in ein bestehendes ERP-System
+
+----
+
+Date: 2010-05-17
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Bereits im August 2009 durfte ich mich, im Rahmen einer Arbeit für mein Studium, mit dem Thema "(file: Integration-eines-Magento-Webshops-in-ein-bestehendes-ERP-System.pdf text: Integration eines Magento-Webshops in ein bestehendes ERP-System)" näher beschäftigten. Heute habe ich mich dazu entschlossen diese Arbeit, damit sie nicht weiter "verstaubt", zu veröffentlichen. Bitte beachtet das einige der damals aktuellen Daten z.B. durch die Magento <a href="http://www.magentocommerce.com/product/bridgeconnect">BridgeConnect</a> nicht mehr ganz aktuell sind.
+
+(file: Integration-eines-Magento-Webshops-in-ein-bestehendes-ERP-System.pdf text: Integration eines Magento-Webshops in ein bestehendes ERP-System)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 343

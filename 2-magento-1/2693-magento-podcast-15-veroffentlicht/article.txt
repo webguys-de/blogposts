@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Magento Podcast #15 veröffentlicht
+
+----
+
+Date: 2012-03-04
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Soeben haben Damian und ich den Magento Podcast #15 veröffentlicht. Unser Hauptthema bestand dieses mal in Magento 1.7 Alpha 1. Aber natürlich durfte News und Aussichten zur Meet-Magento auch nicht fehlen.
+
+<a href="http://magentopodcast.de/2012/03/magento-podcast-15/">Weiterlesen auf Magento-Podcast.de</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2693

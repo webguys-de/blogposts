@@ -1,0 +1,67 @@
+Article-meta: 
+
+----
+
+Title: Türchen 04: Mit fertigen Themens zum Erfolg
+
+----
+
+Date: 2011-12-04
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Auch ich freue mich auf diesen Adventskalender - ist er dieses Mal etwas ganz besonderes. Ich bedanke mich bei den vielen Gastautoren, die mit ihren Beiträgen helfen, Magento besser zu verstehen und neue Möglichkeiten aufzeigen.
+
+Für viele Einsteiger in den e-Commerce stellt sich die Frage nach der Gestaltung des Shops. Jeder macht sich im Vorfeld bereits Gedanken, wie der Shop aussehen könnte. Jedoch stellt sich bei der Umsetzung meist schnell heraus, dass das eigene Layout ein individuelles Theme nach sich zieht und so im Vorfeld nicht bedachte Kosten mit sich bringt.
+Für ein individuelles Theme sind schnell 8.000€ und mehr fällig - vor allem für ein (junges) Startup sind dies Kosten, die besser im Marketing und in der Entwicklung aufgehoben sind. Hier stellen fertige Themes eine schnelle und kostengünstige Alternative dar.
+
+
+----
+
+Text: Fertige Themes werden in steigender Anzahl angeboten; das Spektrum reicht von kostenlosen bis hin zu Premium Themes. Premium Themes bietet meist vielfältige Konfigurationsmöglichkeiten und bringen speziell entwickelte oder angepasste Extensions bereits mit. Die Palette der Extensions ist abhängig vom Theme und reicht vom Bilder-Karusell auf der Startseite bis z.B. zu individuellen Reports im Admin.
+
+Bekannte Anbieter von fertigen Themes sind z.B.<a href="http://www.Themeforest.net">Themeforest</a> oder <a href="http://www.emthemes.com">emthemes</a>.
+
+Nachdem die Entscheidung für ein Theme gefallen ist und das Theme gekauft wurde, kann es mithilfe der meist beiliegenden Anleitung installiert werden. Für Shopbetreiber schön: Nun müssen nur noch einige Konfigurationen vorgenommen werden und der Shop ist in wenigen Minuten einsatzbereit. Da es sich um ein fertiges Theme handelt, ist es nachvollziehbar, dass man als Shop-Betreiber gerne noch ein paar Anpassungen vornehmen möchte. Zu diesen Änderungen zählen z.B. das Ausblenden der "permanent callouts" und der diversen "reports".
+
+Für die Dateien des Themes gelten die selben Regeln wie für den Magento Core: "Es wird nichts geändert". Aus diesem Grund müssen im Adminbereich einige Einstellungen vorgenommen werden. Dazu wählt man <em>System > Konfiguration</em>. Dort wählt man <em>Allgemein > Gestaltung Themes</em> aus.
+(image: themes-650x352.png)
+
+In diesem Bereich trägt man unter Standard den Namen des Themes an. Um eigene Änderungen sichtbar zu machen, muss im selben Paket ein neues Theme erstellt werden; den Namen trägt man in den restlichen Feldern ein. So weist man Magento beim Rendern der Seite darauf hin, dass zuerst im neuen Theme nach der angefragten Datei geschaut wird, sollte diese nicht vorhanden sein, wählt Magento den Inhalt aus dem <em>Standard</em>-Theme. Ist hier die Datei auch nicht vorhanden, erstellt Magento die Verknüpfung, das Ziel hingegen fehlt jedoch.
+Dieses Schema macht es Frontend-Entwicklern einfach, Änderungen am gekauften Theme vorzunehmen, ohne die Quelldateien zu modifizieren.
+
+Der Rückgriff auf ein fertiges Theme nimmt dem Shop-Betreiber in der Regel die gestalterische Freiheit, die eigenen Ideen in den Shop einfließen zu lassen - dies ist für viele der wichtigste Punkt; ist das Layout doch die Visitenkarte des Shops. Auf der anderen Seite erhält der Shop-Betreiber duch das fertige Theme ein komplett durchgetestes Theme, welches am ehesten den eigenen Vorstellungen entspricht. Das wichtigste jedoch: auf einmal sind ca. 8.000 € mehr in der Marketing-Kasse. Am Anfang ist elementar, am Markt anzukommmen - sich auf den Google-Indexer als einzige Markting-Maßnahme zu verlassen ist fatal. Nur weil die Kunden die potenzielle Möglichkeit haben, den Shop zu erreichen, wird der Shop-Betreiber keine nennenswerte Besucherzahlen registrieren. Daher: lieber Geld in Marketing stecken um die Conversion-Rate zu steigern - ein gutes Layout alleine schafft es (statistisch) nicht.
+
+Bei einer durchschnittlichen Conversionrate vom 1-3% und einem durchschnittlichen Warenkorbwert von ca. 75€ ist es eine einfache Rechengrundlage, welche eindrucksvoll demomstriert, dass mehr Besucher, höhere Verkaufszahlen bedeuten - die Geschäftsgrundlage für jeden Shop-Betreiber.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2032

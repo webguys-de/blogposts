@@ -1,0 +1,127 @@
+Article-meta: 
+
+----
+
+Title: Türchen 19: Den Lieferpreis schon im Warenkorb anzeigen
+
+----
+
+Date: 2012-12-19
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: mike
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wäre es nicht wunderbar, wenn der Kunde schon im Warenkorb wüsste was er insgesamt bezahlen muss? Viele Shops machen es so und in Magento ist es bei den vielen möglichen Ländern und verschiedenen Lieferarten ebenfalls realisierbar. Durch eine simple Erweiterung direkt hinter dem Event "checkout_cart_add_product_complete", wird ein Land und eine Lieferart gesetzt, um die Speditionskosten zu ermittlen.
+
+
+
+----
+
+Text: <h2>Observer für Shipping und Cart</h2>
+Schauen wir uns einmal in den folgenden Zeilen an, wie das ganze funktionieren könnte. Eine Observer-Klasse (z.B "Codex_Cartshipping_Model_Observer_Checkout_Cart") könnte so aussehen:
+
+(code lang: php)
+function addProductComplete ( Varien_Event_Observer $observer )
+{
+    // Update the cart's quote.
+    /** @var $onepage Mage_Checkout_Model_Type_Onepage */
+    $onepage = Mage::getSingleton('checkout/type_onepage');
+    $onepage->saveShippingMethod("HIER DIE SHIPPING METHOD"); // <<<<<
+
+    // Add address to cart
+    $address = $onepage->getQuote()->getShippingAddress();
+
+    if (null == $address->getCountryId())
+    {
+        $country = Mage::helper('core')->getDefaultCountry(); // use default country
+        if ( '' == $country )
+        {
+            $country = 'DE';
+        }
+        $address->setCountryId($country);
+    }
+
+    if ( null == $address->getPostcode() )
+    {
+        $address->setPostcode('00000');
+    }
+
+    $address->setCollectShippingrates(true);
+
+    // save settings
+    $onepage->getQuote()->collectTotals()->save();
+    $onepage->getQuote()->save();
+}(/code)
+
+Im Groben ist zu erkennen, dass eine Adresse erstellt und diese im Warenkorb gespeichert wird. Für diese Adresse reicht lediglich das Land und ein (fiktiver) Postcode, damit "collectTotals()" damit arbeiten kann. Geschieht dies bevor der Warenkorb angezeigt wird, so kann der Warenkorb die Daten nutzen und auch einen Versandpreis anzeigen.
+<h3>Eintragen bevor der Warenkorb angezeigt wird</h3>
+Am einfachsten ist hierfür das Event "checkout_cart_add_product_complete", welches jedesmal aufgerufen wird, nachdem ein Artikel dem Warenkorb hinzugefügt wird. Das ist sogar eine sehr sinnvolle Stelle, denn manche Artikel können die Lieferkosten beeinflussen. Die zugehörige config.xml beinhaltet also mindestens das hier:
+
+(code lang: php)
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Codex_Cartshipping>
+            <version>0.1.0</version>
+        </Codex_Cartshipping>
+    </modules>
+    <global>
+        <models>
+            <cartshipping>
+                <class>Codex_Cartshipping_Model</class>
+            </cartshipping>
+        </models>
+    </global>
+
+    <frontend>
+        <events>
+            <checkout_cart_add_product_complete>
+                <observers>
+                    <cartshipping_checkout_cart_add_product_complete>
+                        <type>singleton</type>
+                        <class>cartshipping/observer_checkout_cart</class>
+                        <method>addProductComplete</method>
+                    </cartshipping_checkout_cart_add_product_complete>
+                </observers>
+            </checkout_cart_add_product_complete>
+        </events>
+    </frontend>
+</config>
+(/code)
+
+Somit wird nun das Event abgefangen und unsere Methode von vorhin aufgerufen.
+<h2>Sinnvolle Erweiterungen</h2>
+Schwierig wird es, wenn der Besucher des Shops aus einem anderen Land als dem voreingestellten kommt und so die Kosten etwas zu niedrig angezeigt werden könnten. Aber für ein Shop der bevorzugt in nur ein Land liefert dürfte das bis hier hin schon eine wunderbare Extension sein. Zudem kann so etwas, wie die Bestimmung des Herkunftlandes, noch per GeoIP ermittelt werden. Auch die genutzte Versandart kann über das Backend konfiguriert werden oder durch einen weiteren Algorithmus gewählt werden. Hier stehen noch alle Türen offen.
+<h2>Speditionskosten anzeigen oder nicht?</h2>
+Die einen sagen, es wäre ein Kundenblocker, wenn bereits vor dem Kaufentscheid noch weitere Kosten aufgeschlagen werden. Andere wiederrum finden es sehr Verbraucherorientiert und halten das für die noch fehlende Aufklärung, statt die zusätzlichen Kosten zu verschleiern. Ich persönlich halte es für angebracht frühzeitig über die Kosten zu informieren und freue mich euch meinen Ansatz im Rahmen dieses Weihnachtskalenders zeigen zu dürfen. Vielen Dank für eure Aufmerksamkeit und noch angenehme Feiertage! :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3283

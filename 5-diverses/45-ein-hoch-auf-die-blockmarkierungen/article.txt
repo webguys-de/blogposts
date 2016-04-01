@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Ein Hoch auf die Blockmarkierungen
+
+----
+
+Date: 2010-01-04
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,templates,reddot
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es zeigt sich immer wieder: Nicht alles was alt ist, muss durch Neues ersetzt werden. Diesmal handelt es sich um die Blockmarkierung "Konditional". Um einen Link in einer Content-Klasse anzuzeigen, wenn dieser gepflegt ist - dies mit Rendertags zu bewerkstelligen ist eine Aufgabe, die nicht machbar ist; ab der dritten geschachtelter If-Struktur habe ich zugunsten der Performance anfgehört. Nach kurzer Überlegung ist mir die oben genannte Blockmarkierung wieder eingefallen.
+
+----
+
+Text: Der Anfang ist schnell erledigt:
+
+(code)
+<!--IoRangeConditional--><a href="<%anc_link%>"<!--/IoRangeConditional--></a>
+(/code)
+
+Der zweite Teil ist etwas unübersichtlicher, da auch beim schließenden ```<a>``` die Bedingung, in diesem Fall also ```<%anc_link%>```, geprüft werden muss, im besten Fall jedoch auch nicht im späteren Quelltext erscheint. Mit dieser Überlegung im Hinterkopf entsteht dieses Konstrukt:
+
+(code language:xml)
+<!--IoRangeConditional--></a> <!--IoRangeRedDotMode--><!--IoRangeNoRedDotMode--><%anc_link%><!--/IoRangeNoRedDotMode--> <!--/IoRangeRedDotMode--><!--/IoRangeConditional-->
+(/code)
+
+Das ist bis aufs erste meine Lösung, da Rendertags nur das als Link erkennen, was entweder als Seite angehängt oder auf verwiesen wird. Wenn der Redakteur jedoch auf die Idee kommt, eine Url gleich im ersten Dialog nach einem Klick auf den RedDot eingibt, können Rendertags dies nicht darstellen.  Auch wenn Rendertags die Arbeit erheblich vereinfachen,  so sind es manchmal die kleinen Dinge, die nicht wie erwartet funktionieren.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 45

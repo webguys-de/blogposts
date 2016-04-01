@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Magento2:  Fatal error: Maximum function nesting level of '100' reached, aborting!
+
+----
+
+Date: 2014-04-08
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Da will man Magento2 ausprobieren und es begrüßt einen nur mit der netten Meldung "Fatal error: Maximum function nesting level of '100' reached, aborting!". Abhilfe schafft es das xdebug Nesting Level zu erhöhen.
+
+
+
+----
+
+Text: Dazu einfach in der php.ini den Eintrag <em>xdebug.max_nesting_level=250</em> ergänzen. Schon läuft es :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3906

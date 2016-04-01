@@ -1,0 +1,186 @@
+Article-meta: 
+
+----
+
+Title: Türchen 02: Fehler mit der Vergleichsliste vermeiden
+
+----
+
+Date: 2011-12-02
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: karl
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Vergleichsliste in Magento ist ein gern verwendetes Feature. Bei meiner Arbeit mit Magento und der Vergleichliste bin ich auf einen Design Fehler der CompareCollection gestoßen. Jedes mal wenn der Google-Bot kommt, erzeugt das Shop-System Fehlerberichte in var/reports. Die Fehlermeldung lautet:
+
+
+
+----
+
+Text: (code)(Mage_Catalog_Model_Product) with the same id "XXX" already exist(/code)
+
+Der Normale Shopbetrieb war davon nicht betroffen. Also muss es etwas mit Google (Fehlerzeit im Log stimmte mit den Zugriffslogs vom Apache überein.) zu tun haben.
+
+Seit Version 1.4 ist Magento in der Lage Crawler zu erkennen und diese beim Tracking durch das Log Modul zu ignorieren. Siehe:
+
+(code lang: xml)
+<config>
+    <modules>
+    <Mage_Log>
+        <version>0.7.7</version>
+    </Mage_Log>
+    </modules>
+    <global>
+        <ignore_user_agents>
+            <google1>Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)</google1>
+            <google2>Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</google2>
+            <google3>Googlebot/2.1 (+http://www.googlebot.com/bot.html)</google3>
+        </ignore_user_agents>
+    ...
+(/code)
+
+Der Visitor wird einfach nicht erzeugt und erhält die ID 0. Soweit alles kein Problem. So lange man keine Collection der Vergleichsobjekte aufruft. Aber warum sollte das ein Problem sein? Werfen wir einen Blick auf die Tabelle (code)<table_prefix>catalog_compare_item(/code). Diese verlangt entweder eine (code)visitor_id(/code) oder eine (code)customer_id(/code). Wenn eine Kunde eingeloggt ist, dann wird die (code)visitor_id(/code) einfach auf 0 gesetzt. Erinnern wir uns an dass was passiert wenn ein Crawler den Shop aufruft. Genau er bekommt die (code)visitor_id = 0(/code). Wenn wir nun eine Collection der Produkte in der Vergleichliste holen, holt Magento automatisch alle Produkte von allen Kunden. Glaubt ihr nicht? Sehen wir uns den Helper ((code)Mage_Catalog_Helper_Product_Compare(/code)) an:
+
+(code lang: php)
+   /**
+     * Retrieve compare list items collection
+     *
+     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Compare_Item_Collection
+     */
+    public function getItemCollection()
+    {
+        if (!$this->_itemCollection) {
+            $this->_itemCollection = Mage::getResourceModel('catalog/product_compare_item_collection')
+                ->useProductItem(true)
+                ->setStoreId(Mage::app()->getStore()->getId());
+
+            if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+                $this->_itemCollection->setCustomerId(Mage::getSingleton('customer/session')->getCustomerId());
+            } else {
+                $this->_itemCollection->setVisitorId(Mage::getSingleton('log/visitor')->getId());
+            }
+
+            Mage::getSingleton('catalog/product_visibility')
+                ->addVisibleInSiteFilterToCollection($this->_itemCollection);
+
+            /* Price data is added to consider item stock status using price index */
+            $this->_itemCollection->addPriceData();
+
+            $this->_itemCollection->addAttributeToSelect('name')
+                ->addUrlRewrite()
+                ->load();
+
+            /* update compare items count */
+            $this->_getSession()->setCatalogCompareItemsCount(count($this->_itemCollection));
+        }
+
+        return $this->_itemCollection;
+    }
+(/code)
+
+In der `IF` Abfrage und dem `load()` liegt das Problem. Mit einem Rewrite des Helpers können wir das Problem an zentraler Stelle beheben.
+
+(code lang: php)
+class Webguys_Catalog_Helper_Product_Compare extends Mage_Catalog_Helper_Product_Compare {
+    public function getItemCollection() {
+	$visitor = Mage::getSingleton('log/visitor');
+	if ($visitor->getId() == 0) {
+	     $visitor->setId(-1);
+	}
+	return parent::getItemCollection();
+    }
+}
+(/code)
+
+Jetzt noch den Rewrite in einer `config.xml` hinterlegen und am besten in einem eigenen Modul unterbringen.
+
+(code lang: xml)
+<helpers>
+  <catalog>
+    <rewrite>
+      <product_compare>Webguys_Catalog_Helper_Product_Compare</product_compare>
+    </rewrite>
+  </catalog>
+(/code)
+
+Ob der Rewrite funktioniert zeigt uns ein Unit-Test (Verbesserungen sind erwünscht! Bitte in die Kommentare!):
+
+(code lang: php)
+class Webguys_Model_CompareCollectionTest extends PHPUnit_Framework_TestCase {
+	/** @var $_helper Mage_Catalog_Helper_Product_Compare */
+	private $_helper = null;
+	private $_session = null;
+
+	public function setUp() {
+		$this->_helper = Mage::helper('catalog/product_compare');
+		$this->_session = Mage::getSingleton('catalog/session');
+	}
+	public function testVisitorNotDefinied() {
+		$visitor = Mage::getSingleton('log/visitor');
+		$this->assertArrayNotHasKey("id", $visitor->getData());
+		$this->assertTrue($visitor->getId() == 0);
+	}
+	public function testCatalogSession()
+	{
+		$this->assertNotNull($this->_session, "Keine Session");
+		$this->assertArrayNotHasKey("catalog_compare_items_count", $this->_session->getData());
+	}
+	public function testDuplicateEntryInCollection() {
+		$collection = $this->_helper->getItemCollection();
+		$this->assertEquals(-1, Mage::getSingleton('log/visitor')->getId());
+		$this->assertEquals(0, count($collection));
+	}
+	public function testDuplicateEntryByCount() {
+		try {
+			$this->_helper->getItemCount();
+		} catch (Exception $e) {
+			$this->fail($e->getMessage());
+		}
+	}
+	public function testCompareExceptionFix() {
+		$visitor = Mage::getSingleton('log/visitor');
+		if ($visitor->getId() == 0) {
+			$this->_session->setData("catalog_compare_items_count", 0);
+		}
+		try {
+			$this->_helper->getItemCollection();
+		} catch (Exception $e) {
+			$this->fail("Fix not working!");
+		}
+
+	}
+}
+(/code)
+
+Mein Fazit: Rechne mit den Schlimmsten beim Design von API's und testen, testen, testen und testen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2030

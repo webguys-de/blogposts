@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Türchen 24: Frohe Weihnachten
+
+----
+
+Date: 2014-12-24
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Auch dieses Jahr möchte ich ganz ganz herzlich bei den 23 Gastautoren, welche uns jeden Tag eine neues "Türchen" präsentierten, bedanken. Wirklich eine tolle Leistung und auch wieder tolle herausragende Beiträge.
+
+
+
+----
+
+Text: Ich wünsche allen ein wunderbares Fest und einen guten Rutsch. Auf das wir 2015 viel Spaß mit Magento 2 haben dürfen, uns auf der Meet Magento, beim Hackathon oder im Firegento-Vereinleben über den Weg laufen.
+
+<h2>Der Adventskalender 2014 im Überblick</h2>
+
+(advent: 2014)
+
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4201

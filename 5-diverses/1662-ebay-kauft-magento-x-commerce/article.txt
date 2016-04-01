@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: Ebay kauft Magento: x.commerce
+
+----
+
+Date: 2011-06-08
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Leider ist meine Zeit im Moment ein wenig zu knapp um einen langen Beitrag zum Ebay-Deal zu schreiben. Deswegen eine kurze Sammlung von interesannten Links und meine Meinung dazu:
+
+
+
+----
+
+Text: <a href="http://blog.mittwald.de/ecommerce/ebay-kauft-magento/"></a>
+
+<a href="http://t3n.de/news/ebay-magento-komplett-kaufen-313963/">Was das T3N dazu sagt</a>
+
+<a href="http://www.excitingcommerce.de/2011/06/magento-ebay-xcommerce.html">Excitingcommerce zum Thema</a>
+
+<a href="http://romanzenner.com/blog/ebay-takes-over-magento-the-end-of-an-era/">Der bekannte Buch-Autor Roman Zenner zum Thema </a>
+
+<a href="http://blog.mittwald.de/ecommerce/ebay-kauft-magento/">Zusammenfassung von Mittwald</a>
+
+<a href="http://www.ebayinc.com/#message_to_developers_from_John_Donahoe">Video: Stellungnahme des CTO von Ebay</a>
+
+<a href="https://www.x.com/">Die neue Vereinigung selbst: x.commerce</a>
+
+<a href="http://www.magentocommerce.com/images/uploads/Magento_eBay_FAQ.pdf">Die offizielle FAQ zur Übernahme als PDF</a>
+
+Was in allen Beiträgen durchklingt ist die Überraschung über den Kauf. Ebay ist z.Z. nicht das stabilste E-Commerce Unternehmen. Viele Strategiewechsel geben den Autoren ein wenig zu denken.
+
+<strong>Meine Meinung:</strong> Wir müssen abwarten was passiert. Mit Magento haben wir eine wirklich gute Basis. Für den Fall das, was ich nicht glaube, das Produkt nicht mehr im eigentlichen Sinne weitergeführt wird besitzen wir eine große Community: und eine solche hat doch bei TYPO3 doch auch einiges geschaffen :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1662

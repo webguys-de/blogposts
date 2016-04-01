@@ -1,0 +1,54 @@
+Article-meta: 
+
+----
+
+Title: Mails eines Absenders aus Mail-Queue löschen
+
+----
+
+Date: 2013-07-25
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Manchmal muss man auf seiner lokalen Maschine oder auf dem Testsystem eine handvoll Emails nach einem bestimmten Muster löschen. Damit man im Postfix nicht manuell alle Mail-Ids kopieren und löschen muss hilft, wie so oft, die Kommandozeile.
+
+
+----
+
+Text: Diesmal bestand die kleine Aufgabe darin alle Mails eines Absenders zu löschen der leider, durch ein fehlerhaftes Formular, etwas SPAM verursacht hatte. Dank dem <a href="http://wolf-u.li/4472/bestimmte-mails-eines-absenders-aus-postfix-queue-loeschen/">Beitrag von Uli</a> geht das aber ganz einfach mit folgendem Kommando auf der Shell:
+
+(code lang: bash)
+mailq|grep 'test@webguys.de'|awk {'print $1'}|grep -v "(host"|tr -d '*!'|postsuper -d -
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3438

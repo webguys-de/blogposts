@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Magento-Podcast #11
+
+----
+
+Date: 2011-03-31
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Gerade habe ich, zusammen mit Damian,  die Magento-Podcast Folge 11 veröffentlicht. Diesmal konnten wir 55 Minuten Zeit füllen - aber hört selbst.
+
+Weiter unter <a href="http://www.magento-podcast.de">www.magento-podcast.de</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1586

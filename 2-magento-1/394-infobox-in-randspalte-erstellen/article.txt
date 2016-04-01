@@ -1,0 +1,100 @@
+Article-meta: 
+
+----
+
+Title: Infobox in Randspalte erstellen
+
+----
+
+Date: 2010-07-28
+
+----
+
+Description: 
+
+----
+
+Tags: themes-magento
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Oftmals ist ein notwendig eine oder mehrere Infoboxen in der Kontextspalte anzuzeigen. Dazu werden wir ein Template anlegen und ein bestehendes Layout um einen weiteren Block erweitern. In drei Schritten werden wir diese Arbeiten erledigen, als Beispiel bauen wir eine Box mit einem Hinweis auf die Videogalerie ein.
+
+
+
+----
+
+Text: <strong>1. Schritt: Template erstellen</strong>
+Dazu erstellen wir uns einen Ordner "<em>app/design/frontend/default/default/template/infobox/</em>" und erstellen in diesem die Template-Datei "<em>videobox.phtml</em>" mit z.B. folgendem Inhalt:
+(code lang: html)
+<div class="context video-box">
+    <h4>Videogalerie</h4>
+    <img src="<?php echo $this->getSkinUrl('images/infobox/infobox_video.jpg') ?>"
+      alt="<?php echo __('Videogalerie') ?>" />
+    <div class="copy">
+        Sehen Sie unsere Geräte in Aktion!
+    </div>
+</div>
+(/code)
+Das hier referenzierte Bild muss im Ordner "<em>skin/frontend/default/default/images/infobox/infobox_video.jpg</em>" vorhanden sein.
+
+<strong>2. Schritt: Einfügen in das Layout</strong>
+Da die neue Infobox in allen Seiten des Katalogs erscheinen soll, öffnen wir die "<em>catalog.xml</em>", die sich im Ordner "<em>app/design/frontend/default/default/layout</em>" befindet. Um die Infobox in der rechten Randspalte zu positionieren, fügen wir diesen Code:
+(code lang: xml)
+<block
+    type="core/template"
+    name="right.infobox.video"
+    alias="infobox_video"
+    after=""
+    before=""
+    template="infobox/videobox.phtml"
+/>
+(/code)
+
+in Abschnitt:
+(code lang: xml)
+<reference name="right">
+    /* layout definition */
+</reference>
+(/code)
+ein.
+Der Alias ist nicht zwingend notwendig, jedoch hilfreich, wenn man die Positionierung der Boxen beeinflussen möchte.
+
+<strong>3. Schritt: Anpassen des CSS</strong>
+Um das hier verwendete Template Ihren Bedürfnissen anzupassen, dient das folgende CSS nur als Rahmen für Ihr Layout. Das nachfolgende CSS kopieren Sie in die von Ihnen zu erstellende Datei '<em>skin/frontend/default/default/css/infoboxen.css</em>'.
+(code lang: css)
+/*** Infobox Video ***/
+.video-box {
+    font-size: 0.8em;
+    font-weight: normal;
+    padding: 0 5px 0 5px;
+}
+(/code)
+
+Jetzt wird die Infobox angezeigt, sollte jedoch nichts zu sehen sein, liegt es am Cache. Im Backend über "<em>System > Cache Verwaltung</em>" wählen und leeren.
+
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 394

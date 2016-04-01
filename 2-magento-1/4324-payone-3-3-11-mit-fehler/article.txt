@@ -1,0 +1,115 @@
+Article-meta: 
+
+----
+
+Title: Payone 3.3.11 mit Fehler
+
+----
+
+Date: 2015-09-03
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Leider hat die aktuelle Payone Version einen Fehler welcher hoffentlich kurzfristig von Payone geprüft wird. Hierbei bleiben einige Transaktionen auf Running stehen, Rechnungen werden nicht erstellt und der Kunde erhält keine Bestellbestätigung. Generell ist der Fehler durch Payone noch nicht bestätigt.
+
+
+
+----
+
+Text: Im system.log Log ist Fehler durch folgende Zeile sichtbar:
+
+(code lang: php)
+2015-09-01T08:25:46+00:00 ERR (3):
+Warning: include(Payone/Core/Model/Observer/TransactionStatus/Forwarding.php):
+failed to open stream: No such file or directory
+(/code)
+
+Laut Payone wurde die Datei Payone/Core/Model/Observer/TransactionStatus/Forwarding.php entfernt.
+Sie wird im config.xml als Observer jedoch noch verwendet.
+
+(code lang: xml)
+<payone_core_transactionstatus_all>
+  <observers>
+    <payone_core_observer_forwarding>
+    <type>singleton</type>
+    <class>payone_core/observer_transactionStatus_forwarding</class>
+    <method>onAll</method>
+    </payone_core_observer_forwarding>
+    </observers>
+</payone_core_transactionstatus_all>
+(/code)
+
+So lange man nur eine Transaction verarbeitet ist das alles nicht so schlimm. Dann versucht Magento das Model zu laden, registriert es, über die Mage::getSingleton(), in der Registry und stellt fest das er auf "false" die Methode "onAll" nicht aufrufen kann. Alles ist gut.
+
+Verarbeitet das Modul jedoch nun den die zweite Transaction wird das Event payone_core_transactionstatus_all wieder geworfen. Nun kommt der Bug.
+
+Magento prüft, ob das Singleton bereits registriert ist, und bekommt das false des nicht existierenden Models zurück:
+
+(code lang: php)
+public static function getSingleton($modelClass='', array $arguments=array())
+{
+  $registryKey = '_singleton/'.$modelClass;
+  if (!self::registry($registryKey)) {
+    self::register($registryKey, self::getModel($modelClass, $arguments));
+  }
+  return self::registry($registryKey);
+}
+(/code)
+
+Hier muss man nun wissen wie die registry-Methode in Magento generell arbeitet:
+
+(code lang: php)
+public static function registry($key)
+{
+  if (isset(self::$_registry[$key])) {
+    return self::$_registry[$key];
+  }
+  return null;
+}
+(/code)
+
+Nun registriert Magento den tollen Singleton noch mal und wir bekommen eine Exception.
+
+(code lang: php)
+Fatal error: Uncaught exception 'Mage_Core_Exception' with message
+'Mage registry key "_singleton/payone_core/observer_transactionStatus_forwarding"
+already exists' in [..]/htdocs/app/Mage.php on line 595
+
+Mage_Core_Exception: Mage registry key
+"_singleton/payone_core/observer_transactionStatus_forwarding"
+already exists in [..]/htdocs/app/Mage.php on line 595
+(/code)
+
+Als Lösung hilft es den falschen Observer im Source des Moduls auszukommentieren. Generell vielleicht auch auf einen offiziellen Bugfix warten :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4324

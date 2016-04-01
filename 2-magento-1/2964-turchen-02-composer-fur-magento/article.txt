@@ -1,0 +1,237 @@
+Article-meta: 
+
+----
+
+Title: Türchen 02: Composer für Magento
+
+----
+
+Date: 2012-12-02
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: vinai-kopp
+
+----
+
+Article-content: 
+
+----
+
+Intro: Als ich vor ein paar Monaten von <a title="composer" href="http://getcomposer.org" target="_blank">composer</a> erfuhr, war ich überrascht das ich nicht schon früher darauf gestoßen bin – die PHP Welt entwickelt sich derzeit schnell weiter, und ich bin so sehr auf Magento fokussiert sodass ich manche Sachen verpasse. Um so schöner composer jetzt kennen zu lernen :)
+
+
+
+----
+
+Text: <h2>Über Composer</h2>
+Falls der Fall bei Dir ähnlich gelagert ist und du composer noch nicht wirklich kennst, hier ein kurzer Überblick:
+
+composer ist ein Dependency Manager für PHP Bibliotheken. Aber das war doch schon PEAR? Das Hauptproblem bei PEAR ist das Pakete systemweit installiert werden. In der Praxis benötigen aber Projekte meistens bestimmte Bibliothek-Versionen. Composer installiert deswegen alle Bibliotheken für jedes Projekt getrennt. Konkret, composer installiert Pakete in einem Verzeichnis namens vendor/. Ausserdem erstellt es eine vendor/autoload.php Datei, welche die Konfiguration des PHP autoloading für alle Bibliotheken übernimmt. Will man also in dem Projekt Bibliotheken verwenden, muss man nur die vendor/autoload.php Datei einbinden und kann sofort losprogrammieren.
+
+Pakete, die von composer installiert werden sollen, werden in eine kleine Konfigurations-Datei namens composer.json eingetragen. Dabei bekommt jedes Paket eine Version zugewiesen (der * steht für die aktuellste Version). Die genaue Syntax sprengt den Rahmen dieses Artikels und kann <a href="http://getcomposer.org/doc/04-schema.md">in der Dokumentation</a> nachgelesen werden.
+
+Bevor wir uns Magento zuwenden, noch ein bisschen Hintergrund zu Installations-Quellen.
+Im Gegensatz zu PEAR kann composer mit verschiedenen Quellen für Pakete umgehen. Das können unter anderem github repositories, git repositories, ZIP File URL’s, SVN Server oder auch PEAR Channel sein. Alles was benötigt wird, damit ein Paket installiert werden kann, ist eine Konfigurations-Datei namens composer.json (ja, genau wie die oben genannte Datei mit der Liste der zu installierenden Pakete).
+
+Alle öffentlich verfügbaren, per compsoser installierbaren Pakete sind auf <a href="http://packagist.org">http://packagist.org</a> gelistet. Magento Module haben ihr eigenes Repository <a href="http://packages.firegento.com">http://packages.firegento.com</a> (mehr dazu später). Normalerweise interessiert es also gar nicht, woher ein Paket installiert wird. Alles was man machen muss, ist den Paket-Namen und die Version in der composer.json anzugeben:
+
+(code lang: php)
+{
+    "minimum-stability":"dev",
+    "require":{
+        "phpunit/phpunit":"3.7.9",
+        "n98/magerun":"*",
+        "twig/twig":"v1.11.2"
+    }
+}
+(/code)
+
+Nach dem Aufruf von <em>php composer.phar install</em> sind all diese Pakete installiert und verwendungsbereit.
+
+Zurück zu Magento
+
+Um Unterschied zu „üblichen“ PHP Bibliotheken haben Magento Module die Besonderheit, dass enthaltene Dateien nicht in einem Verzeichnis gesammelt sind, sondern an verschiedenen Stellen in Magento liegen müssen – je nach Verwendungszweck. Um dieses Problem zu lösen hat sich unter Magento Entwicklern das Tool <a title="modman" href="https://github.com/colinmollenhour/modman" target="_blank">modman</a> eingebürgert. Wer das nicht kennt, sollte sofort das <a href="http://www.webguys.de/magento/turchen-08-magento-projekte-mit-dem-module-manager-clever-strukturieren">Adventskalender-Türchen Nummer 8 aus 2011 von Fabrizio Branca</a> zu dem Thema lesen.
+
+Bei dem <a href="http://www.magento-hackathon.de/event/2/about" target="_blank">Magento Hackathon in München</a> erstellte eines der Teams eine <a title="Magento Composer Installer auf github" href="https://github.com/magento-hackathon/magento-composer-installer" target="_blank">composer-Erweiterung</a>, welche auch Magento Module per composer installierbar macht. Dazu werden bei der Installation eines Magento Moduls entsprechend einer modman Datei Symlinks aus dem vendor/ Verzeichnis in die Magento erstellt. Alternativ kann auch das linking in der composer.json des Moduls konfiguriert werden.
+
+Damit also ein Magento Modul per composer zu installieren ist, muss
+1) eine composer.json vorhanden sein
+2) das Einhaken der Modul-Dateien per modman oder in der composer.json konfiguriert sein.
+
+Hier ein Beispiel für eine composer.json eines Magento Moduls:
+
+(code lang: php)
+{
+    "name":"netzarbeiter/customer-activation",
+    "type":"magento-module",
+    "license":"OSL-3.0",
+    "homepage":"https://github.com/Vinai/customer-activation",
+    "description":"Makes it impossible for a customer to log in until the account has been activated by the administrator.",
+    "authors":[
+        {
+            "name":"Vinai Kopp",
+            "email":"vinai@netzarbeiter.com"
+        }
+    ],
+    "require":{
+        "magento-hackathon/magento-composer-installer":"*"
+    }
+}
+(/code)
+
+Der Eintrag "type":"magento-module" sorgt dafür, dass composer den Magento Modul-Installer zum installieren benutzt anstatt des regulären composer Installers. Deswegen muss auch die Abhängigkeit zum magento-composer-installer unter "require" eingetragen werden.
+
+Hier ein Beispiel für eine composer.json Datei eines Projektes, in dem unter anderem einige Magento Module gelistet sind.
+
+(code lang: php)
+{
+    "minimum-stability":"dev",
+    "require":{
+        "fbrnc/aoe_templatehints":"*",
+        "netzarbeiter/customer-activation":"*",
+        "riconeitzel/vertical-navigation":"v0.4.2",
+        "colinmollenhour/cache-backend-file":"*",
+    },
+    "repositories":[
+        {
+            "type":"composer",
+            "url":"http://packages.firegento.com"
+        }
+    ],
+    "extra":{
+        "magento-root-dir":"./htdocs/"
+    }
+}
+(/code)
+
+Wenn jetzt <em>composer.phar install</em> aufgerufen wird, landet das z.B. Modul Aoe_TemplateHints im Verzeichnis <em>vendor/fbrnc/Aoe_TemplateHints</em>.
+Außerdem werden alle Symlinks entsprechend der modman Datei nach <em>app/code/local/Aoe/TemplateHints/</em> erstellt.
+
+Wie bereits erwähnt, kann anstatt einer modman Datei das Verlinken nach Magento auch in der composer.json des Moduls angegeben werden:
+
+(code lang: php)
+{
+    "name": "fbrnc/Aoe_TemplateHints",
+    "license": "OSL-3.0",
+    "type": "magento-module",
+    "description": "Advanced Template Hints for Magento",
+    "homepage": "http://www.fabrizio-branca.de/magento-advanced-template-hints-20.html",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "authors":[
+        {
+            "name":"Fabrizio Branca",
+            "email":"mail@{firstname}-{lastname}.de"
+        }
+    ],
+    "extra":{
+        "map": [
+            ["app/etc/modules/Aoe_TemplateHints.xml", "app/etc/modules/Aoe_TemplateHints.xml"],
+            ["app/code/local/Aoe/TemplateHints/", "app/code/local/Aoe/TemplateHints/"],
+            ["skin/frontend/base/default/aoe_templatehints", "skin/frontend/base/default/aoe_templatehints"]
+        ]
+    }
+}
+(/code)
+<h2>Magento Modul Repository</h2>
+Wie bereits erwähnt haben Magento Module ihr eigenes Repository, denn entsprechend den composer Richtlinien sollen Erweiterungen für Applikationen mit eigenem Eco-System (zb Wordpress) nicht auf packagist.org gelistet werden. Anstatt dessen sollen diese in einem eigenen Repository geführt werden. Deswegen wurde composer–installierbare Magento Module <a href="http://packages.firegento.org">http://packages.firegento.org</a> initiiert.
+
+Damit Pakete von dort installiert werden können müssen die folgenden Zeilen in die Projekt <em>composer.json</em> eingetragen werden:
+
+(code lang: php)
+    "repositories":[
+        {
+            "type":"composer",
+            "url":"http://packages.firegento.com"
+        }
+    ]
+(/code)
+
+Damit wird bei einem <em>composer.phar</em> install zuerst auf packages.firegento.com gesucht, und erst danach, sollte ein Packet nicht gefunden worden sein, auf packagist.org.
+Eigene Magento Module können der packagist.firegento.com einfach und schnell hinzugefügt werden. Dazu sind die folgenden Schritte notwendig.
+1.) Hinzufügen einer composer.json
+2.) <a title="Composer Magento Module Repository" href="https://github.com/magento-hackathon/composer-repository" target="_blank">Magento repository</a> auf gitub clonen
+3.) Eigenes Modul in die <a href="https://github.com/magento-hackathon/composer-repository/blob/master/satis.json" target="_blank">satis.json</a> eintragen
+4.) Pull request machen
+
+Danach wird das Modul auch per composer installierbar sein.
+
+Man muss nicht unbedingt nur externe Repositories nutzen – composer unterstützt auch die Installation von privaten Quellen, aber das sprengt den Rahmen dieses Adventskalender-Türchens.
+<h2>Versionsverwaltung und composer</h2>
+Bei der Verzeichnis-Struktur für Projekte scheiden sich die Geister – jeder Entwickler und jede Agentur hat ihre eigenen Richtlinien. Da composer Packete in das vendor/ Verzeichnis installiert, muss dieses irgendwo eingeordnet werden. Im Prinzip kann das vendor/ Verzeichnis direkt in dem Magento Root-Verzeichnis liegen:(code)
+htdocs
+├── .git
+├── composer.json
+├── composer.lock
+├── index.php
+├── app
+├── js
+├── lib
+├── media
+├── skin
+├── var
+└── vendor
+(/code)
+
+In dem Fall muss das vendor/ Verzeichnis mit allen Inhalten durch eine .htaccess Datei geschützt werden.
+
+Besser ist jedoch eine Ebene höher anzusetzen, zum Beispiel wie folgt:(code)
+├── .git
+├── composer.json
+├── composer.lock
+├── htdocs
+│   ├── index.php
+│   ├── app
+│   ├── includes
+│   ├── js
+│   ├── lib
+│   ├── media
+│   ├── shell
+│   ├── skin
+│   └── var
+└── vendor
+(/code)
+
+Wird das ganze Projekt mit einem Versions-Controll-System wie z.B. git verwaltet, wird das vendor/ Verzeichnis üblicherweise nicht mit in das Projekt Repository aufgenommen. Anstatt dessen wird die composer.json und die composer.lock Datei hinzugefügt. Letztere wird durch composer bei der installation angelegt, und enthält immer alle aktuell installierten composer Pakete mit der jeweiligen Version.
+
+Wird compser.phar install in einem Projekt ohne vendor/ Verzeichnis, aber mit composer.lock Datei, aufgerufen, wird der Status aus der lock Datei wieder hergestellt. Im konkreten Fall muss jeder natürlich selber entscheiden welches Vorgehen für ihn am meisten Sinn macht.
+<h2>Ausblick</h2>
+Beim nächsten <a href="http://www.magento-hackathon.de/event/1/about" target="_blank">Magento Hackathon in Januar in Berlin</a> ist geplant, Module auch direkt von Magento Connect via composer installierbar zu machen.
+
+<h2>Screencast</h2> Um das ganze zu illustrieren habe ich zwei kleine Screencasts aufgenommen: 
+
+<h3>Magento Composer Installer Howto</h3> 
+<iframe src="http://www.youtube.com/embed/m_yprtQiFgk?rel=0" frameborder="0" width="640" height="480"></iframe> 
+
+<h3>Adding Extensions to the Magento Module Repository</h3> 
+<iframe src="http://www.youtube.com/embed/56_IYsZAhEk?rel=0" frameborder="0" width="640" height="480"></iframe>
+
+Viel Spaß!
+
+UPDATE
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2964

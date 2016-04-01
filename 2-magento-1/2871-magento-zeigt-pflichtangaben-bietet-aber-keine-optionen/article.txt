@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Magento zeigt '* Pflichtangaben' bietet aber keine Optionen
+
+----
+
+Date: 2012-06-25
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nach einigen CSV-Imports hatten wir das Problem, das Magento auf der Produkt-Detailseite über dem Warenkorb-Button, die Anzeige '* Pflichtangaben' zeigte. Nach einiger Zeit kamen wir darauf das diese Anzeige eigentlich nur ausgegeben wird sobald individuelle Optionen verfügbar waren. 
+
+----
+
+Text: Naheliegend war es nun zu prüfen was die Methode <em>hasOptions()</em>, welche bestimmt ob der Container-Wrapper für '* Pflichtangaben' angezeigt wird, zurück gibt.  Und, welche Überraschung - sie gab uns ein <em>true</em>. Leider stimmte das nicht mit unserer gefühlten Realität überein. Was war passiert?
+
+Magento besitzt in der Tabelle <em>catalog_product_entitiy</em> eine Spalte 'has_options'. Diese cached ob ein Produkt individuelle Optionen hat - in der Regel spart man sich so eine weitere SQL-Abfrage. Hier ging es leider schief da die Cache-Spalte ebenfalls angab das das Produkt individuelle Optionen besitzen würde. Nach einer Korrektur der Werte bei den defekten Produkten verhielt sich das System wieder wie gewünscht.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2871

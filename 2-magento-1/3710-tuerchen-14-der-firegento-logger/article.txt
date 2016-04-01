@@ -1,0 +1,81 @@
+Article-meta: 
+
+----
+
+Title: Türchen 14: Der Firegento Logger
+
+----
+
+Date: 2013-12-14
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: karl
+
+----
+
+Article-content: 
+
+----
+
+Intro: Im heutigen Türchen geht es um die Geschichte und das Ziel rund um den <a href="https://github.com/firegento/firegento-logger" title="Firegento Logger" target="_blank">Firegento Logger</a>.
+
+
+----
+
+Text: Ich kann mich nicht mehr genau erinnern, aber es muss beim ersten Magento Hackathon in München gewesen sein, da entstand die Idee einen besseren Logger für Magento zu schreiben. Ich und einige andere hatten tief im Magento Quellcode die Möglichkeit entdeckt den Standard Logger über eine XML-Konfiguration zu ersetzen. 
+(code lang: xml)
+<!-- app/code/core/Mage/Core/etc/config.xml -->
+<config>
+  <global>
+    <log>
+      <core>
+        <writer_model>Zend_Log_Writer_Stream</writer_model>Zend_Log_Writer_Stream
+      </core>
+    </log>
+  </global>
+</config>
+(/code)
+Genau das richtige für so einen Hackathon. Zusammen haben wir einen ersten Entwurf auf GitHub veröffentlicht. Die Idee war einen Proxy Logger für viele verschiedene Logziele zu haben und diesen Proxy im Backend bequem zu konfigurieren. Am Ende des Hackathon war der Proxy Logger fertig und wir konnten per Mail, XMPP und die Datenbank loggen. Das Backend des Moduls war sehr schmal und schlank.
+
+Es folgten einige Hackathon und die Community entwickelte fleißig weiter. So wurde das Backend ausgebaut, es kamen neue Logziele hinzu und die Möglichkeit Logdateien im Backend anzuzeigen. Bis dahin hieß das Projekt noch Hackathon_Logger und wurde hauptsächlich von Colin und Damian entwickelt.
+
+Im Jahr 2013 hat sich das Team rund um Firegento dem Logger angenommen und ihn erstmal in dessen Namensraum portiert. Zusätzlich haben sie noch Fehler behoben und die Möglichkeit integriert direkt in die Chrome Konsole zu loggen. Warum haben sie das gemacht, wird man sich Fragen? Eines der Ziel von Firegento ist es Module mit ständigem Support und Weiterentwicklung zu versehen. Gute Beispiele sind hier MageSetup und Firegento-PDF. Und genau an diesem Punkt steht das Projekt nun: Es hat ein neues Zuhause und will den Qualitätsansprüchen von Firegento genügen.
+
+Aber was macht der Firegento-Logger nun eigentlich genau? Mit diesem Modul hat der Entwickler folgende Möglichkeiten:
+
+<ul><li>Lognachrichten in mehrere Ziele gleichzeitig schreiben</li>
+	<li>Nachrichtenformat im Backend anpassen</li>
+	<li>Lognachrichten in der DB und in Dateien im Backend anzeigen</li>
+	<li>Echtzeitaktualisierung der Nachrichten in den Logdateien</li>
+	<li>Auswahl der Loglevel für die Logziele</li>
+	<li>Mittels regexp Nachrichten filtern</li> 
+</ul>
+
+Mit all diesen Eigenschaften können sich Entwickler und Shopbetreiber schnell und einfach über Fehler informieren lassen, oder Logs an einer zentralen Stelle sammeln (Multi-Web-Konten-Setup). In vielen Situation wird die Fehlersuche dadurch erleichtert und die Entwicklung wird komfortabler.
+
+Das Modul selber ist einer früheren Version auch produktiv im Einsatz. Mit dem jetzigen Codestand muss noch getestet werden. Und dazu lade ich alle recht herzlich ein! Gebt uns Feedback, Pull-Requests und und und. Dafür im voraus schon mal vielen lieben Dank und frohe Weihnachten.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3710

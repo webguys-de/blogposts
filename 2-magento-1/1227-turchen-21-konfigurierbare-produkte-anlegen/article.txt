@@ -1,0 +1,188 @@
+Article-meta: 
+
+----
+
+Title: Türchen 21: Konfigurierbare Produkte anlegen
+
+----
+
+Date: 2010-12-21
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: vinai-kopp
+
+----
+
+Article-content: 
+
+----
+
+Intro: <em>Türchen 21 ist ein besonderes Türchen, auch für uns. Es ist ein Gastbeitrag von <a href="http://www.netzarbeiter.de/">Vinai Kopp</a>, bekannt z.B. durch das Buch <a href="http://www.amazon.de/Magento-Das-Handbuch-f%C3%BCr-Entwickler/dp/389721928X">Magento - Das Handbuch für Entwickler</a>. Vielen Dank an dieser Stelle an ihn! Nun zu seinem Beitrag:</em> Einfache Produkte lassen sich in Magento auch einfach anlegen. <a href="http://www.webguys.de/magento/turchen-16-individuelle-optionen-importieren/">Mit individuellen Optionen</a> steht auch eine Möglichkeit zur Verfügung diese zu Individualisieren. Diese sind bei einer Anbindung an ein ERP-System aber meistens nicht sehr angenehm einsetzbar. Darum hier als eine alternative Code-Schnipsel zum Anlegen von konfigurierbaren Produkten.
+
+
+----
+
+Text: Im Beispiel gehen ich davon aus das die Produkt-Attribute color und size schon existieren und jeweils alle benötigten Attribut-Werte angelegt wurden.
+
+(code lang: php)
+require_once 'app/Mage.php';
+
+Mage::app('admin');
+
+/*
+ * Vorbereiten der Daten
+ */
+$varianten = array(
+	array('color' => 'Rot',   'size' => 'S', 'price' => '10.00'),
+	array('color' => 'Rot',   'size' => 'M', 'price' => '10.00'),
+	array('color' => 'Rot',   'size' => 'L', 'price' => '10.00'),
+	array('color' => 'Blau',  'size' => 'M', 'price' => '10.00'),
+	array('color' => 'Blau',  'size' => 'L', 'price' => '10.00'),
+	array('color' => 'Gold',  'size' => 'S', 'price' => '12.00'),
+	array('color' => 'Gold',  'size' => 'L', 'price' => '12.00'),
+);
+
+$attributeModels = array(
+	'color' => Mage::getModel('catalog/resource_eav_attribute')->loadByCode('catalog_product', 'color'),
+	'size'  => Mage::getModel('catalog/resource_eav_attribute')->loadByCode('catalog_product', 'size')
+);
+
+$product = Mage::getModel('catalog/product');
+
+/*
+ * Anlegen der Simple Products
+ */
+foreach ($varianten as $i => $variante)
+{
+	$product->reset()
+		->setData(array(
+			'name' => sprintf('Shirt %s %s', $variante['color'], $variante['size']),
+			'sku' => sprintf('shirt-%s-%s', $variante['color'], $variante['size']),
+			'status' => true,
+			'type_id' => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+			'visibility' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
+			'website_ids' => array_keys(Mage::app()->getWebsites()),
+			'stock_data' => array(
+				'qty' => 100,
+				'is_in_stock' => 1
+			),
+			'attribute_set_id' => $product->getDefaultAttributeSetId(),
+			'tax_class_id' => 2,
+		));
+
+	/*
+	 * Setzen der Options Werte
+	 */
+	foreach ($variante as $code => $wert)
+	{
+		if (isset($attributeModels[$code]))
+		{
+			$wert = $attributeModels[$code]->getSource()->getOptionId($wert);
+		}
+		$product->setData($code, $wert);
+	}
+
+	$product->save();
+
+	/*
+	 * Merken der Simple Product ID für später
+	 */
+	$varianten[$i]['id'] = $product->getId();
+}
+
+/*
+ * Vorbereiten des konfigurierbaren Produktes.
+ * Verwenden eines frischen Product Models damit die Product Type Instance des
+ * Simple Products nicht wiederverwendet wird.
+ */
+$product = Mage::getModel('catalog/product')
+	->setData(array(
+		'name' => 'Your next Shirt',
+		'sku' => 'shirt',
+		'category_ids' => '10',
+		'status' => true,
+		'type_id' => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
+		'visibility' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+		'website_ids' => array_keys(Mage::app()->getWebsites()),
+		'stock_data' => array(
+			'is_in_stock' => 1
+		),
+		'attribute_set_id' => $product->getDefaultAttributeSetId(),
+		'tax_class_id' => 2,
+		'price' => 10,
+	));
+
+/*
+ * Setzen der Daten für die Varianten
+ */
+$simpleProductIds = array();
+$attributeData = array('color' => array(), 'size' => array());
+
+foreach ($varianten as $variante)
+{
+	$simpleProductIds[$variante['id']] = true;
+
+	$priceDelta = $variante['price'] - $product->getPrice();
+	foreach (array_keys($attributeData) as $code)
+	{
+		if (! $attributeData[$code])
+		{
+			$attributeData[$code] = array(
+				'attribute_id' => $attributeModels[$code]->getId(),
+				'label' => $attributeModels[$code]->getFrontendLabel(),
+				'default_label' => $attributeModels[$code]->getFrontendLabel(),
+				'store_label' => $attributeModels[$code]->getFrontendLabel(),
+				'use_default' => true,
+				'values' => array(),
+			);
+		}
+
+		$optionValue = $attributeModels[$code]->getSource()->getOptionId($variante[$code]);
+
+		/*
+		 * Preisunterschiede an dem Attribut color festmachen
+		 */
+		$priceValue = ('color' === $code && 0 < $priceDelta) ? $priceDelta : '';
+
+		$attributeData[$code]['values'][$variante[$code]] = array(
+			'value_index'       => $optionValue,
+			'label'             => $variante[$code],
+			'is_percent'        => 0,
+			'pricing_value'     => $priceValue,
+			'use_default_value' => true
+		);
+	}
+}
+
+$product->setConfigurableProductsData($simpleProductIds)
+	->setConfigurableAttributesData(array_values($attributeData))
+	->setCanSaveConfigurableAttributes(true)
+	->setCanSaveCustomOptions(true);
+
+$product->save();
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1227

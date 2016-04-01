@@ -1,0 +1,88 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento 2015 - Mein Rückblick
+
+----
+
+Date: 2015-05-14
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Da ist sie schon wieder vorbei, die Meet Magento 2015 in Leipzig. Nachdem ich letztes Jahr eher mit dem Gefühl gefahren bin mir nicht ganz sicher zu sein ob es sich lohnt in diesem Jahr wiederzukommen muss ich sagen: Ja, es hat sich gelohnt.
+
+
+
+----
+
+Text: Am Sonntag reiste ich von Paderborn nach Leizpig. Gegen 18 Uhr war im Hotel und wurde auch direkt von David, dem Initiator von <a href="https://twitter.com/mageengage">MageEngage</a> in der Hotel Lobby begrüßt. Auf dem Weg zum Zimmer begegente ich noch dem <a href="https://twitter.com/kkoepke/">Kai </a>sodass ich mich direkt angekommen fühlte. Sehr toll. Gemeinsam ging es dann weiter etwas Essen und anschließend zum Pre-Networking-Event im Spizz.
+
+Am nächsten Morgen begrüßten uns Rico und Annett mit einleitenden Worten zum Event. Danach ging es in den Fachvorträgen ans "eingemachte". Auf diese möchte ich an dieser Stelle allerdings nicht eingehen. Das haben schon viele andere wie z.B. die <a href="http://t.co/5E4KVMUdM9">Integer.NET in Ihrem Blog</a>, <a href="http://t.co/MHPCrgwwAw">Tobias Zander</a> und auch der <a href="http://geistreich78.info/ecommerce/das-war-die-meet-magento-2015">Stefan von Geistreich</a> getan.
+
+<h2>Was habe ich gelernt?</h2>
+
+Wenn ich ehrlich bin ist es das erste mal das ich mir im Blog diese Frage stelle. Inwiefern hat mich die Meet Magento eigentlich persönlich oder beruflich voran gebracht oder wird es noch tun?
+
+<ul><li>Mir wurden in Hinblick auf Performance Optimierung die Augen geöffnet. Ich werde mich zukünftig viel mehr mit der DOM-Ready Gesamtperformance beschäftigen anstatt mit der First-Byte-Performance. Warum 200ms sparen wenn woanders 2000ms möglich sind? Mein Kopf ist nun neu prioritisiert.</li>
+    <li>Nach dem Vereinsgespräch des FireGentos habe ich dass Gefühl dass wir ein Stück weiter vorangekommen sind mit einer Zielausrichtung des Vereins. Wir zwar noch kein fertiges Konzept aber kleine agile  Teams welche autonom erst mal loslaufen. Danach schauen wir mal :)</li>
+    <li>Ich weiß nun endlich wie wir unsere Erweiterung im GIT bzw. Versionsnummer taggen. Ganz einfach: Wir werden es vermutlich genau wie in Magento 2 "composer-like" tun.</li>
+    <li>Vermutlich werden wir zukünftig noch stärker an SCSS Naming-Konventionen arbeiten. Sinnvoll wäre es sich hier an Magento 2 anzulehnen.</li>
+    <li>Ich werde mich nun deutlich mehr (hoffentlich) mit Magento 2 beschäftigen. Die Veranstaltung hat motiviert.</li>
+    <li>Live-Coding Vorträge zu halten ist <strong>immer</strong> eine schlechte Idee.</li>
+    <li>Der große Raum für Entwickler ist einfach richtig gut.</li>
+</ul><h2>Meine Vorträge?</h2>
+
+Generell durfte ich auch zwei Voträge halten. Meinen Slot zum Thema Warenkorbpreisregeln konnten ich, mit Hilfe von Annett (DANKE), noch spontan in den Entwickler-Raum umlegen. Das wäre sonst auch komisch gewesen. War doch sehr viel Source :)
+
+<ul><li>Präsentation <a href="http://webguys.de/praesi/warenkorbpreisregeln/">Warenkorb-Preis-Regeln in Magento</a></li>
+    <li><a href="http://webguys.de/praesi/xtest/#/">Präsentation Testing & Magento mit Xtest</a> und <a href="http://xtest-mage.com/">Link zur Dokumentation</a></li>
+</ul><h2>Die Verantstaltung für mich auf Twitter?</h2>
+
+Ein bisschen was für meine Erinnerung die ich natürlich gerne teile. Bzw.: Das habe andere schon übernommen :)
+
+<blockquote class="twitter-tweet" data-lang="de"><p lang="und" dir="ltr">.<a href="https://twitter.com/tobi_pb">@tobi_pb</a> &amp; <a href="https://twitter.com/daim2k5">@daim2k5</a> = <a href="https://twitter.com/hashtag/magebromance?src=hash">#magebromance</a> <a href="https://twitter.com/hashtag/mm15de?src=hash">#mm15de</a> <a href="http://t.co/8XzsErkptU">pic.twitter.com/8XzsErkptU</a></p>&mdash; Sonja Riesterer (@sonjarierr) <a href="https://twitter.com/sonjarierr/status/597494585925963776">10. Mai 2015</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr"><a href="https://twitter.com/tobi_pb">@tobi_pb</a> is talking about cart  price rules <a href="https://twitter.com/hashtag/mm15de?src=hash">#mm15de</a> <a href="http://t.co/j0YJHdBRM5">pic.twitter.com/j0YJHdBRM5</a></p>&mdash; Kai Köpke (@kkoepke) <a href="https://twitter.com/kkoepke/status/598079971224092672">12. Mai 2015</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet" data-lang="de"><p lang="de" dir="ltr">Beim Zuhören von <a href="https://twitter.com/tobi_pb">@tobi_pb</a>’s Vortrag wächst der Wunsch, dass es viel mehr davon geben sollte. <a href="https://twitter.com/hashtag/ilike?src=hash">#ilike</a> <a href="https://twitter.com/hashtag/mm15de?src=hash">#mm15de</a></p>&mdash; Sascha Wohlgemuth (@Nomad73) <a href="https://twitter.com/Nomad73/status/598082549903171584">12. Mai 2015</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+ 
+
+<blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr">Looks like the <a href="https://twitter.com/hashtag/mm15de?src=hash">#mm15de</a> has produced some great content... I mean, look at that method name! <a href="http://t.co/frCpgYlqrl">pic.twitter.com/frCpgYlqrl</a></p>&mdash; Ben Marks (@benmarks) <a href="https://twitter.com/benmarks/status/598083563557359616">12. Mai 2015</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+ 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4256

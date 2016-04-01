@@ -1,0 +1,85 @@
+Article-meta: 
+
+----
+
+Title: Türchen 19: Typische Magento Fehler
+
+----
+
+Date: 2010-12-19
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 19 verrät uns einige Kniffe, über die jeder mindestens einmal stolpert. Egal wie lange schon man schon mit Magento arbeitet, einer dieser Fehler tritt sicherlich bei fast jedem Projekt auf.
+
+
+----
+
+Text: <h2>1. Fehler: Keine Zugriffsrechte in der neuen Extension</h2>
+Die Extension wurde implementiert, der neue Menupunkt erscheint, jedoch gelangt man nach Klick darauf erscheint nur eine weiße Seite, mit dem Hinweis auf fehlende Rechte. An dieser Stelle ist es wichtig zu wissen, dass jede <em>config.xml</em> ein Abschnitt zur Regelung der Zugriffsrechte enthalten muss, sollte es einen Screen im Admin besitzen:
+(code lang: xml)
+<config>
+...
+ <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <extension_name translate="title" module="extension_name">
+                                            <title>Navigations Titel</title>
+                                        </extension_name>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+</config
+(/code)
+<h2>2. Fehler: Leere weiße Seite</h2>
+Vermutlich ist das Error-Reporting von PHP deaktiviert so dass Magento keine detaillierte Fehlermeldung ausgeben kann. Zum Änderung das Error-Reportings kann zuerst in der index.php von Magento das Level des Befehls error_reporting auf z.B. E_ALL geändert werden. Nun wirft PHP alle erdenklichen Hinweismeldungen zum Quellcode. Weiße Seiten haben in der Regel jedoch den Hintergrund das PHP verboten wurde Parse-Error beim Start der PHP-Scripte anzuzeigen. Um dies zu erlauben muss in der php.ini der Wert <em>display_startup_errors</em> auf <em>on</em> gesetzt werden. Per PHP-Script kann diese Variable nicht verändert werden.
+
+<h2>3. Fehler: Extension wird nicht akzeptiert</h2>
+Die Extension wurde implementiert, jedoch wird der neue Code nicht ausgeführt - häufig kommt es zu solchen Situationen. Der Grund liegt in den meisten Fällen an Schreibfehlern, denn in der <em>config.xml</em> sind die Angaben case-sensitiv, d.h. Groß-Kleinschreibung ist wichtig. Sollte die neue Extension nicht in der Liste unter <em>System > Konfiguration > Erweitert > Erweitert</em> erscheinen. liegt es in der Regel an einem Schreibfehler.
+
+<h2>4. Fehler: Änderungen werden nicht übernommen</h2>
+Es werden an Artikeln, Seiten oder Widgets Änderungen vorgenommen, diese erscheinen jedoch nicht im Browser. Auch mehrmaliges laden der Seite bringt nichts, der Cache wurde auch schon geleert. Der von Magento auch? Unter <em>System > Cache Verwaltung</em> findet sich die Cache-Verwaltung von Magento - sollten Änderungen nicht erscheinen, nach den Cache von Magento schauen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1216

@@ -1,0 +1,201 @@
+Article-meta: 
+
+----
+
+Title: Türchen 18: URL Rewrite Indexierung
+
+----
+
+Date: 2012-12-18
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: michael-augsten
+
+----
+
+Article-content: 
+
+----
+
+Intro: Da gibt es so einen unscheinbaren Menüpunkt, denn viele Shop-Betreiber gar nicht kennen und dem Programmierer zu schaffen machen kann. Die URL-Rewrites.
+
+
+----
+
+Text: Bei kleineren bis mittleren Shops ist auch alles ok, man kann ganz schnell neue Umleitungen definieren.
+Möchten man jedoch einen Shop mit ca. 240.000 Produkten  in 220 Kategorien und 8 Store-Views nächtlich mit einem Import beglücken und danach den Index neu aufbauen, schaut man schon und überlegt, was macht er da solange.
+
+Er legt mal so einige Millionen neue Records  an. Für jedes Produkt in jeden Store (egal ob  Aktiviert oder nicht) für den Kategorie-Teil-Baum und jedem Produkt in der entsprechenden Kategorie.Damit kann man sicherlich fast alle SEO-Wünsche erfüllen. Sprachabhängige "suchmaschinenfreundliche" URLs mit und ohne dem Kategorie-Baum. Ob man es brauch oder nicht muss jeder selber entscheiden, für uns war die Index-Bildung einfach zu lang.
+
+Was kann man machen, bzw. haben wir für diesen Projekt umgesetzt. Man kann sicherlich auch nur die Rewrites aktualisieren, die durch den Import geändert wurden sind. Macht aber einiges an Logik notwendig und eine manuelle Indexierung dauert immer noch so lange.
+
+Zuerst einmal gibt es die Option "Kategoriepfad für Artikel URLs verwenden", wenn diese Option  auf "Nein" gestellt wird, dann gibt es nur noch URLs in der Form "http://domain.de/product-a.html ", dies hilft besonders bei Produkten,  die in mehreren Kategorien zu finden sind.
+
+Die weitere Einsparung geht leider nicht ohne Programmierung. Da die URLs, nie sprachabhängig gebraucht werden (in unserem Projekt), und somit in allen Store-Views gleich aussehen,  haben wir den Faktor "Store Views" auf ein Store-View pro Website verringert. 
+
+Zuerst muss die Klasse" Mage_Catalog_Model_Url" überlagert werden und denn Loop über alle Store-Views mit einem über alles Websites und den Aufruf mit dem Default-Store der Website ersetzt werden:
+
+(code lang: php)
+<?php
+
+class AuIt_Cfc_Model_Rewrite_Catalog_Url extends Mage_Catalog_Model_Url
+{
+    protected function _refreshProductRewrite(Varien_Object $product, Varien_Object $category)
+    {
+        if ($this->getStoreRootCategory($category->getStoreId())->getId() != $category->getId()) {
+            return $this;
+        }
+        return parent::_refreshProductRewrite($product, $category);
+    }
+
+    public function refreshRewrites($storeId = null)
+    {
+        if (is_null($storeId)) {
+            foreach (Mage::app()->getWebsites() as $website) {
+                if ($website->getDefaultStore())
+                    $this->refreshRewrites($website->getDefaultStore()->getId());
+            }
+            return $this;
+        }
+        return parent::refreshRewrites($storeId);
+    }
+
+    public function refreshCategoryRewrite($categoryId, $storeId = null, $refreshProducts = true)
+    {
+        if (is_null($storeId)) {
+            foreach (Mage::app()->getWebsites() as $website) {
+                if ($website->getDefaultStore())
+                    $this->refreshCategoryRewrite($categoryId, $website->getDefaultStore()->getId(), $refreshProducts);
+            }
+            return $this;
+        }
+        return parent::refreshCategoryRewrite($categoryId, $storeId, $refreshProducts);
+    }
+
+    public function refreshProductRewrite($productId, $storeId = null)
+    {
+        if (is_null($storeId)) {
+            foreach (Mage::app()->getWebsites() as $website) {
+                if ($website->getDefaultStore())
+                    $this->refreshProductRewrite($productId, $website->getDefaultStore()->getId());
+            }
+            return $this;
+        }
+        return parent::refreshProductRewrite($productId, $storeId);
+    }
+
+    public function clearStoreInvalidRewrites($storeId = null)
+    {
+        if (is_null($storeId)) {
+            foreach (Mage::app()->getWebsites() as $website) {
+                if ($website->getDefaultStore())
+                    $this->clearStoreInvalidRewrites($website->getDefaultStore()->getId());
+            }
+            return $this;
+        }
+        return parent::clearStoreInvalidRewrites($storeId);
+    }
+
+}
+(/code)
+
+Da aber alle Anfragen des Systems immer über den Store-View kommen müssen wir die Anfrage eines Store-Views wieder zum Default-Store der Website zuordnen.
+
+(code lang: php)
+class AuIt_Cfc_Model_Rewrite_Core_Url_Rewrite extends Mage_Core_Model_Url_Rewrite
+{
+    public function loadByIdPath($path)
+    {
+        $storeId = $this->getStoreId();
+        $this->setStoreId(Mage::app()->getWebsite()->getDefaultStore()->getId());
+        parent::loadByIdPath($path);
+        $this->setStoreId($storeId);
+        return $this;
+    }
+
+    public function loadByRequestPath($path)
+    {
+        parent::loadByRequestPath($path);
+        if ( !$this->getData('request_path') )
+        {
+            $storeId = $this->getStoreId();
+            $this->setStoreId(Mage::app()->getWebsite()->getDefaultStore()->getId());
+            parent::loadByRequestPath($path);
+            $this->setStoreId($storeId);
+        }
+        return $this;
+    }
+}
+(/code)
+
+Damit die URLs richtig aufgebaut werden, muss noch die Methode " joinUrlRewrite" wieder entsprechend an den Default-Store der Website angepasst werden.
+
+(code lang: php)
+class AuIt_Cfc_Model_Rewrite_Resource_Category_Collection extends Mage_Catalog_Model_Resource_Category_Collection
+{
+    /**
+     * Joins url rewrite rules to collection
+     *
+     * @return Mage_Catalog_Model_Resource_Category_Collection
+     */
+    public function joinUrlRewrite()
+    {
+        //$storeId = Mage::app()->getStore()->getId();
+        $storeId = Mage::app()->getWebsite()->getDefaultStore()->getId();
+        $this->joinTable(
+            'core/url_rewrite',
+            'category_id=entity_id',
+            array('request_path'),
+            "{{table}}.is_system=1"
+                . " AND {{table}}.product_id IS NULL"
+                . " AND {{table}}.store_id='{$storeId}'"
+                . " AND id_path LIKE 'category/%'",
+            'left'
+        );
+        return $this;
+    }
+}
+(/code)
+
+Setzt man die Flat-Tabellen für die Kategorien ein, so müssen die Methoden
+
+(code lang: php)
+Mage_Catalog_Model_Resource_Category_Flat:: getParentCategories,
+Mage_Catalog_Model_Resource_Category_Flat:: _loadNodes,
+Mage_Catalog_Model_Resource_Category_Flat_Collection::addUrlRewriteTo
+(/code)
+
+noch angepasst werden. Dabei einfach nach "url_rewrite" suchen und die Store-ID mit der Store-ID des Default-Store-Views ersetzen. Gegenüber früheren Zeiten ist
+
+(code lang: php)
+Mage_ImportExport_Model_Import_Entity_Product, 
+Mage_ImportExport_Model_Import_Entity_Customer, 
+Mage_ImportExport_Model_Import_Entity_Abstrac
+(/code)
+
+(Vorgestellt im letzten Adventskalender  http://www.webguys.de/magento/turchen-19-produktimport-mit-der-importexport-schnittstelle/), in einer annehmbaren Zeit möglich, wenn danach nicht die Indexierung laufen müsste. Mit diesen vorgestellten, relativ kleinen Maßnahmen, konnten wir die Zeit der URL-Rewrite-Indexierung um ca. 6/8 minimieren. Vieleicht gibt es auch noch andere Möglichkeiten … 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3288

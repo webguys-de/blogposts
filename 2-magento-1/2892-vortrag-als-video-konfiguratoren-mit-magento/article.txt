@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Vortrag als Video: Konfiguratoren mit Magento 
+
+----
+
+Date: 2012-07-11
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Mein kleiner Bettel-Tweet hat geholfen. Die Abstimmung des nächstes Videos zur Meet-Magento konnte dank Twitter so manipuliert werden das mein Video nun auch auf YouTube zu sehen ist.  Aber schaut selbst ..
+
+----
+
+Text: <iframe src="http://www.youtube.com/embed/-NqIdROmoxg" frameborder="0" width="640" height="360"></iframe>
+
+Leider ist mein Vortrag aus technischen Gründen jedoch nicht komplett aufgezeichnet worden. Schade, aber die <a title="Meet Magento Vortrag: Konfiguratoren mit Magento" href="http://www.webguys.de/magento/meet-magento-vortrag-konfiguratoren-mit-magento/">Präsentation zum Vortrag</a> könnt ihr euch natürlich auch <a href="http://www.webguys.de/magento/meet-magento-vortrag-konfiguratoren-mit-magento/">als PDF herunterladen</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2892

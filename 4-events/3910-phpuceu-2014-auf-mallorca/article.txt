@@ -1,0 +1,63 @@
+Article-meta: 
+
+----
+
+Title: PHPucEU 2014 auf Mallorca
+
+----
+
+Date: 2014-04-25
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: fabian-blechschmidt
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die PHP Unconference ist seit Jahren Garant für gute Talks und noch bessere Kaffeepausen mit sehr großem Informationsinhalt. Neben der großen Hamburger Version gibt es seit vier Jahren auch den kleineren europäischen Ableger.
+
+Rund hundert Teilnehmer und Teilnehmerinnen aus Europa treffen sich zu Web- und Projektthemen rund um PHP. Nach Manchester und Berlin steht für den <del datetime="2014-04-26T08:38:02+00:00">18./19.</del> 17./18. Mai 2014 Palma de Mallorca auf dem Programm. Nachdem das OrgaTeam sich beim ersten Mal zumindest mit "es ist doch Insel!" bei Ulf Wendel, mySQL-Urgestein und Ideengeber für die PHP Unconference auf
+Mallorca, herausreden konnte, freuen sich die Ausrichtenden Judith Andresen, Fabian Blechschmidt, Karl Spies und Marcus Wolff sehr, dass es nun mit Palma geklappt hat.
+
+
+
+----
+
+Text: Das gewählte Hotel liegt mitten in Palma. Für die Lauffaulen gibt es einen Pool direkt vor Ort, alle anderen können auch zum Strand wandern.Bei erwarteten 25° und Sonne werden die Zeiten vor dem Unconf-Beginn und zum Abend hin gut von den Teilnehmern und Teilnehmerinnen genutzt werden können.
+
+Wie bei allen Unconferences bestimmen die Teilnehmer und Teilnehmerinnen das Programm. Sie bringen Ihre Angebote und Wünsche mit -- gemeinsam wird das Tagungsprogramm festgelegt und durchgeführt. Diese Art der Themenfindung führt regelmäßig auf Unconferences zu einem hochkarätigen Programm - dies erhofft sich das OrgaTeam auch für diesjährige PHP
+Unconference Europe.
+
+Dabei ermöglicht die PHP Unconference Europe einen Austausch über die deutsche PHP Community hinaus. Diese Impulse für die eigene Arbeit zusammen mit einer sonnigen Atmosphäre sollte sich niemand entgehen lassen.
+
+Darüber hinaus bietet der Sponsor thePHP.cc Schulungen direkt vor der PHP Unconference Europe an, die gut in die Unconference einstimmen: "Secure Web Development" und "Riskfree Framework Usage" stehen als Ganztages-Workshops auf der Agenda.
+
+Die Anmeldung für diese Veranstaltungen und die PHP Unconference als solche findet Ihr auf der Veranstaltungswebsite: <a href="http://www.phpuceu.org/phpuceu-2014/tickets/">http://www.phpuceu.org/phpuceu-2014/tickets/</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3910

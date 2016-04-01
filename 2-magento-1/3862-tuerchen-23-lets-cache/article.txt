@@ -1,0 +1,201 @@
+Article-meta: 
+
+----
+
+Title: Türchen 23: Let's Cache
+
+----
+
+Date: 2013-12-23
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: bastian-ike
+
+----
+
+Article-content: 
+
+----
+
+Intro: Dieses jahr möchte ich das Caching in Magento einmal wieder beleuchten.
+Es gibt zwar eine Menge guter Texte, Tutorials, Sourcecode, etc. dazu, aber ich denke es schadet nichts das ganze mal etwas in einen Text zu verpacken.
+
+
+----
+
+Text: <h2>Cachen</h2>
+Cachen grundsätzlich bedeutet erstmal bestimmte erzeugte Daten zwischenzuspeichern um diese bei Bedarf direkt zu nutzen ohne die (zeitaufwändige) Generierung der Daten durchzuführen.
+
+Daher können wir praktisch alles cachen, die komplette Seite (Full-Page-Cache, also z.B. Varnish), die Konfiguration (macht Magento intern um das aufwendige Parsen und Mergen aller XML-Dateien zu sparen) oder auch einzelne HTML-Blöcke (macht Magento teilweise, z.B. für Footer-Blöcke).
+
+Der Cache selber wird im Cache-Backend gehalten, das kann im Dateisystem, APC, Redis, Memcache oder auch der Datenbank sein.
+
+Da es bereits genug zum Thema Varnish gibt und Konfigurationen sowieso gecached werden will ich mich im folgenden etwas mehr auf das Thema Blockcaching eingehen.
+
+<h3>Block-Level-Cache in Magento</h3>
+Magento bietet grundsätzlich an jeden einzelnen gerenderten Block zu Cachen, was theoretisch erstmal gut klingt, praktisch aber nicht ganz einfach ist. Um Blöcke effektiv Cachen zu können müssen wir a) wissen was den Cache-Key ausmacht, also einen gecachten Block eindeutig identifizieren können, b) sicherstellen das der Cache auch wieder gelöscht wird wenn sich darin gespeicherte Daten ändern und c) sicherstellen das der Cache nicht durch die eigene Größe o.ä. ineffektiv wird.
+
+`Mage_Core_Block_Abstract` beinhaltet die grundlegende Block-Caching Logik. Innerhalb der `toHtml` methode wird versucht mittels `$this->_loadCache()` den aktuellen Block aus dem Cache zu laden. Sollte das nicht möglich sein wird dieser Block gerendert und danach mittels `$this->saveCache($data)` versucht zu cachen.
+
+Ausschlaggebend ist die Methode `getCacheLifetime()`. Wenn diese `null` zurückliefert wird der Block nicht gecached, das ist auch die Standardwert was dazu führt das Magento grundsätzlich erstmal Blöcke nicht cached. Ein positiver Wert gibt die Zeit in Sekunden an die der Eintrag im Cache bleiben soll. Der Wert -1 bedeutet "für immer" Cachen, bis anderweitig der Eintrag aus dem Cache gelöscht wird.
+
+Wenn wir einen bestimmten Block also Cachen möchten müssen wir zuerst mal `getCacheLifetime()` überschreiben oder `$this->setCacheLifetime(12345)` im Konstruktor nutzen.
+
+Weiter geht's: Cache Key und Cache Tags: für beide gibt es eine Funktion `getCacheKey()` respektive `getCacheTags()`. Erstere liefert einen String zurück der einen Block eindeutig identifiziert, letztere ein Array mit Tags anhand derer der Eintrag wieder aus dem Cache gelöscht wird.
+
+<h3>Beispiel</h3>
+Nehmen wir mal ein Beispiel: in unserem Projekt haben wir eine ultra-hochkomplexe-mega-krasse Preisberechnung, die die normale price.phtml in den Schatten stellt und pro Produkt 1 Sekunde braucht zum rendern. Wäre noch machbar auf einer Seite mit einem Produkt, aber eine Kategorieseite mit 50-60 Produkten wird einfach unbenutzbar.
+
+Als Lösung können wir jetzt mehrere Stellen cachen: Wir könnten die komplette Kategorie-Liste (also den Product_List Block cachen), wir könnten die Seite umbauen das die einzelnen Produkte als Child-Blöcke geladen werden und diese Cachen und wir können direkt den Price-Block cachen. Wenn wir jetzt den Price-Block als Problemkind gefunden haben (z.B. mit dem <a href="https://github.com/AOEmedia/Aoe_Profiler/" title="Aoe_Profiler">Aoe_Profiler</a>) können wir daran gehen diesen Direkt zu Cachen.
+
+Für die Cache-Tags brauchen wir eigentlich nur `self::CACHE_GROUP`, `Mage_Catalog_Model_Product::CACHE_TAG` und `Mage_Catalog_Model_Product::CACHE_TAG."_".$this->getProduct()->getId()`.
+
+Der Cache-Key wird jetzt spannender: wenn wir einfach sagen `product-price-<product_id></product_id>` wäre auf jeder Seite in jeder Sprache für jeden User der gleiche Produkt-Preis für das Produkt. Das ist offensichtlich etwas das schnell nicht funktioniert.
+
+Ich habe mich in diesem Beispiel einmal an dem Modul <a href="https://github.com/netresearch/Magento-CatalogCache" title="Magento-CatalogCache">Magento-CatalogCache</a> von Netresearch orientiert, die einen guten Cache-Key zusammengebaut haben:
+(code lang: php)
+    public function getCacheKey()
+    {
+        $_taxCalculator = Mage::getModel('tax/calculation');
+        $_customer = Mage::getSingleton('customer/session')->getCustomer();
+        $_product = $this->getProduct();
+        return 'ProductPrice'.
+        /* Create different caches for different products */
+        $_product->getId().'_'.
+        /* ... for different stores */
+        Mage::App()->getStore()->getCode().'_'.
+        /* ... currency */
+        Mage::App()->getStore()->getCurrentCurrencyCode().'_'.
+        /* ... for different login state */
+        $this->helper('customer')->isLoggedIn().'_'.
+        /* ... for different customer groups */
+        $_customer->getGroupId().'_'.
+        /* ... for different tax classes (related to customer and product) */
+        $_taxCalculator->getRate(
+            $_taxCalculator
+                ->getRateRequest()
+                ->setProductClassId($_product->getTaxClassId())
+        );
+    }
+(/code)
+
+Mit einem solchen Cache-Key dürften wir den Block sehr genau identifizieren können.
+
+Hier unser Beispiel Preis-Block:
+(code lang: php)
+<?php
+    
+    class Some_Example_Price_Block extends Mage_Catalog_Block_Product_Price
+    {
+        /**
+         * example-block, just sleeps for testing purposes
+         *
+         * @param null|Mage_Catalog_Model_Product $product
+         * @return array
+         */
+        public function getTierPrices($product = null)
+        {
+            // some ultra-special-complex-tierpricelogic
+            sleep(1);
+            return array();
+        }
+    
+        /**
+         * default 24h cache
+         *
+         * @return int
+         */
+        public function getCacheLifetime()
+        {
+            return 86400;
+        }
+    
+        /**
+         * cache-key based on current store, currency, user-group, etc...
+         *
+         * @return string
+         */
+        public function getCacheKey()
+        {
+            $_taxCalculator = Mage::getModel('tax/calculation');
+            $_customer = Mage::getSingleton('customer/session')->getCustomer();
+            $_product = $this->getProduct();
+            return 'ProductPrice'.
+            /* Create different caches for different products */
+            $_product->getId().'_'.
+            /* ... for different stores */
+            Mage::app()->getStore()->getCode().'_'.
+            /* ... currency */
+            Mage::app()->getStore()->getCurrentCurrencyCode().'_'.
+            /* ... for different login state */
+            $this->helper('customer')->isLoggedIn().'_'.
+            /* ... for different customer groups */
+            $_customer->getGroupId().'_'.
+            /* ... for different tax classes (related to customer and product) */
+            $_taxCalculator->getRate($_taxCalculator->getRateRequest()->setProductClassId($_product->getTaxClassId()));
+        }
+    
+        /**
+         * necessary cache-tags
+         *
+         * @return array
+         */
+        public function getCacheTags()
+        {
+            return array(
+                self::CACHE_GROUP,
+                Mage_Catalog_Model_Product::CACHE_TAG,
+                Mage_Catalog_Model_Product::CACHE_TAG."_".$this->getProduct()->getId()
+            );
+        }
+    }
+(/code)
+
+Würden wir diesen Block jetzt in Magento nutzen würde uns der erste Aufruf (sofern TierPrices genutzt werden) pro Produkt eine Sekunde warten lassen. Danach käme der Inhalt aber aus dem Cache und würde somit deutlich schneller gerendert werden.
+
+Alternativ könnten wir natürlich auch die Kategorie-Seite cachen, das würde aber einen sehr komplexen Cache-Key benötigen (inkl. Filter-Navigation, aktuelle Seite, Seitengröße, usw).
+
+<h3>Magento-Cache aufbohren</h3>
+Neben dem Cachen selber kann man auch die Cache-Mechanismen in Magento verbessern.
+
+<h4>Cache Backend</h4>
+Die Erste Frage ist welches Cache-Backend Sinn macht: Standardmäßig wird das Dateisystem (var/cache/) genutzt, es gibt aber auch Redis, Memcache, Apc, undwasweißichnichtnochalles.
+
+Grundsätzlich kann ich Redis empfehlen da Redis standardmäßig mit Cache-Tags klarkommt. In anderen Fällen (z.B. APC) werden die Cache-Tags wieder im Dateisystem gespeichert und müssen jedesmal aufwendig geparsed werden um die entsprechenden Keys aus APC zu löschen (mit APC ist hier der Key-Value-Store gemeint, nicht der PHP-Bytecodecache. Der hat damit nix zu tun).
+
+Das Modul <a href="https://github.com/colinmollenhour/Cm_Cache_Backend_Redis">Cm_Cache_Backend_Redis</a> ist hierfür zu empfehlen. Die Installation ist super-einfach.
+
+<h4>Aoe_AsyncCache</h4>
+Wir haben alle Blöcke gecached, nutzen meinetwegen den Magento-Enterprise-FPC, haben Redis für Sessions und Cache-Backend und trotzdem ein Problem: unserer Import-Skripte invalidieren ständig den Cache.
+
+Der <a href="https://github.com/AOEmedia/Aoe_AsyncCache">Aoe_AsyncCache</a> kann hier abhilfe schaffen. Wie das ganze funktioniert hat <a href="http://www.fabrizio-branca.de/magento-asynchronous-cache.html">Fabrizio Branca in seinem Blog</a> super beschrieben. Zusammengefasst: Jeder Cache-Clean wird in eine Queue geschrieben die dann nur (z.B.) stündlich abgearbeitet wird. Erfahrungsgemäß kann das sehr viel Leistung für einen Shop bringen. Wichtig: wenn das Modul in der Magento-Enterprise-Version genutzt werden soll nutzt bitte den "enterprise_fpc" Branch, da sonst der FPC von Magento nicht korrekt gelöscht wird ;-) Ebenso achtet auf den korrekten Tag (1.7/1.12 oder 1.8/.13) beim auschecken, da sich zwischen den Versionen der Cache in Magento etwas geändert hat.
+
+<h3>...kommen wir langsam zu Ende</h3>
+Ich hoffe ich konnte euch hier ein paar Infos zum Caching übermitteln und vielleicht ein bisschen Hilfe wenn ihr (oder euer Shop) mal irgendwo "feststeckt".
+
+In dem Sinne: ein frohes Weihnachtsfest, einen guten Rutsch ins neue Jahr und all sowas :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3862

@@ -1,0 +1,194 @@
+Article-meta: 
+
+----
+
+Title: Türchen 13: Magento ImportExport: Xmlimport
+
+----
+
+Date: 2014-12-13
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: nikolai-krambrock
+
+----
+
+Article-content: 
+
+----
+
+Intro: The Magento standard import, ImportExport, was a big improvement in terms of speed and reliability of product import. Unfortunately, it only accepts a complicated CSV-format. This import format is hard to understand and looks like somebody tried to transform XML into CSV. So we created a module that transforms it back to XML and called this module XmlImport. It was built on top of FastSimpleImport and has been tested intensively for simple products in multiple stores. Other cases have also been tested and seem to work. The module is available on GitHub: <a href="https://github.com/code4business/xmlimport">https://github.com/code4business/xmlimport</a> and as a ZIP-File in this blog page: <a href="http://www.code4business.de/xmlimport">http://www.code4business.de/xmlimport</a>
+
+
+
+----
+
+Text: <h2>1. Magento ImportExport</h2>
+
+Magento introduced a product import called ImportExport for versions CE 1.5 and EE 1.10. It is good because it is fast and reliable, but it is also complicated to use, mainly because the items in a given line in the CSV-format do not necessarily belong together:
+
+<div style="overflow-x: scroll; width: auto">
+
+<table>
+<th>
+
+<td>SKU</td>
+<td>Store</td>
+<td>Name</td>
+<td>Description</td>
+<td>_media_image</td>
+<td>_media_lable</td>
+<td>_category</td>
+</th>
+
+<tr>
+<td>1234567</td>
+<td>&nbsp;</td>
+<td>Default</td>
+<td>Default Description</td>
+<td>img1.jpg</td>
+<td>Image 1</td>
+<td>Cat A</td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+<td>de</td>
+<td>Standard</td>
+<td>Standard-Beschreibung</td>
+<td>img2.jpg</td>
+<td>Image 2</td>
+<td>Cat B</td>
+</tr
+
+><tr>
+<td>&nbsp;</td>
+<td>en</td>
+<td>Default</td>
+<td>Default Description</td>
+<td>Img3.jpg</td>
+<td>Image 3</td>
+<td></td>
+</tr>
+</table>
+
+</div>
+
+<br>
+
+In this example “de”, “Standard” and “Standard-Beschreibung DE” belong to the German storeview. The value “img1.jpg” and the corresponding image 1, however, belongs to every storeview. The format seems like somebody tried to put XML into CSV. This might be acceptable to Magento-developers – but it is usually not to developers of ERP-Systems and they would need to produce the import file. From our experience it is not worth the effort to produce this format. There are good articles about the format, e.g. <a href="http://www.webguys.de/magento/turchen-19-produktimport-mit-der-importexport-schnittstelle/">http://www.webguys.de/magento/turchen-19-produktimport-mit-der-importexport-schnittstelle/</a> and <a href="http://www.meet-magento.de/fileadmin/user_upload/meet-magento.de/pdf/ImportExport_Vinai.pdf">http://www.meet-magento.de/fileadmin/user_upload/meet-magento.de/pdf/ImportExport_Vinai.pdf</a>.
+
+<h2>2. Transforming the import format back</h2>
+
+The rest of the article transforms the CSV-format above into the XML-format that XmlImport is reading getting the same information. The format of every product consists out of three areas: The storeviews, store-view-related “simple data” and non-storeview-related collections as “complex data”:
+
+(code lang: xml)
+<products>
+ <product>
+   <stores>
+     ... STORES GO HERE ...
+   </stores>
+   <simple_data>
+     ... SIMPLE DATA GOES HERE ...
+   </simple_data>
+   <complex_data>
+     ... COMPLEX DATA GOES HERE ...
+   </complex_data>
+ </product>
+</products>
+(/code)
+
+Attributes that start with “_” in Magento ImportExport are complex, other attributes are simple. The only exception is _store: This attribute is used twice – first in the store part and second mapping the simple data to storeviews. The storeview part is simple. It enumerates all the storeviews that this product uses:
+
+(code lang: xml)
+<stores>
+ <item>de</item>
+ <item>en</item>
+</stores>
+(/code)
+
+The simple products are mapping values to attributes for storeviews. This looks like this:
+
+(code lang: xml)
+<simple_data>
+ <sku><default>1234567</default></sku>
+ < Name>
+   <default> Default</default>
+   <de>Standard</de>
+   <en>Default</en>
+ </ Name>
+ < Description>
+   <default> Default description</default>
+   <de> Standard-Beschreibung</de>
+   <en>Default description</en>
+ </ Description>
+</simple_data>
+(/code)
+
+This tricky part is that you can only have one <default>-node for the sku, because the sku is unique for a product. If you have multiple skus you get multiple products. All other attributes map values to storeviews or to the default view. Remark: Attributes that are defined on website-level need to be assigned to one of the storeviews. This is a limitation of ImportExport. The last part is the complex data:
+
+(code lang: xml)
+<complex_data>
+ <enum>
+   <item>
+     <_media_image>img1.jpg</_media_image>
+     <_media_lable>Image 1</_media_lable>
+   </item>
+   <item>
+     <_media_image>img2.jpg</_media_image>
+     <_media_lable>Image 2</_media_lable>
+   </item>
+ </enum>
+ <enum>
+   <item>
+     <_category>Cat A</_category>
+   </item>
+   <item>
+     <_category>Cat B</_category>
+   </item>
+ </enum>
+</complex_data>
+(/code)
+
+The complex data consists of enumerations. One enumeration contains only attributes that belong together to keep their order. It is important that img1.jpg is linked with Image 1 and not with Image 2. The category on the other hand is independent of the order of the media. Therefore it is in an own enumeration (theoretically it would be possible to put it into the same enumeration making things less easy to read). It is required that all items of an enumeration contain the same attributes. This is necessary because ImportExport is meant to work with a CSV-file that does not allow to not have this attributes.
+
+<h2>3. Why should I use this?</h2>
+
+The module implements an import that works out-of-the-box; you install FastSimpleImport and XmlImport, configure the modules in the backend, put an import file in the configured directory and then run php shell/xml_import.php. There are three cases where you might want to use the standard-like Magento XML import:
+
+1) If you can select a format from your ERP-Developer, you use the proposed format of XmlImport and you are done before you start working
+
+2) If you have a given ERP-Output you can transform it into the proposed format. If you are good in processing files then you are properly faster than writing an importer on top of FastSimpleImport
+
+3) You can use the module as an example for a FastSimpleImport implementation
+
+<h2>4. Related work and alternatives</h2>
+
+The module is built on top of FastSimpleImport. FastSimpleImport is definitely an alternative if you need to read a custom file anyways. It is properly more expensive than transforming the file – at least, the first time you are using it – but in the end, the solution is a single Magento module.
+
+If you can cope with the CSV-format, then the Magento ImportExport is sufficient. But if you’re looking for another XML-based solution, there is one by Fabrizio Branca: <a href="https://github.com/AOEpeople/Aoe_Import">https://github.com/AOEpeople/Aoe_Import</a>. From what I understand, it addresses additional problems like concurrency and memory leaks, but is not as easy to use. There is a second similar solution of Paul Hachmang, that is based on FastSimpleImport <a href="https://github.com/ho-nl/Ho_Import">https://github.com/ho-nl/Ho_Import</a>. Both of the solutions use configuration to explain which part of the XML-Document is going where in Magento.</default>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4096

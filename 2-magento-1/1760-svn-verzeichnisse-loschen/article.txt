@@ -1,0 +1,59 @@
+Article-meta: 
+
+----
+
+Title: .svn Verzeichnisse löschen
+
+----
+
+Date: 2011-08-18
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die erste Frage lautet selbstverständlich: "Warum sollte man so etwas machen wollen?". Und im Prinzip steht man auch selten vor so einem Problem bzw. Aufgabenstellung. Zu so einer Situation kann es kommen, wenn aus einem bisherigen Projekt welches unter Versionsverwaltung mit SubVersion steht, Teile des Codes kopiert und für ein Neues verwendet werden. Zu so einer Situation muss/darf es nicht kommen.
+
+
+----
+
+Text: Anstatt das Verzeichnis oder die Verzeichnisse zu kopieren und so auch die SubVersion_Verzeichnisse .svn zu übernehmen, bietet SubVersion die Möglichkeit des Exports von Teilbäumen an.
+(code lang: shell)
+svn export [-r REV] PATH1[@PEGREV] [PATH2]
+(/code)
+Eine ausführliche Beschreibung ist bei <a href="http://svnbook.red-bean.com/en/1.5/svn.ref.svn.c.export.html">red-bean.com</a> zu finden.
+
+Sollte dies nicht zu bekannt gewesen sein und die Verzeichnisse bereits kopiert worden sein, so enthalten diese noch die alten Daten von SubVersion, die vor einem Einchecken ins aktuelle Projekt zwingend entfernt werden muss. Dies ist mit diesem Befehl problemlos möglich:
+(code lang: shell)
+find . -type d -name .svn -exec rm -Rf {} \;
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1760

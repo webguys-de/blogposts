@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Thanks to magentocommerce.com
+
+----
+
+Date: 2012-02-28
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: That is really really awesome. Magento provide an interview with me at <a href="http://magentocommerce.com">magentocommerce.com</a>. Take a look:  <a href="http://www.magentocommerce.com/blog/comments/meet-tobias-vogt-magento-certified-developer/">Meet Tobias Vogt Magento Certified Developer</a>
+
+
+
+----
+
+Text: (image: Magento-Blog-Meet-Tobias-Vogt-Magento-Certified-Developer-eCommerce-Software-for-Growth-2012-02-28-20-41-49-588x1024.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2684

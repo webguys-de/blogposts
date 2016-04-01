@@ -1,0 +1,95 @@
+Article-meta: 
+
+----
+
+Title: Magento Blöcke durch Überschreiben erweitern 
+
+----
+
+Date: 2010-07-26
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,block,uberschreiben
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: <p style="text-align: left;">Für jede Erweiterung, die Magento nicht schon nativ mitliefert, müssen Teile des original Quellcodes angepasst oder weitere neu geschrieben werden. Um jedoch immer updatefähig zu bleiben, ist es ein Muss, die betreffenden Module zu überschreiben. Anhand eines Blocks wird das Prinzip erklärt.</p>
+
+
+----
+
+Text: Zuerst wird im Ordner "app/etc/modules" eine weitere config.xml erstellt, diese weisst Magento darauf hin, dass es lokale Änderungen bestehen.
+
+(code lang: xml)
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Wg_Catalog>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Wg_Catalog>
+    </modules>
+</config>
+(/code)
+
+Der Name es Moduls ist frei wählbar, fängt jedoch mit einem Grossbuchstaben; ein "_" stellt einen Verzeichniswechsel dar. Eigene Erweiterungen werden immer im Ordner "app/local" abgelegt, in unserem Beispiel im Ordner <em>"app/local/Wg/Catalog"</em>. Im Ordner <em>"app/code/local"</em> erstellen wir nun die Struktur für das neue Modul. Dazu benötigen wir folgende Ordner: <em>"app/code/local/Wg/Catalog/Block"</em>, <em>"app/code/local/Wg/Catalog/Block/Category"</em>, sowie <em>"app/code/local/Wg/Catalog/etc"</em>. In dem Verzeichnis etc erstellen wir eine config.xml mit folgendem Inhalt:
+
+(code lang: xml)
+<?xml version="1.0"?>
+<config>
+    <global>
+        <blocks>
+             <wg_catalog>
+    	         <class>Wg_Catalog_Block</class>
+	     </wg_catalog>
+             <catalog>
+		<rewrite>
+	            <category_view>Wg_Catalog_Block_Category_View</category_view>
+                </rewrite>
+            </catalog>
+        </blocks>
+    </global>
+</config>
+(/code)
+
+Im Ordner <em>"app/code/local/Wg/Catalog/Block/Category"</em> erstellen wir Datei, die wir erweitern möchten, in diesem Fall <em>"View.php"</em>. Dazu benötigen wir initial diesen Inhalt:
+
+(code lang: php)
+class Wg_Catalog_Block_Category_View extends Mage_Catalog_Block_Category_View
+{
+    public function MyFunction(){
+        /* magic */
+   }
+}
+(/code)
+
+Nun kann die Function "MyFunction()" aus dem gewohnten Kontext heraus aufgerufen werden, ohne die Core Dateien von Magento modifizieren zu müssen. Denn dies sollte unter keinen Umständen passieren, denn nach einem Update sind sämtliche Änderungen überschrieben.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 374

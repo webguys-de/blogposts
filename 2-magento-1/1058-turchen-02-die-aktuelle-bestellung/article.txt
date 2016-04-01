@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: Türchen 02: Die aktuelle Bestellung
+
+----
+
+Date: 2010-12-02
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Heute hinter dem Kläppchen: Die aktuelle Bestellung.
+(code lang: php)
+$order      = Mage::registry('current_order');
+$subtotal  = $order->getSubtotal();
+$shipping = $order->getBaseShippingAmount();
+(/code)
+
+Zuerst holen wir uns das den aktuellen Warenkorb. Dort stehen uns über '$order' verschiedene Methoden zur Verfügung, in diesem Fall greifen wir mit 'getSubtotal()' auf die Zwischensumme und mit 'getBaseShippingAmount()' auf die Versandkosten zu. Mit diesen Informationen kann man - das Wissen um die kostenfreien Lieferung vorausgesetzt - folgende Box realisieren: 'Noch xx.xx € - dann sparen Sie yy.yy € Versandkosten'. Wenn das kein Anreiz ist.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1058

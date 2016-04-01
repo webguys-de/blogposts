@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Lust mit uns zu arbeiten?
+
+----
+
+Date: 2011-06-22
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: "Wie, im einem Blog arbeiten? Geht doch gar nicht richtig." Stimmt schon, aber wir brauchen auch nicht Verstärkung im Blog sondern bei der <a href="http://www.code-x.de">code-x GmbH</a>. Das ist, für die die es nicht wussten, unser Brötchengeber :)
+
+Also wenn Du glaubst, irgendwo auf der Strecke zwischen <strong>CSS</strong> und <strong>HTML</strong> über <strong>PHP</strong> nach <strong>WordPress</strong> oder <strong>Magento</strong> ein Zuhause zu haben, in dem Du Dich richtig wohl fühlst und gut auskennst dann melde mich doch direkt bei mir (<a href="mailto:tobi@webguys.de">tobi@webguys.de</a>) oder natürlich auch direkt bei <a href="mailto:stefan.freise@code-x.de">Stefan Freise</a> (Geschäftsführung code-x)
+
+Wir freuen uns auf Dich! :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1679

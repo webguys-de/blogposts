@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: Webguys auf der CeBIT: Am OpenSource-Stand von Mittwald
+
+----
+
+Date: 2012-02-07
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: In <strong>Halle 6, Stand J11</strong> am Dienstag und Mittwoch (<strong>06.03 + 07.03.2012</strong>).  An den beiden Tagen bin ich am <em>Open Source Community</em>-Stand des <a href="http://www.mittwald.de/">Webhosters Mittwald</a> und freue mich über einige spannende <strong>Magento</strong>-Gespräche<em>. </em>Neben Magento sind auch die Systeme Wordpress, Typo3, Oxid und Joomla dort vertreten. Mittwald hat sich bereit erklärt diesen Systemen insgesamt 105qm Platz zu spendieren.
+
+
+
+----
+
+Text: <h2>Open Source unterstützen</h2>
+<a href="http://www.pressebox.de/pressemeldungen/mittwald-cm-service-gmbh-co-kg/boxid/479570">Nach eigener Aussage </a>hat sich die Mittwald bereits seit ihrer Gründung Open-Source auf die Flaggen geschrieben. Dieses Jahr möchten sie mit einem eigenen Stand auf der CeBIT den Communitys die Möglichkeit bieten sich zu präsentieren. Meiner Meinung nach eine absolute Win-Win Situation: Wir, die Community, haben ein spannendes Ereignis, können viele neue Kontakte knüpfen und halten natürlich nebenher das Magento-Banner hoch. Spannende Gespräche und eine große Plattform - ein Traum. Auch wenn die Mittwald sich im Hintergrund halten will so werden sich Kunden, Entwickler und Open-Source-Stand Besucher dennoch gerne an das Sponsering der Mittwald erinnern - das kann und wird vermutlich Umsatz mitbringen. Selbst wenn die Mittwald etwas vordergründiger Auftreten würde ist das immer noch eine große Chance für die Open-Source Systeme die wir optimal nutzen sollten. Das der Sponsor am Ende etwas Geld verdienen darf ist absolut gewollt :)
+
+<strong>Ich freue mich sehr das ich, im Rahmen dieses Events, an zwei Tagen offiziell am Open-Source-Stand der Mittwald sein darf und hoffe auf einige spannende Gespräche und natürlich auch über bekannte Gesichter.</strong>
+
+P.S. Sobald meine Tickets eingetroffen sind <a href="http://www.webguys.de/magento/verlosung-8-x-2-cebit-tagestickets/">verlosen wir hier noch 16 CeBIT-Tickets</a> :) Aber das machen wir dann in einem eigenen Artikel!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2649

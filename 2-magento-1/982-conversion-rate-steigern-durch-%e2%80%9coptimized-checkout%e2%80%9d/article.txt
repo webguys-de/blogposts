@@ -1,0 +1,52 @@
+Article-meta: 
+
+----
+
+Title: Conversion-Rate steigern durch “Optimized-Checkout”
+
+----
+
+Date: 2010-10-27
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Einstiegsseite des “Zur Kasse”-Prozesses ist Magento teilweise sehr umständlich. Die neue Extension OptimizedCheckout sorgt dafür das der Kunde, der bei Ihnen etwas bestellen möchte, einen Schritt weniger absolvieren muss. Das bedeutet weniger Wartezeit, weniger Entscheidungen die der Kunde treffen muss und dadurch eine höhere Conversion-Rate.
+
+----
+
+Text: Dazu wird die Login-Seite im Checkout (zur Kasse) vollständig mit der Rechnungsinformation verschmolzen. Der Bestandskunde hat hier die Möglichkeit sich, falls noch nicht geschehen, anzumelden bzw. das Adressformular der Rechnungsinformationen auszufüllen. Am Ende des Formulars befindet sich eine kleine Checkbox die Ihm die Registrierung ermöglicht. Möchte er sich registrieren wird er zusätzlich nach seinem gewünschten Passwort gefragt.
+
+Es ist somit nicht mehr notwendig vor der Eingabe der Adressinformationen zu entscheiden ob ein Kundenkonto erstellt werden soll. Kunden wird das eigentliche Bestellen dadurch erheblich vereinfacht: Die Abbrecher-Quote sinkt.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 982

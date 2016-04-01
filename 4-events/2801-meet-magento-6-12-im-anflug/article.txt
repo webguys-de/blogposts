@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento #6.12 im Anflug
+
+----
+
+Date: 2012-04-30
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Mit großen Schritten eilt die Meet-Magento heran und auch wir konnten einen Sprecher-Slot ergattern. Dieses Jahr befasse ich mich, als Ergänzung zum meinem vorherigen Thema <a title="Meet-Magento: Checkout verstehen und optimieren" href="http://www.webguys.de/magento/meet-magento-checkout-verstehen-und-optimieren/">Checkout</a>,  mit <a href="http://www.meet-magento.de/programm/tobias-vogt-programm-meet-magento-612.html">Produkt-Konfiguratoren und Magento</a>. Natürlich freue ich mich, wie im letzten Jahr auch, über viele Zuhörer und eine rege Diskussion.
+
+
+
+----
+
+Text: Da der zweite Tag im <a href="http://www.meet-magento.de/programm.html">Programm</a> vollständig fürs Barcamp reserviert ist noch ein kleiner Aufruf: Überlegt euch Themen! Was kann man Vorstellen? Wo braucht ihr Hilfe? Gibt es Community-Projekte die alle kennen sollten? Ein Barcamp ist zwar oft spontan aber ein bisschen Vorbereitung ist, wenn ich mich an das letzte Jahr erinnere, auch nicht schlecht :)
+
+.. ach und nicht vergessen: Am Sonntag Abend findet im <a href="https://www.facebook.com/events/291155767607796/">Spizz Leipzig wieder die Pre-Party</a> statt. Anwesenheit lohnt sich :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2801

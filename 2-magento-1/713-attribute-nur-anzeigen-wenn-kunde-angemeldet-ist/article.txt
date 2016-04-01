@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Attribute nur Anzeigen wenn Kunde angemeldet ist
+
+----
+
+Date: 2010-08-30
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Inspiriert von einem <a href="http://www.magentocommerce.com/boards/viewthread/202572/">Beitrag im MagentoCommerce-Forum </a>haben wir ein Modul geschrieben das <a href="http://www.magentocommerce.com/magento-connect/t-ob-i/extension/4413/webguys_customerattributes">ausgewählte Attribute nur anzeigt wenn der Kunde angemeldet</a> ist. Dazu können die Attribute im Admin unter Katalog/ Attribute verwalten bei "Visible on Frontend" auf "Only customer logged in" gestellt werden. Die Attribute werden dann also vor Gästen versteckt.
+
+<a href="http://www.magentocommerce.com/magento-connect/t-ob-i/extension/4413/webguys_customerattributes">Zum Modul</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 713

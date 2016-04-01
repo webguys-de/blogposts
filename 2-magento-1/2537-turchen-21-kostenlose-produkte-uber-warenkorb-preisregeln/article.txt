@@ -1,0 +1,251 @@
+Article-meta: 
+
+----
+
+Title: Türchen 21: Kostenlose Produkte über Warenkorb-Preisregeln
+
+----
+
+Date: 2011-12-21
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: nikolai-krambrock
+
+----
+
+Article-content: 
+
+----
+
+Intro: Passend zum Thema Weihnachten versteckt sich hinter diesem Türchen die Möglichkeit Geschenke zu verteilen. Die vorgestellte Extension erweitert die Magento-Warenkorbpreisregeln (Salesrules) um kostenlose Produkte, die dem Warenkorb hinzugefügt werden können. In diesem Artikel möchte ich erklären, wie sich die Warenkorbpreisregeln auf diese Art in vier einfachen Schritten erweitern lassen.
+
+----
+
+Text: Dieser Artikel liefert ein fertiges Modul, um Geschenke unter bestimmten Bedingungen dem Warenkorb hinzuzufügen. Das Modul kann unter <a href="http://www.krambrock.com/blog/magento/make-a-gift/">http://www.krambrock.com/blog/magento/make-a-gift/</a> heruntergeladen und eingesetzt werden. Es ist eine Beta-Version – getestet, aber noch nicht live im Einsatz. Die Verwendung lässt sich einfach Anhand von zwei Screenshots erklären. Der erste Screenshot zeigt, wie eine neue Warenkorbpreisregel eingegeben wird:
+
+(image: Rule1.png)
+
+Der zweite Screenshot zeigt die Auswirkungen im Warenkorb, wenn die Bedingungen der Regel zutreffen:
+
+(image: Cart1.png)
+<h2>Neue Aktionen für Warenkorbpreisregeln selbst erstellen</h2>
+Im Folgenden möchte ich an dem Modul erklären, wie sich die Aktionen der Warenkorbpreisregeln leicht selbst erweitern lassen. Das geschieht in vier Schritten:
+<ol><li>Im ersten wird der Warenkorbpreisregel-Editor um eine Aktion 'Add a gift' und ein Feld mit der SKU des Geschenks erweitert.</li>
+	<li>Im zweiten Schritt werden die beiden Felder ausgewertet und es wird ein Geschenk hinzugefügt.</li>
+	<li>Im dritten Schritt wird verhindert, dass sich die Geschenke mit jedem Klick auf den Warenkorb akkumulieren.</li>
+	<li>Im letzten (optionalen) Schritt wird schließlich das Template angepasst.</li>
+</ol>
+Alle Quellcodebeispiele sind der Übersichtlichkeit und Verständlichkeit halber vereinfacht und gekürzt. Sie müssten auch so laufen – im Zweifel empfehle ich, dem getesteten Download zu vertrauen.
+<h2>Schritt 1: Dem Warenkorbpreisregel-Fenster im Backend eine Aktion und ein Feld hinzufügen</h2>
+Zunächst muss die Möglichkeit geschaffen werden, eine neue Aktion im Backend überhaupt einzutragen. Dies lässt sich elegant bewerkstelligen, indem über das Event 'adminhtml_block_salesrule_actions_prepareform' in den Aufbau des Warenkorbpreisregel-Formulars eingegriffen wird. Dazu muss in der app/code/community/C4B/Freeproduct/etc/config.xml ein Observer registriert werden:
+
+(code lang: xml)
+<config>
+  <!-- ... -->
+  <adminhtml>
+    <events>    
+      <adminhtml_block_salesrule_actions_prepareform>
+        <observers>
+          <freeproduct>
+            <type>singleton</type>
+            <class>freeproduct/observer</class>
+            <method>adminhtmlBlockSalesruleActionsPrepareform</method>
+          </freeproduct>
+        </observers>
+      </adminhtml_block_salesrule_actions_prepareform>
+    </events>
+  </adminhtml>
+  <!-- ... -->
+</config>
+(/code)
+
+Im entsprechenden Observer unter app/code/community/C4B/Freeproduct/Model/Observer.php geschieht Zweierlei: Zunächst werden die Aktionen um 'Add a gift' erweitert. Dazu werden im Quellcode unten die Aktionen ('simple_action') aus dem Formular geholt und um die Aktion 'Add a gift' erweitert. Schließlich werden die Formularfelder ('action_fieldset') aus dem Formular geholt und um das Feld 'gift_sku' erweitert. Damit das Ganze funktioniert muss die Datenbanktabelle Salesrule ein neues Feld 'gift_sku' haben. Dazu möchte ich auf den Download verweisen, um den Rahmen dieses Artikels nicht zu sprengen.
+
+(code lang: php)
+class C4B_Freeproduct_Model_Observer {
+  public function adminhtmlBlockSalesruleActionsPrepareform($observer) {
+    $field = $observer->getForm()->getElement('simple_action');
+    $options = $field->getValues();
+    $options[] = array('value' => 'add gift', 'label' => 'Add a Gift');
+    $field->setValues($options);
+        
+    $fieldset = $observer->getForm()->getElement('action_fieldset');
+    $fieldset->addField('gift_sku', 'text', array('name' => 'gift_sku', 'label' => 'Gift SKU'));
+  }
+}
+(/code)
+
+<h2>Schritt 2: Dem Warenkorb Geschenke hinzufügen</h2>
+Wurde die oben hinzugefügte Aktion verwendet und treffen die Bedingungen der Warenkorbpreisregel zu, dann muss auch ein Geschenk in den Warenkorb gelegt werden. Wieder macht Magento bereits den größten Teil. Wieder muss ein Observer in der app/code/community/C4B/Freeproduct/etc/config.xml registriert werden – diesmal für eine positiv ausgewertete Warenkorbpreisregel:
+
+(code lang: xml)
+<config>
+  <!-- ... -->
+  <frontend>
+    <events>    
+      <salesrule_validator_process>
+        <observers>
+          <freeproduct>
+            <type>singleton</type>
+            <class>freeproduct/observer</class>
+            <method>salesruleValidatorProcess</method>
+          </freeproduct>
+        </observers>
+      </salesrule_validator_process>
+    </events>	
+  </frontend>
+  <!-- ... -->
+</config>
+(/code)
+
+Die Auswertung im Observer app/code/community/C4B/Freeproduct/Model/Observer.php ist ein wenig aufwändiger und teilt sich in drei Blöcke im Quellcode. Im ersten Block wird geprüft, ob die Voraussetzungen für unser Geschenk erfüllt sind. Nur bei der Aktion 'Add a gift' kommt es zu einer Auswertung und das auch nur, wenn diese nicht bereits ausgewertet wurde. Im zweiten Block wird das Geschenk erstellt und mit einem Preis von 0 € versehen. Im dritten Block wird das Geschenk schließlich dem Warenkorb hinzugefügt. Auch dies funktioniert nur mit entsprechenden neuen Feldern in der Datenbank. Dies wird im Download gezeigt.
+
+(code lang: php)
+class C4B_Freeproduct_Model_Observer {
+  public function salesruleValidatorProcess(Varien_Event_Observer $observer) {
+    $quote = $observer-> getQuote();
+    $item = $observer-> getItem();
+    $rule = $observer-> getRule();
+        
+    if ($rule->getSimpleAction() != 'add gift' || $rule->getIsApplied()) {
+        return;
+    }
+
+    $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $rule->getGiftSku());
+    Mage::getModel('cataloginventory/stock_item')->assignProduct($product);
+    $freeItem = Mage::getModel('sales/quote_item')->setProduct($product);
+    $freeItem ->setQuote($quote)
+              ->setQty($rule->getDiscountAmount())
+              ->setCustomPrice(0.0)
+              ->setIsFreeProduct(true)
+              ->setStoreId($item->getStoreId());    
+    
+    $quote->addItem($item);
+    $rule->setIsApplied(true);    
+  }
+}
+(/code)
+
+<h2>Schritt 3: Geschenke aus dem Warenkorb entfernen</h2>
+Im jetzigen Stand werden zwar Geschenke in dem Warenkorb gelegt, allerdings nie entfernt. Damit führt jeder Klick in den Warenkorb zu mehr Geschenken – was leicht zu einem schlechten Geschäft für den betreffenden Online-Händler werden könnte. Vor dem Auswerten der Warenkorbpreisregel werden daher alle kostenlosen Produkte aus dem Warenkorb entfernt. Dazu wird – Überraschung – ein Observer in der app/code/community/C4B/Freeproduct/etc/config.xml registriert:
+
+(code lang: xml)
+<config>
+  <!-- ... -->
+  <frontend>
+    <events>    
+      <sales_quote_collect_totals_before>
+        <observers>
+          <freeproduct>
+            <type>singleton</type>
+            <class>freeproduct/observer</class>
+            <method>salesQuoteCollectTotalsBefore</method>
+          </freeproduct>
+        </observers>
+      </sales_quote_collect_totals_before>
+    </events>	
+  </frontend>
+  <!-- ... -->
+</config>
+(/code)
+
+Wer bis hierhin folgen konnte, den werden diese Zeilen in Quellcode in app/code/community/C4B/Freeproduct/Model/Observer.php nicht überraschen. Es werden alle Artikel aus dem Warenkorb entfernt, die Freeproducts sind:
+
+(code lang: php)
+class C4B_Freeproduct_Model_Observer {
+  public function salesQuoteCollectTotalsBefore(Varien_Event_Observer $observer) {
+    foreach ($observer->getEvent()->getQuote()->getAllItems() as $item) {
+      if ($item->getIsFreeProduct()) {
+        $quote->removeItem($item->getId());
+      }
+    }
+  }
+}
+(/code)
+<h2>Schritt 4: Das Template anpassen (optional)</h2>
+Bisher hat der Benutzer des Systems noch das trügerische Gefühl, er könnte die Zahl der Geschenke selbst anpassen oder durch einen Klick auf den Papierkorb darauf verzichten. Tatsächlich ist dem nicht so: Da bei jedem neuen Aufruf des Warenkorbs zunächst alle Freeproducts gelöscht werden, haben die Eingaben keine Auswirkungen. Schöner wäre es aber sicherlich, wenn der Benutzer die Menge nicht editieren könnte und der Papierkorb nicht angezeigt würde. Dazu muss das Template angepasst werden. Hierfür benötigen wir zunächst wieder einen Eintrag in der app/code/community/C4B/Freeproduct/etc/config.xml, in der eine neue Layout-Datei registriert wird:
+
+(code lang: xml)
+<config>
+  <!-- ... -->
+  <frontend>
+    <layout>
+      <updates>
+        <freeproduct>
+          <file>freeproduct.xml</file>
+        </freeproduct>
+      </updates>
+    </layout>	
+  </frontend>
+  <!-- ... -->
+</config>
+(/code)
+
+Die referenzierte Layout-Datei findet sich unter app/design/frontend/base/default/layout/freeproduct.xml. In ihr wird eine geänderte PHTML-Datei für einfache Produkte definiert, so dass wir die Darstellung der Geschenke ändern können:
+
+(code lang: xml)
+<layout version="0.1.0">
+  <checkout_cart_index>
+    <reference name="checkout.cart">
+      <action method="addItemRender">
+        <type>simple</type>
+        <block>checkout/cart_item_renderer</block>
+        <template>freeproduct/checkout/cart/item/default.phtml</template>
+      </action>
+    </reference>
+  </checkout_cart_index>
+</layout>
+(/code)
+
+In der recht unübersichtlichen Datei app/design/frontend/base/default/template/freeproduct/checkout/cart/item/default.phtml werden nun zwei kleine Veränderungen vorgenommen, die die Anzeige unseres Freeproduct korrigieren: Die Anzahl wird nicht als Form-Field angegeben, sondern einfach als Text und der Papierkorb samt Link wird entfernt. In diesem Quellcode-Schnipsel ist die If-Konstruktion und 'echo $this->getQty()' hinzugekommen, das Input-Feld bestand bereits vorher:
+
+(code lang: php)
+<?php if ($_item->getIsFreeProduct()) : ?>
+  <?php echo $this->getQty() ?>
+<?php else: ?>
+  <input name="cart[<?php echo $_item->getId() ?>][qty]" 
+         value="<?php echo $this->getQty() ?>" 
+         size="4" 
+         title="<?php echo $this->__('Qty') ?>" 
+         class="input-text qty" maxlength="12" />
+<?php endif; ?>
+(/code)
+
+Bei dem zweiten Quellcode-Schnipsel ist lediglich die If-Konstruktion hinzugekommen:
+
+(code lang: php)
+<?php if (!$_item->getIsFreeProduct()) : ?>    
+  <a href="<?php echo $this->getDeleteUrl()?>" 
+     title="<?php echo $this->__('Remove item')?>" class="btn-remove btn-remove2">
+    <?php echo $this->__('Remove item')?>
+  </a>
+<?php endif; ?>
+(/code)
+
+<h2>Fazit</h2>
+Damit sind alle Änderungen beschrieben, um neue Aktionen zu Warenkorb-Preisregeln hinzufügen zu können. Dies lässt sich einigermaßen einfach und ohne gefährliche Rewrites durchführen. Da ich bis jetzt keine andere kostenfreie Extension für diese Aufgabe finden konnte, möchte ich meine Extension zur Verfügung stellen. Ich freue mich auf Feedback. Dem relativ übersichtlichen Aufwand steht aus meiner Sicht ein ordentlicher potentieller Nutzen gegenüber: Statt Preisnachlässen können nun Produkte verschenkt werden, was geringere Kosten verursacht und eine höhere Identifikation stiftet.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2537

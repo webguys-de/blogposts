@@ -1,0 +1,86 @@
+Article-meta: 
+
+----
+
+Title: Produkte mehrsprachig importieren
+
+----
+
+Date: 2010-04-06
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,import
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: In Magento können durch das Anlegen unterschiedlicher Store-Views Produkte mehrsprachig gepflegt werden. Der Benutzer kann dabei entscheiden ob die Daten vom Hauptstore übernommen oder durch die aktuelle Store-View überschrieben werden.
+
+Ein bestehender Produktimport lässt sich relativ einfach um die Möglichkeit der Mehrsprachigkeit erweitern. Der Trick besteht einzig und alleine darin vor dem Laden des Produktes noch den Store zu definieren.
+
+
+
+----
+
+Text: Zuerst erstellen wir ein Standard-Produkt über das Product-Model:
+(code lang: php)
+require_once dirname(__FILE__).'/app/Mage.php';
+Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID); 
+
+$product = Mage::getModel('catalog/product');
+
+$product->setAttributeSetId( 1 ); // Id kann abweichen
+$product->setVisibility(4); // Produkt soll in Katalog und Suche sichtbar sein
+$product->setStatus(1);  // Produkt soll aktiv sein
+
+$product->setSku("webguys-1234"); // Die Artikel-Nr. lautet webguys-1234
+$product->setName("Hello World"); // Das soll später übersetzen werden
+
+$product->setStoreId( 1 );
+$product->setWebsiteIds(array(1));
+
+$product->save();	
+(/code)
+
+Jetzt haben wir ein kleines Basisprodukt importiert. Zugegeben fehlen natürlich ein paar Hauptattribute wie z.B. der Preis aber der soll für diesen Artikel keine Rolle spielen.
+
+Nun wollen wir das gerade erstellte Produkt in eine andere Sprache, also in einer anderen Store-View pflegen:
+(code lang: php)
+$product = Mage::getModel('catalog/product');
+
+$product->setStoreId(2);
+$product->load( $productid );
+
+$product->setName( "Hallo Welt!" ); // Und jetzt die deutsche Übersetzung
+$product->save();
+(/code)
+
+Schwups ist das Produkt in zwei Store-Views und somit mehrsprachig verfügbar. Zu beachten ist das ausschließlich Attribute importiert werden sollten die sich vom Hauptstore auch logisch unterscheiden können - sonst macht es nur unnötigen Aufwand und kostet Rechenzeit.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 62

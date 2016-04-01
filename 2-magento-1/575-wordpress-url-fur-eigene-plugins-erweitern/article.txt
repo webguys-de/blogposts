@@ -1,0 +1,86 @@
+Article-meta: 
+
+----
+
+Title: Wordpress - Url für eigene Plugins erweitern
+
+----
+
+Date: 2009-04-25
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Url einer Seite wird von Wordpress automatisch bearbeitet und erstellt, dies funktioniert in den meisten Fällen auch tadellos und ohne Probleme. Wenn man SEO-freundliche Urls und Zugriff auf die .htaccess Datei auf dem Webserver hat, kann man eigene Regeln ( RewriteCond / RewriteRule )  definieren und so eigene Urls einbinden. Dies ist jedoch nicht von langer Dauer, da einige Plugins oder auch der Wordpress Core die .htaccess Datei bearbeiten - da Wordpress nicht weiß, dass dort auch "systemfremde" Inhalte stehen - sind auch die eigenen Inhalte weg.
+
+
+----
+
+Text: Nach einigem Suchen habe ich dieses Plugin gefunden und kann es wärmstens empfehlen:
+<a href="http://wordpress.org/extend/plugins/askapaches-rewriterules-viewer/">AskApache RewriteRules Viewer 3.0</a>. Dieses Plugin listet alle internen Regeln auf, die im Wordpress Core registriert sind - eine bessere Kontrolle über die interne Verarbeitung kann man sich nicht wünschen.
+
+Ausgangslage für diesen Artikel war folgendes Problem: mein neues Plugin ( sollte bald fertig werden ) stellt einen Eventkalender dar - Url: /events/. Sobald man ein Event gewählt hat, wird die gleiche Seite aufgerufen, mit weiteren Informationen - Url: /events/Linkin-Park/. Im normalen Fall würde Wordpress die Seite "Linkin-Park" suchen, die als Oberkategorie "events" hat; da es diese Seite nicht gibt, erscheint ein 404 Fehler.
+Das muss nicht sein.
+
+Das Plugin um diese Zeilen erweitern:
+
+(code)
+// init
+function event_plugin_init() {
+    global $wp;
+    $pagename = 'events';
+
+    $wp->add_query_var( 'artist_name' );
+
+    // role
+    add_rewrite_rule( "$pagename/([^/]+)/?global $wp_rewrite;
+    $wp_rewrite->flush_rules();quot;, 'index.php?pagename='.$pagename.'&artist_name=$matches[1]', 'top' );
+}
+add_action( 'init', 'event_plugin_init' );
+(/code)
+
+Jetzt muß Wordpress nur noch angewiesen werden, die Permalinks zu neu zu erstellen:
+
+(code)
+global $wp_rewrite;
+$wp_rewrite->flush_rules();
+(/code)
+
+Im Plugin kann dann auf den Wert in der Url zugegriffen werden:
+
+(code)
+$artist_name = get_query_var( 'artist_name' );
+(/code)
+
+Auf diese Weise können weitere Parameter, Urls und Regeln definiert werden, die jedes Update von Wordpress überleben und nachher inwandfrei funktionieren.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 575

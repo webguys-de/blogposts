@@ -1,0 +1,211 @@
+Article-meta: 
+
+----
+
+Title: Türchen 06: Versandkostenberechnung für Deutschland, Europa und den Rest der Welt in Magento umsetzen
+
+----
+
+Date: 2012-12-06
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: daniel-sasse
+
+----
+
+Article-content: 
+
+----
+
+Intro: In der letzten Zeit sind mir bei Umsetzung und Betreuung diverser Magento Projekte aufgefallen das viele Vorgänger Agenturen wie auch Shopbetreiber teilweise völlig unnötig Ihre Magento Instanzen vollpumpen mit Versand-Extensions die überhaupt nicht nötig währen für weit verbreitete Szenarien. Zusätzlich werden diese dann noch ergänzt mit Warenkorbpreisregeln – teilweise eine Regel pro Versand-Land. Eine solche Konstellation schreit gerade nach Fehlern und vielen Fragezeichen wenn man dann mal was ändern muss.
+
+
+
+----
+
+Text: Das ist aber kein Wunder, denn durch derart komplexe Konfigurationen entsteht ein Overhead an
+Konfigurationsparametern die erst einmal gleichzeitig verarbeitet werden müssen von Magento.
+
+Magento besitzt von Haus aus die Möglichkeit mit den „Table.Rates“ bzw. „Tabellenbasierte Versandkosten“ einige weit verbreitete und auch oft gewünschte Szenarien abzubilden.
+
+Viele scheuen in der Erstellung eines Magento-Shops davor zurück selbige zu nutzen, weil teilweise die Konzepte dahinter nicht verstanden werden oder die Konfiguration zu komplex erscheint im ersten Moment. An dieser Stell soll dieser Beitrag Abhilfe verschaffen.
+
+<strong>Unser Beispiel Szenario:</strong>
+- Wir wollen Versandkosten pauschal pro Bestellung berechnen.
+- Wir möchten unsere Produkte an Kunden in der gesamten Welt versenden.
+- Wir möchten dafür nicht Versandkosten für alle Länder der Welt hinterlegen müssen,
+sondern so weit wie möglich automatisiert zuweisen.
+- Wir möchten insgesamt in 3 Gruppen kategorisieren: Deutschland, EU + Rest der Welt.
+- Für Deutschland und die EU möchten wir höhere Bestellsummen belohnen mit
+Versandkostenfreiheit.
+
+<strong>Deutschland</strong>
+Versandkosten: 5,50 € für Bestellungen bis 49,99 €
+Versandkostenfrei: für Bestellungen ab 50,00 €
+
+<strong>EU-Länder, ausser Deutschland</strong>
+Versandkosten: 7,50 € für Bestellungen bis 99,99 €
+Versandkostenfrei: für Bestellungen ab 100,00 €
+
+<strong>Rest der Welt</strong>
+Festpreis: 12,50 €
+
+Normalerweise würden wir jetzt für gewöhnlich mit 3 Versand-Extensions arbeiten um das abzudecken + ggf. Warenkorb Preisregeln die entsprechende Rabatte anwenden. Das machen wir wegen weiter oben beschriebenen Nachteilen nicht, sondern werden stattdessen alles über die Table Rates abdecken – nur diese Core-Extension von Magento sonst nichts, versprochen!
+
+<strong>Start:</strong>
+- Magento Admin Panel
+System->Konfiguration->Verkäufe->Versandarten->Tabellenbasierte Versandkosten, letzteres Tab kann je nach Sprachpaketversion auch anders heißen!
+
+<strong>Wichtig:</strong> Wir müssen spätestens jetzt oben den Konfigurationsbereich auf Website oder StoreView wechseln, da wir ansonsten keine Import / Export Möglichkeit haben! Gleichzeitig bedeutet es dass wir Versandkosten pro Webseite oder StoreView extra konfigurieren können – etwa wenn wir für Endverbraucher und Wiederverkäufer unterschiedliche Versandkosten hinterlegen wollen und der Reseller Shop auf einer 2. Magento Website konfiguriert ist.
+
+- Diese Versandart aktivieren, standardmäßig deaktiviert
+- Titel und Name der Versandart festlegen – im Beispiel:
+DHL als Titel und Ihre Versandkosten: als Name
+
+Anschließend entscheiden wir noch was unsere Berechnungsgrundlage sein soll:
+
+<strong>Gewicht gg. Ziel =</strong>
+Die Versandkostenberechnung würde sich auf das Gewicht der Artikel im Warenkorb beziehen +
+Zieladresse der Sendung.
+
+<strong>Preis gg. Ziel =</strong>
+Die Versandkostenberechnung würde sich auf die Gesamtsumme des Warenkorbs beziehen +
+Zieladresse der Sendung.
+
+<strong>Anzahl der Artikel gg. Ziel =</strong>
+Die Versandkostenberechnung würde sich auf die Anzahl der Artikel im Warenkorb beziehen +
+Zieladresse der Sendung. Beispiel: Kaufen Sie 3 Artikel = Versandkostenfreier Versand
+
+Für unser eingangs beschriebenes Szenario entscheiden wir uns für die goldene Mitte:
+
+<strong>Preis gg. Ziel =</strong>
+Die Versandkostenberechnung würde sich auf die Gesamtsumme des Warenkorbs beziehen +
+Zieladresse der Sendung. Alle anderen Punkte könnte man jetzt auch noch konfigurieren, dass ist für unser Beispiel hier aber nicht notwendig. Wir speichern jetzt zunächst unsere Konfiguration.
+
+Dann exportieren wir uns die Datei & öffnen Sie in einer Tabellenkalkulation oder eben einen
+Texteditor. Ich empfehle an dieser Stelle wegen verschiedener Trennzeichen und weiterer
+Kompatibilitätshürden die Datei mit einem Texteditor zu bearbeiten!
+
+In der Tabellenkalkulation sollten Sie eine solche (hier vereinfachte) Ansicht haben:
+
+(image: tablerates-650x230.png
+
+<strong>Erklärung – im Beispiel besetzt sind Deutschland, Belgien und der Rest der Welt:</strong>
+
+Land:
+Zielland nach ISO Ländercode gemäß <a href="http://de.wikipedia.org/wiki/ISO-3166-1-Kodierliste" target="_blank">http://de.wikipedia.org/wiki/ISO-3166-1-Kodierliste</a>
+(Spalte 3, ISO 3166 ALPHA-3)
+
+Region/Staat:
+Bei uns mit * belegt, da für uns nicht relevant
+
+Postleitzahl:
+Bei uns mit * belegt, da für uns nicht relevant
+
+Bestellzwischensumme (und höher):
+Bestellsumme die erreicht werden muss um eine Versandkosten Staffelung anzuwenden.
+
+Versandkosten:
+Die jeweiligen Versandkosten mit einem Punkt getrennt – nicht per Komma!
+
+Erklärung zur letzten Zeile:
+Für unsere „Rest der Welt“ Länder setzen wir selbst im Feld Land ein Sternchen. Das bewirkt das Magento es als Fallback anwendet für alle Anschriften die nicht explizit eingestellt sind – dieser Fallback wird von uns also für eine Vielzahl von Ländern genutzt, für Deutschland und EU Länder aber nicht da deklariert mit Kostenstaffelungen.
+
+Unsere komplette Datei in Textform mit allen deklarierten Ländern. Die eingesetzten Staffeln für Deutschland, die EU + Rest der Welt Regel bzw. Fallback können sehr gerne kopiert werden - Speicherung als .csv Datei zum Import!
+
+(code lang: php)
+Land,Region/Staat,Postleitzahl,Bestellungszwischensumme (und höher),Versandkosten
+BEL,*,*,0,7.50
+BEL,*,*,100,0
+BGR,*,*,0,7.50
+BGR,*,*,100,0
+DEU,*,*,0,5.50
+DEU,*,*,50,0
+DNK,*,*,0,7.50
+DNK,*, *,100,0
+EST,*,*,0,7.50
+EST,*,*,100,0
+FIN,*,*,0,7.50
+FIN,*,*,100,0
+FRA,*,*,0,7.50
+FRA,*,*,100,0
+GRC,*,*,0,7.50
+GRC,*,*,100,0
+IRL,*,*,0,7.50
+IRL,*,*,100,0
+ITA,*,*,0,7.50
+ITA,*,*,100,0
+LVA,*,*,0,7.50
+LVA,*,*,100,0
+LTU,*,*,0,7.50
+LTU,*,*,100,0
+LUX,*,*,0,7.50
+LUX,*,*,100,0
+MLT,*,*,0,7.50
+MLT,*,*,100,0
+NLD,*,*,0,7.50
+NLD,*,*,100,0
+AUT,*,*,0,7.50
+AUT,*,*,100,0
+POL,*,*,0,7.50
+POL,*,*,100,0
+PRT,*,*,0,7.50
+PRT,*,*,100,0
+ROU,*,*,0,7.50
+ROU,*,*,100,0
+SWE,*,*,0,7.50
+SWE,*,*,100,0
+SVK,*,*,0,7.50
+SVK,*,*,100,0
+SVN,*,*,0,7.50
+SVN,*,*,100,0
+ESP,*,*,0,7.50
+ESP,*,*,100,0
+CZE,*,*,0,7.50
+CZE,*,*,100,0
+HUN,*,*,0,7.50
+HUN,*,*,100,0
+GBR,*,*,0,7.50
+GBR,*,*,100,0
+CYP,*,*,0,7.50
+CYP,*,*,100,0
+*,*,*,0,12.50
+(/code)
+
+Ist die Datei fertig, kann Sie über das Magento Admin Panel importiert werden, indem man die Datei auswählt und die Konfiguration abspeichert. Sollte es über das Magento Backend nicht klappen, kann die CSV auch in die Datenbank importiert werden – etwa über phpMyAdmin. Die betreffende Tabelle lautet: shipping_tablerate
+
+Wir haben nun eine Lösung für eine Vielzahl von Zielregionen, gleichzeitig können die Versandkosten gestaffelt werden und unsere Versandkosten-Matrix kann unter Nutzung dieses hauseigenen Versandmoduls vollumfänglich genutzt werden. Unser Shop hat nun eine Lösung die schlank ist
+und trotzdem sehr viel leistet – zudem ein Magento Core Modul ist – es kommt ohne extra Extensions und Preisregeln aus. Es ist per Import / Export Funktion pflegbar.
+
+Ausbaubarkeit in eigenen Projekten:
+- Weitere Staffelungen möglich mit unterschiedlichsten Preisen
+- Bezug auf weitere Standortfaktoren möglich, Beispiel:
+Auf Grundlage der Postleitzahl Inselzuschläge definieren wenn die Kosten hier höher sind als
+normal oder wenn es andere logistische Gründe hat.
+
+Ich wünsche viel Spaß bei der Nutzung der Table Rates von Magento.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3026

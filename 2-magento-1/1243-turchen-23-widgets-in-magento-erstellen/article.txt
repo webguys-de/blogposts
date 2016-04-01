@@ -1,0 +1,129 @@
+Article-meta: 
+
+----
+
+Title: Türchen 23: Widgets in Magento erstellen
+
+----
+
+Date: 2010-12-23
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Tüchen 23 gibt den Blick auf Widgets frei. Genauer gesagt auf die Erstellung eines Widgets. Widgets können seid Magento 1.4 erstellt und eingebunden werden. Sie stellen zusätzliche Funktionen bereit, in der Basis-Version kann bereits auf einige zurückgegriffen werden.
+
+
+----
+
+Text: Da dies jedoch nicht so spannend ist, wie ein neues zu erstellen, erstellen wir in einfachen Schritten ein einfaches Widget.
+
+<strong>1. Extension anlegen</strong>
+In local erstellen wir folgendes Verzeichnis "<em>Webguys/Widget</em>" und darin - wie auch bei einer Extension die Verzeichnisse "<em>Helper</em>" und "<em>etc</em>".
+
+<strong>2. config.xml erstellen</strong>
+Unter "<em>Webguys/Widget/etc</em>" erstellen wir die "<em>config.xml</em>" mit folgendem Inhalt:
+(code lang: xml)
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Webguys_Widget>
+            <version>0.0.1</version>
+        </Webguys_Widget>
+    </modules>
+    <global>
+        <helpers>
+            <widget>
+                <class>Webguys_Widget_Helper</class>
+            </imagewidget>
+        </helpers>
+        <blocks>
+             <widget>
+                <class>Webguys_Widget_Block</class>
+             </widget>
+        </blocks>
+    </global>
+</config>
+(/code)
+
+<strong>3. widget.xml erstellen</strong>
+Damit Magento das Widget auch als solches erkennt, erstellen wir die "<em>widget.xml</em>" im Verzeichnis "<em>Webguys/Widget/etc/widget.xml</em>".
+(code lang: xml)
+<?xml version="1.0"?>
+<widgets>
+    <widget_text type="widget/text">
+        <name>Text anzeigen</name>
+        <description type="desc">Fügt einen Text hinzu.</description>
+        <parameters>
+            <mein_text>
+                <label>Text</label>
+                <visible>1</visible>
+                <required>1</required>
+                <type>text</type>
+            </mein_text>
+        </parameters>        
+    </widget_text>
+</widgets>
+(/code)
+
+<strong>4. Helper anlegen</strong>
+Damit alles funktioniert noch schnell einen - in diesem Fall - leeren Helper anlegen:
+(code lang: php)
+<?php
+class Webguys_Widget_Helper_Data extends Mage_Core_Helper_Abstract {
+}
+(/code)
+
+<strong>5. Einen Block anlegen</strong>
+Damit auch eine Ausgabe erfolgt, erstellen wir nun noch einen Block, nämlich "<em>Webguys/Widget/Block/Text.php</em>":
+(code lang: php)
+<?php
+
+class Webguys_Widget_Block_Text extends Mage_Core_Block_Abstract implements Mage_Widget_Block_Interface {
+
+    protected function _toHtml() {
+        $text = $this->getData('mein_text');
+        if( trim( $text ) != "" ){
+            return $text;
+        }
+    }
+}
+(/code)
+
+<strong>6. Widgets über Magento anlegen</strong>
+Die Darstellung von Widgets lässt sich bequem über Magento steuern, dazu wechselt man in Backend und wählt den den Punkt "<em>CMS > Widgets</em>". Über "<em>Neue Widget Instanz anlegen</em>" legen wir eine neue Instanz an und wählen über das DropDown unser neu erstelltes Widget.  Dazu wählen wir die nötige "<em>Frontend Eigenschaften</em>" und über "<em>Layout Updates</em>" die gewünschten Seiten, auf denen das Widget erscheinen soll. Über den zweiten Menupunkt "<em>Widget Optionen</em> können wir den Text für unser Widget eingeben und am Ende speichern.
+
+<strong>7. Cache leeren</strong>
+Wie immer bei Änderungen - Cache leeren und das Resultat bewundern.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1243

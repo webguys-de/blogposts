@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Video-Rückblick zur Meet-Magento #mm12de
+
+----
+
+Date: 2012-05-25
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Einige von euch haben es bestimmt schon auf der Konferenz gemerkt: Wir sind mit der kleinen Kamera herumgelaufen und haben ein paar Fragen gestellt. Dazu gehörte unter anderem Vinai Kopp mit einer Erklärung zum Frontendverbesserer und eine spannende Meinung von Roman Zenner. Aber seht selbst.
+
+
+
+----
+
+Text: <iframe src="http://www.youtube.com/embed/I7CtSZX8ENw" frameborder="0" width="640" height="360"></iframe>
+
+Vielen Dank an <a href="http://www.code-x.de">Ingo Hillebrand</a> ( code-x GmbH & Webguys), <a href="http://netzarbeiter.de/">Vinai Kopp</a> (Magento Inc.), <a href="http://www.nexoma.de/">Guido Sauerland</a> (nexoma GmbH), <a href="http://romanzenner.com/">Roman Zenner</a> (Buchautor "Online-Shops mit Magento"), <a href="http://kkoepke.de/">Kai Köpke</a>, <a href="http://www.mittwald.de">Daniel Wolf</a> (Mittwald) und <a href="http://www.code-x.de">Jan Brinkmann</a> im Abspann. Ein großes Danke auch an <a href="http://www.thorsten-ising.com/">Thorsten Ising</a> für Kamera und Video-Bearbeitung.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2850

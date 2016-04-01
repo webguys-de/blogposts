@@ -1,0 +1,100 @@
+Article-meta: 
+
+----
+
+Title: Magento meldet "Der Lagerbestand des Artikels ist ungültig"
+
+----
+
+Date: 2013-07-19
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: In der letzten Zeit sind wir immer häufiger in der Situation fremde Magento Shops zu übernehmen, Fehler zu korrigieren und den Shop weiterzuentwickeln. Dabei lernt man doch erstaunlich viel über Magento-Fehler mit denen man sich vorher nie auseinander gesetzt hat. Manchmal gibt es Lösungen bei Google, häufig müssen wir uns selber etwas überlegen. Diesmal hatten wir Glück und Google half mit ein paar kleinen umwegen.
+
+
+
+----
+
+Text: So begrüßte uns Magento mit der Fehlermeldung "Der Lagerbestand des Artikels ist ungültig" sobald ein Artikel in den Warenkorb gelegt wurde. Ein direktes suchen der Fehlermeldung bei Google half leider nicht direkt weiter. Was tun? Ganz einfach. Zuerst haben wir fix einmal die englische Meldung aus der Datei app/locale/de_DE/Mage_CatalogInventory.csv extrahiert: "The stock item for Product is not valid". Schnell die Meldung gegoogelt und, in der Tat, wir fanden einen <a href="http://zaclee.net/magento/errors-magento/stock-item-for-product-is-not-valid">Artikel von Zachary</a> mit genau dem Problem.
+
+(code lang: php)
+<?php
+
+include 'htdocs/app/Mage.php';
+
+// Set store defaults for Magento
+$storeId = Mage::app()->getStore()->getId();
+Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+
+$pModel = Mage::getModel('catalog/product');
+
+$products = $pModel->getCollection();
+
+foreach ($products as $product) {
+    $stockData = $product->getStockData();
+
+    if (!$stockData) {
+        $product = $product->load($product->getId());
+        $stockData = array(
+            'manage_stock' => 0,
+            'is_in_stock'  => 1,
+            'qty'          => 1
+        );
+        $product->setStockData($stockData);
+
+        echo ".";
+        ob_end_flush();
+
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+}
+(/code)
+
+<h2><strong>Was war</strong> passiert?</h2>
+Wenn Produkte falsch bzw. unvollständig angelegt wurden fehlt in Magento das Stock-Item. In der Datei app/code/core/Mage/CatalogInventory/Model/Observer.php quittiert Magento das in Zeile 426 direkt mit einer Fehlermeldung:
+
+(code lang: php)
+$stockItem = $quoteItem->getProduct()->getStockItem();
+/* @var $stockItem Mage_CatalogInventory_Model_Stock_Item */
+if (!$stockItem instanceof Mage_CatalogInventory_Model_Stock_Item) {
+    Mage::throwException(Mage::helper('cataloginventory')->__('The stock item for Product is not valid.'));
+}(/code)
+
+ 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3432

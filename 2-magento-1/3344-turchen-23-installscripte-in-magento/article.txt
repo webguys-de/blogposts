@@ -1,0 +1,260 @@
+Article-meta: 
+
+----
+
+Title: Türchen 23: Installscripte in Magento
+
+----
+
+Date: 2012-12-23
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: bastian-ike
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wir alle kennen Installskripte in Magento. Nach dem installieren eines Moduls (bzw. kopieren der Dateien) werden diese ausgeführt und genutzt um beispielsweise neue Datenbanktabellen anzulegen oder auch bestehende zu erweitern. Desweiteren gibt es die Möglichkeit neue Attribute zu bestehenden Entity-Typen hinzuzufügen, beispielsweise neue Produktfelder.
+
+
+----
+
+Text: Das ist ja soweit ganz nett und wir kennen das schon alles, aber bei den Installskripten hat sich sehr viel getan, vom mysql4-install-1.0.0.php weg hin zu DBMS-spezifischen Installskripten.
+<h2>Übersicht</h2>
+Bevor ich auf die möglichen Entities und entsprechend möglicher Erweiterbarkeit zu sprechen komme fange ich also erstmal mit einem Überblick über den Ablauf von Installationsskripten.
+
+In unserer config.xml definieren wir (natürlich nur bei Bedarf) unser Setup mit Install-/Upgradeskripten. Über die Versionsnummer des Moduls setzen wir die aktuelle Version (ja, tatsächlich ;-) ), welche Magento in der Tabelle core_resource speichert.
+
+Unter sql/module_setup/ liegen unsere Install- und Upgradekripte. Wenn Magento jetzt aufgerufen wird werden die Versionsnummern der Module mit denen in der Tabelle core_resource verglichen. Bei Differenzen (es wird PHPs version_compare() genutzt) zwischen beiden werden die entsprechenden Skripte aufgerufen.
+
+Ausgelöst wird der Vorgang in Mage_Core_Model_App::_initModules() über Mage_Core_Model_Resource_Setup::applyAllUpdates();
+
+Zu beachten ist: nur ein Mage_Core_Model_App::run() (und somit Mage::run()) führt zum ausführen der Skripte, ein einfaches Mage::app() reicht leider nicht.
+
+Parallel dazu gibt es die data Skripte, diese werden nach _initModules() aufgerufen.
+
+Mithilfe dieser Data-Skripte lassen sich zusätzliche Daten für das eigene Modul installieren, die unabhängig von strukturellen Änderungen sind, beispielsweise CMS-Blöcke oder Beispieleinträge.
+
+Faktisch gibt es also nicht ein, sondern jeweils zwei Setups pro Modul, einmal für die Datenbank und einmal für Inhalte/Daten.
+
+Die entsprechenden Skripte liegen im setup Ordner (setup-Knoten wird über die config.xml definiert, siehe unten). Der Syntax ist: (resource_type-)type-(version_from-)version_to.(sql|php)
+
+Mit diesen Dateien kann man Setupskripte Resourcemodelabhängig (Beispiel: mysql4) und Allgemein schreiben, sowie versionsabhängige Install- und Upgradeskripte.
+<h2>Ermitteln der benötigten Skripte</h2>
+Im ersten Schritt läd Magento für das entsprechende Modul die zu erreichende Version (unter config/modules/My_Module/version in der config.xml definiert) sowie die aktuell installierte Version (in der Tabelle core_resource sofern vorhanden).
+
+Sofern keine Version gefunden wurde läuft ein Install gefolgt von Upgrades, ansonsten nur Upgrades. Der entsprechende Schritt geschieht in Mage_Core_Model_Resource_Setup::_modifyResourceDb($actionType, $fromVersion, $toVersion).
+
+Den Ordner mit Installskripten sucht Magento unter Moduleordner/sql/[modul_setup], letzterer liegt als Knoten unter
+
+(code lang: php)
+<config>
+    <global>
+        <resources>
+            <[modul_setup]>
+                ...
+
+(/code)
+
+Also Beispielsweise catalog_setup oder checkout_setup.
+
+_modifyResourceDb(...) sucht sich mithilfe von _getAvailableDbFiles(...) (im Falle von date-install/-upgrades _getAvailableDataFiles(...)) passende Setupdateien, dazu werden folgende RegExps genutzt:
+
+(code lang: php)
+$regExpDb   = sprintf('#^%s-(.*)\.(php|sql)$#i', $actionType);
+$regExpType = sprintf('#^%s-%s-(.*)\.(php|sql)$#i', $resModel, $actionType);
+(/code)
+
+Der $actionType ist einer aus der folgenden Liste:
+
+(code lang: php)
+    install
+    upgrade
+    rollback (nicht unterstützt)
+    uninstall (nicht unterstützt)
+    data-install
+    data-upgrade
+(/code)
+
+$resModel ist das der Typ des aktuellen Resource-Model, aktuell also mit 99,9%iger Wahrscheinlichkeit mysql4.
+
+Somit würde ein Install auf Version 1.0.0 die Skripte install-1.0.0.php, install-1.0.0.sql, mysql4-install-1.0.0.php und mysql4-install-1.0.0.sql finden.
+
+Sofern mehrere Skripte gefunden werden, werden diese noch anschließend von _getModifySqlFiles(...) sortiert. Wichtig hierbei: Bei mehreren Install-Skripten wird nur das mit der höchsten Versionsnummer genommen.
+
+Wenn wir uns (beispielsweise) Mage_Catalog anschauen finden wir den Fall:
+
+(code lang: php)
+mysql4-install-0.7.0.php
+mysql4-install-1.4.0.0.0.php
+install-1.6.0.0.php
+(/code)
+
+Der Sinn dabei ist das bei einer Installation von Magento 1.6 (oder höher) direkt das install-1.6.0.0.php Skript genommen wird, und so nicht Version 0.7.0 installiert und danach bis 1.6 hochgepatched wird. Sollte eine Version vor 1.6 installiert sein und wir machen ein Update des Shops wird hochgepatched, ansonsten direkt ab 1.6 installiert und so eine Menge overhead gespart.
+
+Theoretisch gibt es auch Rollback und Uninstall Skripte, erstere würden geladen werden wenn die Modulversion geringer als die installierte ist, letztere sind nur als Konstante bisher vorgesehen. Rollbackskripte werden zwar theoretisch berücksichtigt, von Magento aber in _modifyResourceDb(...) ignoriert.
+<h2>Ausführen der Skripte</h2>
+Im Falle von SQL-Dateien werden die Dateien einfach ausgeführt:
+
+(code lang: php)
+$sql = file_get_contents($fileName);
+if (!empty($sql)) {
+
+    $result = $this->run($sql);
+} else {
+    $result = true;
+}
+(/code)
+
+PHP Dateien werden über ein include eingebunden (und "erbt" somit $this, welches in den Setup-Skripten ab dann beliebig genutzt werden kann):
+
+(code lang: php)
+$conn   = $this->getConnection();
+$result = include $fileName;
+(/code)
+
+Am Ende wird, wenn alles geklappt hat, noch in der core_resources Tabelle die passende Version gespeichert.
+<h2>Setup Klassen</h2>
+Im großen und ganzen gibt es zwei Setup-Klassen die man sinnvoll nutzen kann (es sei denn man braucht noch eigene, die lassen sich einfach schreiben und unter config/global/resources/modul_setup/setup/class spezifizieren):
+<h3>Mage_Core_Model_Resource_Setup</h3>
+Dies ist die Basis-Setupklasse, mit $this->run('SQL') lässt sich SQL-Ausführen, ansonsten halt mit beliebigen Magento-Models hantieren um Wasauchimmermanwill anzulegen (CMS-Blöcke oder sonst was).
+<h3>Mage_Eav_Model_Entity_Setup</h3>
+Von Mage_Eav gibt es eine Entity-Setupklasse, welche einige tolle Funktionen haben, auf die ich hier einmal eingehen möchte.
+
+Insbesondere addAttribute(...) (sowie passend getAttribute(...), deleteAttribute(...) und updateAttribute(...)), mithilfe dieser Funktionen lassen sich Attribute anlegen (und ändern). Dazu gibt es noch addAttributeSet(...), addAttributeGroup(...), addAttributeToGroup(...) und so weiter (inklusive upgrade, get und delete pendants)... ;-)
+
+Am Interessantesten ist aber erstmal addAttribute(...), hiermit können wir nicht nur Produkten, sondern auch Kategorien, Kunden und Kundenadressen neue Attribute spendieren, was gerade im Falle der letzteren oft vermisst wird (wobei Magento Enterprise ja einen Attributeditor für Kundenattribute anbietet).
+<h2>addAttribute($entityTypeId, $code, array $attr)</h2>
+Der Name dieser Funktion ist etwas "verwirred", da, nach dem validieren der Argumente, überprüft wird ob das Attribut bereits existierend, und wenn das so ist automatisch updateAttribute(...) aufgerufen wird.
+
+So oder so, mit addAttribute legen wir uns neue Attribute an, und das ist cool ;-) Beispielsweise wenn wir ein neues Textfeld für Kategorien haben möchten (eine zweite Beschreibung) oder auch ein zusätzlichen Feld für unsere Kunden (Firmenname oder sowas).
+
+Als Beispiel schauen wir uns mal ein Setupskript für eine zweite Categorydescription an:
+
+(code lang: php)
+<?php
+
+/* @var $installer Mage_Catalog_Model_Entity_Setup */
+$installer = $this;
+$installer->startSetup();
+$installer->addAttribute('catalog_category','description2',array(
+   'type'                       => 'text',
+   'visible'                    => true,
+   'label'                      => 'Description 2',
+   'input'                      => 'textarea',
+   'required'                   => false,
+   'default'                    => '',
+   'is_global'                  => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
+   'is_html_allowed_on_front'   => true,
+   'is_wysiwyg_enabled'         => true,
+   'sort_order'                 => 4,
+));
+
+$installer->addAttributeToGroup('catalog_category', 'Default', 'Description2', 'description2');
+
+$installer->endSetup();
+(/code)
+
+Am Anfang setzen wir $setup auf $this, daraufhin fügen wir ein neues Attribut zu catalog_category hinzu. Als Typ wählen wir input, der Scope wird auf Store gesetzt und noch ein paar Attribute gesetzt (z.B. Wysiwyg erlauben usw.). Ansonsten dürfte das ganze relativ selbsterklärend sein denke ich.
+
+$installer unabhängig von $this zu halten hat den Grund das wir Beispielsweise in einem Setupskript Attribute für verschiedene Entity-Typen anlegen. So können wir beispielsweise erst Kategorie-Attribute (Mage_Catalog) und dann Kundenattribute (Mage_Customer) anlegen.
+
+Der Unterschied den es zu beachten gilt ist die unterschiedliche Tabellennutzung. Kundenattribute können nicht catalog_category_ Entitytabellen nutzen, daher brauchen wir für ein Kundenattribut das passende Resource-Setup:
+
+(code lang: php)
+$installer = $this;
+$installer->startSetup();
+$installer->addAttribute('catalog/category', 'categorydescription2', array(
+    [...]
+));
+$installer->endSetup();
+
+$installer = Mage::getResourceModel('customer/setup', 'customer_setup');
+$installer->startSetup();
+$installer->addAttribute('customer/customer', 'company', array(
+    [...]
+));
+$installer->endSetup();
+(/code)
+<h3>Argumente</h3>
+Das dritte Argument von addAttribute(...) ist ein Array mit Argumente, hier einmal die wichtigsten:
+
+(code)
+    sort_order: die Sortierung, wird im automatisch generierten Formularen beachtet
+    user_defined: ein Switch ob System- oder User-Attribut
+    group: direktes Zuweisen zu einer Gruppe Attributsets. Wenn group leer ist und user_defined nicht angegeben ist wird die primären Gruppe des Attributsets genommen
+    option: ein Array um Attributoptionen (für select/multiselect Attribute) anzulegen, alternativ lässt sich hier nach addAttribut(...) auch addAttributeOption(...) aufrufen
+    backend_model: ein Backend Model bei Bedarf
+    backend_type: Attributtyp der gespeichert wird
+    backend_table: nutzen einer speziellen Tabelle
+    frontend_model: ein Frontend-Model (bei Bedarf)
+    frontend_input: der Attributtyp
+    frontend_label: ein Label
+    source_model: bei Bedarf ein Source Model für Selects/Multiselects
+    is_required: selbsterklärend ;-) (default: 1)
+    is_user_defined: user_defined Ja/Nein (default: 0)
+    default_value: eine Default-Value
+    is_unique: Forcieren von einmaligen Werten (default: 0)
+    note: eine Note zum Attribut
+    is_global: Scope, siehe Mage_Catalog_Model_Resource_Eav_Attribute für die Scope-Konstanten (default: Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL)
+(/code)
+<h2>Tabellen anlegen</h2>
+Wenn wir eigene Tabellen in unserem Modul benötigen brauchen wir mittlerweile den SQL-Code übrigens nicht mehr. Seit der Einführung der Möglichkeit unterschiedliche Datenbanken zu nutzen ist es wichtig das kein reiner MySQL-Code mehr genutzt wird, um die Kompatibilität zu wahren. Natürlich können wir Setup-Skripte mit MySQL-spezifischen Anweisungen (möglicherweise weil wir so DBMS-spezifische Optimierungen nutzen können oder so'n Kram) schreiben, generell für normale Install-Skripte sollte man aber über die DDL-Funktionen von Magento (bzw. Varien) gehen.
+
+Als Beispiel ein Teil von Mage_Catalog: install-1.6.0.0.php:
+
+(code lang: php)
+/**
+ * Create table 'catalog/category_anchor_products_indexer_tmp'
+ */
+$table = $installer->getConnection()
+    ->newTable($installer->getTable('catalog/category_anchor_products_indexer_tmp'))
+    ->addColumn('category_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'default'   => '0',
+        ), 'Category ID')
+    ->addColumn('product_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'default'   => '0',
+        ), 'Product ID')
+    ->setComment('Catalog Category Anchor Product Indexer Temp Table');
+$installer->getConnection()->createTable($table);
+(/code)
+
+Eigentlich sehr selbsterklärend, die Funktionen um die euch hier interessieren dürften findet ihr in der Klasse Varien_Db_Ddl_Table. Und da wir als gute Programmierer natürlich sauberen Code schreiben nutzen wir natürlich die DDL ;-)
+<h2>$installer->endSetup();</h2>
+So, das war es ;-)
+
+Ich hoffe euch mit diesem Blogpost ein paar nützliche Tipps zu Setup-Skripten mitzugeben, und möchte mich einmal bei Tobi für diesen (wiedermal) tollen Weihnachtskalender bedanken!
+
+In diesem Sinne: frohe Weihnachten und einen guten Rutsch :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3344

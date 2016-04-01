@@ -1,0 +1,165 @@
+Article-meta: 
+
+----
+
+Title: Türchen 03: Magento Übersetzungen - demystified
+
+----
+
+Date: 2013-12-03
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: jan
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Lokalisierung von Online-Shops auf Magento Basis kann unübersichtlich sein, speziell, wenn Du Dich mit der technischen Umsetzung in Magento noch nicht auseinandergesetzt hast. Die initiale Übersetzung in die Landessprache ist, vor allem wegen der erstklassigen Arbeit von vielen fleißigen Entwicklern aus der Community, noch nicht das Problem. Auf dem deutschen Markt, wo das wunderbare Modul GermanSetup von FireGento existiert (Kudos!), ist es auch für unerfahrene Personen ein leichtes. Schwerer wird es, wenn einzelne Strings nach einem Update noch nicht erfasst wurden, einzelne Extensions keine Übersetzung mitliefern oder Übersetzungen überschrieben werden sollen. Dieser Artikel soll etwas Licht ins Dunkel bringen und die Arbeitsweise von Magento im Bezug auf Übersetzungen beleuchten.
+
+
+
+----
+
+Text: <h2>Wo liegen die Herausforderungen?</h2>
+Als Knackpunkt gibt es im wesentlichen zwei Faktoren. Zum einen solltest Du in etwa wissen wie und wo Text in Magento übersetzt wird, insofern die passende Lokalisierung geladen wurde. Der zweite Schritt ist zu verstehen, woher Übersetzungen kommen und wie diese geladen werden. Genau diese beiden Punkte untersucht der Artikel.
+<h2>Wie wird übersetzt?</h2>
+Grundlegend werden in Magento Strings bzw. Zeichenketten nur übersetzt, wenn diese mittels einer speziellen Helfermethode aus den vorhandenen Übersetzungen geladen werden. Im Quellcode wird diese zum Beispiel wie folgt auf angesprochen:
+
+<em>echo $this->__(“My Orders”);</em>
+
+Statt direkt Text im Template zu hinterlegen, wird dieser an die “magische” Methode __() übergeben, die durch die abstrakte Klasse <em>Mage_Core_Helper_Abstract</em> in jeden Helper verfügbar ist.
+<h2>Wie arbeitet die magische Methode?</h2>
+Die “magische” Methode ruft in der Klasse Mage_Core_Model_App die Methode getTranslator() auf und bekommt ein Objekt der Klasse Mage_Core_Model_Translate zurück. Darin wird wiederum die Methode translate($args) verwendet, um die Übersetzung vorzubereiten.
+
+Die Übersetzung wird dann mit der Methode <em>_getTranslatedString()</em> (ebenfalls in <em>Mage_Core_Model_Translate</em>) geladen. Der Text, der an die Helfermethode <em>__()</em> übergeben wurde, wird dort als Index für das assoziative Array <em>$_data</em> genutzt das als Instanzvariable in Mage_Core_Model_Translate definiert ist. Darin sind zur Laufzeit alle relevanten Übersetzungen geladen.
+
+Bei unserem Beispiel oben wird geprüft ob der Array-Schlüssel “My Orders” existiert. Wenn ja, wird der zugeordnete Wert zurückgegeben. Bei einer deutschen Lokalisierung wird dort “Meine Bestellungen” zurückgegeben werden. Existiert der Array-Schlüssel nicht, wird der ursprüngliche Text zurückgegeben.
+<h2>Variablen im Text</h2>
+Die semi-automagische Übersetzung klingt praktisch. Die Wrapper-Methode für alle ausgegebenen Strings zu verwenden ist nicht kompliziert. Früher oder später begegnest Du jedoch der Frage, wie werden Strings übersetzt, wenn sie Variablen enthalten?
+
+Ganz einfach: Es werden Platzhalter verwendet. Die Technik ist ähnlich wie bei der PHP-Funktion sprintf(), mit der formatierte Strings ausgegeben werden. Du kannst für eine Variable, deren Wert als Zeichenkette ausgegeben werden soll, bspw. den Platzhalter %s verwenden:
+
+<em>$itemCount = 1;</em>
+<em>echo $this->__(‘%s items in your cart’, $itemCount);</em>
+
+Übersetzt würde dieser String genau wie jeder andere auch:
+
+<em>“%s items in your cart’”,”%s Artikel in Deinem Warenkorb”</em>
+
+Der Platzhalter wird in der Übersetzung beibehalten. Die Methode <em>__()</em> wird beim Aufruf mit einem zusätzlichen Parameter, der Variable deren Wert in der Ausgabe gegen den Platzhalter getauscht werden sollen, angesprochen. Werden mehrere Platzhalter verwendet, werden einfach noch weitere Variablen als Parameter übergeben, jeweils mit einem Komma getrennt.
+<h2>Format für Übersetzungen</h2>
+Die Übersetzungen bestehen, unabhängig von der Quelle, immer aus zwei Teilen. Der erste Teil ist der zu übersetzende Text, der im Quellcode an die “magische Methode” übergeben wird. Der zweite Teil ist die Übersetzung.
+
+Als Quelle dienen entweder CSV Dateien oder Datenbankeinträge. Letztere sind vor allen Dingen ein Ergebnis der “Inline Übersetzung” die Magento anbietet.
+<h2>Lokalisierung über CSV Dateien</h2>
+Der beste Weg zur Übersetzung von Magento Shops sind CSV Dateien. Diese haben den großen Vorteil, dass sie von einer hoffentlich vorhandenen Revisionskontrolle, zum Beispiel Git, berücksichtigt und erfasst werden. Werden Änderungen in Dateien gemacht, ist so nicht nur nachvollziehbar, wo im Detail Anpassungen stattgefunden haben. Fast genauso wichtig ist, dass Sie auf mehreren Systemen verfügbar sind. Sei es die lokale Entwicklungsumgebung, eine Testinstallation, ein Stagingsystem oder das Live-Deployment des Online Shops.
+
+Der Aufbau der Dateien ist inhaltlich einfach. Um den Beispieltext “My Orders” aufzugreifen, könnte dieser mit folgender Zeile in einer der CSV-Dateien übersetzt werden:
+
+<em>“My Orders”,“Meine Bestellungen”</em>
+
+Doch das ist, wie erwähnt, nicht die einzige Möglichkeit.
+<h2>Die Inline Übersetzung</h2>
+Magento bietet neben den CSV-Dateien zur Lokalisierung die Möglichkeit der sogenannten Inline Übersetzung. Diese wird im Backend unter den Entwickleroptionen aktiviert:
+
+<em>System->Konfiguration->Inline übersetzen</em>
+
+(image: inline-uebersetzen-aktivieren.png)
+
+Wird die Option auf “Ja” gesetzt, bietet Magento im Frontend die Möglichkeit neben dem Text auf ein Icon (ein Buch) zu klicken:
+
+(image: inline-uebersetzung-aktiv.png)
+
+Der Dialog im Anschluss sieht wie folgt aus:
+
+(image: inline-translation-dialog-650x326.png)
+
+Die Benutzung sollte selbsterklärend sein. Ein Hinweis noch: Nachdem eine Übersetzung gespeichert wurde, muss die Seite neu geladen werden. Sonst greift die Übersetzung nicht. Wird sie auch dann nicht geladen, muss der Cache aktualisiert werden.
+
+Soll auf die Übersetzungen zugegriffen werden, kann dies in der Tabelle <em>core_translate</em> erfolgen. Dort werden diese gespeichert, woraus sich ein entscheidender Nachteil ergibt. Die gesamte Inline Übersetzung arbeitet vollständig an der Revisionskontrolle vorbei. Außerdem ist es auch praktikabler CSV-Dateien durch externe Partner übersetzen zu lassen. Als Richtlinie würde ich empfehlen: Die Inline Übersetzung soweit es geht vermeiden.
+<h2>Wo liegen die Übersetzungen konkret?</h2>
+Magento kombiniert mehrere Stellen, an denen Übersetzungen definiert werden können:
+
+1.    modulspezifische Übersetzungen
+2.    Übersetzungen im Theme
+3.    Inline-Übersetzungen
+
+Spannend ist nicht nur die Frage, welche Quellen es sind. Mindestens genauso wichtig ist es zu wissen, das Magento sie in dieser Reihenfolge lädt.
+
+Wie oben gezeigt werden die Übersetzungen in ein assoziatives Array geladen. Der ursprüngliche Text dient als Schlüssel. Da mehrere Quellen eine Übersetzung für den gleichen Text enthalten können, werden die Array-Elemente überschrieben. Eine Regel dabei: Das zuletzt geladene Element gewinnt und überschreibt den zuvor gesetzten Wert. Das bedeutet, die modulspezifischen Übersetzungen haben die niedrigste Priorität und die Inline Übersetzung die höchste.
+
+Der Punkt, an dem die Übersetzungen geladen werden, befindet sich in der Methode <em>init()</em> der Klasse <em>Mage_Core_Model_Translate</em>.
+<h2>Modulspezifische Übersetzungen</h2>
+Die modulspezifischen Übersetzungen werden in den CSV-Dateien gespeichert. Die sind unter app/locale zu finden. Dort gibt es für jedes “Locale” ein eigenes Verzeichnis. Im Standard ist dies bspw. en_US. Die Übersetzungen ins Deutsche, mit der Ausrichtung auf Deutschland, sind in de_DE gespeichert.
+
+Dort liegen Dateien, die jeweils den Namen der zugehörigen Extension tragen. In diesen sind Strings sowie deren Übersetzungen wie das Beispiel “My Orders” hinterlegt.
+
+(image: locale-files.png)
+
+Um “My Orders” im Kundenbereich zu übersetzen, muss in app/locale/de_DE die Datei Mage_Customer.csv angelegt werden. In dieser wird die Übersetzung gespeichert:
+
+<em>“My Orders”,”Meine Bestellungen”</em>
+
+Die Übersetzungen sind case-sensitiv! Es muss auf Groß-/Kleinschreibung geachtet werden. Wer sich mit den Übersetzungen aus app/locale befassen möchte, findet in der Klasse Mage_Core_Model_Translate die Methode _loadModuleTranslation(...). Dort werden die Dateien geladen.
+<h2>Theme Übersetzungen</h2>
+Die modulspezifischen Übersetzungen bilden die Basis für die Anpassung. Sollen jedoch vereinzelte Wörter, Sätze oder Ausdrücke abweichend übersetzt werden, wird ein anderer Weg gewählt. Es bietet sich die Datei translate.csv des Themes an. Die Anpassungen sind ohnehin meist nur für den jeweiligen Shop relevant. Das Theme wird nahezu immer individuell für den Shop erstellt oder angepasst, es spricht daher nichts gegen diesen Weg.
+
+Es muss im Hauptverzeichnis des Themes (unter app/design…) das Verzeichnis “locale” angelegt werden. Als Unterzeichnis werden, genau wie in app/locale die Verzeichnisnamen gemäß der “Locale”-Einstellung erzeugt und die Datei translate.csv darin angelegt. Wenn das Default-Theme eingesetzt wird und eine deutsche Übersetzung angelegt oder überschrieben werden soll:
+
+(image: theme-translate-csv.png)<em>app/design/frontend/default/default/locale/de_DE/translate.csv</em>
+
+Der Aufbau ist genau wie in den modulspezifischen Übersetzungen. Jede Zeile enthält einen ursprünglichen Text und die Übersetzung. So könntest Du nun den Text “Meine Bestellungen” bspw. in “Bestellhistorie” ändern:
+
+<em>“My Orders”,”Bestellhistorie”</em>
+
+Das ist noch nicht alles. Es gibt ein Feature, das nicht so bekannt ist. Die Möglichkeit spezifische Übersetzungen einzelner Module zu überschreiben.
+
+Ein Beispiel ist der String “Product Name”. Er wird in verschiedenen Extensions benutzt. Möchtest Du bspw. nur die Übersetzung für das Modul Mage_Checkout überschreiben, wird der Scope des Moduls, also der Modulname, vorangestellt und mit zwei Doppelpunkten vom String getrennt:
+
+“Mage_Checkout::Product Name”,”Name des Artikels”
+
+Von der geänderten Übersetzung sind Verwendungen in der Core-Extension Mage_Checkout betroffen. An den anderen Stellen bleibt die Übersetzung wie gehabt. Dies funktioniert auch in den Datenbank-Übersetzungen.
+
+Wer im Code Details nachvollziehen möchte, findet einen guten Einstiegspunkt in der Methode <em>_loadThemeTranslation()</em> der Klasse <em>Mage_Core_Model_Translate</em>.
+<h2>Probleme mit Theme Übersetzungen</h2>
+Es gibt spezifische Fälle, in denen Übersetzungen aus der translate.csv-Datei nicht greifen. Der erste Schritt ist in dem Fall den ursprünglichen String zu kontrollieren. Probleme können bspw. die Anführungszeichen verursachen. Da gibt es die einzelnen Anführungsstriche und doppelte. Im Zweifel den Quellstring direkt aus Quellcode kopieren, um Probleme auszuschließen.
+
+Es gibt Fälle, in denen Übersetzungen in der Datei translate.csv aus eurem Theme scheinbar nicht greifen wollen. Das liegt häufig an Problemen mit dem »Scope«. Sollte eine Änderung nicht greifen, wie oben gezeigt den Modulnamen bzw. den Scope vor den zu übersetzenden String setzen:
+
+<em>“Mage_Checkout::String”,”Übersetzung”</em>
+
+Nun wird der Eintrag in der Datei translate.csv höher gewichtet.
+<h2>Inline Übersetzungen</h2>
+Die Inline Übersetzungen stammen aus der Datenbank. Dort werden sie in der Tabelle <em>core_translate</em> gespeichert. Es ist nicht zwingend notwendig, den Weg über den Dialog zur Übersetzung zu gehen. Stattdessen kann man direkt in der Tabelle Übersetzungen anlegen.
+
+Wie oben erwähnt überschreibt eine Übersetzung aus der Datenbank modulspezifische Übersetzungen und die Übersetzungen aus dem Theme (per translate.csv). Dies liegt daran, dass sie in der init()-Methode der Klasse <em>Mage_Core_Model_Translate</em> zuletzt geladen werden. Dort wird die Methode <em>_loadDbTranslation()</em> aufgerufen, die für das Laden der Übersetzungen aus der Datenbank zuständig ist.
+<h2>Zusammenfassung</h2>
+Wege zur Übersetzung von Strings gibt es mehrere, die Magento gekonnt zusammenführt. Alle Varianten existieren berechtigt. Dennoch sollte man, wenn es geht, auf die Übersetzungen aus der Datenbank (Inline Translation) nach Möglichkeit verzichten. Deployment über Git&Co wird erschwert. Die Tabelle »core_translate« wird manuell übernommen. Ergebnis ist, dass Entwicklungsversion und Live-Deployment voneinander abweichen. Spezifische Anpassungen am besten über das Theme (translate.csv) vornehmen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3552

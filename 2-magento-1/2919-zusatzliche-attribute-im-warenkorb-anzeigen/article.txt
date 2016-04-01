@@ -1,0 +1,79 @@
+Article-meta: 
+
+----
+
+Title: Zusätzliche Attribute im Warenkorb anzeigen
+
+----
+
+Date: 2012-08-24
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es kann vorkommen das der Kunde im Warenkorb weitere Attribute sehen möchte. Hier sollte man es jedoch möglichst vermeiden für jedes Produkt im Warenkorb ein $product-&gt;load() aufzurufen. Das erhöht die Ladezeit unnötig. Viel einfacher dagegen ist das Hinzufügen der benötigen Attributen zur Product-Collection. So sind sie direkt geladen kann man die Attribute schnell und ohne Verzögerung abrufen und anzeigen.
+
+
+
+----
+
+Text: Dazu sind wirklich nur ein paar Zeilen Quellcode in der config.xml seines Moduls notwendig:
+
+(code lang: xml)
+<config>
+	[..]
+	<global>
+		[..]
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <abmessung/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+    	[..]
+	<global>
+	[..]
+</config>
+(/code)
+
+Danach kann der Wert des Attribute Abmessung ganz einfach im Template checkout/cart/item/default.phtml wie folgt ausgegeben werden:
+
+(code lang: php)
+<?php echo $this->getProduct()->getAbmessung(); ?>
+(/code)
+
+(Vielen Dank an <a href="http://www.falk-opitz.de/">Falk Optiz</a> für den Tipp)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2919

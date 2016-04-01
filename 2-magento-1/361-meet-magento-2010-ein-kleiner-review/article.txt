@@ -1,0 +1,74 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento 2010: Ein kleiner Review
+
+----
+
+Date: 2010-06-01
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es begann Montag morgens um 4.55 Uhr. Der Wecker klingelte, die Frisur saß. (Zumindest bei Ingo) Dann von Paderborn nach Leipzig. Dauert ungefähr 3 Stunden, Tempomat und 160 sei dank. Kein Stau, kamen gut durch. Ankunft im <a href="http://www.plagwitzer-hof.de/index.html">Hotel Plagwitzer Hof</a> um 8.55 Uhr. Dann zu Fuss vom Hotel zur "<a href="http://www.g-a-r-a-g-e.com/">Garage</a>". Der Fussweg war  ein kleiner Umweg - Google Maps sei Dank. Zitat nach 600 Metern in die falsche Richtung: "Ähh.. Moment das entwickelt sich auf der Karte nicht so wie ich das erwartet habe".
+
+Keynote von Varien mit Präsentation der neuen Mobile Magento Mobile App. (Video verlinken). Uns stelle sich jedoch die Frage welche Zielgruppe diese App hat. Im deutschen Raum sehen wir eher Potenzial im B2B Geschäft. Wer sucht denn sonst im App-Store ein App um z.B. Schuhe zu kaufen? Da bemüht man doch eher Google und erwartet eine Mobile-Edition der Webseite? Vlt. aber dort einen Hinweis zum App einbauen? Das App wird von Varien in den App-Store gestellt. So ersparrt man sich eventuellen Ärger mit Apple, falls das App nicht ganz den Konventionen entsprechen sollte, aber verliert Flexiblität. Das Lizence-Model basiet wohl auf einer jährlichen Gebühr und einer einmal Zahlung - die genauen Preise wurden nicht genannt oder von uns einfach überhört ;) Spannend war auch die Frage wie groß das Potenzial im mobilen Markt überhaupt ist. Dazu gab es ein paar Anmerkungen von Osama Bedier (Paypal). Laut seinen Zahlen sei der Umsatz der Transaktionen im Jahresvergleich von 2009 zu 2010 auf über 600% gestiegen. Wir werden sehen was kommt und wieviel Umsatz sich wirklich über ein Mobiltelefon generieren lässt. Technisch aber ziemlich cool :)
+
+Was hat uns beeindruckt, was fanden wir gut?
+
+
+
+----
+
+Text: <strong>Die Suche</strong>
+Neben der Solr suche in der Enterprise Edition arbeitet die Community an einer freien Suche ebenfalls auf der Basis von Solr. Dazu hat Damian einen kleinen Beitrag vorgestellt in dem er zeigt, wie weit er ist, was noch fehlt und was noch kommt. Abgesehen von ein paar technischen Problemen ein interesannter Denkanstoss. Er wird das Modul aber nacher wohl nur kostenpfichtig zur Verfügung stellen, sucht aber irgendwie kostenlos Unterstützung ;) Stephan Hoyer dagegen macht seine Lucene Implementierung OpenSource und veröffentlich sie bzw. den aktuellen Stand im Laufe der Woche bei Github [prüfen]. Der Source sah auf den ersten Blick wirklich gut und sauber aus. Wenn nun noch die Performance mit macht wird das eine wirklich gute Erweiterung :) Warum das ganze? Die Magento-Suche ist doch relativ langsam. Das liegt aber in der Regel daran das MySQL mit Like und Fulltext-Indizies nicht darauf ausgelegt tausende Datensätze zu durchsuchen. Zudem gibt es keine Korrekturen von Rechtschreibungen (=meinten Sie?) und keine ordentliche Sortierung nach Relevanz. Alles das könnte durch den Einsatz einer externen Software recht einfach in Magento implementiert werden. Solr bzw. Lucene sind dafür denken wir ein sehr guter Ansatz!
+
+<strong>Ebay Integration</strong>
+André Herrn von <a href="http://www.netresearch.de/">Netresearch</a> stellte sein Modul MageBid vor, das zur Zeit in der Alpha-Phase steckt. MageBid kümmert sich darum Produkte zu Ebay zur Exportieren und im selben Zuge Bestellungen von Ebay in den Magento-Store wieder zu importieren. Dabei werden Templates zum Export der Produktdaten angegeben und Produkte in Export-Profile zusammengefasst. Ein solches Exportprofil kann z.B. Pauschal einen Betrag X auf ein Produkt draufschlagen und definiert welche Versandarten das Produkt hat und in welchen Ebay-Kategorien es verfügbar ist. Die erste stabile Version soll es Ende Sommer bzw. Anfang Herbst geben. Geplant ist ein freies Modul und ein kostenpflichtiges mit weiteren Features.
+
+<strong>Faett.net</strong>
+Ein Modul mit dem ein Webshop Entwickler Module in seinem Shop verkaufen kann. Wirklich tolle Idee, Umsetzung sieht auch gut aus und total genial: OpenSource! Selbst haben wir es noch nicht ausprobiert, aber nach der Präsentation lohnt sich das Experiement bestimmt :)
+
+<strong>Abseits von Magento: Mobile-Apps</strong>
+Mit PhoneGap und Appcelerator Titanium lassen sich IPhone, Android, Blackberry Anwendungen erstellen und das tolle: Nur mit JavaScript und HTML/CSS. Ganz ohne große Java oder Objective C Kenntnisse. Dabei wird am Ende jedoch ein richtiges App erstellt das eben auch über den App-Store gekauft bzw. heruntergeladen werden kann.
+
+<strong>AfterShow-Party</strong>
+Tolle Location. Wirklich gute Musik. Aber alles doofe Informatiker - keiner am Tanzen, alle früh zu hause bis auf den harten Kern :) An dieser Stelle grüße an die Jungs von Visions und den <a href="http://paravista.de/de/index.php">Michael</a> :)
+
+Und allgemein: Gute Planung, tolles Catering aber bitte lasst die Kellner doch das nächste mal die Teller nicht ganz so schnell abräumen. Kaum war der Teller leer standen schon drei Kellner um den Tisch und waren sich fast am Streiten wer denn abräumen darf :)
+
+Alles in allem: Gelungene zwei Tage.
+
+P.S. Ein paar Verlinkungen fehlen, die hole ich heute Abend nach. EDGE im Auto ist so langsam ;)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 361

@@ -1,0 +1,81 @@
+Article-meta: 
+
+----
+
+Title: $mitarbeiter++;
+
+----
+
+Date: 2011-11-10
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Wir suchen in unserer Magento-PHP-Entwicklungsabteilung etwas Verstärkung für das <a href="http://www.code-x.de">code-x'sche Team</a> und da wir Stellenanzeigen-Angeber-Texte gar nicht mögen nur ein paar Grundvoraussetzungen zu deinen Fertigkeiten:
+
+[twoclick_buttons]
+
+(code lang: php)
+class hire {
+
+	const SEHR_GUT = 6;
+	const GUT = 4;
+	const ETWAS = 3;
+
+	public function check( Mitarbeiter $mitarbeiter ) {
+
+		if ( !$mitarbeiter->kannObjektorientiertPHP( self::GUT ) ) {
+			return false;
+		}
+
+		if ( !$mitarbeiter->kannHTMLCss( self::ETWAS ) ) {
+			return false;
+		}
+
+		if ( !$mitarbeiter->hatMagentoErfahrung( self::ETWAS ) ) {
+			return false;
+		}
+
+		$chef = new Chef('Stefan Freise');
+		return $chef->entscheiden( $mitarbeiter );
+	}
+
+}
+(/code)
+
+Wir freuen uns auf Interessenten unter <a href="mailto:tobi@webguys.de">tobi@webguys.de</a> oder <a href="mailto:stefan.freise@code-x.de">stefan.freise@code-x.de</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1995

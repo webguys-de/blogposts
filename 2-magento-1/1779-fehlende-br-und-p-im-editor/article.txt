@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: Fehlende < br / > und < p > im Editor
+
+----
+
+Date: 2011-08-26
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Bei einer WordPress-Installation fiel mir nach der Einpflege der Texte auf, dass die im visuellen Editor mit shift+Enter erzeugten Leerzeilen nicht auf der Internetseite selbst, noch im Html-Editor enthalten waren. Es kam aber noch schlimmer: Es fehlten sämtliche &lt;br /&gt; und &lt;p&gt; Tags. Auch Google brachte nicht die richtigen Dankanstösse - ebensowenig wie ein Update. Ein Hinweis brachte mich letztlich auf die richtige Spur.
+
+
+----
+
+Text: Ich setze das Plugin <em>TinyMCE Advanced</em> ein. In einer der neuen Versionen wurden zusätzliche Optionen bereitgestellt, darunter auch die folgende:
+<strong><em>
+Stop removing the</em></strong>  and <br /> tags when saving and show them in the HTML editor
+
+<strong><em></em></strong>Zu finden am unteren Ende der Einstellungen des Plugins.
+(image: Bildschirmfoto-2011-08-26-um-09.37.21-650x212.png)
+Das war dann auch die Lösung des Problems.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1779

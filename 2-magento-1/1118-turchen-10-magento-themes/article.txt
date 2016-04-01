@@ -1,0 +1,66 @@
+Article-meta: 
+
+----
+
+Title: Türchen 10: Magento Themes
+
+----
+
+Date: 2010-12-10
+
+----
+
+Description: 
+
+----
+
+Tags: themes-magento,adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 10 lässt Ihren Magento-Shop in einem neuen Gewand erstrahlen. Ein Magento-Shop ist schnell erstellt und für die eigenen Bedürfnisse reicht ein ein Theme von "der Stange" in den meisten Fällen aus, da eine komplette Theme-Entwicklung gut und gerne ein paar Tage dauern kann. Aus diesem Grund haben wir einigen Quellen guter Themes gesucht und gefunden.
+
+
+----
+
+Text: Es kann zwischen zwei Arten von Themes unterschieden werden: freien und kostenpflichtigen. Der Kostenrahmen liegt bei den meisten Themes zwischen 99€ und 400€ - ein paar Ausreisser zu beiden Seiten gibt es natürlich auch.
+
+Freie Magento-Themes findet man unter anderem hier:
+<a href="http://www.design4magento.com/">http://www.design4magento.com</a>
+
+Kostenpflichtige Magento-Themes findet man unter anderem hier:
+<a href="http://templates-master.com/magento-templates.html">http://templates-master.com</a>
+<a href="http://www.templatemonster.com/magento-themes.php">http://www.templatemonster.com</a>
+<a href="http://ecommerce-themes.com/magento-themes">http://ecommerce-themes.com</a>
+<a href="http://www.hellothemes.com">http://www.hellothemes.com</a>
+<a href="http://free-magentoextensions.com/magento-themes.html">http://free-magentoextensions.com</a>
+
+Sowohl freie als auch kostenpflichtige Themes findet man unter anderem hier:
+<a href="http://www.magthemes.com">http://www.magthemes.com</a>
+<a href="http://www.emthemes.com">http://www.emthemes.com</a>
+
+Dies soll eine Hilfe sein, natürlich kann man ein Theme auch <a href="http://www.webguys.de/magento/ein-magento-theme-erstellen/">eigenständig entwickeln</a>. Einen Anfang dazu vermittelt <a href="http://www.webguys.de/magento/ein-magento-theme-erstellen/">dieser Artikel</a>, sowie <a href="http://www.webguys.de/magento/layout-updates-uber-die-local-xml/">dieser Artikel</a>, der etwas tiefer eingreift. Um ein Grundverständnis zu bekommen, hat Tobias Vogt einen Artikel im <a href="http://it-republik.de/php/php-magazin-ausgaben/No-SQL-000423.html">aktuellen PHP Magazin</a> über Layouts, Interfaces und Blöcken verfasst.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1118

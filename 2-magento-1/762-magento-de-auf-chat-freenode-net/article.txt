@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: #magento-de auf chat.freenode.net 
+
+----
+
+Date: 2010-09-15
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Nicht alle Fragen lassen sich in Foren und Blogs klären. Oft ist es auch sehr angenehm mit gleichgesonnenen ein paar Worte zum Konzept zu wechseln, eine flüchtige Frage zu stellen oder eine schnelle Antwort zu geben. Perfekt für einen Chat :)
+
+Der Chat ist im IRC unter <strong>chat.freenode.net</strong> im Channel <strong>#magento-de</strong> per IRC-Software oder direkt per <a href="http://webchat.freenode.net/">Webinterface</a> zu erreichen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 762

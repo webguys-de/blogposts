@@ -1,0 +1,393 @@
+Article-meta: 
+
+----
+
+Title: Türchen 17: Lasttests mit „Siege“
+
+----
+
+Date: 2014-12-17
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: carmen-wingenbach
+
+----
+
+Article-content: 
+
+----
+
+Intro: Performance oder Last-Tests sind nicht unwichtig, wenn man einen Shop fertig stellt und nicht weiß, wie er mit dem möglicherweise zu erwartenden Besucheraufkommen zurecht kommt. Siege ist ein Kommandozeilen-Werkzeug zur Durchführung von Lasttests mit einer frei wählbaren Anzahl an URLs und Benutzern...
+
+
+
+----
+
+Text: <h2>Was ist Siege?</h2>
+
+Ich weiß nicht, ob Ihr alle wisst, dass ich Wörter sammle? Eines der Wörter, die es in meine Wortkiste geschafft haben, ist „Stresstest“. Weil es fast unmöglich ist, das nicht gestresst auszusprechen, weil es soviele "S" hat, weil es bei Google Burnout und Banken zum Thema hat, aber ich schweife ab.... "Siege" ist im im Grunde ein Stresstest. Siege simuliert http-Zugriffe auf eine Webseite und versucht menschliches Verhalten (alle auf einmal klicken dasselbe an, alle machen dann wieder Pause) nachzubilden.
+
+„Siege“ ist ein Werkzeug für Lasttests oder auch Test- und Benchmark und ist programmiert worden von Jeffrey Fulmer.
+
+Siege ist wohl „ab“ recht ähnlich, kann aber, im Gegensatz dazu, mehrere URLs gleichzeitig abfragen. Abgefragt wird eine (oder mehrere) URL mit einer zuvor festgelegten (und konfigurierbaren) Anzahl an simulierter Nutzer.
+
+Das Ergebnis ist dann eine Statistik über die übertragenen Datenmengen und Reaktionszeiten der Webseite.
+
+Solche Tests machen vor allem dann Sinn, wenn man Vergleichswerte hat, ansonsten kommen nur Soso-Achso-Zahlen dabei raus. Siege also nicht nur für ein Projekt, sondern für mehrere, vielleicht auch vergleichbare Shops auf unterschiedlichen Servern zu nutzen ist daher sinnvoll, weil man aufgrund der gemachten Erfahrungen bessere Rückschlüsse ziehen kann.
+
+<h2>Was kann Siege alles?</h2>
+
+Siege kann mehr als http, es unterstützt die Protokolle HTTP/1.0 und 1.1, GET- und POST-Direktiven, Cookies, Transaktionsaufzeichnung und einfache Authentifizierung. Man kann relativ viel konfigurieren und einstellen – für jeden Benutzer individuell wenn man möchte. Daher lohnt es sich, sich intensiv mit den Konfigurations-Files und der Dokumentation auseinanderzusetzen.
+
+<h2>Wie benutzt man Siege?</h2>
+
+Siege ist ein Kommandozeilentool. Also wird es dort installiert, verwendet und ausgewertet.
+
+<h2>Wie spricht man es aus und was heißt das genau?</h2>
+
+Obwohl ich es hübsch fände, wenn Siege aus dem Französischem stammen würde und "Siäsch" ausgesprochen würde, womit es eine Chance auf einen Platz in meiner Wortkiste gehabt hätte, stammt es doch aus dem Englischen, heißt "Belagerung" und wird „ssiedsch“ ausgesprochen.
+
+<h2>Wie installiert man es?</h2>
+
+Ich kann ja nur für den Mac sprechen, daher folgt jetzt die Anleitung für die Installation unter Mac OSX.
+
+<b>1) Verzeichnis anlegen:</b>
+z.B. „siege“ (ich hab‘s unter /Users/kahm/ angelegt).
+
+(code lang: php)
+~ $ mkdir siege
+~ $ cd siege
+siege $ 
+(/code)
+
+<b>2) Siege downloaden:</b>
+Entweder via Kommandozeile:
+
+(code lang: php)
+siege $ curl http://www.joedog.org/pub/siege/siege-latest.tar.gz -o siege-latest.tar.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  8450    0  8450    0     0   6787      0 --:--:--  0:00:01 --:--:--  6792
+siege $ ls
+siege-latest.tar.gz
+(/code)
+
+Oder via Web-Download auf: <a href="http://download.joedog.org/siege/" target="_blank">http://download.joedog.org/siege/</a> (Download ganz unten)
+
+<b>3) Entpacken und ins entpackte Verzeichnis wechseln:</b>
+
+(code lang: php)
+siege $ tar xvfz siege-latest.tar.gz
+x siege-3.0.7/
+x siege-3.0.7/AUTHORS
+…..
+x siege-3.0.7/acinclude.m4
+x siege-3.0.7/acspecific.m4
+siege $ ls
+siege-3.0.7		siege-latest.tar.gz
+siege $ cd siege-3.0.7/
+siege-3.0.7 $ ls
+AUTHORS		KNOWNBUGS	NEWS		acinclude.m4	configure.ac	install-sh
+COPYING		MACHINES	README		aclocal.m4	doc		lib
+ChangeLog	Makefile.am	README.https	acspecific.m4	html		src
+INSTALL		Makefile.in	README.solaris	configure	include		utils
+siege-3.0.7 $
+(/code)
+
+<b>4) Konfigurieren</b>
+Konfiguriert wird mit (tataaaa):
+
+(code lang: php)
+$ ./configure
+(/code)
+
+Nun passiert so allerlei Buchstabengeschiebe. Das ist ein gutes Zeichen.
+
+Je nachdem, mit welchen Rechten man grade unterwegs ist, empfiehlt es sich, die folgenden Befehle mit dem „sudo“ Zusatz einzugeben.
+
+(code lang: php)
+$ make
+$ make install
+(/code)
+Auch hier folgt wieder allerlei Buchstabengeschiebe...
+
+Wenn alles gut verlaufen ist, dann kann man nun „siege“ (von wo auch immer) benutzen. Ich bin nun ins Home-Verzeichnis gewechselt:
+
+(code lang: php)
+~ $ siege --version
+SIEGE 3.0.7
+
+Copyright (C) 2014 by Jeffrey Fulmer, et al.
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.
+
+~ $
+(/code)
+
+Fein. Das also tut‘s.
+
+(code)
+~$ siege -h
+~$ siege --help
+(/code)
+
+
+gibt die Liste mit den möglichen Befahlen aus.
+
+(code)
+~$ siege -C
+~$ siege --config
+(/code)
+
+
+Gibt die aktuelle Konfiguration aus.
+
+Nun erstellt man zunächst noch ein eigenes Konfigurations-File, um an diesem Änderungen vornehmen zu können:
+
+(code language:bash)
+$ siege.config
+New configuration template added to /Users/kahm/.siegerc
+Run siege -C to view the current settings in that file
+~ $ siege -C
+CURRENT  SIEGE  CONFIGURATION
+Edit the resource file to change the settings.
+
+version:                        3.0.7
+verbose:                        true
+quiet:                          false
+debug:                          false
+protocol:                       HTTP/1.1
+get method:                     HEAD
+connection:                     close
+concurrent users:               15
+time to run:                    n/a
+repetitions:                    n/a
+socket timeout:                 30
+accept-encoding:                gzip
+delay:                          1 sec
+internet simulation:            false
+benchmark mode:                 false
+failures until abort:           1024
+named URL:                      none
+URLs file:                      /usr/local/etc/urls.txt
+logging:                        true
+log file:                       /usr/local/var/siege.log
+resource file:                  /Users/kahm/.siegerc
+timestamped output:             false
+comma separated output:         false
+allow redirects:                true
+allow zero byte data:           true
+allow chunked encoding:         true
+upload unique files:            true
+
+~ $
+(/code)
+
+Das nun erstellte File enthält nicht nur die Konfiguration, über jedem Parameter findet sich auch eine Erklärung. Daher empfiehlt es sich in jedem Fall, sich dieses auch anzusehen! Zum Beispiel:
+
+(code lang: php)
+#
+# Show logfile location.  By default, siege displays the
+# logfile location at the end of every run when logging
+# You can turn this message off with this directive.
+# ex: show-logfile = false
+#
+show-logfile = true
+(/code)
+
+Im Manuel kann man die restlichen Befehle nachlesen. 
+<a href="http://www.joedog.org/siege-manual/" target="_blank">http://www.joedog.org/siege-manual/</a>
+
+<h2>Wie benutzt man es?</h2>
+
+Jetzt aber mal zum Test...
+
+Der Befehl zum Testen lautet (z.B.):
+
+(code lang: php)
+siege -c10 -d10 -r1 -v http://neoshops.de/
+(/code)
+
+-c steht für „Customer“, also die Anzahl der Besucher, die gleichzeitig simuliert werden soll
+
+-d steth für „Delay“. Zwischen einem und dem nächsten Besucher können per Zufall 0 – x Sekunden vergehen. Die Default-Angabe in der Konfiguration ist 3. Wenn man „richtig“ unter Last testen will, gibt man hier 1 an.
+
+-r steht für „Repetitions“ und gibt die Anzahl der Wiederholungen an.
+
+Gibt man das ein und entschließt sich zum „Return“, fängt Siege an...
+
+(code lang: php)
+~ $ siege -c10 -d10 -r1 -v http://www.neoshops.de/
+** SIEGE 3.0.7
+** Preparing 10 concurrent users for battle.
+The server is now under siege...
+HTTP/1.1 301   1.01 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   1.01 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   1.01 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   1.01 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   0.71 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   0.71 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   0.63 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   0.63 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   0.44 secs:      20 bytes ==> GET  /
+HTTP/1.1 301   0.47 secs:      20 bytes ==> GET  /
+HTTP/1.1 200   0.64 secs:    9963 bytes ==> GET  /
+HTTP/1.1 200   0.69 secs:    9963 bytes ==> GET  /
+HTTP/1.1 200   0.80 secs:    9963 bytes ==> GET  /
+HTTP/1.1 200   0.68 secs:    9963 bytes ==> GET  /
+HTTP/1.1 200   0.59 secs:    9962 bytes ==> GET  /
+HTTP/1.1 200   0.69 secs:    9962 bytes ==> GET  /
+HTTP/1.1 200   0.95 secs:    9962 bytes ==> GET  /
+HTTP/1.1 200   0.68 secs:    9962 bytes ==> GET  /
+HTTP/1.1 200   0.80 secs:    9963 bytes ==> GET  /
+HTTP/1.1 200   0.83 secs:    9963 bytes ==> GET  /
+done.
+
+Transactions:		          20 hits
+Availability:		      100.00 %
+Elapsed time:		       12.32 secs
+Data transferred:	        0.10 MB
+Response time:		        0.75 secs
+Transaction rate:	        1.62 trans/sec
+Throughput:		        0.01 MB/sec
+Concurrency:		        1.22
+Successful transactions:          20
+Failed transactions:	           0
+Longest transaction:	        1.01
+Shortest transaction:	        0.44
+ 
+FILE: /usr/local/var/siege.log
+You can disable this annoying message by editing
+the .siegerc file in your home directory; change
+the directive 'show-logfile' to false.
+~ $
+(/code)
+
+<h2>Was wird getestet?</h2>
+
+Die einzelnen Ergebnisse sind aufgelistet und quasi selbsterklärend. Wer mehr wissen will, ist hier gut aufgehoben:
+<a href="http://manpages.ubuntu.com/manpages/hardy/man1/siege.1.html" target="_blank">http://manpages.ubuntu.com/manpages/hardy/man1/siege.1.html</a>
+
+<em>Transactions:</em>            die Anzahl der Hits insgesamt, die durch Siege ausgeführt wurden.
+
+<em>Availability:</em>            Prozentsatz der erfolgreichen Verbindungsversuche.
+
+<em>Elapsed time:</em>            Gesamtdauer des Tests.
+
+<em>Data transferred:</em>        Gesamtmenge der übertragenen Daten (Header + Content) in MB.
+
+<em>Response time:</em>           Durchschnittliche Antwortzeit des Servers für die Anfragen.
+
+<em>Transaction rate:</em>        Durchschnittliche Anzahl der Transaktionen, die pro Sekunde absolviert werden konnten. (Transaktions geteilt durch Gesamtdauer des Tests) 
+<em>
+Throughput:</em>                  Durchschnittliche Byte-Anzahl pro Sekunde
+
+<em>Concurrency:</em>             Durchschnittliche Anzahl gleichzeitiger (konkurrierender) Verbindungen
+
+<em>Successful transactions:</em>  Anzahl der Serverantworten mit einem Code < 400
+
+<em>Failed transactions:</em>     Anzahl der Serverantworten mit einem Code > 400
+<em>
+Longest transaction:</em>     Längste Transaktion in Sekunden
+<em>
+Shortest transaction:</em>    Kürzeste Transaktion in Sekunden
+
+<h2>Was, wenn‘s komplexer wird?</h2>
+
+Aber das kann ja nicht alles gewesen sein.... Interessant ist so ein Last-Test ja, wenn mehrere URLs aufgerufen werden. Also ein paar Kategorieseiten (oder gar alle) und Produktseiten, CMS-Seiten und und und...
+
+Das löst Siege, indem es eine "urls.txt" anlegt, in der man eine Liste der zu besuchenden Urls hinterlegen kann.
+
+Man ist zum Glück in der Namensvergabe sehr frei und kann pro Domain auch eine txt-Datei anlegen. Meine aktuell zu testende heißt „neoshops.txt“ und enthält ein paar meiner Urls. Hierfür  habe ich ein neues Verzeichnis angelegt „siegetest“ und dort meine neoshops.txt abgelegt und befinde mich nun in diesem Verzeichnis.
+
+Nun muss man Siege mitteilen, dass diese verwendet werden soll.
+
+Zur Erklärung der Parameter:
+i = internet, dies ist gedacht für Files mit mehreren URLs. Hier wird jede URL im File per Zufall von einem der „Besucher“ aufgerufen. Internet = true soll also heißen: wie im realen Leben, da hat man auch keine Einfluss auf die Reihenfolge der Seiten, die aufgerufen wird.
+
+(code lang: php)
+siegetest $ ls
+neoshops.txt
+siegetest $ siege -c10 -d1 -r2 -i -f neoshops.txt
+** SIEGE 3.0.7
+** Preparing 10 concurrent users for battle.
+The server is now under siege...
+HTTP/1.1 200   2.58 secs:    7372 bytes ==> GET  /magento-freelancer/
+HTTP/1.1 200   2.58 secs:   10595 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   2.65 secs:    7372 bytes ==> GET  /magento-freelancer/
+HTTP/1.1 200   2.66 secs:    7372 bytes ==> GET  /magento-freelancer/
+HTTP/1.1 200   2.72 secs:   10595 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   3.20 secs:    9963 bytes ==> GET  /
+HTTP/1.1 200   2.81 secs:   10595 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   2.85 secs:   10595 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   3.06 secs:   10595 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   3.19 secs:   10062 bytes ==> GET  /
+HTTP/1.1 200   2.19 secs:   10695 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   2.32 secs:   10695 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   3.08 secs:   10063 bytes ==> GET  /
+HTTP/1.1 200   2.12 secs:    7464 bytes ==> GET  /magento-freelancer/
+HTTP/1.1 200   2.64 secs:   10694 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   2.18 secs:    7464 bytes ==> GET  /magento-freelancer/
+HTTP/1.1 200   1.85 secs:    7464 bytes ==> GET  /magento-freelancer/
+HTTP/1.1 200   1.84 secs:   10694 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+HTTP/1.1 200   2.23 secs:   10062 bytes ==> GET  /
+HTTP/1.1 200   1.34 secs:   10694 bytes ==> GET  /magento-projekte-referenzen/referenzen-ubersicht/
+done.
+
+Transactions:		          20 hits
+Availability:		      100.00 %
+Elapsed time:		        6.20 secs
+Data transferred:	        0.18 MB
+Response time:		        2.50 secs
+Transaction rate:	        3.23 trans/sec
+Throughput:		        0.03 MB/sec
+Concurrency:		        8.08
+Successful transactions:         20
+Failed transactions:	           0
+Longest transaction:	        3.20
+Shortest transaction:	        1.34
+ 
+FILE: /usr/local/var/siege.log
+You can disable this annoying message by editing
+the .siegerc file in your home directory; change
+the directive 'show-logfile' to false.
+siegetest $
+(/code)
+
+Zu den Hauptaufgaben wird es also zählen, dieses elende txt-File mit den Shop-URLs zu erstellen. Aber neben UTF-8 Kämpfen gehören URL-Listen-Kämpfe auch zu denen, die man seit Anbeginn der Zeit kämpft. Ashley Schroeder hat in seinem Beitrag zu Siege eine Lösung dazu: 
+<a href="http://www.aschroder.com/2010/12/laying-siege-to-magento-performance-testing-your-magento-webstores/" target="_blank">http://www.aschroder.com/2010/12/laying-siege-...</a>
+
+<h2>Und wenn ich mir die Installation nicht antun möchte?</h2>
+
+Dann gibt es eine Online-Lösung, die auf Siege basiert:
+<a href="http://www.magespeedtest.com/" target="_blank">http://www.magespeedtest.com/</a>
+
+<h2>Fazit</h2>
+
+Siege hat es nicht in meine Wortkiste geschafft, aber auf meinen Mac. (Und ist Euch aufgefallen, dass in diesem ganzen Beitrag nicht einmal das Wort "Magento" im Fließtext aufgetaucht ist????). Siege lohnt sich, wenn man herausfinden möchte, ab welcher Anzahl gleichzeitiger Zugriffe der Server in die Knie geht. Es gibt sicherlich viele weitere mögliche Werkzeuge, um Lasttests durchzuführen. Irgendeines dieser Werkzeuge sollte man in jedem Fall nutzen –  Siege ist recht einfach zu bedienen, liefert interpretierbare Ergebnisse und ist daher in jedem Fall einen Versuch wert.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4156

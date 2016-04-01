@@ -1,0 +1,140 @@
+Article-meta: 
+
+----
+
+Title: Türchen 04: Testdaten in Magento generieren
+
+----
+
+Date: 2013-12-04
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: matthias-zeis
+
+----
+
+Article-content: 
+
+----
+
+Intro: Vielleicht kennt ihr die Situation. Ein Kunde fragt an, ob sich ein Shop mit 250 Websites betreiben lässt. Oder ob er seinen Shop problemlos auf 200.000 Produkte hochskalieren kann. Oder ob etwas dagegen spricht, 500 Produktattribute zu verwenden. Oder wie das Menü aussieht, wenn seine neue Navigationshierarchie 10 Ebenen enthält (ok, auf die letzte Idee ist bei mir zum Glück noch niemand gekommen ;)). Oder ihr seid einfach neugierig darauf, einen Test-Store mit Daten zuzuschießen. Echtdaten, die man einfach so einspielen kann, sind natürlich (noch) nicht vorhanden. Willkommen in der Realität.
+
+
+
+----
+
+Text: In solchen Fällen ist es mühsam, immer wieder aufs Neue Skripte zu erstellen, die genau diesen Zweck erfüllen. Als es Anfang des Jahres einen Anlass für einen Datentest gab, dachte ich mir: lass mal eine Extension schreiben, mit der ich <strong>über das Backend Testdaten erstellen</strong> lassen kann. Und so entstand <a href="https://github.com/LimeSoda/LimeSoda_SampleDataGenerator">LimeSoda_SampleDataGenerator</a>.
+<h2>Den Sample-Data-Generator installieren</h2>
+Die Extension kann über <strong>modman</strong> oder <strong>composer</strong> installiert werden.
+
+Das sieht zum Beispiel so aus:
+<pre class="brush:shell">modman clone https://github.com/LimeSoda/LimeSoda_SampleDataGenerator.git</pre>
+Hat alles geklappt, dann findet ihr im Backend einen neuen Menüpunkt "Development > Sample Data Generator" vor.
+
+(image: menueeintrag.png)
+
+Navigiert ihr zum Data-Generator, seht ihr zuerst eine leere Übersichtsseite. Mit "Add New" erstellt ihr ein neues Datenset.
+
+(image: add_new.png)<h2>Allgemeine Informationen definieren</h2>
+Im ersten Screen könnt ihr den Datensatz mit einem <strong>Namen</strong> versehen, über den ihr ihn später auf der Übersichtsseite wiederfindet. Wir basteln im heutigen Beitrag einen "kleinen Webshop".
+
+(image: general_information.png)
+
+Auf derselben Seite wird kurz erklärt, wie die gewünschten Datenmengen zu definieren sind. Die Extension geht nämlich davon aus, dass ihr x Websites, Store-Views, Kategorien, Produkte, Attribute, ... <strong>mehr</strong> generieren wollt. Angenommen in eurer Instanz sind bereits 20.000 Produkte vorhanden und ihr wollt 50.000 darin haben, dann müsst ihr 30.000 eingeben und nicht 50.000. Ok?
+
+Zudem müsst ihr beachten, dass bei verschachtelten Datenstrukturen (Website/Store-Group/Store-View bzw. Kategorien) die <strong>Angaben pro Hierarchie-Ebene</strong> gelten. Dazu gleich mehr.
+<h2>Websites, Store-Groups und Store-Views</h2>
+(image: websites_storegroups_storeviews.png)
+
+Eine frische Magento-Installation beinhaltet eine Website, eine Store-Group und eine Store-View. Klar.
+
+Nehmen wir an, dass der Händler neben seinem Hauptgeschäft einen weiteren Shop betreiben möchte, in dem er einen Teil seines Produktsortiments auf Deutsch und Englisch verkaufen möchte. Er benötigt also eine <strong>zweite Store-Group</strong> mit <strong>zwei Store-Views</strong>.
+
+Im Screenshot seht ihr das ausgefüllte Formular. Ihr erstellt keine neue Website, denn ihr habt schon eine. Dann legt ihr fest, dass <strong>genau eine Store-Group</strong> erzeugt werden soll. Mit "<strong>minimum count</strong>" und "<strong>maximum count</strong>" könntet ihr eine zufällige Verteilung von Daten erzielen, was vor allem für Kategoriehierarchien, Produkte und Attribute interessant ist.
+
+Die neue Store-Group soll <strong>zwei Store-Views</strong> erhalten. Auch das ist im Screenshot festgehalten.
+<h3>Das Märchen von den Angaben pro Hierarchie-Ebene</h3>
+Nun kommen wir wie versprochen zu den <strong>Angaben pro Hierarchie-Ebene</strong>. Wenn bei der Store-Group eine 1 eingetragen wird und "<strong>Add only to new websites</strong>" auf "<strong>No</strong>" steht, wird <strong>für jede</strong> Website eine Store-Group eingerichtet. Gäbe es bereits 3 Websites, dann würden 3 Store-Groups angelegt werden: für jede Website eine.
+
+Das klingt am Anfang vielleicht verwirrend. Denken wir uns die Konfiguration aus dem Screenshot durch.
+
+Eine <strong>Website</strong> habt ihr schon, also braucht ihr keine mehr zu erstellen.
+
+Ihr benötigt genau eine neue <strong>Store-Group</strong>, also tragt ihr eine 1 ein. Weil ihr keine neue Website erzeugt, müsst ihr festlegen, dass die Store-Groups nicht nur zu neuen Websites hinzugefügt werden, sondern zu allen.
+
+Eure neue Store-Group soll zwei <strong>Store-Views</strong> enthalten. Damit die originale Store-Group nicht betroffen ist, wählt ihr "<strong>Add only to new store groups</strong>" mit "Yes" aus. Die ursprüngliche Store-Group 1 bleibt unangetastet, doch für die neue Store-Group werden zwei Store-Views ins Leben gerufen.
+<h2>Attribut-Sets und Attribute</h2>
+In den folgenden zwei Tabs ist es möglich, Attribut-Sets und Attribute zu definieren.
+
+(image: attribute_sets.png)
+
+Ihr entscheidet euch für insgesamt vier Attribut-Sets, fügt also <strong>3 neue Attribut-Sets</strong> hinzu.
+
+Ein kleiner Schönheitsfehler am Rande: in Version 0.1.2 ordnet der Data-Generator alle Produkte dem Default-Attribut-Set hinzu. :-)
+
+(image: attributes.png)
+
+Jedes gute Produktsortiment beschreibt seine Produkte über eigene <strong>Produktattribute</strong>. Unser kleiner Shopbetreiber hat aber vorerst nur wenig Zeit für die Datenpflege, weswegen ihr zwischen 7 und 10 Attributen einplant. Die Attribute werden allen Attribut-Sets zugeordnet.
+<h2>Kategorien</h2>
+(image: categories.png)
+
+Der Beispielhändler hat entschieden, sein Sortiment auf 3 Kategorie-Ebenen aufzuteilen. Außerdem hat er von der "7 +/- 2"-Regel gehört und daher <strong>5 Hauptkategorien</strong> mit <strong>jeweils 4 bis 6 Unterkategorien</strong> gebildet. Manche Kategorien zweiter Ebene haben gar keine Unterkategorien, manche bis zu 3.
+<h2>Produkte</h2>
+(image: products.png)
+
+Und jetzt zur Essenz des Shops: den Produkten. Es wird 500 Produkte geben. Außerdem wird jedes Produkt zwischen 1 und 3 Kategorien zugeordnet.
+<h2>Daten generieren</h2>
+Nun speichert ihr eurer Datenset und gelangt zurück zur Übersichtsseite.
+
+(image: generate.png)
+
+Indem ihr das Datenset markiert und die <strong>Aktion "Generate"</strong> ausführt, startet ihr die Generierung der Daten.
+
+Da momentan die normalen Magento-Models verwendet werden und nicht die Import-/Export-Schnittstelle o.ä. kann das bei größeren Datenmengen entsprechend lange dauern.
+
+Zwecks<strong> Performance-Optimierung</strong> könnt ihr die <strong>Caches aktivieren</strong> und auf <strong>manuelle Indizierung</strong> umstellen - genau wie bei jedem anderen Import bringt das erhebliche Leistungssteigerungen mit sich.
+
+Wenn die Daten fertig erzeugt sind, erhaltet ihr eine Übersicht über die neuen Datensätze.
+
+(image: generated.png)<h2>Die erzeugten Daten</h2>
+So sieht das dann im Backend aus:
+
+(image: generated_storegroups_storeviews.png)(image: generated_attribute_sets.png)(image: generated_attributes.png)(image: generated_categories.png)(image: generated_products.png)
+
+Und so im Frontend:
+
+(image: generated_frontend.png)<h2>Status und Weiterentwicklung des Sample-Data-Generators</h2>
+Ich bin mir ziemlich sicher, dass sich der eine oder andere von euch beim Durchlesen dachte: "kann man dieses [Variation X> und jenes [Feature Y> machen"? Die Chance ist hoch, dass die Antwort "nein" lautet. :-D
+
+De facto haben wir den Sample-Data-Generator nur mit dem Allernötigsten verstehen, was für diesen Test gebraucht wurde. Bis heute sind wir damit gut durchgekommen. Für einzelne Tests haben wir die Testdaten (z.B. die Attributwerte, Preise, Sichtbarkeiten, ... der Produkte) verändert, doch zu einem bedienbaren Backend hat es noch nicht gereicht.  Ich habe viele viele Ideen, was man noch alles mit der Extension anstellen könnte, doch die fehlende Zeit und der Mangel an Dringlichkeit sind's, welche die Entwicklung entschleunigt haben.
+
+Tatsächlich steht der Code seit vielen Monaten in einem Refactoringzyklus und ich hoffe, diesen durch den Artikel und hoffentlich positives Feedback wieder anzustoßen (ihr kennt das von Runtastic und co - go go go! ;-)).
+
+Momentan hat die Extension mehr einen Prototypen- als einen Beta-Status. Falls jemand von euch in nächster Zeit den Sample-Data-Generator für sich weiterentwickeln und dabei kompatibel mit unserer Version bleiben möchte, dann meldet euch bitte bei mir, denn es wird sich sicher in der Code- und Datenbank-Struktur einiges ändern. Zwei Ziele des Refactorings sind zum Beispiel, dass man die Daten wesentlich flexibler (auch über Events) variieren und andere Importer (z.B. <a href="https://github.com/avstudnitz/AvS_FastSimpleImport">AvS_FastSimpleImport</a>) verwenden kann. Und auch der Ruf nach weiteren Entitäten (Kunden, Bestellungen, ...) ist schon laut geworden.
+
+Ich hoffe, wir können euch mit dem SampleDataGenerator beim nächsten Test etwas Arbeit abnehmen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3585

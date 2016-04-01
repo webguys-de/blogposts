@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: Listen: Auf und ab mit Rendertags
+
+----
+
+Date: 2009-04-06
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,reddot,rendertags
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Rendertags sind,  wie schon öfter erwähnt, trotz noch eingeschränktem Funktionsumfang ein mächtiger Helfer bei RedDot Projekten. Sie erleichtern Redakteuren als auch Administratoren  die Pflege und Aufbau von Projekten, da es Möglichkeiten bietet, von gewohnten Arbeitsmethoden abzuweichen und so vor allem dem Redakteur die Arbeit zu erleichtern.
+
+----
+
+Text: Dem folgenden Beispiel liegt folgende Struktur zugrunde:
+Instanz (Seite A) einer Content-Klasse mit einer Liste und einigen angehängten Seiten (Seite B).
+
+Zugriff von 'Seite A' auf Elemente von 'Seite B':
+(code)
+<reddot:cms>
+<foreach itemname="item" object="Context:CurrentPage.Elements.GetElement(LIST).Value">
+<htmltext>
+<%!! Store:Contact.Elements.GetElement(NAME_OF_ELEMENT).Value !!%>
+</htmltext>
+</foreach>
+</reddot:cms>
+
+(/code)
+
+Und so greift man von 'Seite B' auf ein Element von 'Seite A' zu:
+(code)
+<%!! Context:CurrentPage.MainLink.OwnerPage.Elements.GetElement(ELEMENT).Value !!%>
+(/code)
+
+Der Zugiff auf alle Elemente funktioniert nicht auf alle Elemente, auch Inahlte von Standardfeldern die nicht vom Typ Text sind werden nicht angezeigt. Im ersten Beispiel ( Zugriff über die Liste ) werden die Seiten nicht sortiert zurückgegeben und diese kann auch nicht beeinflußt werden, solange keine Skriptsprachen wie ASP. Php zum Einsatz kommen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 52

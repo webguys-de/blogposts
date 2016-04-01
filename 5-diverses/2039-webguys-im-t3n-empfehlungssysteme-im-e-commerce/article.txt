@@ -1,0 +1,52 @@
+Article-meta: 
+
+----
+
+Title: Webguys im T3N: Empfehlungssysteme im E-Commerce
+
+----
+
+Date: 2011-11-23
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Unverhofft kommt oft. Eigentlich hatte ich mit dem T3N erst zum 01.12 gerechnet aber so ist natürlich auch super toll. Die Ausgabe lag nämlich gerade im Briefkasten :) Warum ich mich so freue? Diesmal ist sogar ein Beitrag von mir dabei: "<a href="http://t3n.de/magazin/t3n-nr-26-web-betriebssystem/">Kaufempfehlungen mit System</a>". Dabei erkläre ich wie automatische Produkt-Empfehlungen funktionieren und welche Anbieter es auf dem Markt dazu gibt. Ein Blick lohnt sich :)
+
+----
+
+Text: <h3>Noch ein Foto!</h3>
+(image: 2011-11-23-10.49.55.jpg)
+
+<a href="http://t3n.de/magazin/recommendation-dienste-kaufempfehlungen-system-228525/">Weiteres zum Artikel direkt beim T3N</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2039

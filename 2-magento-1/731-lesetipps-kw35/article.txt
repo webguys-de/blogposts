@@ -1,0 +1,55 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW35
+
+----
+
+Date: 2010-09-03
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Die Zeit rast. Schon wieder eine Woche, schon wieder Lesetipps. Beginnen wollen wir mit einem Tipp von Michael zu den Lesetipps aus <a href="http://www.webguys.de/magento/lesetipps-kw33/">KW33</a>: Ein YouTube Video das zeigt wie der <a href="http://www.youtube.com/watch?v=cTiHwiEboKg">Magento Theme auf dem IPhone aussieht</a>.
+
+Richtig tolle Arbeit haben die Autoren von <a href="http://www.ecomdev.org/">ecomdev.org</a> geleistet. Eine <a href="http://www.ecomdev.org/2010/08/31/magento-module-configuration-file-reference.html">Übersicht über die Möglichkeiten der Magento-Modul config.xml</a> mit (fast) allen Einstellungen die vorgenommen werden können. Gehört unbedingt in die Bookmarks!
+
+Das auf der <a href="http://www.webguys.de/magento/meet-magento-2010-ein-kleiner-review/">Meet Magento Anfang 2010</a> vorgestellte Modul <a href="http://www.netresearch.de/blog/2010/09/03/magebid-%E2%80%93-das-ultimative-ebay-modul-fur-magento/">MageBid</a> ist nun endlich in der Beta-Version verfügbar. Details finden sich im <a href="http://www.netresearch.de/blog/2010/09/03/magebid-%E2%80%93-das-ultimative-ebay-modul-fur-magento/">Blog der Netresearch</a>.
+
+Letztlich bleibt noch der Hinweis auf die nächste <a href="http://meet-magento.de/">Meet-Magento</a> die am 4. und 5. November wieder ihre Türen öffnet. Die <a href="http://www.meet-magento.de/tickets.html">Early-Bird-Tickets </a>gibt es noch bis zum 5. September - also schnell zuschlagen - es lohnt sich.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 731

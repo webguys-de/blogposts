@@ -1,0 +1,70 @@
+Article-meta: 
+
+----
+
+Title: Wie man Parameter aus der Store Konfiguration ausließt
+
+----
+
+Date: 2010-09-25
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento ist ein wirklich mächtiges Webshop-Werkzeug. Das erkennt man gerade an den umfangreichen Möglichkeiten der Konfiguration des Systems. Von Gestaltungsfragen, über den Warenkorb bis hinzu E-Mailadressen ist beinahe alles unter <em>System/ Konfiguration</em> hinterlegt. Mittels XML und PHP lassen sich diese Parameter auslesen und verarbeiten.
+
+
+----
+
+Text: Die Konfiguration sieht im Admin ungefähr wie folgt aus:
+(image: Configuration-System-Magento-Admin_1285190906211-500x176.png)<h3>Einen Parameter mittels PHP auslesen</h3>
+Das auslesen eines Parameters geht mittels einer Code-Zeile per PHP fast wie von selbst:
+
+(code lang: php)
+echo Mage::getStoreConfig('web/unsecure/base_url')
+(/code)
+
+Dies gibt uns die aktuell in Magento hinterlegte Basis-URL aus.
+<h3>Einen Parameter im Layout-XML verwenden</h3>
+Zusätzlich ist es auch Möglich die Parameter im Layout-XML zu verwenden. Nach meinem Verständnis macht das jedoch meist nur bei Ja/Nein-Werten wirklich Sinn:
+
+(code lang: xml)
+<reference name="right">
+	<action method="unsetChild" ifconfig="webguys/general/relatedtabbed">
+		<name>catalog.product.related</name>
+	</action>
+</reference>
+(/code)
+
+Ist in Magento nun eine Konfiguration für  <em>webguys/general/relatedtabbed </em>hinterlegt die Wahr (True/ 1) ist wird die Action aufgerufen. Ist der Wert nicht Wahr ignoriert Magento die Anweisung komplett.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 806

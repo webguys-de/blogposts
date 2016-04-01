@@ -1,0 +1,88 @@
+Article-meta: 
+
+----
+
+Title: Up-Sell, Cross-Sell und Related-Product-Links
+
+----
+
+Date: 2011-07-22
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento bietet von Haus aus drei Möglichkeiten an, Produkte untereinander zu verknüpfen um so den Kunden Produktalternativen oder weitere Produkte  aufzuzeigen.
+
+
+----
+
+Text: Dies kann alternativ zum Backend auch über php lösen. Zuerst benötigt man dafür das Model:
+(code lang: php)
+$model = Mage::getModel('Catalog/Product);
+(/code)
+
+Danach natürlich noch ein Produkt:
+(code lang: php)
+$product = $model->loadByAttribute('Sku', '12346-0' );
+(/code)
+
+Als nächstes bauen wir ein exemplarisches Array Up-Sell-Produkte zusammen, dieses besteht aus der verknüpften Product-ID, sowie der Position:
+(code lang: php)
+$related_products = array(
+    11 => array( 'position' => 1 ),
+    25 => array( 'position' => 2 ),
+    42 => array( 'position' => 3 )
+);
+(/code)
+
+Als letztes weisen wir dieses Array unserem Produkt zu und speichern es:
+(code lang: php)
+$product->setRelatedLinkData( $related_products );
+$product->save();
+(/code)
+
+Das kann kan natürlich auch sehr schön über Daten z.B. CSV, XML laufen lassen, oder auch über Collections, die anhand von bestimmten Attributen gefiltert werden können. Einen Artikel über die <a href="http://www.webguys.de/magento/turchen-11-eine-collection-filtern/">grundlegende Benutzung von Collections</a> hat <a href="http://www.webguys.de/author/tobi/">Tobias Vogt</a> bereits <a href="http://www.webguys.de/magento/turchen-11-eine-collection-filtern/">hier</a> geschrieben.
+
+Um abweichend auch Related- und/oder Cross-Sell-Produkte zu speichern, einfach sie "Set"-Methode anpassen:
+(code lang: php)
+//Related Products
+$product->setRelatedLinkData( $values );
+
+//Up-Sell Products
+$product->setUpSellLinkData( $values );
+
+//Cross-Sell Products
+$product->setCrossSellLinkData( $values );
+(/code)
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1731

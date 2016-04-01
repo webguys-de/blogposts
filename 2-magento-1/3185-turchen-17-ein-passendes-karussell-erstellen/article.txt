@@ -1,0 +1,166 @@
+Article-meta: 
+
+----
+
+Title: Türchen 17: Ein passendes Karussell erstellen
+
+----
+
+Date: 2012-12-17
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Karussells sind bei Webseiten und Web-Shops gleichermaßen beliebt und werden häufig eingesetzt. So lassen sich mehrere Informationen an einer presenten Stelle, meist komplett above the fold, unterbringen. Die meisten Themes liefern ein Karussell gleich mit, in den meisten Fällen kann dies nur sehr umständlich und mit HTML-Kenntnissen gepflegt werden. Bei einem so wichtigen Element ist natürlich nicht wünschenswert und hat war der Anlass, eine eigene Extension zu erstellen.
+
+
+----
+
+Text: Der Erfolg einer gelungenen Extension liegt in der Konzeption. Folgende Anforderungen sollte das Karussell erfüllen:
+<ul><li>Hohe Usability für den Redakteur</li>
+	<li>Flexibilität</li>
+	<li>Erweiterbar</li>
+</ul>
+Aus diesen Anforderungen lassen sich schnell die benötigen Elemente der Extension ableiten:
+<ul><li>Eigene Tabelle</li>
+	<li>Grid</li>
+	<li>Flexibles Formular</li>
+</ul>
+
+Am Anfang aller Extensions steht die Konfigurationsdatei  in etc/modules, in diesem Fall <em>Webguys_Carousel.xml</em>.
+(code lang: xml)
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Webguys_Carousel>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Webguys_Carousel>
+    </modules>
+</config>
+(/code)
+
+Die Struktur der vollständigen Extension ist dieser Grafik zu entnehmen:
+(image: webguys-carousel-struktur2.png)
+
+Der Hauptteil der Extension besteht aus dem Backend, dies in der Tiefe zu erklären, würde den Rahmen hier jedoch sprengen. Das Formular und das Grid wird von den Magento-Standard-Klassen abgeleitet und stellt dieselben Funktionen bereit, wie man von der Oberfläche kennt und gewohnt sind. Einen ausführlichen Artikel über die Erstellung und Erweiterung von Formularen und Grids von Ben Robbie findet man <a href="http://codemagento.com/2011/02/grids-and-forms-in-the-admin-panel/">hier</a>.
+
+Über ein Setup-Skript:
+(code lang: xml)
+...
+        <resources>
+            <carousel_setup>
+                <setup>
+                    <module>Webguys_Carousel</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </carousel_setup>
+            <carousel_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </carousel_write>
+            <carousel_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </carousel_read>
+        </resources>
+...
+(/code)
+
+
+wird die Datenbank erstellt. Die Struktur kann später über upgrade-Skripte auf die eigenen Bedürfnisse angepasst werden.
+
+(code lang: php)
+<?php
+$installer = $this;
+$installer->startSetup();
+$installer->run("
+CREATE TABLE IF NOT EXISTS {$this->getTable('carousel')} (
+  `carousel_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `sortnr` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `text` text NOT NULL,
+  `bildklein` varchar(255) NOT NULL,
+  `bildgross` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `link_caption` varchar(255) NOT NULL,
+  `loggedIn` tinyint(1) NOT NULL DEFAULT '0',
+  `status` smallint(6) NOT NULL DEFAULT '0',
+  `created_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`carousel_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+");
+$installer->endSetup();
+(/code)
+
+Un ist die Basis fertig und es geht an die Ausgabe. An dieser Stelle gibt es mehrere Möglichkeiten, vor allem steht die Entscheidung, welches JS-Framework genutzt werden soll. Persönlich finde ich Prototype gar nicht so schlecht, jedoch arbeite ich mit JQuery um Längen lieber, weshalb ich JQuery über ein Layout-Handle einbinde, um das Karussell darzustellen. Es gibt zahlreiche fertige Karussells auf Basis von JQuery, mein Favorit ist <a href="http://sorgalla.com/jcarousel/">jcarousel</a> von <a href="http://sorgalla.com">Jan Sorgalla</a>. Diese Erweiterung auf Basis von JQuery bietet ein flexibles Karussell mit ein paar schönen Funktionen, sowie komplett anpassbaren CSS via Skins. So kann man schnell das Layout anpassen, ohne das Rad immer neu erfinden zu müssen.
+
+Das mitgelieferte Layout-Update fügt das Template und die benötigten Javascript-Dateien hinzu und kann mittels 
+(code lang: php)
+<?php echo $this->getChildHtml('carousel') ?>
+(/code)
+an der benötigen Stelle dargestellt werden.
+
+Das nötige HTML stellt das Template <em>carousel.phtml</em> zur Verfügung, dort wird über die Collection die verfügbaren Slides mithilfe der Konfigurationsoptionen gesammelt und in der notwenigen Syntax ausgegeben. Das Minimal-Beispiel stellt die Funktionsweise dar:
+(code lang: html)
+<?php
+	$_items = $this->getCarouselItems(Mage::app()->getStore()->getId());
+	$_media = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery('#carousel').jcarousel({
+            wrap: 'circular'
+        });
+    });
+</script>
+
+<ul id="carousel" class="jcarousel-skin-tango">
+    <?php foreach ($_items AS $_item) : ?>
+        <li>
+            <a href="<?php echo $_item->getLink(); ?>">
+                <img src="<?php echo $_media . $_item->getBildgross(); ?>" alt="<?php echo $_item->getTitle(); ?>" />
+            </a>
+        </li>
+    <?php endforeach; ?>
+</ul>
+(/code)
+
+Der Vorteil mit diesem System liegt in der modularen Verwendung. So ist es beispielsweise auch möglich, diese Extension mit minimalem Aufwand so einzusetzen, dass es das Karussell eines gekauften Themes bedienbar macht. Die fertige Extension könnt ihr euch (file: Webguys_Carousel.zip text: hier herunterladen). Über Feedback freue ich mich natürlich.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3185

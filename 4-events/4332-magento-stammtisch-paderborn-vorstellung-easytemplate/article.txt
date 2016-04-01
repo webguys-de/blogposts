@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Magento Stammtisch Paderborn - Vorstellung Easytemplate
+
+----
+
+Date: 2015-09-27
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Auf dem letzten Magento Stammtisch in Paderborn durfte ich unsere Erweiterungen "Easytemplate" vorstellen. Sebastian von MaxCluster war zudem so freundlich den Vortrag in ein Video gießen zu lassen. Aber seht selbst:
+
+
+
+----
+
+Text: (youtube: https://www.youtube.com/watch?v=FhMM2gK8EBo width: 635 height: 390)
+
+Das ganze ist natürlich auf Github unter <a href="https://github.com/webguys-de/EasyTemplate">https://github.com/webguys-de/EasyTemplate</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4332

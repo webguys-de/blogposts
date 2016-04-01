@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps im Februar 2011
+
+----
+
+Date: 2011-02-21
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Leider leider gelingt es mir im Moment kaum mich regelmäßig um die Lesetipps zu kümmern. Dabei haben sie doch immer viel positives an Feedback gegeben. Statt, wie früher, einmal wöchentlich ein paar Lesetipps zu veröffentlichen habe ich mir überlegt dies nun einmal monatlich zu tun. Also Bookmarks raus und los...
+
+----
+
+Text: Ebay besitzt nun 49% an Magento und alle schreien: Wieso, Weshalb - Warum? Einige lesenswerte Meinungen dazu gibt es von <a href="http://www.matthias-zeis.com/archiv/aktuelle-diskussion-um-magento-was-sind-eure-bedenken">Matthias Zeis </a>, <a href="http://romanzenner.com/de/blog/magentos-wohlfuehl-community/">Roman Zenner</a> und natürlich unsere Community Manager <a href="http://riconeitzel.de/arbeit-und-buero/magento-und-die-sogenannte-wohlfuhl-community-114.html">Rico Neitzel</a>. Den Stein ins Rollen brachte übrigens der Artikel von <a href="http://www.excitingcommerce.de/2011/02/ebay-und-die-perspektiven-f%C3%BCr-magento.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed:+ExcitingCommerce+%28Exciting+Commerce%29">Jochen Krisch</a>. Meine Meinung dazu? Viel viel rauch um nichts. Selbst wenn Magento Inc. entscheiden sollte die Community-Edition weniger gut zu behandeln so liegt es an uns dieses Produkt, vergleichbar zu z.B. Type3 oder Wordpress, weiterzuführen. Ich mache mir absolut gar keine Sorgen das uns das relativ problemlos gelingt - und wenn ich selbst durch Deutschland toure um die Unterstützer unter einen Hut zu bringen.
+
+Fabrico hat einen <a href="http://www.fabrizio-branca.de/magento-two-level-caching.html">ausführlichen Artikel zur Magento Cache-Optimierung</a> veröffentlicht.  Dabei deckt er auch noch eine "kleine" logische Inkonsistenz auf. Wirklich gute Arbeit.
+
+Die restlichen Link-Tipps nun als Aufzählung:
+<ul><li><a href="http://inchoo.net/ecommerce/magento/how-to-add-external-javascript-css-file-to-magento/">How to add an external javascript/css file to Magento?</a></li>
+	<li><a href="http://www.magentocommerce.com/blog/comments/developer-designer-and-business-courses-from-magento/">Developer, Designer and Business Courses from Magento!</a></li>
+	<li><a href="http://www.phpmonkeys.de/2011/01/19/netbeans-7-0-ein-preview/">Netbeans 7.0 – ein Preview</a></li>
+	<li><a href="http://inchoo.net/online-marketing/magento-conversion-rate-optimization-cart-and-checkout/">Magento Conversion Rate Optimization – Cart and Checkout</a></li>
+	<li><a href="http://alanstorm.com/magento_compiler_path">Magento Compiler Mode</a></li>
+	<li><a href="http://ringsdorff.net/2011/01/24/netresearch-wird-magento%E2%80%99s-corporate-representative-in-europa/">Netresearch wird Magento’s corporate representative in Europa</a></li>
+</ul>
+Viel Spaß beim Lesen!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1448

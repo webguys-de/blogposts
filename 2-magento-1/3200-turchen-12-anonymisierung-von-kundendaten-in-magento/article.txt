@@ -1,0 +1,140 @@
+Article-meta: 
+
+----
+
+Title: Türchen 12: Anonymisierung von Kundendaten in Magento
+
+----
+
+Date: 2012-12-12
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: andreas-von-studnitz
+
+----
+
+Article-content: 
+
+----
+
+Intro: <p>Viele werden die Situation kennen: Als Basis für die lokale Entwicklungs-Instanz von Magento dient ein Datenbank-Dump des Live-Systems. Dies erspart einem das Anlegen von Beispieldaten und ist vor allem bei der Fehlersuche unerlässlich. Denn wie soll man einen Fehler finden, der mit den Beispieldaten gar nicht auftritt? Leider ist dieses Vorgehen bedenklich, was den Datenschutz angeht. Besonders problematisch wird es auch, wenn zum Beispiel versehentlich Emails an Kunden ausgelöst werden. Um dies zu vermeiden, sollten auf allen Entwicklungssystemen alle Kundendaten anonymisiert oder komplett entfernt werden.</p>
+
+
+----
+
+Text: <h2>Löschen oder Anonymisieren?</h2>
+Wenn man 100% sicher sein will, keine Kundendaten im System zu haben, sollte man diese Daten erst gar nicht in den Datenbank-Dump einschließen. Am einfachsten geht das mit dem Kommandozeilen-Tool <a href="https://github.com/netz98/n98-magerun#stripped-database-dump" target="_blank">n98-magerun</a> von Christian Münch, das (neben vielen anderen) diese Funktion integriert. Selbstverständlich kann man die entsprechenden Datenbank-Tabellen auch im Nachhinein leeren.
+Sollte man hingegen Kunden- und/oder Bestelldaten zum Testen benötigen, ist es häufig sehr aufwändig, eine ausreichende Anzahl Kunden oder Bestellungen manuell oder mit einem Skript anzulegen. Spätestens, wenn es um die Entwicklung von Statistikfunktionen oder um die Analyse eines einzelnen Kunden- oder Bestellungsdatensatzes geht, genügt dieser Ansatz nicht mehr. An dieser Stelle sollte man stattdessen die bestehenden Datensätze verwenden und anonymisieren.
+
+<h2>Die richtigen Daten anonymisieren</h2>
+Neben den offensichtlichen Kunden- und Bestellunsgdaten gibt es noch eine Reihe zusätzlicher Datensätze, die ebenfalls anonymisiert werden sollten:
+<ul><li>Kundenadressen</li>
+	<li>Bestelladressen</li>
+	<li>Quotes (Warenkörbe)</li>
+	<li>Quote-Adressen</li>
+	<li>Newsletter-Abonnenten</li>
+</ul>Eine weitere interessante Frage: Welche Attribute sollten anonymisiert werden? Wählt man zu wenige, werden möglicherweise Rückschlüsse auf den Original-Kunden ermöglicht - in diesem Fall ist die Anonymisierung nicht ausreichend. Werden hingegen zu viele gewählt, Erzeugt man möglicherweise Inkonsistenzen in den Datensätzen. Ein Beispiel wäre das Land oder die Postleitzahl des Kunden: anhand dieser Daten werden Versandkosten, verfügbare Zahlungsarten etc. in Magento bestimmt. Bei der Nachstellung einer bestimmten Bestellung erhält man so möglicherweise ein falsches Ergebnis.
+Bei der Erstellung meines Anonymisierungs-Moduls habe ich mich für die Anonymisierung der folgenden Felder entschieden:
+<ul><li>prefix</li>
+	<li>firstname</li>
+	<li>middlename*</li>
+	<li>lastname</li>
+	<li>suffix*</li>
+	<li>email</li>
+	<li>company</li>
+	<li>street</li>
+	<li>telephone</li>
+	<li>fax*</li>
+	<li>taxvat*</li>
+	<li>remote_ip</li>
+</ul>Alle weiteren Felder sind nicht personenbezogen - aus dem Wohnort und den bestellten Produkten lassen sich normalerweise keine Rückschlüsse auf die bestellende Person ziehen.
+Die mit einem Sternchen markierten Feldinhalte werden dabei einfach gelöscht, da sie selten systemrelevant sind. Alle anderen werden sinnvoll ersetzt.
+
+<h2>Vorgehen bei der Ersetzung</h2>
+Der einfachste Ansatz bei der Ersetzung wäre, Zufallszeichen einzufügen. Während dies den Zweck des Anonymisierens erfüllt, werden die Datensätze anschließend unlesbar. Um das zu vermeiden, können echte Daten eingesetzt werden, die aber natürlich keinen echten Personen entsprechen sollten. In meinem Modul nutze ich hierfür den Webservice <a href="http://fakester.biz/" target="_blank">fakester.biz</a>, der Personendaten auch in größeren Mengen bereitstellt. Ein Datensatz sieht z.B. wie folgt aus (JSON-Format):
+<pre>{
+    "name":"Prohaska-McLaughlin",
+    "first_name":"Manuela",
+    "last_name":"Raynor",
+    "prefix":"Mrs.",
+    "suffix":"LLC",
+    "city":"South Tristianview",
+    "city_prefix":"New",
+    "city_suffix":"stad",
+    "country":"Armenia",
+    "secondary_address":"Apt. 971",
+    "state":"Louisiana",
+    "state_abbr":"FL",
+    "street_address":"235 Wolf Vista",
+    "street_name":"Heathcote Ridge",
+    "street_suffix":"Knolls",
+    "zip_code":"45097",
+    "bs":"enhance proactive technologies",
+    "catch_phrase":"Balanced well-modulated focus group",
+    "domain_name":"durgan.info",
+    "domain_suffix":"org",
+    "domain_word":"hamill",
+    "email":"stewart.bauch@marvin.biz",
+    "free_email":"gianni.bosco@gmail.com",
+    "ip_v4_address":"180.229.218.93",
+    "ip_v6_address":"a70c:b72c:6de:e671:f03c:a8b6:25c6:d74c",
+    "user_name":"bret_borer"
+}</pre>
+Für die oben genannten Felder sind also entsprechende Datenfelder vorhanden.
+Schön wäre es natürlich noch, wenn in den einzelnen Datensätzen, die zusammen gehören, auch die gleichen Daten zum Ersetzen verwendet würden. Als Beispiel: Ein Kunde trägt üblicherweise den gleichen Namen in den Kundendaten, in seiner Kundendadresse im Adressebuch und in seiner Liefer- oder Rechnungsadresse bei Bestellungen ein. Dieser Name wird anschließend auch in die Bestellung und die Bestelladresse übernommen. Hier sollte also auch nach der Anonymisierung überall der gleiche Name stehen.
+
+<h2>Das Modul: IntegerNet_Anonymizer</h2>
+Zu den aufgelisteten Anforderungen habe ich ein Modul gebaut, das unter <a href="https://github.com/integer-net/Anonymizer" target="_blank">https://github.com/integer-net/Anonymizer</a> auf GitHub bereit steht und kostenlos genutzt werden kann. Nach der Installation kann es wie folgt aufgerufen werden:
+<ul><li>Im Admin-Bereich von Magento unter System -> Werkzeuge -> Anonymizer</li>
+	<li>Per Kommandozeile: php -f shell/anonymizer.php (empfohlen)</li>
+</ul>Es geht dabei (etwas vereinfacht) wie folgt vor:
+<ul><li>Anonymisiere Kundendaten
+		<ul><li>Anonymisiere zugehörige Newsletter-Empfänger</li>
+			<li>Anonymisiere zugehörige Warenkörbe</li>
+			<li>Anonymisiere zugehörige Bestellungen</li>
+			<li>Anonymisiere zugehörige Kundenadressen
+				<ul><li>Anonymisiere zugehörige Warenkorbadressen</li>
+					<li>Anonymisiere zugehörige Bestelladressen</li>
+				</ul></li>
+		</ul></li>	
+	<li>Anonymisiere verbleibende Newsletter-Empfänger</li>
+	<li>Anonymisiere verbleibende Bestellungen
+		<ul><li>Anonymisiere zugehörige Bestelladressen</li>
+		</ul></li>
+	<li>Anonymisiere verbleibende Warenkörbe
+		<ul><li>Anonymisiere zugehörige Warenkorbadressen</li>
+		</ul></li>
+	<li>Anonymisiere verbleibende Bestellungadressen
+		<ul><li>Anonymisiere zugehörige Warenkorbadressen</li>
+		</ul></li>
+	<li>Anonymisiere verbleibende Warenkorbadressen</li>
+</ul>Sofern vorher Daten zusammengehörig waren, sind sie das auch nach der Anonymisierung noch.
+Die Nachteile dieser Lösung sollen natürlich nicht verschwiegen werden. Wegen der komplexen Zusammenhänge ist es in der aktuellen Version des Moduls nicht möglich, einen einmal begonnenen Anonymisierungsprozess zu einem späteren Zeitpunkt fortzusetzen. Da die Magento-eigenen Models verwendet werden, ist die Performance des Moduls nicht so, wie sie bei einem reinen Datenbank-Tool sein könnte. Bei größeren Datenmengen kann das Modul daher durchaus an seine Grenzen stoßen.
+
+<h2>Fazit</h2>
+Mit dem <a href="https://github.com/integer-net/Anonymizer" target="_blank">Anonymizer</a> lassen sich alle Kundendaten und zugehörige Datensätze wie Adressen und Bestellungen einfach anonymisieren, sodass auch Zusammenhänge bestehen bleiben und "schöne" Beispieldaten im System verbleiben. Über Rückmeldungen zum Beitrag oder zum Modul oder über Interesse bei der Mitarbeit würde ich mich sehr freuen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3200

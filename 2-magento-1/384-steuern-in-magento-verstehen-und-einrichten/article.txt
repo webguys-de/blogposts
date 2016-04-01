@@ -1,0 +1,91 @@
+Article-meta: 
+
+----
+
+Title: Steuern in Magento verstehen und einrichten
+
+----
+
+Date: 2010-09-22
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento bietet die Möglichkeit, Steuerkonstrukte für beliebig komplexe Shops zu entwerfen und zu verwalten. In diesem Beispiel richten wir den Shop für den Einsatz im Deutschland ein. Um die Steuern für den deutschen Markt einzurichten, gibt es einige Stellen, an denen man zugreifen muss, um die Steuern einzurichten. Für den Anwender gibt es (mindestens) zwei Möglichkeiten, diese einzurichten.
+
+
+----
+
+Text: Der erste Ansatz ist einfach, über Magento-Connect wird eine Extension installiert. Diese heißt "<a href="http://www.magentocommerce.com/magento-connect/TechDivision/extension/3399/techdivision_germany">German Shop</a>" und kommt aus dem Hause der <a href="http://www.techdivision.com/">Techdevision</a>. Diese Erweiterung übernimmt die komplette Arbeit und verfügt darüber hinaus auch noch über einige Template-Änderungen, sowie über die Integration der AGB. Es handelt sich quasi um ein rundrum Sorglos-Paket, jedoch ist es auch von Vorteil zu wissen, welche Arbeiten die Erweiterung im Bereich Steuern erledigt.
+
+Der zweite Ansatz setzt eigene Initiative voraus, denn jetzt erstellen wir dies von Hand und lernen, wo die kleinen Schrauben sind, an denen man drehen kann, wenn es doch nicht so aussieht oder funktioniert wie es soll. Die Einrichtung gliedert sich in 9 Schritte, die chronologisch abgearbeitet werden sollten, um ein brauchbares Ergebnis zu erzielen.
+
+<strong>1. Schritt: Produktsteuerklassen festlegen</strong>
+<em>Menu: Verkäufe > Steuern > Produktsteuerklassen</em>
+
+Die bereits bestehenden Klassen übernehmen wir der und passen diese sprachlich an. Danach haben wir in der Liste folgende Klassen definiert:
+(image: bild1-500x95.png)<strong>2. Schritt: Kundensteuerklasse definieren</strong>
+<em>Menu: Verkäufe > Steuern > Kundensteuerklassen</em>
+
+Den bereits bestehenden Eintrag ändern wir ab, danach erhalten wir folgende Liste:
+(image: bild2-500x76.png)<strong>3. Steuersätze verwalten</strong>
+<em>Menu:  Verkäufe  > Steuern > Steuerzonen und -sätze verwalten</em>
+
+Die bestehenden Einträge löschen wir zu Beginn, diese werden nicht mehr benötigt. Am Anschluss legen wir zwei neue Einträge an, sodass wir am Ende mit Stolz auf diese Liste schauen können:
+(image: bild3-500x93.png)<strong>4. Steuerregeln definieren</strong>
+<em>Menu: Verkäufe > Steuern > Steuerreglen verwalten</em>
+
+Ebenso wie in Schritt 4 werden alle vorhandenen Steuerklasse gelöscht und im Anschluss drei neue angelegt. Zum Ende von Schritt vier sieht wird man diese Liste erblicken:
+(image: bild4-500x82.png)<strong>5. Lokale Einstellungen anpassen
+</strong>
+
+Um das richtige Ergebnis zu erlangen, müssen die Einstellungen an mehreren Stellen kontrolliert und ggfs. angepasst werden.
+
+<strong>6 Versandeinstellungen</strong>
+<em>Menu: System > Konfiguration > Verkäufe > Versandeinstellungen</em>
+(image: bild5-500x128.png)<strong>7. Steuerklasse für den Versand einrichten</strong>
+<em>Menu: System > Konfiguration > Verkäufe > Steuern > Versand</em>
+(image: bild7-500x75.png)
+
+<strong>8. Allgemeine Steuerklassen Konfiguration</strong>
+<p>
+<em>Menu: System > Konfiguration > Steuer</em>
+In den verschiedenen Bereich ist möglich die Mehrwertsteueranzeige sowie Preisberechnung den jeweiligen Bedürfnissen anzupassen.
+</p>
+
+<strong>9. Cache leeren</strong>
+<em>Menu: System > Cacheverwaltung</em>
+Um die vorgenommenen Anpassungen auch sehen zu können, muss der Magento-Cache geleert werden.
+
+Abschließend zu dieser Lösung muss gesagt werden, dass für deutsche Shops noch eine Bestätigung der AGB nötig ist, diese Einrichtung fehlt an dieser Stelle und wird in einem neuen Beitrag erklärt; in der Extension <a href="http://www.magentocommerce.com/magento-connect/TechDivision/extension/3399/techdivision_germany">German Shop</a> ist dies bereits - neben vielen anderen Dingen wie Vorlagen - enthalten.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 384

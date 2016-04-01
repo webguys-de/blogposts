@@ -1,0 +1,63 @@
+Article-meta: 
+
+----
+
+Title: Türchen 14: Magento aktualisieren
+
+----
+
+Date: 2010-12-14
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 14 wird kniffelig für den Vertrieb  ebenso wie für Entwickler: Magento aktualisieren. Ein Update auf die aktuelle Version kann schwierig werden, muss es jedoch nicht. Es hängt vor allem vom Projekt und den eingesetzten Extensions ab und kann daher schlecht zeitlich geschätzt werden.
+
+
+----
+
+Text: Wer jedoch die Grundregel befolgt und keine Änderungen an <em>app/core</em> vorgenommen und statt dessen alles in eigene Extensions in <em>app/local</em> abgelegt hat, der spart sich einiges an mühseliger Arbeit. Nun aber der Reihe nach.
+
+<strong>1. Schritt: Cache leeren </strong>
+
+<strong>2. Schritt: Entweder ein Backup machen oder neuen Branch erstellen</strong>
+
+<strong>3. Schritt: Datenbank-Backup </strong>
+
+<strong>4. Schritt: Magento aktualisieren</strong>
+Dazu wechselt man ins Backend und dann über <em>System > Magento Connect > Magento Connect Manager</em> und gibt folgenden Extension-Key an: <strong>magento-core/Mage_All_Latest</strong> und bestätigt mit "Install". Der folgende Installationsprozess benötigt eine Weile, es sind eine Menge an Daten - Geduld. Nach einem erfolgreichen Ende, wechselt man ins Backend, parallel auch ins Frontend. Sollte die Seite nicht aufgerufen werden können, weil es zu einem Fehler kommt, dann bitte die Inhalte aus <em>/app/code/core/Zend/Cache/</em> löschen.
+
+Jetzt folgt der schwierige Teil des Updates - es müssen alle Änderungen nachgezogen oder neu implementiert werden. Vor allem an den Übersetzungen hat sich einiges getan, hier werden einige Fehler auffallen. Am besten ist es mit einer lokalen Übersetzungsdatei zu arbeiten, um nicht nach jedem Update Übersetzungen anzupassen. 
+
+Am Ende heißt es nun testen, testen und nochmals testen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1159

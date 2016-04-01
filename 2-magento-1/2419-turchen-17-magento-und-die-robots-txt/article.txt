@@ -1,0 +1,154 @@
+Article-meta: 
+
+----
+
+Title: Türchen 17: Magento und die robots.txt
+
+----
+
+Date: 2011-12-17
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender,seo
+
+----
+
+Author: b-wunderlich
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die robots.txt ist eine einfache Textdatei, die im Stammverzeichnis einer Webseite abgelegt wird. Darin werden Regeln für die Indexierung durch Suchmaschinen notiert. Alle Webcrawler, die den <a href="http://de.wikipedia.org/wiki/Robots_Exclusion_Standard" target="_blank">Robots Exclusion Standard</a> implementieren, schauen sich zuerst diese Datei an, bevor sie mit dem Crawling der Webseite beginnen. Dabei werden dann die formulierten Regeln beachtet.
+
+----
+
+Text: Ein einfaches Beispiel:
+
+(code)User-agent: *
+Disallow: /noindex.html
+Disallow: /noindex/
+Disallow: /*.css$
+Sitemap: http://www.domain.de/sitemap.xml
+(/code)
+
+Im ersten Block (Zeile 1 bis 4) werden Regeln für alle Crawler definiert: Der Zugriff auf die Datei /noindex.html, den Unterordner /noindex/ (inkl. aller weiteren Unterverzeichnisse und Dateien darin) und alle CSS-Dateien wird unterbunden.
+
+In Zeile 5 befindet sich schließlich noch der Verweis auf eine <a href="http://de.wikipedia.org/wiki/Sitemaps#XML-Sitemap-Format" target="_blank">XML-Sitemap</a>.
+
+Man kann also über eine robots.txt Crawlern zeigen, welche Bereiche der Webseite sie explizit aufnehmen (Sitemap) und welche sie ignorieren sollen (Disallow).
+<h3>Worin liegt der Unterschied zum Meta-Tag im HTML-Head?</h3>
+Das Meta-Tag im HTML-Head sieht gewöhnlich so aus:
+
+(code)<meta name="robots" content="INDEX,FOLLOW">(/code)
+
+Ist der Zugriff auf eine Seite oder einen Bereich durch die robots.txt untersagt, werden diese Dokumente gar nicht erst vom Server abgerufen, was Traffic spart und ggf. die Serverlast etwas reduziert. Hingegen findet dann eine Weiterverfolgung von Links (FOLLOW) auch nicht mehr statt.
+
+Die Blockade über die robots.txt ist flexibler und grobgranularer, da sie regelbasiert ist. Muss man bei den Meta-Tags jedes einzige HTML-Dokument anpassen, so können hier ganze Verzeichnisbäume in einer Regel gesperrt werden. PDF-Dokumente beispielsweise haben keine Robots-Meta-Tags, sodass diese grundsätzlich nur über die robots.txt ausgeschlossen werden können.
+
+Bei der robots.txt können verschiedene Crawler unterschiedlich behandelt werden, z.B.:
+
+(code)User-agent: Googlebot-Image
+Disallow: /(/code)
+
+Mit diesem Block wird nur der Crawler für die Bilder-Suche von Google ausgeschlossen, alle andere crawlen munter weiter.
+<h2>Warum man einige Seiten von Suchmaschinen fernhalten sollte</h2>
+Auf den ersten Blick mag es unsinnig erscheinen, Seiten von Suchmaschinen auszuschließen. Aber auch hier ist weniger häufig mehr. Warum sollen Suchmaschinen irrelevante Seiten indexieren? Diese werden von Google und Co. sowieso abgewertet und tauchen dann in den <a href="http://de.wikipedia.org/wiki/SERP" target="_blank">SERPs</a> nicht auf. Sollten sie dies trotzdem tun und ein Nutzer klickt auf das Suchergebnis,
+wird er wenig Nutzen aus einer solchen Seite ziehen (z.B. ein leerer Warenkorb). Dann doch lieber auf einer spannenden Kategorie- oder Produktseite landen.
+
+Außerdem sollte man das manchmal kleine "Aufmerksamkeitsfenster" von Suchmaschinen möglichst effizient nutzen und sich auf das Relevante fokussieren.
+
+Der bereits genannte Aspekt der Reduzierung des Traffics und der Verbesserung der Performance könnte ebenfalls in einigen wenigen Konstellationen als Argument zählen.
+<h2>Die robots.txt in Magento</h2>
+Es gibt sie nicht! Magento liefert im Standard überhaupt keine robots.txt aus. Diese wird auch nicht automatisch erstellt, wenn man eine XML-Sitemap generiert. Auch wird
+keine Warnung ausgegeben, dass die Datei fehlt. Die Suche im Code ist auch erfolglos. Kurz: Magento ignoriert dieses Thema vollständig.
+
+Man muss also selbst Hand anlegen und alle für Suchmaschinen uninteressanten Bereiche ausklammern. Bei vielen Shops mit aktiviertem mod_rewrite sieht das (in Summe) etwa so aus:
+
+(code)User-agent: *
+Disallow: /index.php/
+Disallow: /*?
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*.php$
+Disallow: /admin/
+Disallow: /app/
+Disallow: /catalog/
+Disallow: /catalogsearch/
+Disallow: /checkout/
+Disallow: /customer/
+Disallow: /downloader/
+Disallow: /js/
+Disallow: /lib/
+Disallow: /media/
+Disallow: /newsletter/
+Disallow: /pkginfo/
+Disallow: /report/
+Disallow: /review/
+Disallow: /skin/
+Disallow: /var/
+Disallow: /wishlist/(/code)
+
+Im Prinzip werden damit die Seiten einiger relevanter Core-Module gesperrt, so zum Beispiel des Bestellprozesses (checkout), des Kundenmenüs (customer) und des Wunschzettels (wishlist).
+
+Die ersten Zeilen sind die spannenden: Mit der ersten Disallow-Regel (Zeile 2) werden alle Seiten blockiert, die nicht über einen URL-Rewrite laufen. Schaltet man im Magento-Backend
+die Webserver Rewrites aus oder passiert dies aufgrund eines Fehlers, ist der SEO-Super-Gau perfekt: Der ganze Shop fliegt aus dem Index. Also Vorsicht!
+
+Über die zweite Regel (Zeile 3) lässt sich trefflich streiten und hier gibt es auch Raum für individuelle Anpassungen. Das Pattern /*? schließt alle Seiten aus, in denen URL-Parameter enthalten sind, also auch die Kategorieseiten ab Seite 2 (blättern). Dies wird vornehmlich gemacht, um das Problem des <a href="http://de.wikipedia.org/wiki/Duplicate_Content" target="_blank">Duplicate Contents</a> etwas zu entschärfen. Diese Seiten sind sich naturgemäß recht ähnlich, da sie denselben Browsertitel, dieselbe Überschrift und ggf. auch noch denselben CMS-Block enthalten. Magento stellt diese Seiten im Standard alle auf INDEX, FOLLOW.
+
+Auch Suchergebnisseiten werden über diese Regel ausgeschlossen. Shops, die die TagCloud mit beliebten Suchanfragen nutzen (catalogsearch/term/popular) wollen, sollten auf die Blockade des Moduls <em>catalogsearch</em> (Zeile 10) verzichten und Suchergebnisseiten mit dem Parameter <em>q</em> nach den Disallow-Regeln wieder zulassen:
+
+(code)Allow: /*?q=
+Allow: /*&q=(/code)
+
+Wer die Kundenmeinungen zu seinen Produkten bei Google drin haben möchte, sollte nicht das Modul <em>reviews</em> blockieren.
+
+Interessant ist auch Zeile 7, in der der Zugriff auf das Magento-Admin-Panel unterbunden wird. Wer bei der Installation von Magento unnötigerweise das Backend verstecken wollte, wird sich an dieser Stelle dann ggf. wieder verraten (Stichwort <a href="http://de.wikipedia.org/wiki/Security_through_obscurity" target="_blank">Security through Obscurity</a>).
+<h2>Mehrere Webseiten und Stores einbeziehen</h2>
+Da die robots.txt im Stammverzeichnis liegt, greift diese natürlich bei allen Webseiten, Stores und StoreViews gleichermaßen. Spätestens bei der Einbindung der Sitemap muss man hier aber individualisieren, da diese immer inklusive Domain angegeben wird. Zwei Lösungswege sollen hier kurz genannt sein:
+<ol><li>Die Stores werden über Unterverzeichnisse eingebunden und per Symlinks mit Magento
+verknüpft. In diesen Verzeichnissen kann dann eine individuelle robots.txt hinterlegt
+werden.</li>
+	<li>Man bastelt sich per mod_rewrite und PHP eine Weiche, die nach Domain entsprechend
+unterschiedliche robots.txt-Dateien ausliefert. Wenn man es ordentlich macht, verpackt man das
+in ein Modul und knüpft es an entsprechende Konfigurationswerte im Backend (und
+stellt es der Community zur Verfügung).</li>
+</ol><h2>Testen der robots.txt</h2>
+Da die robots.txt frei zugänglich ist, kann man diese einfach über den Browser in jeder Webseite und jedem Shop abrufen:
+
+(code)http://www.domain.tld/robots.txt(/code)
+
+Für Nutzer des Mozilla Firefox gibt es eine kleine Extension namens <a href="https://addons.mozilla.org/de/firefox/addon/roboxt/" target="_blank">roboxt!</a>, die in der Info-Leiste eine kleine Ampel anzeigt, ob die aktuell dargestellte Seite von der robots.txt der Domain blockiert ist:
+
+(image: roboxt.png)
+
+Desweiteren bietet auch Google in seinen Webmaster-Tools einige Werkzeuge und Informationen zur robots.txt an.
+<h2>Fazit</h2>
+Die robots.txt ist kein Wundermittel, das das Ranking bei Suchmaschinen spürbar verbessert. Aber es ist ein nützliches Detail für das Feintuning des eigenen Magento-Shops. Man muss allerdings wissen, was man tut und sollte dies mit Bedacht tun, da kleinste Tippfehler Bereiche der Webseite oder gar den gesamten Shop aus dem Index kegeln können.
+
+Wichtig wird die robots.txt, wenn man vollautomatisch den Crawlern den Weg zur XML-Sitemap weisen und diese nicht überall händisch anmelden möchte.
+
+Vielleicht gibt es hierfür in naher Zukunft ja noch ein Modul, das diese - wenn auch kleine - Lücke schließt und das Handling bei mehreren Stores vereinfacht.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2419

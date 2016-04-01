@@ -1,0 +1,307 @@
+Article-meta: 
+
+----
+
+Title: Türchen 20: Hilfreiches rund um Warenkorbpreisregeln
+
+----
+
+Date: 2014-12-20
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: stefan-bothner
+
+----
+
+Article-content: 
+
+----
+
+Intro: Mit den Warenkorb-Preisregeln steht einem in Magento out-of-the-box ein mächtiges Tool zur Rabattierung auf Warenkorb-Ebene zur Verfügung. Jedoch haben Kunden immer wieder Anforderungen an z.B. zusätzlichen Bedingungen oder Automatisierungen. Auch gibt es z.B. bei der Implementierung der Validierung auf Kategorie-Ebene
+Stolperfallen, die einem die tägliche Arbeit erschwären kann. Dieser Beitrag zeigt an praktischen Beispielen wie man GiftCards generell aus der Rabatt-Berechnung ausschließt, ein neues Warenkrorb-Attribute für Bedingungen zur Verfügung stellt und validiert und ein mögliches Problem bei der Kategorie-Validierung auf Artikelebene bei konfigurierbaren Produkten umschifft.
+
+
+
+----
+
+Text: <h2>1. GiftCards aus der Rabattberechnung generell ausschließen</h2>
+
+GiftCards sollten grundsätzlich aus der Berechnung von Zeilenrabatten ausgeschlossen werden. Diese können wir zum einen für jede Regel manuell über z.B. die SKU steuern oder aber GiftCards global per Observer von der Einbeziehung auschließen. In einem lokalen Modul Namens Lokal_SalesRule definieren wir in unserer Observer-Klasse die Methode excludeGiftCard welche auf den Observer "sales_quote_collect_totals_before" lauscht. Hier durchlaufen wir alle Quote-Items und setzen für alle GiftCards-Items die Eigenschaft "no_discount".
+
+(code lang: php)
+<?php
+/**
+ * Do not process giftcard in sales rules
+ *
+ * Listens to:
+ * - sales_quote_collect_totals_before
+ *
+ * @param Varien_Event_Observer $observer
+ * @return void
+ */
+public function excludeGiftCard(Varien_Event_Observer $observer)
+{
+    $quote = $observer->getEvent()->getQuote();
+    /* @var $quote Mage_Sales_Model_Quote */
+
+    foreach ($quote->getAllItems() AS $item) {
+        if ($item->getParentItemId()) {
+            continue;
+        }
+        /* @var $item Mage_Sales_Model_Quote_Item */
+        if ($item->getProductType() == Enterprise_GiftCard_Model_Catalog_Product_Type_Giftcard::TYPE_GIFTCARD) {
+            $item->setNoDiscount(1);
+        }
+    }
+}
+(/code)
+
+Die collect-Methode des Quote-Discount-Models prozessiert nur Items durch den SalesRule-Validator wenn für dieses die "no_discount"-Eigenschaft false ist. Somit werden global alle GiftCards aus der Regelausführung/-prüfung ausgeschlossen. Es können über diese Methode programmatisch weitere beliebige Items anhand von Eigenschaften ausgeschlossen werden.
+
+<h2>2. Eigenes Warenkorb-Attribut für Bedingung: z.B. Eigenes Subtotal ohne GiftCards</h2>
+
+Manch einer möchte beispielsweise eine Regel nur angewendet bekommen wenn die Zwischensumme des Warenkorbs ohne eingerechnete GiftCards einen gewissen Wert überschreitet. Um das zu ermöglichen, müssen wir zum einen ein neues Address-Condition-Attribute definieren und zum anderen das Attribute an den Quote-Addresses zur Verfügung stellen. Beides können wir über einen Observer implementieren. Um ein neues Address- bzw. Quote-Attribute als Bedingung definieren zu können erweiteren wir unseren Observer mit nachfolgender Methode und lassen diese im Event "salesrule_rule_condition_combine" ausführen. Die neu zu validierende Eigenschaft lautet in unserem Fall "subtotal_incltax_without_giftcards".
+
+(code lang: php)
+<?php
+/**
+ * Add new condition for address / quote
+ *
+ * Listens to:
+ * - salesrule_rule_condition_combine
+ *
+ * @param Varien_Event_Observer $observer
+ * @return void
+ */
+public function addAddressCondition(Varien_Event_Observer $observer)
+{
+    $additional = $observer->getAdditional();
+    $conditions = $additional->getConditions();
+
+    if (!is_array($conditions)) {
+        $conditions = array();
+    }
+    $conditions[] = array(
+        'label' => 'Additional Cart Conditions',
+        'value' => array(
+            array('label' => Mage::helper('lokal_salesrule')->__('Subtotal WITHOUT GiftCards'),
+                'value' => 'lokal_salesrule/rule_condition_address|subtotal_incltax_without_giftcards',)
+        )
+    );
+    $additional->setConditions($conditions);
+}
+(/code)
+
+Jetzt können wir im Admin-Interface eine neue Bedingung auswählen. (siehe Screenshot)
+
+(image: auswahl.png)
+
+Zusätzlich benötigen wir jetzt noch das entsprechende Rule Condition Model. Die neu definierte Eigenschaft ("subtotal_incltax_without_giftcards") wird dort für virtuelle Warenkörbe auf der Rechungsadresse und bei Standard-Warenkörben auf der Versandadresse als Bedingung validiert.
+
+(code lang: php)
+<?php
+class Lokal_SalesRule_Model_Rule_Condition_Address extends Mage_Rule_Model_Condition_Abstract
+{
+    public function loadAttributeOptions()
+    {
+        $attributes = array(
+            'subtotal_incltax_without_giftcards' => Mage::helper('lokal_salesrule')->__('Subtotal WITHOUT GiftCards'),
+        );
+
+        $this->setAttributeOption($attributes);
+
+        return $this;
+    }
+
+    public function getAttributeElement()
+    {
+        $element = parent::getAttributeElement();
+        $element->setShowAsText(true);
+        return $element;
+    }
+
+    public function getInputType()
+    {
+        switch ($this->getAttribute()) {
+            case 'subtotal_incltax_without_giftcards':
+            return 'numeric';
+
+        }
+        return 'string';
+    }
+
+    public function getValueElementType()
+    {
+        return 'text';
+    }
+
+    public function getValueSelectOptions()
+    {
+        if (!$this->hasData('value_select_options')) {
+            switch ($this->getAttribute()) {
+                default:
+                    $options = array();
+            }
+            $this->setData('value_select_options', $options);
+        }
+        return $this->getData('value_select_options');
+    }
+
+    /**
+     * Validate Address Rule Condition
+     *
+     * @param Varien_Object $object
+     * @return bool
+     */
+    public function validate(Varien_Object $object)
+    {
+        $address = $object;
+        if (!$address instanceof Mage_Sales_Model_Quote_Address) {
+            if ($object->getQuote()->isVirtual()) {
+                $address = $object->getQuote()->getBillingAddress();
+            }
+            else {
+                $address = $object->getQuote()->getShippingAddress();
+            }
+        }
+        return parent::validate($address);
+    }
+}
+(/code)
+
+Der "subtotal_incltax_without_giftcards" Wert muss jetzt noch per Observer für die beiden Adress-Typen zur Verfügung gestellt werden. Hierfür hört die nachfolgende Methode auf den Event "sales_quote_collect_totals_before" wo der Wert berechnet und für die einzelnen Modelle gesetzt wird.
+
+(code lang: php)
+<?php
+/**
+ * Calculate subtotal without giftcard amounts
+ *
+ * Listens to:
+ * - sales_quote_collect_totals_before
+ *
+ * @param Varien_Event_Observer $observer
+ * @return void
+ */
+public function calcSubtotalWithoutGiftCards(Varien_Event_Observer $observer)
+{
+    $quote = $observer->getEvent()->getQuote();
+    /* @var $quote Mage_Sales_Model_Quote */
+
+    $gcRowsTotal = 0;
+    /* item is marked as deleted, so we have two items left, including card */
+    foreach ($quote->getAllItems() AS $item) {
+        if ($item->getParentItemId()) {
+            continue;
+        }
+        /* @var $item Mage_Sales_Model_Quote_Item */
+        if($item->getProductType() == Enterprise_GiftCard_Model_Catalog_Product_Type_Giftcard::TYPE_GIFTCARD){
+            $gcRowsTotal += $item->getRowTotalInclTax();
+        }
+    }
+    $quote->getShippingAddress()->setData('subtotal_incltax_without_giftcards',  $quote->getShippingAddress()->getSubtotalInclTax() - $gcRowsTotal);
+    $quote->getBillingAddress()->setData('subtotal_incltax_without_giftcards',  $quote->getBillingAddress()->getSubtotalInclTax() - $gcRowsTotal);
+}
+(/code)
+
+Jetzt können wir unsere neue Warenkorb-Bedingung einsetzen. Es kann die Bedingung konfiguriert werden, das zu validierende Objekt hat die entsprechend benötigte Eigenschaft erhalten und die Validierung ist implementiert.
+
+<h3>3. Regelbedingung für Kategorien auf Artikel-Ebene bei Configurable-Products</h3>
+
+Je nach Art der Kategorisierung von konfigurierbaren Produkten kann es bei der Validierung von Bedingungen auf Kategorien zur Problemen mit der Regelvalidierung kommen. Mage_SalesRule_Model_Rule_Condition_Product::validate (siehe nachfolgenden Code) validiert das konfigurierbare Produkt eines Quote-Items. Ist diese unwahr wird die selbe Bedingung auf das Produkt des ersten Child-Items (ein Simple) validiert. Da normalerweise Simples nicht katgorisiert werden müssen (Stichwort: Sichtbarkeit nirgendwo) und in Version >= EE 1.14.0.0 die zu validierenden Kategorien aus Mage_Catalog_Model_Product::getCategoryIds() gelesen werden, wird die Bedingung dann ggf. bei einem unkategorisierten Simple wahr. Somit würde die Regel ungewollt angewendet werden.
+
+<em>Mage_SalesRule_Model_Rule_Condition_Product::validate</em>
+
+(code lang: php)
+<?php
+/**
+ * Validate Product Rule Condition
+ *
+ * @param Varien_Object $object
+ *
+ * @return bool
+ */
+public function validate(Varien_Object $object)
+{
+    /** @var Mage_Catalog_Model_Product $product */
+    $product = $object->getProduct();
+    if (!($product instanceof Mage_Catalog_Model_Product)) {
+        $product = Mage::getModel('catalog/product')->load($object->getProductId());
+    }
+
+    $product
+        ->setQuoteItemQty($object->getQty())
+        ->setQuoteItemPrice($object->getPrice()) // possible bug: need to use $object->getBasePrice()
+        ->setQuoteItemRowTotal($object->getBaseRowTotal());
+
+    $valid = parent::validate($product);
+    if (!$valid && $product->getTypeId() == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
+        $children = $object->getChildren();
+        $valid = $children && $this->validate($children[0]);
+    }
+
+    return $valid;
+}
+(/code)
+
+An einem Beispiel konkretisiert:
+Eine Warenkorb-Regel soll nicht für Produkte aus einer bestimmten Kategorie X angewendet werden. Wir definieren unter "Regel nur auf Artikel im Warenkorb mit den..." "Kategorie enthält nicht X". Somit sind Produkte aus der Kategorie X ausgeschlossen. In unserem Shop sind nur die konfigurierbaren Produkte kategorisiert. Wird nun ein Produkt/Item validiert, welches in die Kategorie X verknüpft ist, ist für dieses Item die Validierung fehlgeschlagen, also unwahr. Jetzt wird das Produkt des Child-Items validiert auf die Kategorie X validiert. Da dieses jedoch nicht kategorisiert ist wird die Validierung wahr, es ist ja nicht in Kategorie X.
+
+Hinweis:
+Version bis EE 1.14.0.0 validieren auf die Kategorie-Id's aus dem Category-Product-Index (Mage_Catalog_Model_Product::getAvailableInCategories())
+Version ab EE 1.14.0.0 validieren auf Mage_Catalog_Model_Product::getCategoryIds() (ohne Index, macht die Regeldefinition komplizierter)
+
+Man könnte dieses Problematik jetzt zum einen damit umgehen, dass wir zusätzlich alle Simple-Products kategorisieren, was wir jedoch nicht wollen. Wir behelfen uns lieber wieder mit einem Observer über welchen wir das Produkt des Child-Items vor der Abarbeitung der Totals (vorallem Discount) durch eine Vererbung der Parent-Item-Kategorisierung anreichern. Das nachfolgende Beispiel funktioniert z.B. für Versionen >= EE 1.14.0.0.
+
+Wir lauschen auch hier wieder auf "sales_quote_collect_totals_before" und reichern das Child-Item-Product mit den Kategorien aus seinem Parent-Item-Product an.
+
+(code lang: php)
+<?php
+/**
+ * Inherit categories
+ *
+ * Listens to:
+ * - sales_quote_collect_totals_before
+ *
+ * @param Varien_Event_Observer $observer
+ * @return void
+ */
+public function inheritCategories(Varien_Event_Observer $observer)
+{
+    $quote = $observer->getEvent()->getQuote();
+    /* @var $quote Mage_Sales_Model_Quote */
+
+    /* item is marked as deleted, so we have two items left, including card */
+    foreach ($quote->getAllItems() AS $item) {
+        /** add parent product categories to item */
+        if($item->getParentItem()){
+            $categoryIds = Mage::helper('catalog/product')->getProduct($item->getParentItem()->getProductId(), null)->getCategoryIds();
+            $item->setProduct($item->getProduct()->setCategoryIds($categoryIds));
+        }
+    }
+}
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4179

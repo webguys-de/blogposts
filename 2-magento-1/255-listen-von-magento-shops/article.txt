@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Listen von Magento-Shops
+
+----
+
+Date: 2010-04-15
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Eine Liste von <a href="http://www.shoptrainer.de/shopsysteme/liste-mit-magento-shops.html">deutschsprachigen Magento-Shops</a> hat das Team von <a href="http://www.shoptrainer.de">Shoptrainer</a> zusammengestellt. Ein paar ganz spannende Seiten sind dabei - was ich persönlich ganz interessant fand und bis dato nicht wusste: Zalando.de, aus der TV-Werbung, ist auch ein Magento Kind :)
+
+Die Liste scheint Inspiration für den Beitrag <a href="http://www.webshopnews.net/2010/04/die-20-besten-magento-shops.html">Die 20 besten Magento-Shops</a> der TechDivision gewesen zu sein. Auch hier lohnt sich das rein schauen. Spannend wäre noch eine Budgetierung der einzelnen Projekte - aber das werden wir wohl nie erfahren ;)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 255

@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Magento Developer Foocamp: Gewinne einen Platz!
+
+----
+
+Date: 2011-07-08
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wir machen wieder Magento-Foocamp. Das heißt einige kompetente Magento-Entwickler treffen sich, sitzen zusammen, reden über Gott und die Welt: Natürlich auch über Magento. Dazu gibt es Hotelzimmer, Bier, Essen und Meer(blick). Unser Motto ist KnowHow-Transfer - auch gerne Agentur übergreifend. Und dieses Jahr verlosen wir einen Platz. <strong>Magst Du ihn gewinnen?</strong>
+
+----
+
+Text: Ganz einfach. Nimm deinen Facebook-Account, öffne <a href="https://www.facebook.com/magentopodcast">www.facebook.com/magentopodcast </a>und verewige dich mit dem Stichwort "Foocamp" auf der Pinnwand. Natürlich musst du vorher Fan werden ;) <em>(Der Rechtsweg ist ausgeschlossen, Einsendeschluss ist der 15.8.2011, der Gewinner wird zeitnah benachrichtigt)</em>
+
+<strong>Noch ein paar Fakten</strong>: Das Foocamp findet am <strong>22. - 23.10.2011 in Butjadingen</strong> statt. Für <strong>Hotel und Verpflegung ist gesorgt</strong>. Anfahrt zahlst du selber, sonst quasi nichts. Bis dato ist das Interesse an der Veranstaltung noch gering, deine Chancen stehen also gut :)
+
+(image: 2011-04-10-20.27.24-650x487.jpg)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1707

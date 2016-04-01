@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: In eigener Sache: Kompletter RSS-Feed
+
+----
+
+Date: 2012-04-27
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Mittlerweile wurde schon häufiger der Wunsch an uns herangetragen den kompletten RSS-Feed unserer Artikel auszuliefern und nicht nur den Anreißer. Das haben wir soeben umgestellt und wünschen viel Spaß beim Offline lesen :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2798

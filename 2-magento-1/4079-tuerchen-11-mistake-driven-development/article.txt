@@ -1,0 +1,137 @@
+Article-meta: 
+
+----
+
+Title: Türchen 11: Mistake Driven Development
+
+----
+
+Date: 2014-12-11
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: david-manners
+
+----
+
+Article-content: 
+
+----
+
+Intro: There are two things that make me feel human. Firstly, I feel human because my body is a wreck of injuries and I am starting to feel my age. Secondly, I regularly screw-up in life. Both of these stop me from feeling like superman and bring me crashing back to earth.
+
+
+
+----
+
+Text: Making mistakes is a very human thing to do, in fact I seem to do it very well without any formal training, but I guess practice makes perfect. We should not be so worried about making the actual mistake but should focus on dealing well when we or others make mistakes. Sadly this does not come easy, at least to me. For me I find that there are two situations that are particularity hard to deal with.
+
+<strong>When I cannot forgive myself for mistakes</strong>
+
+There have been many nights that I simply could not drift off to sleep because I was thinking of some way in which I have messed up today, or even worse something that happened years ago. No matter how positively situations are dealt with, I often seem to dwell on them for a long time.
+
+<strong>When I cannot forgive others for mistakes</strong>
+
+There have been times that I have forgotten that people are human and will make mistakes. When this happens I end up getting personally offended and being rude to people for the smallest of screw-ups.
+
+Technically, I think that these two situations come from the same root and so have the same solution. Though I like to separate them out in my mind.
+
+Let me just put this out there now - you and I will both screw-up. Everybody will screw-up and make mistakes and that is ok! Making the mistake is not the problem and will often be the best way in which we can learn. Now I am not saying we should encourage mistakes, but we should encourage the positive process of dealing with the mistake. Often simply allowing and helping people and ourselves to work through mistakes is enough here.
+
+If you are the one that made the mistake then admit it, figure out how to improve, and then move on. If it is someone else that has made the mistake then forgive them for it, offer help but mostly just give them the time and space to deal with it. It sounds so simple writing it down but it is hard and I still struggle with this.
+
+Hell, nobody is perfect. Be nice to each other, give each other time, space and help to learn, because speaking from experience you will probably be the next to make a mistake.
+
+So I would like to share with you some of my tips that I have learnt the hard way. All these tips come from times I have messed-up as a developer and I hope that sharing these will help you maybe save some time.
+
+<h2>Do not suffer in silence</h2>
+
+A few years ago now I decided, with my family, to leave the UK and move to Germany. This involved plenty of changes both large and small. Firstly, there was a language change. I had never done much more than ordering food in German before I moved. Then of course, my job changed big time as I moved from a large multi-national company with thousands of employees based around the world to a small web agency. Finally, I started working with Magento. Previously I was working in e-commerce but with a self built system.
+
+Now at the time I moved over, the company had only just started working with Magento so I was given a lot of time and freedom to become a Magento "expert". This was all great apart from one small thing, there was no one internally that I could really ask about Magento. Sure, general programming questions not a problem, but with regards to Magento I had to find out the right and wrong way all by myself.
+
+Lucky for me there were plenty of resources online. At first I used all of them, stackoverflow, blog posts, the official Magento wiki and forums, and of course my favourite, stalking people over Twitter. It quickly became apparent that not all resources are created equal.
+There are plenty of great resources out there, there are also plenty of resources that I am sure were once great but are now just outdated, and of course there are plenty of bad resources. Finding resources is not a problem when it comes to Magento, and development in general, but finding the right resources can be a problem.
+
+I finally settled on the stackoverflow set of sites, in particular the Magento site. They quickly and easily give you a platform for not only finding out the answers, but also sharing your knowledge with others.
+
+If, like me, you like to get out and meet real people then I would also highly recommend finding your local user group. Note that if there is not a user group in your area then why not consider starting one?
+
+For the really adventurous of you there are plenty of conferences, unconferences and hackathons around the world just asking for you to join in.
+
+Getting out there, either physically or virtually, is really important for us as developers. It helps to share our experiences with others and brings support for yourself and for others. The chances are that either someone has had the same problem as you are currently dealing with or someone will have the same problem and would really appreciate your help.
+
+<h2>Find out the why</h2>
+
+When I started working for Sitewards I was desperate to fit in and impress people. Sadly for me this manifested itself in the form of not asking questions and generally agreeing too easily with people. I was so worried that if I voiced my opinions I could be shown up by wrong ideas. So because of this I would often stay in my shell at first. Not only was this a real issue for myself in terms of confidence and general satisfaction in life, but it was also an issue for customers and the company.
+
+There were many examples early on in my time at Sitewards that involved requests coming in from the customer that either made no sense or could be covered by core features. With taking the simple step of stopping early to discuss the request with either a PM or the customer directly I could have stopped some dead code and wasted time.
+
+In my nature I love to dive straight into coding but this can cause real issues later on. There should always be time in a project to stop and simply ask why and discuss ideas. Planning is so important but can often be missed off for many reasons.
+
+Please make sure you set aside time for planning on a general project level, and also individually sit down and think before you start to code. It does not take long to think through a task and it can really add benefit. Magento is so flexible that there is always more than one way to do something. Make sure that the way you choose is at least not the worst way, and hopefully is the best way.
+
+If you really need to just jump into something without fully thinking then get yourself a toy project at home.
+
+<h2>Stop reinventing the wheel</h2>
+
+Now I know every project is special and unique in its own way, but there are still sections that are common no matter what you do with Magento.
+For example, every customer has their own very unique way of displaying and configuring products but those products will always need to be inputted into Magento. There are plenty of good resources out there that you will be able to use, at least as a base for your custom code. This means that the chances that you will need to write your own import from scratch are very low.
+
+Sadly when it came to my first couple of Magento projects I did not know what sort of options were out there for working with an import process in Magento. So I got my hands dirty and built my own, at least twice. Though these implementations worked, most of the time, and each iteration is better than the previous, they are still terribly over engineered and it really hurts every time someone has to debug them.
+
+To avoid reinventing the wheel when working with Magento I highly recommend:
+
+<ul><li>learning the core functionality of Magento,</li>
+    <li>investing time into researching extensions,</li>
+</ul>
+
+One note about third party extension is that though you will find great ones, you will also find terrible ones. It takes time to find the good ones but when you find them they will regularly save you time. Though you simply cannot install the extensions blindly and hope for the best, I would always perform a code quality and functionality check.
+
+With regards to the import process, we now no longer work with our own imports built from scratch but use the Avs_FastSimpleImport as a base.
+
+<h2>Stay away from rewrites</h2>
+
+I will just say this straight off - I was once a core code modifier. I am sorry and I hope you can forgive me.
+
+So what is actually so wrong with modifying the core code? Well, good luck when it comes to upgrading your Magento because in a lot of cases it just won't work.
+
+We had this recently when a colleague of mine had to upgrade my first ever Magento site to the latest version. This site contained core hacks, rewrites everywhere, modules that could have been covered by core functionality, and third-party modules that no longer worked. He had lots of work on his plate upgrading and reworking all my terrible practices, but he still found the time to abuse me for what I had done.
+
+My advice for Magento development is simple.
+
+<ul><li>Do not modify the core code,</li>
+    <li>Use events when you can,</li>
+    <li>If there is no event. perform a rewrite in the correct way but simply fire off your own events and leave the original functions logic when possible.</li>
+</ul>
+
+These steps should help you when it comes to maintaining and upgrading your system.
+They should hopefully also limit the stress of other developers and the abuse you receive from them.
+
+<h2>Use the right tools</h2>
+
+When I started working with PHP 10 years ago, I was working without frameworks, without an IDE and without any form of code review process be it either peer or automated. Now we had our reasons for this and at the time it worked, but nothing lasts for ever.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4079

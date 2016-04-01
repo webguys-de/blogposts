@@ -1,0 +1,162 @@
+Article-meta: 
+
+----
+
+Title: Türchen 08: Magento Cron Demystified
+
+----
+
+Date: 2013-12-08
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: fabrizio-branca
+
+----
+
+Article-content: 
+
+----
+
+Intro: When running a web shop there are a lot of tasks that need to be run on a regular basis. Also usually these tasks don’t require any user interaction and can run in the background. Magento comes with the “Mage_Cron” module that provides some structure to manage these background tasks.
+Unfortunately this is not transparent at all. It’s hard to find out if cron has been configured properly, if it is working correctly and what tasks have been processed. In this post I’ll show you how to configure cron, how to manage existing tasks and implement own task and how to visualize what’s going on in the background.
+
+
+----
+
+Text: <h2>Cron configuration</h2>
+Magento’s cron is triggered by your <a href="http://en.wikipedia.org/wiki/Cron">operation system’s cron</a>. The generic cron dispatcher that comes with Magento checks the configuration to decide what specific task needs to be executed in Magento. These tasks come with a cron-like configuration as well. But the presence of a Magento task only won’t make it execute without the operating system’s cron.
+<h3>Granularity</h3>
+Magento’s cron script should be called every five minutes (or even every minute). As a rule of thumb it needs to be called at least as often as the task in Magento with the highest frequency to avoid those tasks to pile up and to be run all at once the next time the scheduler is triggered.
+If you’re hosting provider doesn’t allow you to run custom cron jobs with this frequency it might not be a good choice for a hosting provider anyways :)
+Scheduling configuration
+In <em>System > Configuration > System > Cron (Scheduled Tasks)</em> you can configure the scheduling behavior. Magento creates a schedule on a regular basis and stores records in the cron_schedule table (with status “pending”). The cron dispatcher then processes the pending tasks from that table. Make sure your “<em>Schedule Ahead for</em>” value is bigger than “<em>Generate Schedules Every</em>” to avoid any gaps while processing the tasks and to reduce the risk of missing to schedule a task.
+
+(image: cron_config-650x322.jpg)
+<h2>cron.php vs. cron.sh</h2>
+In Magento’s root folder there’s a <em>cron.php</em> file and a <em>cron.sh</em> file. Briefly explained <em>cron.sh</em> internally calls <em>cron.php</em> and takes care of not executing more than one process in parallel. That’s a good thing, right? Well, sometimes… If you have long running tasks (e.g. a product import implemented as a task), these tasks will prevent anything else from being executed until the task has finished. You might have some other important tasks that shouldn’t wait or be skipped just because another task is running.
+Check the “<em>Missed if Not Run Within</em>” setting to configure the maximum delay a task can have to still be executed.
+On the other hand using <em>cron.php</em> will start a new process every time it’s being called which could easily result in performance problems or race conditions for tasks operating on the same data.
+This is why <em>cron.php</em> should not be called directly. Find out more about cron groups later in this blog post for a nice solution on how to handle this situation.
+
+(image: cron1-650x349.jpg)
+So this is how to configure your crontab. Make sure it is run as the web server user!
+(code)$ sudo crontab -e -u www-data
+* * * * * /bin/sh /var/www/magento/cron.sh(/code)
+If you’re running your cron scheduler on the same machine your frontend runs on you might want to give the cron process a lower priority:
+(code)* * * * * <strong>nice -n 10 </strong>/bin/sh /var/www/magento/cron.sh(/code)
+In order to avoid problems while deploying a new package or while doing maintenance you might want to check for the maintenance.flag before triggering cron.sh:
+(code)* * * * * <strong>! test -e /var/www/magento/maintenance.flag</strong> && nice -n 10 /bin/sh /var/www/magento/cron.sh(/code)
+<h2>“Always” tasks</h2>
+So if you already digged into the Magento cron stuff you might have noticed that Magento CE 1.8 and EE 1.13 introduced a new scheduling mode called “always” (instead of the cron syntax…). As the name says these tasks will unconditionally be executed every time cron is triggered and don’t need an explicitly defined schedules.
+In the Enterprise Edition this is used to trigger the new changelog-based indexing. The Community Edition currently doesn’t seem to use this new feature. However, this feature is part of Mage_Cron and thus can be used for custom tasks in CE as well.
+Looking at <em>cron.php</em> you’ll find the little mess that has been added to make this happen (also check <a href="http://davidalger.com/development/magento/a-new-breed-of-cron-in-magento-ee-1-13-2/">this post</a>). Basically <em>cron.php</em> being called without any parameters uses <a href="http://www.php.net/shell_exec">shell_exec</a> to execute two processes of <em>cron.sh</em>. Each with a different parameter (“default” or “always”). <em>Cron.sh</em> in turn passes this parameter back to <em>cron.php</em> which then executes the cron. Internally Magento uses its event infrastructure to process the two modes by dispatching events with the vacuous names “default” and “always”. Mage_Cron implements two observer methods to do the actual magic: <em>Mage_Cron_Model_Observer->dispatch()</em> and <em>Mage_Cron_Model_Observer->dispatchAlways()</em>
+
+(image: cron_diagram-650x365.jpg)
+
+Keeping this in mind I suggest simplifying the process and configuring cron like this instead (add “nice” and maintenance.flag check if required…)
+(code)* * * * * /bin/sh /var/www/magento/cron.sh –malways 1
+* * * * * /bin/sh /var/www/magento/cron.sh –mdefault 1(/code)
+<h3>Protect cron.php from outside access</h3>
+The cron.php file is a php file that is intended to be run from command line but could also be triggered from the browser. Some sources even recommend triggering the cron scheduler by calling this script over http on a regular basis (again, if this is a workaround to your hosting not allowing you to support cron, you’re hoster is probably not a good fit in the first place).
+Cron tasks potentially can run much longer than your maximum execution time or put some extra load on the server. Also maybe you have a dedicated worker server to process background tasks. This is why cron.php should blocked from outside access and cron tasks should not run in your webserver’s context.
+<h3>Create your own task</h3>
+Creating an own cron task is simple. Add following snippet to your module’s <em>config.xml</em> file:
+(code)<config>
+    [...]
+    <crontab>
+        <jobs>
+            <yourtaskname>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>your_module/model::method</model>
+                </run>
+            </yourtaskname>
+        </jobs>
+    </crontab>
+    [...]
+</config>(/code)
+This is the simplest way of adding a cron job. Mage_Cron will pick this up from the xml configuration and start scheduling it according to your cron expression (<XXXXX; add link!>). The model you specified in the run->model node will be executed by Magento. The only parameter is the current instance of the schedule object (Mage_Cron_Model_Schedule). Now it’s your turn to implement whatever you want to do in with this task.
+Although it’s easy to hardcode the cron expression I recommend always sticking to the second option Magento offers. Instead of having a cron_expr node you should add a config_path node within the schedule node. This one points to a value stored in the system configuration allowing you to define a default configuration and having this value configured individually:
+(code)<config>
+    [...]
+    <crontab>
+        <jobs>
+            <yourtaskname>
+                <schedule>
+                    <config_path>your_module/your_section/cron_expr</config_path>
+                </schedule>
+                <run>
+                    <model>your_module/model::method</model>
+                </run>
+            </yourtaskname>
+        </jobs>
+    </crontab>
+
+    <default>
+        <your_module>
+            <your_section>
+                <cron_expr>*/5 * * * *</cron_expr>
+            </your_section>
+        </your_module>
+    </default>
+    [...]
+</config>(/code)
+In your system.xml you could add a simple text field to have the cron expression configured directly. For a fancier interface with custom drop down fields use “<em>adminhtml/system_config_source_cron_frequency</em>”. (Check out Mage_Backup for an example on how to implement this)
+<h2>Aoe_Scheduler</h2>
+Magento’s build in cron scheduler is pretty simple and comes with some serious limitations if you’re trying to get things done efficiently or trying to find out what’s going on in the background. Check the Aoe_Scheduler (blog post/documentation: <a href="http://www.fabrizio-branca.de/magento-cron-scheduler.html">http://www.fabrizio-branca.de/magento-cron-scheduler.html</a>, GitHub: <a href="https://github.com/fbrnc/Aoe_Scheduler">https://github.com/fbrnc/Aoe_Scheduler</a>) module for a lot of improvements:
+<ul><li>Backend, cli and web service access to all tasks</li>
+	<li>Visual timeline</li>
+	<li>Disabling tasks</li>
+	<li>Better error, exception and return value handling.</li>
+	<li>Events that allow custom workflows and dependencies between tasks</li>
+	<li>Email notifications (on success or error)</li>
+	<li>Heartbeat</li>
+	<li>Process management (checkout the development branch for this experimental feature)</li>
+	<li>Cron groups</li>
+	<li>…and many more features</li>
+</ul>(image: 44aa43f2d0-650x369.jpg)
+<h2>Cron groups</h2>
+One of Aoe_Scheduler’s feature is introducing support for cron groups. That means you can run multiple <em>cron.sh</em> commands (on the same server or use this as a strategy to balance background processes across multiple servers) in parallel.
+Having a closer look at <em>cron.sh</em> you’ll see that it accepts an optional second parameter that defaults to “<em>cron.php</em>”. This parameter tells <em>cron.sh</em> which php script to execute and <em>cron.sh</em>’s check if a process is already running takes the script name into account. This way you can have a defined number of tasks in parallel and making sure that tasks that should not overlap won’t.
+
+Let’s say we want to execute three processes in parallel:
+<ol><li><em> cron_always.php</em> will process the “always” tasks</li>
+	<li><em>cron_import.php</em> will process your custom import tasks that might take some time</li>
+	<li><em>cron_default.php</em> will process all other tasks.</li>
+</ol>
+First we need to symlink (or copy, if you like) the cron.php to cron_always.php, cron_import.php and cron_default.php. This can be done in your deployment scripts or using <a href="https://github.com/colinmollenhour/modman">modman</a>.
+Then we create a comma separated list of all the importer tasks: e.g. ‘<em>xx_import_products, xx_import_categories</em>’
+Change the cron configuration to following to allow Magento processing up to three processes in parallel (again, combine with “nice” and test for the maintence.flag if required…)
+(code)* * * * * /bin/sh /var/www/magento/cron.sh cron_always.php –malways 1
+* * * * * /usr/bin/env SCHEDULER_WHITELIST=xx_import_products, xx_import_categories' /bin/sh /var/www/magento/cron.sh cron_import.php –mdefault 1
+* * * * * /usr/bin/env SCHEDULER_BLACKLIST=xx_import_products, xx_import_categories' /bin/sh /var/www/magento/cron.sh cron_default.php –mdefault(/code)
+The task execution now will look more like this (only showing the non-always processes…)
+
+(image: cron2-650x123.jpg)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3649

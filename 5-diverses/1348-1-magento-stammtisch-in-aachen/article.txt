@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: 1. Magento-Stammtisch in Aachen 
+
+----
+
+Date: 2011-01-21
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Wir wünschen Roman Zenner viel Erfolg beim Ausrichten des ersten Magento-Stammtisches in Aachen. Für alle aus der Region ein paar Infos direkt von Roman:
+<blockquote>[..] es höchste Zeit, im  westlichsten Zipfel der Republik ebenfalls ein solches Grüppchen ins  Leben zu rufen. Das Ganze findet statt <strong>am Mittwoch, 9. Februar ab 19.00  im <a href="http://www.orient-expresso.de/">Orient Expresso</a>,</strong> alle Magentoianer oder die, die es werden wollen, sind herzlich willkommen!</blockquote>
+<a href="http://romanzenner.com/de/blog/1-magento-stammtisch-in-aachen/">Weiterlesen bei Roman Zenner</a> und unter <a href="http://www.magento-stammtisch.de">www.magento-stammtisch.de</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1348

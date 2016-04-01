@@ -1,0 +1,54 @@
+Article-meta: 
+
+----
+
+Title: Ressourcen-Engpässe über Freelancer-Portale abfangen?
+
+----
+
+Date: 2011-11-24
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Im Moment denke ich regelmäßig darüber nach wie im Zweifel Ressourcen-Engpässe kurzfristig abgefangen werden können - gerade weil gute Entwickler alles andere als einfach zu finden sind. Eine Möglichkeit sind online Projektvermittlungsplattformen die dem Kunden einen Zugriff auf Tausende von Fachkräften aus verschiedenen Bereichen bieten. Damit dieses Verfahren verständlich wird, soll es vom Anfang an beschrieben werden. Herr Wojciech Dziedzic von <a href="http://www.twago.de/">Twago</a> erklärte mir das übliche Vorgehen kurz:
+
+
+
+----
+
+Text: <blockquote>Der Auftraggeber braucht also einen Magento-Webshop. Er schreibt ein Projekt bei einer Projektvermittlungsplattform aus. Alle Freelancer, die <a href="http://www.twago.de/expert/PHP-Programmierer/PHP-Programmierer">PHP</a>, Magento oder Ecommerce als ihre Skills angegeben haben, bekommen eine Benachrichtigung via E-Mail. Wer an diesem Projekt Interesse hat, setzt sich mit dem Auftraggeber in Verbindung. Der Kunde entscheidet sich für den passenden Freelancer (bei größeren Projekten auch für mehrere Spezialisten) und die Arbeit an dem Magento-Webshop kann beginnen. Sowohl der Auftraggeber, als auch der Freelancer sind auf der sicheren Seite, da die Bezahlung über ein Safety-Pay-System abgesichert wird und dank dem Bewertungssystem (ähnlich , wie zum Beispiel bei Ebay) weiß man, welche Auftraggeber oder Dienstleister zuverlässig sind. Bei den Webshops ist es sehr wichtig, dass ein erfahrener Programmierer die Webseite erstellt, da die Zahlungssysteme und Kundendaten gut von den Hackern geschützt werden sollen. Sicherheit und Schutz der Privatsphäre sind heutzutage entscheidend für die Kunden. Niemand möchte, dass die eigenen Daten an Dritte weitergeleitet werden oder durch Datendiebe genutzt werden.
+
+Projektvermittlungsplattformen sind laut vielen Marktanalysen die Jobbörsen der Zukunft. Die Beschäftigungstendenz geht in der Richtung des Freelancings. Schon jetzt sind in den Vereinigten Staaten 30% aller berufstätigen Freelancer. In Europa ist die Anzahl der Freiberuflichen noch nicht auf diesem Level, aber sie geht in diese Richtung.</blockquote>
+Ich habe mir dazu noch keine abschließende Meinung gebildet: Eigentlich bin ich eher Fan von festen Mitarbeitern mit sicheren Arbeitsplätzen und gleichbleibender Qualität - aber eventuell eröffnen sich auch neue Chancen. <strong>Was sind eure Erfahrungen?</strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2050

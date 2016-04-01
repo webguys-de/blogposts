@@ -1,0 +1,108 @@
+Article-meta: 
+
+----
+
+Title: Google Base Integration von Magento
+
+----
+
+Date: 2010-08-12
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,allgemein
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Google Base erlaubt die Anbindung von Produkt Feeds, um es Suchenden einfacher zu machen, Produkte aus dem Webshop über die Google Produktsuche zu finden. Das ist vor allem bei der Arbeit mit Magento ein Vorteil, denn Magento liefert die Anbindung auch schon in der Community-Version mit aus. Dieser Artikel soll Sie bei der Einrichtung unterstützen, um die Produkte besser zu plazieren.
+
+
+----
+
+Text: Um zu starten benötigen Sie neben einer Magento-Installation auch einen Account für Google Base. Sollten diese Hürden überwunden sein, reichen vier einfache Schritte aus, um die Produkte an Google Base zu übertragen.
+
+<strong>1. Zugangsdaten eingeben</strong>
+Menu: <em>System > Konfiguration > Google API > Google Base</em>
+Geben Sie an dieser Stelle Ihre Benutzerdaten ein; zusätzlich besteht hier die Möglichkeit ein Produkt nach einer Änderung direkt übertragen zu lassen, ohne dies manuell machen zu müssen.
+
+<strong>2. Attributzuordnung herstellen</strong>
+Menu: <em>Katalog > Google Base > Attribute verwalten</em>
+Wählen Sie <em>Attributzuordnung hinzufügen</em> um eine neue Zuordnung zu erstellen. Hier muss das Land, ein Attributset sowie eine passende Warengruppe seitens Google Base bestimmt werden. Nun können diverse Attribute hinzugefügt werden, wie z.B. Preis, Hersteller etc. Diese Werte werden immer Paarweise angegeben: links aus Magento, rechts aus Google Base. Sind alle Attribute angelegt, kann die Attributzuordnung gespeichert werden.
+
+Sollte beim Anlegen einer neuen Attributzuordnung folgender Fehler "<em>Notice: Undefined offset: 1 in app/code/core/Mage/GoogleBase/Model/Service/Feed.php on line 120</em>" auftreten, so gehen Sie bitte wie folgt vor:
+
+<strong>2.1. Betreffende Datei öffnen</strong>
+Öffnen Sie bitte folgende Datei "<em>app/code/core/Mage/GoogleBase/Model/Service/Feed.php</em>"
+
+<strong>2.2. Änderungen am Code</strong>
+Ändern Sie die den Code ( Zeile: 120 - 132 ):
+
+(code lang: php)
+$typeAttributes = $entry->extensionElements[1]->extensionElements;
+$attributes = array();
+if (is_array($typeAttributes)) {
+    foreach($typeAttributes as $attr) {
+        $name = $attr->extensionAttributes['name']['value'];
+        $type = $attr->extensionAttributes['type']['value'];
+        $attribute = new Varien_Object();
+        $attribute->setId($name);
+        $attribute->setName($name);
+        $attribute->setType($type);
+        $attributes[$name] = $attribute;
+    }
+}
+(/code)
+
+in:
+
+(code lang: php)
+$attributes = array();
+if(count($entry->extensionElements) > 1) {
+    $typeAttributes = $entry->extensionElements[1]->extensionElements;
+    if (is_array($typeAttributes)) {
+        foreach($typeAttributes as $attr) {
+            $name = $attr->extensionAttributes['name']['value'];
+            $type = $attr->extensionAttributes['type']['value'];
+            $attribute = new Varien_Object();
+            $attribute->setId($name);
+            $attribute->setName($name);
+            $attribute->setType($type);
+            $attributes[$name] = $attribute;
+        }
+    }
+}
+(/code)
+
+<strong>3. Produkte zu Google Base hinzufügen</strong>
+Menu: <em>Katalog > Google Base > Artikel verwalten</em>
+
+Jetzt sehen wir zwei Tabellen - die obere zeigt die in Google Base verfügbaren Artikel an, die untere ist die Magento-Produkttabelle. Um Artikel zu Google Base hinzuzufügen, beschränken wir die Produktauswahl auf ein Attributset. Aus dieser Liste wählte man die gewünschten Artikel per Checkbox aus und bestätigt diese Auswahl mit der Aktion <em>Zu Google Base hinzufügen</em>. Diese Artikel stehen nun in der oberen Liste, dort können sie auch problemlos wieder entfernt werden oder deaktiviert werden. Jedoch nicht nur an dieser Stelle, auch aus dem Google Base Benutzerkonto ist ein deaktivieren möglich, diese Änderung wird selbstverständlich auch in Magento angezeigt.
+[wgAddVersion system="Magento" version="1.4.1.1"]
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 502

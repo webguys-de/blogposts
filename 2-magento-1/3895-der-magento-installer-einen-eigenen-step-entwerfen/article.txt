@@ -1,0 +1,281 @@
+Article-meta: 
+
+----
+
+Title: Der Magento-Installer: Einen eigenen Step entwerfen
+
+----
+
+Date: 2014-02-24
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Je mehr Shop man installiert, desto mehr hat man das Verlangen, den Konfigurationsprozess zu vereinfachen und zu beschleunigen. Was wäre also, wenn man einen eigenen Install-Step entwerfen könnte, in welchem man bereits viele Informationen speichern könnte, ohne dies nachher im Backend manuell erledigen zu müssen.
+
+In den Abendstunden habe ich genau dies umgesetzt. Außerdem habe ich das Design des Installers noch mit dem <a href="http://code-x.de" target="_blank">code-x</a> Logo gefüttert und die Farben entsprechend angepasst. Und das alles in einer neuen Extension, ohne den Core zu modifizieren - anfangs hätte ich nicht gedacht, dass das möglich ist. Doch was braucht man nun alles, um einen eigenen Step zu entwerfen?
+
+
+
+----
+
+Text: <h2>Die install.xml</h2>
+Wie der Installer arbeitet, kann man sich sehr schön in dem Modul Mage_Install ansehen. Als erstes fällt eine install.xml-Datei auf, welche eine Liste aller Wizards-Steps enthält. Wie überall in Magento, werden die XML-Dateien der einzelnen Module automatisch gemerged - dieses Verhalten kommt uns auch hier zu Gute.
+
+(code language: xml)
+<config>
+    <wizard>
+        <steps>
+            <customer translate="code" before="end">
+                <code>Customer Setup</code>
+                <controller>wizard</controller>
+                <action>customer</action>
+            </customer>
+        </steps>
+    </wizard>
+</config>
+(/code)
+
+<strong>code</strong> ist hierbei der neue Titel in der Navigation, <strong>controller</strong> ist der Name der Controller-Klasse und <strong>action</strong> ist der Name der Funktion, welche aufgerufen wird.
+
+Einziger Nachteil: Es gibt leider keine Möglichkeit, die neuen Steps an der richtigen Stelle einzufügen. Daher musste ich ein Rewrite auf das Model <em>Mage_Install_Model_Config</em> durchführen, um die Logik der Methode <em>getWizardSteps</em> zu ändern. Mit der überschreibenden Variante ist es nun möglich, den einzelnen Elementen ein "before"-Attribut zu geben, nach welchen die Elemente nachträglich sortiert werden.
+
+(code lang: xml)
+<models>
+    <codex_installer>
+        <class>Codex_Installer_Model</class>
+    </codex_installer>
+    <install>
+        <rewrite>
+            <config>Codex_Installer_Model_Install_Config</config>
+        </rewrite>
+    </install>
+</models>
+(/code)
+
+
+(code lang: php)
+class Codex_Installer_Model_Install_Config extends Mage_Install_Model_Config
+{
+    protected $_order;
+
+    public function getWizardSteps()
+    {
+        $steps = array();
+        $this->_order = array();
+
+        foreach ((array)$this->getNode(self::XML_PATH_WIZARD_STEPS) as $stepName => $step) {
+            $stepObject = new Varien_Object((array)$step);
+            $stepObject->setName($stepName);
+
+            // Before logic
+            $inserted = false;
+
+            if ($before = (string)$step->attributes()->before) {
+                if ($position = array_search($before, $this->_order)) {
+                    array_splice( $this->_order, $position, 0, array($stepName) );
+                    $inserted = true;
+                }
+            }
+
+            if (!$inserted) {
+                $this->_order[] = $stepName;
+            }
+
+            $steps[] = $stepObject;
+        }
+
+        usort($steps, array($this, 'sortSteps'));
+
+        return $steps;
+    }
+
+    /**
+     * Sorts the steps by their names
+     *
+     * @param $a
+     * @param $b
+     * @return int
+     */
+    protected function sortSteps($a, $b)
+    {
+        $a = array_search($a->getName(), $this->_order);
+        $b = array_search($b->getName(), $this->_order);
+        if ($a == $b) {
+            return 0;
+        }
+        return ($a < $b) ? -1 : 1;
+    }
+}
+(/code)
+
+Nun, da die Steps in der richtigen Reihenfolge geladen werden, können wir uns um die weiteren Schritte kümmern.
+<h2>Controller</h2>
+Damit unser Modul als erstes gefragt wird, wenn /install aufgerufen wird, wird dies (wie immer) einfach im XML definiert.
+
+(code lang: xml)
+<frontend>
+    <routers>
+        <install>
+            <args>
+                <modules>
+                    <codex_installer before="Mage_Install">Codex_Installer</codex_installer>
+                </modules>
+            </args>
+        </install>
+    </routers>
+</frontend>
+(/code)
+
+Da im XML angegeben wurde, dass die neue Action "customer" heißen soll, brauchen wir diese auch im Controller. Zusätzlich muss die zugehörige "customerPost"-Action implementiert werden. In dieser findet die Validierung der Daten statt. Gelingt dies, wird zum nächsten Schritt weitergeleitet. Welcher dies ist, wird automatisch vom Wizard-Model ermittelt.
+
+(code lang: php)
+require_once Mage::getModuleDir('controllers', 'Mage_Install') . DS . 'WizardController.php';
+
+class Codex_Installer_WizardController extends Mage_Install_WizardController
+{
+    public function customerAction()
+    {
+        $this->_prepareLayout();
+        $this->_initLayoutMessages('install/session');
+
+        $this->getLayout()->getBlock('content')->append(
+            $this->getLayout()->createBlock('codex_installer/customer', 'install.customer')
+        );
+
+        $this->renderLayout();
+    }
+
+    public function customerPostAction()
+    {
+        $this->_checkIfInstalled();
+
+        $step = Mage::getSingleton('install/wizard')->getStepByName('customer');
+
+        $customerData = new Varien_Object($this->getRequest()->getPost('customer'));
+
+        try {
+            /** @var $customerModel Codex_Installer_Model_Customer */
+            $customerModel = Mage::getSingleton('codex_installer/customer');
+            $customerModel->setCustomerInformation($customerData);
+        } catch (Exception $e){
+            // Add error information
+            Mage::getSingleton('install/session')
+                ->setCustomerData($customerData)
+                ->addError($e->getMessage());
+
+            $this->getResponse()->setRedirect($step->getUrl());
+            return false;
+        }
+
+        $this->getResponse()->setRedirect($step->getNextUrl());
+    }
+}
+(/code)
+
+Der Block, welcher für das Design verantwortlich ist, sieht folgendermaßen aus:
+
+(code lang: php)
+class Codex_Installer_Block_Customer extends Mage_Install_Block_Abstract
+{
+    /**
+     * Set template
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setTemplate('xgento/customer.phtml');
+    }
+
+    public function getPostUrl()
+    {
+        return $this->getUrl('*/*/customerPost');
+    }
+
+    public function getFormData()
+    {
+        $data = $this->getData('form_data');
+        if (is_null($data)) {
+            $data = new Varien_Object(Mage::getSingleton('install/session')->getCustomerData(true));
+            $this->setData('form_data', $data);
+        }
+        return $data;
+    }
+}
+(/code)
+
+Wie im Standard-Installer auch, verwenden wir ein eigenes Model um die Daten zu speichern:
+
+(code lang: php)
+class Codex_Installer_Model_Customer extends Mage_Core_Model_Abstract
+{
+    /**
+     * @param $data Varien_Object
+     */
+    public function setCustomerInformation($data)
+    {
+        $mapping = array(
+            'general/imprint/shop_name' => $data->getShopname(),
+            'general/imprint/company_first' => $data->getCompanyFirst(),
+            'general/imprint/company_second' => $data->getCompanySecond(),
+            'general/imprint/email' => $data->getEmail(),
+            'general/imprint/zip' => $data->getAddressZip(),
+            'general/imprint/city' => $data->getAddressCity()
+        );
+
+        /**
+         * Saving host information into DB
+         */
+        $setupModel = new Mage_Core_Model_Resource_Setup('core_setup');
+
+        foreach ($mapping as $path => $value)
+        {
+            if (!empty($value)) {
+                $setupModel->setConfigData($path, $value);
+            }
+        }
+
+        return true;
+    }
+}
+(/code)
+
+Damit wären wir auch schon fertig. Fehlt nur noch eins.
+<h2>Eigenes Layout</h2>
+Wie dem ein oder anderen bei der Entwicklung anderer Extensions sicher schon aufgefallen ist, gibt es drei sogenannte "Areas" für Design: Frontend, Adminhtml und eben Install. Für letztere können wir natürlich genauso Layout-Updates definieren, wie überall sonst auch. Leider ist das Design nicht besonders kleinteilig gehalten, und so kommt man eigentlich nicht drumrum, die komplette page.html zu ersetzen. Diese ist aber auch nicht besonders lang, und man hat am Ende die komplette Freihat die man möchte.
+
+Hier ein Screenshot des neuen Steps. In Zukunft könnte ich mir gut vorstellen, dass an dieser Stelle beispielsweise bereits das Impressum gepflegt wird oder andere Konfigurationen gesetzt werden, welche man immer wieder tut. Der Vorteil gegenüber normalen Installscripts liegt darin, dass dieser Code nach der fertigen Installation ausgeführt wird - so kommt man nicht in Konflikt mit bestehenden Modulen aus dem Core.
+
+(image: Mage_Custom_Setup.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3895

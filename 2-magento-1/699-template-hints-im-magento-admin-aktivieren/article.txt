@@ -1,0 +1,74 @@
+Article-meta: 
+
+----
+
+Title: Template Hints im Magento-Admin aktivieren
+
+----
+
+Date: 2010-08-29
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Template-Hints, die kleinen roten Kästen die einem dabei Helfen sollen die richtigen Templates und Blöcke zu finden, lassen sich auch im Admin aktivieren. Leider nicht, wie gewohnt per Konfiguration im Admin, sondern ausschließlich über die Datenbank oder die Magento eigene Konfigurationsdatei.
+
+----
+
+Text: Um die Template-Hints zu aktivieren ergänzt einfach die Datei app/etc/local.xml um folgende Zeilen:
+
+(code lang: xml)
+<config>
+	[..]
+    <stores>
+       <admin>
+
+			<dev>
+                <debug>
+                    <template_hints>1</template_hints>
+                    <template_hints_blocks>1</template_hints_blocks>
+                </debug>
+            </dev>
+
+       </admin>
+    </stores>
+	[..]
+</config>
+(/code)
+
+Als Ergebnis erhält man folgende wunderschöne Darstellung:
+
+(image: Cache-Management-System-Magento-Admin_1283102613972-500x290.png)
+
+Zum Deaktivieren reicht es den Wert des Tags <em><template_hints></em> auf 0 zu setzen. Alternativ lassen sich die <a href="http://classyllama.com/development/magento-development/enable-templateblock-hints-in-admin-panel/">Template Hints auch direkt in der Datenbank aktivieren</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 699

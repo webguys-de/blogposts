@@ -1,0 +1,54 @@
+Article-meta: 
+
+----
+
+Title: Türchen 24: Frohe Weihnachten
+
+----
+
+Date: 2013-12-24
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ganz ganz herzlich möchte ich mit bei allen 23 Autoren bedanken welche uns dieses Jahr die Magento-Vorweihnachtszeit etwas verkürzt haben. Ich bin wieder absolut beeindruckt über Auswahl und Qualität der einzelnen Themen. Für meinen Teil habe ich, wie die letzten Jahre auch, im Projekt "Adventskalender 2013" viel gelernt. Ich hoffe Euch ging es ähnlich.
+
+
+
+----
+
+Text: An dieser Stelle bleibt mir nun nur noch ein "<strong>Frohe Weihnachten und einen guten Rutsch"</strong> zu Wünschen. Ich freue mich bereits auf 2014 mit all seinen Events, Themen und Magento-Spaß :-)
+<h2>Der Adventskalender 2013 im Überblick</h2>
+
+(advent: 2013)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3866

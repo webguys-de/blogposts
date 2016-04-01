@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Paypal -Fehler unter Magento 1.3 beheben
+
+----
+
+Date: 2010-10-13
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento 1.3 unterscheidet sich in einigen Punkten von signifikant von der Version 1.4. Vor allem die Einstellungen der Steuern kann dazu führen, das man an einigen Stellen bestehende Module überschreiben müssen, um die korrekten Ausgaben zu erzeugen. Dies kann im Umkehrschluss jedoch dazu führen, dass die Zahlung von Paypal nicht ausgeführt wird und anstatt mit einer Erfolgsmeldung, mit einer Fehlermeldung endet.
+
+
+----
+
+Text: (file: Webguys_Paypal.zip text: Diese Extension) bietet Abhilfe - abgeleitet aus diversen Forenbeiträge vergleicht die betreffende Methode nicht mehr die Summen ( die durch programmiertechnischen Eingriff voneinander abweichen ) sondern die IDs der Bestellung. Da dies doch etwas zu speziell ist, wird (file: Webguys_Paypal.zip text: diese Extension) ( vorerst ) nicht über <a href="http://www.magentoconnect.com">Magentoconnect</a> verfügbar sein.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 899

@@ -1,0 +1,132 @@
+Article-meta: 
+
+----
+
+Title: Türchen 11: Templating mittels local.xml in der Praxis
+
+----
+
+Date: 2011-12-11
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: carmen-wingenbach
+
+----
+
+Article-content: 
+
+----
+
+Intro: Heute soll es um "die local.xml" gehen. Wer sich jetzt entspannt zurück lehnt und denkt: jo, kennich, kannich. Der sollte vor allem dann weiter lesen, wenn er denkt, es handelt sich um die local.xml unter app/etc. Um die geht es nämlich nicht. Es geht um "die local.xml", die, die man für Layout-Updates verwenden kann.
+
+----
+
+Text: <h2>Wo?</h2>
+"Die local.xml" liegt im "layout"-Folder Eures <em>app/design/frontend/default/[EUER-THEME]/</em>-Verzeichnisses. Und wenn alles so richtig gut läuft, dann öffnet man dieses layout-Verzeichnis und man sieht nur eine einzige Datei: "die local.xml". Nur die, keine catalog.xml, checkout.xml, page.xml, wowarnochmalwas.xml....
+<h2>Warum?</h2>
+Im Gegensatz zur weit verbreiteten Template-Bau-Technik, in der man XML-Dateien in sein eigenes Template kopiert, damit Magento sie hoffentlich als letztes berücksichtigt und so im Dschungel und der Fülle der XML-Tags und -Files seine Änderungen vornimmt, die man schon nach wenigen Wochen nicht mehr nachvollziehen kann, nimmt man mit der local.xml ausschließlich Updates vor. Man kopiert gar nix. Man kann neue Blöcke hinzufügen, bestehende deaktivieren oder löschen, man kann Blöcken andere Klassen zuweisen oder Klassen-Methoden nutzen, um neue Links einzufügen, man kann auch nur Änderungen für eine bestimmte Produkt- oder Kategorieseite vornehmen. All sowas. Und das fantastische an der local.xml ist: sie wird zum Schluß gelesen. Sie hat also immer recht. (Zumindest auf Datei-Ebene).
+<h2>Wie?</h2>
+Die heutige Aufgabe: die Suche aus dem Header verschieben.
+Als erstes muss die Suche oben aus dem Header erstmal verschwinden. Das geht entweder radikal mittels "remove" (<remove name="top.search" />), dann werden allerdings auch die dazugehörigen Klassen gar nicht geladen. Sprich: man kann den Block dann auch nirgendwo mehr einfügen, weil er schlichtweg nicht mehr existent ist. Die Alternative heißt "unset", dann ist der Block weg, aber die Klassen sind geladen und warten auf ihren Einsatz.
+Also: erstens rausfinden in welchem Block die Suche liegt (im "header"). Und wie der Block heißt (topSearch). Nach diesem Rausfinden, die Methode des umgebenden Blocks "header" nutzen und die Suche unsetten. (Ich habe den Artikel nur geschrieben, um "unsetten" zu schreiben. Über "Ergoogeln" stolpert ja niemanden mehr).
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <default>
+	<reference name="header">
+            <action method="unsetChild">
+              	  <name>topSearch</name>
+            </action>
+        </reference>
+</default>
+</layout>
+(/code)
+
+Nu isse wech.
+
+Und so isse wieder da (erstmal rechts, ist einfacher):
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <default>
+		<reference name="header">
+            	<action method="unsetChild">
+                	<name>topSearch</name>
+            	</action>
+       	 </reference>
+
+		<reference name="right">
+            	<action method="insert">
+               	<name>top.search</name>
+            	</action>
+        	</reference>
+	</default>
+</layout>
+(/code)
+
+Unnu? Nun soll die Suche auch mal neben die Brotkrumen-Navigation. Die befindet sich direkt im Root-Block. Nun würde man ja annehmen, das obige ließe sich auch dort anwenden. Das Klappt aber nicht. Innerhalb des root-Blocks muss man folgendes anwenden:
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <default>
+		<reference name="header">
+            <action method="unsetChild">
+                <name>topSearch</name>
+            </action>
+		</reference>
+
+        <reference name="root">
+            <block type="core/template"
+				name="top.search"
+				as="topSearch"
+    				template="catalogsearch/form.mini.phtml"/>
+        </reference>
+	</default>
+</layout>
+(/code)
+
+Zusätzlich muss man nun in den Page-Template-Dateien (1column.phtml, 2columns-left, ...) unter <em>app/design/frontend/default/[EUER-THEME]/template/page/</em> an der passenden Stelle den "getChild('topSearch') Aufruf einfügen:
+
+(code lang: xml)
+<!-- ... -->
+		<div class="main">
+                <?php echo $this->getChildHtml('breadcrumbs') ?>
+                <?php echo $this->getChildHtml('topSearch') ?>
+<!-- ... -->
+(/code)
+
+(In diesem Fall muss man auch die Styles noch anfassen, damit die beiden Blöcke auch neben und nicht untereinander stehen, dies aber nur am Erwähnenswert-Rande).
+<h2>Wieso?</h2>
+Es gibt unterschiedliche Arten von Blöcken: Struktur- und Inhaltsblöcke. Die Unterschiede? Die einen laden immer automatisch alle Blöcke und sind vom Typ "<em>text/list</em>" (<em>Mage_Core_Block_Text_List</em>). Sie rendern alle Blöcke, die sich in ihnen befinden, ohne dass in irgendeiner Template.phtml-Datei der Auruf <em>getChild('blockname')</em> erfolgen muss. Sie haben nicht mal ein eigenes Template - es gibt also keine right.phtml.
+
+Die anderen sind Inhaltsblöcke. Hier werden Blöcke nicht automatisch gerendert. Hier muss man im Quellcode der Template-Datei an den passenden Stellen den Aufruf zum Rendern des Blocks einfügen: <em>getChild('topSearch')</em>. Wieso? Naja, der Header sähe höchstwahrscheinlich merkwüdig aus, wenn Blöcke automatisch ohne Platzierung geladen würden, die "Muttertemplates" <em>3columnns.phtml, 2columns-left.phtml</em> und -<em>right</em> ebenso...
+<h2>Und die Moral von der Geschicht</h2>
+"Die local.xml" zu benutzen lohnt sich vor allem dann, wenn man immer mal wieder oder auch nur potentiell irgendwann was am Template anpassen muss. Mit ihr erübrigt sich schon fast eine Template-Dokumentation... Wenn man sie nutzt, muss man sich auf eine hartnäckige Namenssuche begeben und man sollte sich die Mühe machen herauszufinden, welche Klassen mit welchen Methoden den Blöcken zugrunde liegen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2230

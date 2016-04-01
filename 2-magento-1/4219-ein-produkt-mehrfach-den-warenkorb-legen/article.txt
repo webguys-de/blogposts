@@ -1,0 +1,83 @@
+Article-meta: 
+
+----
+
+Title: Ein Produkt mehrfach in den Warenkorb legen
+
+----
+
+Date: 2015-02-04
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Immer wieder bekommt man die Anforderung, dass ein und das selbe Produkt mehrfach in den Warenkorb gelegt werden soll. Im Standard werden diese Produkte von Magento dann automatisch zu einer Position zusammengefasst. Um dem entgegen zu wirken, <strong>muss dem Produkt einfach nur eine zusätzliche Option gegeben werden, welche sich von dem anderen Produkt im Warenkorb unterscheidet</strong>. Damit sind es für Magento zwei verschiedene Produkte, welche natürlich nicht zusammen gelegt werden sollten.
+
+In der Praxis sieht es dann so aus, dass man einen neuen Observer erstellt, welcher dann das Quote-Item um eine Position erweitert.
+
+(code lang: xml)
+<sales_quote_product_add_after>
+    <observers>
+        <webguys_module>
+            <class>webguys_module/observer</class>
+            <method>salesQuoteProductAddAfter</method>
+        </webguys_module>
+    </observers>
+</sales_quote_product_add_after>
+(/code)
+
+(code lang: php)
+public function salesQuoteProductAddAfter($event)
+{
+    $items = $event->getItems();
+
+    /* @var $item Mage_Sales_Model_Quote_Item */
+    foreach ($items AS $quoteItem) {
+        $product = $quoteItem->getProduct();
+        $quoteItem->addOption(
+            new Varien_Object(
+                array(
+                    'product' => $product,
+                    'code' => 'unique_id',
+                    'value' => uniqid()
+                )
+            )
+        );
+    }
+}
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4219

@@ -1,0 +1,82 @@
+Article-meta: 
+
+----
+
+Title: 10 Unverzichtbare Plugins für WordPress
+
+----
+
+Date: 2009-03-27
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,lesetipps-wordpress,wordpress,plugins
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es gibt eine riesige Auswahl für Plugins, um Wordpress Seiten dynamischer, praktischer und intuitiver zu gestalten. Von der nahezu unendlichen Auswahl habe ich eine Auswahl von 10 Plugins getroffen, die ich jeder Instanz mit auf den Weg gebe.
+
+
+----
+
+Text: Sie erleichtern das Leben und bieten zusätzliche Features.
+
+<strong><a href="http://www.deliciousdays.com/cforms-plugin">1. Formulare mit CForms II</a>
+</strong>Mit CForms kann eine beliebige Anzahl von Formularen erstellt und mit einem Klick über einen neuen Button im Editor eingebaut werden. Auch "Send-a-Friend" Funktionen können so auch in die Sidebar eingebaut werden.
+
+<strong><a href="http://wordpress.org/extend/plugins/statpress/">2. Statistiken mit StatPress</a>
+</strong>Wenn auch nicht ganz so verspielt wie Google Anaytics, bietet StatPress genügend Kontrolle über die Zugriffe auf die Seite.
+
+<strong><a href="http://wordpress.org/extend/plugins/nextgen-gallery/">3. Galerien verwalten: NextGen</a>
+</strong>Lange habe ich nach einem guten und vielseitigen Plugin für Galerien gesucht und letztlich mit NextGen gefunden. Über einen neuen Menüpunkt können diverse Einstellungen global vorgenommen werden.
+
+<strong><a href="http://wordpress.org/extend/plugins/sociable/">4. Soziale Netzwerke mit sociable</a>
+</strong>Sie suchen eine gute Funktion für das Bookmarken einer Seite oder eines Posts? Dann ist sociable genau das Richtige.
+
+<strong><a href="http://wordpress.org/extend/plugins/cms-like-admin-menu/">5.  CMS Feeling mit CMS like Admin Menu</a>
+</strong>Nicht immer setzt man Wordpress ein, um nur zu bloggen - für diesen Fall ist cms-like-admin-menu genau das richtige. Mit diesem Plugin wird die Menüreihenfolge geändert, sodass die Navgation dem eines CMS entspricht.
+
+<a href="http://wordpress.org/extend/plugins/admin-management-xtended/"><strong>6. Erweiterte CMS Funktionalität mit Admin Management Xtended</strong></a>
+Zusätzliche CMS Funktionalität wie Drag&Drop, Ajaxfunktionalität für: Kategorie- und Tagmanagement und vielem mehr. Die perfekte Ergänzung für das richtige CMS Feeling.
+
+<strong><a href="http://wordpress.org/extend/plugins/google-sitemap-generator/">7. Gut indiziert ist halb gefunden: Google XML Sitemaps</a>
+</strong>Wir alle tun alles, um Google zufrieden zustellen - ein weiterer guter Schritt ist der google-sitemap-generator. Dieser Erstellt eine XML-Sitemap für Googlebots, wahlweise komprimiert oder nicht. Weitere Optionen gibt es in den Einstellungen für das Plugin.
+
+<strong><a href="http://wordpress.org/extend/plugins/all-in-one-seo-pack/">8. Alles für die Suchmaschine: All in one SEO pack</a>
+</strong>All in One SEO Pack bereitet die Seite auf Suchmaschinen vor und das komplett. Nach der Installation findet sich ein neuer Punkt in den Einstellungen und zusätzlich auf der Seite der Artikel und Posts.
+
+<strong><a href="http://wordpress.org/extend/plugins/yet-another-related-posts-plugin/">9. Verwandte Seiten und/oder Posts anzeigen: YARPP</a>
+</strong>Es gibt viele Plugins, aber nicht eins davon hat mich so überzeugt, wie YARPP. Ach ja, YARPP steht übrigens für: Yet Another Related Posts Plugin.
+
+<strong>10. Spam im Griff: Akismet
+</strong>Akismet wird mit Wordpress 2.7.x ausgeliefert und wacht - sobald aktiviert - über die abgegebenen Kommentare. Über veränderliche Optionen lässt sich einstellen, ab wann ein Kommentar als Spam angesehen wird.
+
+Diese Plugins sind der Grundstock meiner Wordpess-Instanzen und werden je nach Einsatzzweck erweitert. Sollte Wordpress eher als CMS eingesetzt werden, empfehle ich zusätzliche Plugins, um <a href="http://www.shift8.de/2009/05/04/plugins-um-wordpress-als-cms-einzusetzen/">Wordpress als CMS</a> einzusetzen. Es gibt noch eine weitere tolle Plugins, die das Leben erleichtern - jedoch sind noch nicht alle Plugins für die Version 2.7.x verfügbar und auch nicht kompatibel.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 572

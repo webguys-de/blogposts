@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Magento-Podcast #12
+
+----
+
+Date: 2011-06-07
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Gestern haben Damian und ich den Magento-Podcast #12 veröffentlicht. Spannende Themen wie Importe, News und Gerüchte zu Magento 2.0 sind natürlich dabei: <a href="http://magentopodcast.de/2011/06/magento-podcast-12/">Hört rein!</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1658

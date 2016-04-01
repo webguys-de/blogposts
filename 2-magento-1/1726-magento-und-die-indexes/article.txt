@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Magento und die Index(es)
+
+----
+
+Date: 2011-07-13
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Teilweise kann es vorkommen, dass die Index(es) in Magento neu aufgebaut werden müssen, sei es durch manuelle Updates oder auf Wunsch von Magento selber. Dabei kann es hin und wieder zu einigen Problemen kommen, die teilweise schwer zu identifizieren und lösen sind.
+
+
+----
+
+Text: <strong>Stock Status Index process is working now. Please try run this process later.</strong>
+Erscheint diese Meldung, hat mir der folgende Weg immer geholfen:
+<ol><li>Verzeichnis var/locks leeren</li>
+	<li>Dateirechte des Verzeichnis var/locks auf 0777 setzen</li>
+</ol><strong>Index: Produkt Attribute</strong>
+Sollte dieser Index nicht mehr erstellt werden können, so hat es mir immer geholfen die Attribut-Werte aus Mehrfachaus-Auswahlfeldern zu überprüfen. Sollte der <i>value</i> Wert aus der Tabelle <i>catalog_product_entity_varchar</i> doppelt vergeben, kann der Index nicht generiert werden. Dazu muss die Id des Attributes bekannt sein, danach kann man den Konflikt leicht lösen.
+
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1726

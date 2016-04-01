@@ -1,0 +1,87 @@
+Article-meta: 
+
+----
+
+Title: Türchen 16: Deutsche Shopkonfig für Magento CE
+
+----
+
+Date: 2012-12-16
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: christian-philipp
+
+----
+
+Article-content: 
+
+----
+
+Intro: Als Magento-Entwickler merkt man das schon gar nicht mehr. Magento installieren, deutsches Sprachpaket dazu, dann noch German Setup mit bei und eben die ganzen Konfigurationspunkte, die man halt immer so macht, wenn man einen Shop erstmalig einrichtet. Was aber, wenn man sich mit Magento nicht auskennt? Dann ist schon das Installieren von Modulen ein Problem. Jetzt noch herauszufinden, wie das amerikanische Produkt tickt und was man tun muss, damit es auf dem deutschen Markt in rechtlicher Form besteht, kann für "Otto-Normalverbraucher" schon abschreckend wirken und die Entscheidung doch eher Richtung Oxid und Co. neigen.
+
+
+----
+
+Text: Aus dieser Motivation heraus haben wir (<a title="integer_net - Magento-Spezialisten" href="http://www.integer-net.de">integer_net</a>) im Auftrag von <a title="Magento und TYPO3 Spezialist" href="http://www.netresearch.de/" target="_blank">Netresearch</a> eine <a href="http://de.magentoappfactory.com/deutsche-shopkonfiguration-fuer-magento-ce.html" target="_blank">deutsche Edition der Magento CE</a> 1.7.0.2 erstellt. Diese enthält die wichtigsten Module, um in Deutschland direkt loszulegen. Hierbei handelt es sich auschließlich um lizenzkostenfreie Module. Das Paket kann ab sofort in der <a title="Magento Module von Magento Profis" href="http://de.magentoappfactory.com/deutsche-shopkonfiguration-fuer-magento-ce.html" target="_blank">Magento App Factory</a> kostenlos heruntergeladen werden.
+
+Doch der Reihe nach.
+<h2>Installation - so einfach wie nur eben möglich</h2>
+Es wurde viel Arbeit investiert, damit der Einstieg für den Interessenten so einfach wie möglich ist. Das beginnt schon beim Installationsprozess. Auf den Server geladen und die Domain eingegeben, beginnt die bekannte Step-by-Step-Installation. Hier sind fast alle Felder so vorausgefüllt, dass man eigentlich nur noch bestätigen muss. "Unnütze" Felder wie den Encryption Key haben wir außen vor gelassen. Lediglich bei den Datenbankdaten sollte man noch in die Unterlagen vom Hoster reinschauen.
+
+<img class="size-medium wp-image-386" title="Installationsprozess mit voreingetragenen Werten" src="http://www.integer-net.de/wp-content/uploads/2012/12/ScreenShot847-600x305.png" alt="Installationsprozess mit voreingetragenen Werten" width="600" height="305"> Installationsprozess mit voreingetragenen Werten
+
+Wenn man mit dem Installationsprozess fertig ist und sich im Backend einloggt, erscheint zunächst eine Seite, in der man alle notwendigen Informationen von der Adresse bis zum PayPal Merchant Account eingeben muss bzw. kann. Ist dies geschehen, hat man schon die halbe Miete. Alle Benachrichtigungen sind bereits als gelesen markiert und die Indizes sind automatisch aktualisiert worden. Nun muss sich der Shopverwalter "nur" noch um die Inhalte kümmern - Kategorien, Produkte, AGB, Widerrufsbelehrung usw. Der Cache ist deaktiviert, ergo muss dieser noch aktiviert werden. Von da an heißt es - ready to go. :)
+
+<img class=" wp-image-385" title="Formular zum Eintragen der Basisdaten" src="http://www.integer-net.de/wp-content/uploads/2012/12/ScreenShot846-560x600.png" alt="Formular zum Eintragen der Basisdaten" width="491" height="526"> Formular zum Eintragen der Basisdaten
+
+<h2>Was ist nun alles in der deutschen Edition enthalten?</h2>
+Damit der Shop auch fit für den deutschen Markt ist, wurden einige Module vorinstalliert:
+<ul><li>Deutsches Sprachpaket</li>
+	<li>FireGento_GermanSetup (Anpassung an den Deutschen Markt, Einrichtung Emails, Steuern, CMS)</li>
+	<li>FireGento_Pdf (Verbesserte PDF-Rechnungen)</li>
+	<li>PRWD_Autoshipping (<a href="http://www.avs-webentwicklung.de/nc/blog/artikel/versandkosten-im-warenkorb-anzeigen.html" target="_blank">Versandkosten bereits im Warenkorb</a>)</li>
+	<li>Phoenix_CashOnDelivery (Zahlungsart Nachnahme)</li>
+	<li>Mage_Debit (Zahlungsart Lastschrift)</li>
+	<li>IntegerNet_RemoveCustomerAccountLinks (<a href="http://www.integer-net.de/benutzerkonto-magento-deaktivieren-von-menupunkten/" target="_blank">Überflüssige Links im Kundenkonto entfernen</a>)</li>
+	<li>AvS_AdminNotificationAdvanced (<a href="http://www.avs-webentwicklung.de/nc/blog/artikel/magento-verbesserte-benachrichtigungen-im-admin-bereich.html" target="_blank">Verbesserte Admin-Nachricht</a>)</li>
+	<li>AvS_ScopeHint (<a href="http://www.avs-webentwicklung.de/nc/blog/artikel/warnung-bei-ueberschriebenen-konfigurations-optionen-kostenloses-magento-modul.html" target="_blank">Benachrichtigungen bei Konflikten in der Konfiguration</a>)</li>
+</ul>
+Darüber hinaus haben wir bestimmte Module deaktiviert, da diese in der Regel in deutschen Shops sowieso nicht benötigt werden:
+<ul><li>Mage_Usa</li>
+	<li>Mage_PaypalUk</li>
+	<li>Mage_GoogleCheckout</li>
+	<li>Mage_Authorizenet</li>
+	<li>Mage_Centinel</li>
+	<li>Mage_Compiler</li>
+	<li>Mage_XmlConnect</li>
+</ul><h2>Wie geht es weiter?</h2>
+Das Projekt soll weder ein Einwegprojekt, noch ein einziger Werbefeldzug und Marktplatz für Sponsoren sein. Wir sehen das als Projekt der deutschen Magento Community, an der jeder eingeladen ist, mitzuarbeiten. Das Projekt wird <a href="https://github.com/integer-net/GermanStoreConfig" target="_blank">auf Github</a> gepflegt und Issues werden von uns bearbeitet. Wir arbeiten auch Neuerungen der einzelnen Module mit ein und versuchen, diese so schnell wie möglich umzusetzen.
+<h2>Fazit</h2>
+Mit dem vorkonfigurierten Paket hoffen wir, Interessenten den Einstieg in Magento zu vereinfachen. Mit den vorgenommenen Änderungen und den eingebundenen Modulen sehen wir uns da auf einem guten Weg. Zusätzlich kann das Paket auch für erfahrene Entwickler und Agenturen eine Arbeitserleichterung und Beschleunigung beim Einrichten neuer Projekte für deutsche Kunden sein. Zumindest wir werden es bei neuen Projekten in jedem Fall einsetzen.
+
+Übrigens: Das Zusatz-Logo kann in der Konfiguration unter "Admin" auch einfach ausgeschaltet werden.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3250

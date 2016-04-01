@@ -1,0 +1,93 @@
+Article-meta: 
+
+----
+
+Title: Türchen 13: Mehr Durchblick bei Problemen oder fremden Instanzen
+
+----
+
+Date: 2013-12-13
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: mike
+
+----
+
+Article-content: 
+
+----
+
+Intro: Viele Köche arbeiten an Magento und da ist es gut, wenn Cron Jobs, Rewrites, Observer, Layout-Handles, Events und alles andere aus dieser endlosen Liste leicht nachgesehen werden kann.
+
+
+
+----
+
+Text: Von einer Produktseite ins Backend zu kommen sollte nur einen Klick entfernt sein und die Übersetzung zu ändern ebenso. Masterpasswörter für alle Benutzer oder ein automatischer Login in das Backend erlauben einen schnellen Wechsel, während Mails im Browser statt im Posteingang das Programmieren sehr erleichtern! So kennen und lieben wir Magento bei <a href="http://www.code-x.de">code-x</a>, dank der <a href="https://github.com/sourcerer-mike/magento-devMode/" target="_blank">DevMode-Erweiterung</a>.
+
+<h2>Developer, developer, developer ...</h2>
+
+Es ist ein Projekt, wie es manch Einzelner schon verfolgt hat. Sei es um den Inhalt von Mails direkt rendern zu lassen, wie zum Beispiel <a title="Magento Mail Preview von Matthias Kleine" href="https://github.com/klein0r/magento-mail-preview" target="_blank">Magento Mail-Preview</a>, oder wiederkehrende Prozesse zu optimieren, wie z.B. mit <a title="Default Developer Config von Fabian Blechschmidt" href="https://github.com/Schrank/DefaultDeveloperConfig" target="_blank">Developer Default Config</a>. Immer wieder stoßen wir auf ein und dieselben Probleme und wünschten, die Antwort läge irgendwo parat.
+
+(image: mehgento1.png)
+
+### Die Klassiker, welche immer wieder Zeit und Nerven kosten.
+
+Die <a title="Magento Developer Mode" href="https://github.com/sourcerer-mike/magento-devMode/" target="_blank">Magento DevMode Erweiterung</a>  ist OpenSource und wird es auch bleiben. Im Backend erzeugt sie einen neuen Menüeintrag “Developer”, welcher für sich selbst sprechende Untermenüs in Magento-Manier hat (mit Customer, Product, etc.). Zur Zeit befindet sich die Extension im “fast Beta-Status” und läuft dank zahlreicher UnitTest (über 90% CodeCoverage) bereits recht stabil.
+
+(image: Selection_075.png)
+
+<h2>Licht in das Dunkel vom Magento-Kern bringen</h2>
+
+Zum Teil durch Reflection wird in die Magento-Blackbox reingegriffen und Informationen an das Tageslicht geholt, die oft nur durch Debuggen oder Core-Hacks auslesbar wären:
+
+<ul><li><strong>Welche CronTabs gibt es aktuell?</strong>
+Im Bakend ist eine Liste über alle konfigurierten CronJobs, die z.B. zeigen wann welche Klassen und Methoden aufgerufen werden.</li>
+    <li><strong>Gibt es Rewrites auf Models?</strong>
+Besonders bei Fremd-Projekten, läuft es in einem Wirr-Warr darauf hinaus, dass die eigenen Erweiterungen durch verrückte Rewrites nicht laufen. Eine einfache Liste verschafft einem den nötigen Überblick.</li>
+    <li><strong>Nutzt mein Magento die richtige Version eines Moduls?</strong>
+In einer Zusammenfassung mit Modul-Name, lokal verfügbarer Version und tatsächlich genutzer Version kann gesehen werden, ob eventuelle SQL-Install-Skripte durchgelaufen sind. Ein Link direkt daneben kann diese auch nochmal alle anstoßen.</li>
+    <li><strong>E-Mails sollen nicht versandt oder umgeleitet werden</strong>
+Besonders während der Entwicklung ist es gut eine E-Mail im Browser zu sehen oder alle an eine ganz andere Adresse zu senden. Besonders wenn Kundendaten im Entwicklungssystem liegen.</li>
+</ul>
+
+Neben diesen häufigen Gedanken während dem Programmieren, sind im Backend sind auch seltene Aufgaben möglich. So können alle Kunden / Bestellungen / Produkte gelöscht werden, die Lagerverwaltung neu berechnet werden, ein Masterpasswort gesetzt werden oder ein Admin-Benutzer ausgesucht werden, der (nur in der lokalen Umgebung) immer angemeldet ist.
+
+<h2>Auch was für Designer</h2>
+
+Bis hier hin wirkt DevMode nur für Entwickler attraktiv. Für Designer gibt es im Frontend eine Toolbox, welche die Arbeit etwas erleichtern soll. Im Allgemeinen erscheint dort der aktuell gewählte Store, View, Controller und die Action mit einzelnen kleinen passenden Aktionen wie im Bild unten zu sehen ist. Wer phpStorm hat wird sich besonders über die anklickbaren Controller- und Action-Namen freuen, welche die zugehörige Datei (und Zeile) öffnen. Zu guter Letzt werden je nach aktueller Ansicht (Category, Product, CMS, etc.) Links angeboten, um direkt zum Bearbeiten in das Backend zu kommen.
+
+[caption id="attachment_3726" align="aligncenter" width="475"](image: Selection_070.png) Hier zeigt die Toolbox einen Link zum Bearbeiten der aktuellen CMS-Seite.[/caption]
+
+<h2>Da geht noch was!</h2>
+
+Durch den Entwicklungsprozess wird es desöfteren dazu kommen, dass einiges auch über die Shell möglich ist, was die Mageshell bereits kann. Manchmal war mir auch einfach danach, die Konfiguration von Magento über die URL zu ändern, was eine kleine weitere Spielerei ist und bald in einer Eingabe-Maske mit Auto-Complete endet, über welche die Config verändert werden kann.
+
+So wächst die Erweiterung immer weiter an und jedes “Ach, schon wieder …”-Gefühl wird in den Issues festgehalten. Und wenn dir jetzt gerade etwas in den Sinn kommt, das dich gestern oder vorhin aufgehalten hat oder wieder Mal gemacht wurde, dann <a href="https://github.com/sourcerer-mike/magento-devMode/issues/new" target="_blank">schick es mir per Issue</a> oder <a href="https://github.com/sourcerer-mike/magento-devMode/fork" target="_blank">schreibe es selbst in einen eigenen Fork</a>. Ich bin froh über jeden Bug, der reinkommt und ganz besonders freuen würde ich mich über Kommentare mit Links auf euer eigenes (ähnliches) Projekt, welches eurer Meinung nacht dort mit einfließen darf oder sollte.
+
+Bis dahin viel Spaß beim Ausprobieren und Zeit sparen mit <a href="https://github.com/sourcerer-mike/magento-devMode/" target="_blank">DevMode</a>!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3725

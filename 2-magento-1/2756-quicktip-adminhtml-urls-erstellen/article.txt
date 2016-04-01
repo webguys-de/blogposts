@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Quicktip: Adminhtml-URL's erstellen
+
+----
+
+Date: 2012-04-19
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: karl
+
+----
+
+Article-content: 
+
+----
+
+Intro: Heute stand ich vor der Aufgabe eine Admin-Url zu generieren. Leider war der Block und der Controller den ich erweitern wollte nicht unter der Standard-Admin-Url erreichbar. 
+
+----
+
+Text: Aus diesem Grund funktioniert folgendes nicht:
+
+(code lang: php)
+$this->getUrl('*/mycontroller/myaction');
+(/code)
+
+Was ich aber tun kann ist dem Adminhtml Helper zu benutzen. Der Helper ersetzt "adminhtml" im übergebenen Parameter durch den eingestellten Frontend-Name des Adminhtml Controllers.
+
+(code lang: php)
+Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit/id/' . $item->getId());
+(/code)
+
+Vielleicht hilft es Euch weiter.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2756

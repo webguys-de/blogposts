@@ -1,0 +1,66 @@
+Article-meta: 
+
+----
+
+Title: Türchen 20: Verpackungseinheiten in Magento
+
+----
+
+Date: 2010-12-20
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 20 ist ein besonderes Türchen. Es ist das erste Türchen zu dem mich jemand angerufen hat mit den Worten: "Du, ich hab da etwas für das Türchen". Das tolle daran: Auch für mich war das ganze noch neu - danke an <a href="http://www.icyapp.de/">Damian Luszczymak</a> dafür. Und zwar es geht darum Verpackungseinheiten in Magento abzubilden. Konkret bedeutet dies dass ein Artikel nur in bestimmen Stückzahlen wie z.B. 6, 12, 18 usw. bestellt werden kann. Wie das geht? Ganz einfach, und sogar Out-Of-The-Box.
+
+
+
+----
+
+Text: In Magento muss lediglich beim Bearbeiten des Produktes die Lagerverwaltung passend konfiguriert werden. Hier gilt es das Feld <em>Enable Qty Increments</em> auf <em>Enabled</em> zu stellen. Danach wird automatisch das <em>Feld Qty Increments</em> eingeblendet welches bestimmt in welchen Stückelungen der Artikel zu kaufen ist. Für unser Beispiel der Reihe 6 oben müssten wir da, wie sollte es anders sein, natürlich eine 6 eintragen.
+
+(image: Webguys-Test-Product-Manage-Products-Catalog-Magento-Admin_1292516816874-632x500.png)
+
+Möchte der Kunde nun eine Anzahl in den Warenkorb legen die nicht Bestandteil unserer Reihe ist wird er höflich darauf hingewiesen das es leider nicht möglich ist:
+
+(image: Webguys-Test-Product_1292517312307-650x49.png)
+<h2>Zugriff mittels Magento-Model</h2>
+Auf den Wert lässt sich natürlich auch über die Models von Magento auslesen - z.B. um ihn im Vorfeld bereits im Frontend anzuzeigen:
+
+(code lang: php)
+$stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct( $_product->getId() );
+echo 'Verpackungsgröße: '.$stockItem->getQtyIncrements();
+(/code)
+
+Spannend und viel viel einfacher als es selbst zu implementieren.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1179

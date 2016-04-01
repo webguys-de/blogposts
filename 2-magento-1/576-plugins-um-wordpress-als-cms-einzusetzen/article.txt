@@ -1,0 +1,75 @@
+Article-meta: 
+
+----
+
+Title: Plugins um Wordpress als CMS einzusetzen 
+
+----
+
+Date: 2009-05-04
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wordpress wird immer beliebter - ein Grund dafür ist die weite verbreitung und die immer besser werdende Struktur, die anderen aufstrebenden CMS, wie <a href="http://www.Silverstripe.com">Silverstripe</a> gehörig Konkurrenz macht. Die weite Verbreitung und viele Foren erzeugten eine breite Auswahl an diversen Plugins, um aus der ehemals reinen Blogsoftware ein CMS zu machen.
+
+----
+
+Text: Ein paar wichtige Plugins habe ich bereits im in meinem persönlichen <a href="http://www.shift8.de/2009/03/27/unverzichtbare-plugins-fur-wordpress/">Top 10</a> erwähnt - damit ist jedoch nicht alles abgedeckt.
+
+<strong>1. Dynamische Seitennavigation</strong>
+
+WordPress liefert ein Widget für die Seitennavigation serienmäßig mit aus, jedoch sind keine Optionen wählbar, es werden sämtliche Unterpunkte aufgeklappt. Bei einer Internetpräsenz von mehr als 15 Seiten kann dies recht schnell sehr unübersichtlich werden. Mit dem Plugin <a href="http://www.adahas.com/work/navigo/">NaviGo</a> kann man schnell und bequem Navigationen erstellen.
+
+<strong>2. Kategorien</strong>
+
+Nicht immer will man alle Kategorien den Benutzern sichtbar darlegen, dienen diese manchmal auch zu Navigationszwecken und sind für den Besucher verwirrend. Um sich diesem Problems zu entledigen kann ich <a href="http://wordpress.org/extend/plugins/advanced-category-excluder/">Advanced Category Excluder</a> empfehlen. Dieses Plugin ermöglicht es, ausgewählte Kategorien von Teilen der Website zu verstecken.
+
+<strong>3. Posts</strong>
+
+Es gibt viele Plugins, zum Posts anzuzeigen, ich habe meinen Favoriten in <a href="http://wordpress.org/extend/plugins/category-posts/">Category Posts Widget</a> gefunden. Es ist klein und dient ausschließlich einem Zweck: Posts zu einer bestimmten Kategorie anzuzueigen.
+
+<strong>4. Benutzerrechte</strong>
+
+Die Rechteverwaltung, die Wordpress von Hause aus mitbringt, reicht aus für kleine Projekte mit wenigen Redakteuren. Bei wachsenden Projekte und somit festen Tätigkeitsbereichen müssen Plugins her, um die Rechte neu zustruktieren. Dazu bieten sich viele Plugins an, mit  <a href="http://sourceforge.net/projects/role-manager">Role Manager</a> und <a href="http://wordpress.org/extend/plugins/adminimize/">Adminimize</a> habe ich positive Erfahrungen machen können.
+
+<strong>5. Seiten verstecken
+</strong>
+Manchmal möchte man bestimmte Seite nicht in der Navigation anzeigen. Für diesen Fall bietet sich <a href="http://wordpress.org/extend/plugins/exclude-pages/">exclude-pages</a> an. Dieses Plugin schließt bestimmte Seiten aus Auflistungen aus - allerdings gilt diese Einstellung dann systemweit. Für manche Fälle ist dies ein nicht gewünschter Nebeneffekt, ansonsten problemlos einsetzbar.
+
+<strong>6. Editor anpassen
+</strong>
+Nicht jeder Redakteur kennt sich mit HTML aus und ist mit gestalterischem Talent gesegnet. Damit diese ein Projekt nicht aus dem CI reissen können, gibt es die Möglichkeit, den Editor an einen Benutzer anzupassen. Und diese Möglichkeit sollte genutzt werden! Der Funktionsumfang übersteigt bei weitem die Bedürfnisse eines Redakteurs und sollte daher immer eingeschränkt werden. Mithilfe des Plugins <a href="http://wordpress.org/extend/plugins/wysiwyg-button-manager/">WYSIWYG Button Manager</a> kann man nicht nur den Redakteuren vorgefertigte Editoren zuweisen, sondern kann auch den Standardeditor um einige Funktionalitäten erweitern.
+
+Des weiteren habe ich mittlerweile einiges gutes über folgende Plugins gehört, allerdings noch keine Zeit diese genauer anzuschauen: <a href="http://flutter.freshout.us/">Flutter</a>, <a href="http://pods.uproot.us/">Pods</a>, <a href="http://joelstarnes.co.uk/pagemash.php">Pagemash</a>. Vorrangig behandelt wird gerade <a href="http://wordpress.org/extend/plugins/qtranslate/">qTranslate</a>, um aus Wordpress ein  multilinguales System zu machen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 576

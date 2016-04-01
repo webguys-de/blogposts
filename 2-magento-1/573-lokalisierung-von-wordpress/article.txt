@@ -1,0 +1,67 @@
+Article-meta: 
+
+----
+
+Title: Lokalisierung von WordPress
+
+----
+
+Date: 2009-04-02
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress,wordpress,lokalisierung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wordpress bietet unter <a href="http://www.wordpress-deutschland.org">www.wordpress-deutschland.org</a> eine komplett deutsch lokalisierte Version von Wordpress an - zum Glück, denn alles komplett zu übersetzen, bedeutet eine ganze Menge Arbeit. Wer jedoch - aus welchem Grund auch immer  - die englische Version installiert hat, kann die Installation mit einfachen Handgriffen auf deutsch trimmen.
+
+
+----
+
+Text: Dazu in folgender Reihenfolge:
+<ol>
+<li>Die deutsche <a href="http://wordpress-deutschland.org/download/sprachdatei/">Sprachdatei</a> von Wordpress-deutschland.org herunterladen.</li>
+	<li>Das Verzeichnis <em>wp-content/languages</em> erstellen und die Datei dort ablegen.</li>
+	<li>Die Datei <em>wp_config.php </em>öffnen und folgende Stelle bearbeiten:</il>
+	</ol>
+
+(code lang: php)
+define ('WPLANG', '');
+(/code)
+
+ersetzen durch:
+
+(code lang: php)
+define ('WPLANG', 'de_DE');
+(/code)
+
+Fertig. Beim nächsten Zugriff auf das Backend ist die Änderung sichtbar. Allerdings nur im Backend - die Spachdateien bestehender Plugins werden ausschließlich im bestreffenden Ordner gespeichert.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 573

@@ -1,0 +1,199 @@
+Article-meta: 
+
+----
+
+Title: Türchen 01: Magento-Webservices
+
+----
+
+Date: 2011-12-01
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich habe mir die Ehre nicht nehmen lassen das erste Türchen unseres Adventskalenders 2011 zu schreiben. Auch dieses Jahr möchten wir Euch die Wartezeit bis Weihnachten mit einigen Magento-Tipps und Tricks etwas verkürzen. Dennoch ist dieser Adventskalender etwas ganz besonderes. Uns ist es gelungen für die kommende Adventsreihe viele viele Gastautoren zu gewinnen. Alle sind dabei absolute Experten in Umgang mit Magento und zudem auch noch sehr hilfsbereit und Community orientiert. Menschen die ein Projekt wie Magento einfach braucht. Ich freue mich sehr auf die kommenden Beiträge! Ihr hoffentlich ebenso :)
+
+
+----
+
+Text: <h2>Webservices mit Magento</h2>
+Das bauen eines eigenen Magento-Webservice hat sich, wie ich feststellen musste, als alles andere als einfach erwiesen. Zu Beginn ist es wichtig zu verstehen das es vier unterschiedliche Webservices gibt:
+<h3>SOAP-Webservice v1</h3>
+Der SOAP-Webservice in der ersten Version arbeitet die Aufrufe alle über eine zentrale <em>Call</em> bzw. <em>Multicall</em>-Methode ab. Das erzeugen eines Produktes ist in diesem Fall wie folgt ausgebaut:
+
+(code lang: php)
+$proxy = new SoapClient('http://magentohost/api/soap/?wsdl');
+$sessionId = $proxy->login('apiUser', 'apiKey');
+$proxy->call($sessionId, 'product.create', array('simple',..));
+(/code)
+
+Wie man erkennt wird auf Basis der aktuellen Session-ID (<em>$sessionId</em>) eine Anfrage an Magento geschickt. Dazu wird 'product.create' mit unterschiedlichen Parametern aufgerufen. Der Vorteil an diesem Webservice ist das er sich schnell und einfach erweitern lässt. Ein großer Nachteil besteht jedoch darin das er nicht kompatibel zu Java oder .NET ist. Dies begründet sich durch die Tatsache das der Webservice keine definierten Typen zurückgibt sondern auschließlich ein <em>ANYTYPE</em> liefert. Damit kommt z.B. Java nicht zurecht und verweigert eine einfache Zusammenarbeit mit dem Webservice. Dazu auch ein Auszug aus dem WSDL:
+
+(code lang: xml)
+<message name="call">
+  <part name="sessionId" type="xsd:string"/>
+  <part name="resourcePath" type="xsd:string"/>
+  <part name="args" type="xsd:anyType"/>
+</message>
+<message name="callResponse">
+  <part name="callReturn" type="xsd:anyType"/>
+</message>
+(/code)
+<h3>SOAP-Webservice v2</h3>
+Der Soap-Webservice v2. geht einen Schritt weiter. Hier werden klare einzelne Methoden im Webservice angelegt welche ebenso eine klare Rückgabe inkl. Typen enthalten. Das bedeutet jedoch das die Methoden nicht mehr, wie im oberen Beispiel, einfach alles entgegen und zurückgeben können. War das WSDL in der Api-V1 noch eine eierlegende Wollmilchsau (die jedoch niemand verstanden hat) müssen nun möglichst atomare Methoden geschaffen werden.
+
+Magento kennt ihr eine Basis-Entität welche die in der Regel notwendigen Attribute inkl. Typdefiniton wiederspiegelt. Im WSDL sieht das dann wie folgt aus:
+
+(code lang: xml)
+<complexType name="catalogProductCreateEntity">
+    <all>
+        <element minOccurs="0" name="categories" type="typens:ArrayOfString"/>
+        <element minOccurs="0" name="websites" type="typens:ArrayOfString"/>
+        <element minOccurs="0" name="name" type="xsd:string"/>
+        <element minOccurs="0" name="description" type="xsd:string"/>
+        <element minOccurs="0" name="short_description" type="xsd:string"/>
+        <element minOccurs="0" name="weight" type="xsd:string"/>
+        <element minOccurs="0" name="status" type="xsd:string"/>
+        <element minOccurs="0" name="url_key" type="xsd:string"/>
+        <element minOccurs="0" name="url_path" type="xsd:string"/>
+        <element minOccurs="0" name="visibility" type="xsd:string"/>
+        <element minOccurs="0" name="category_ids" type="typens:ArrayOfString"/>
+        <element minOccurs="0" name="website_ids" type="typens:ArrayOfString"/>
+        <element minOccurs="0" name="has_options" type="xsd:string"/>
+        <element minOccurs="0" name="gift_message_available" type="xsd:string"/>
+        <element minOccurs="0" name="price" type="xsd:string"/>
+        <element minOccurs="0" name="special_price" type="xsd:string"/>
+        <element minOccurs="0" name="special_from_date" type="xsd:string"/>
+        <element minOccurs="0" name="special_to_date" type="xsd:string"/>
+        <element minOccurs="0" name="tax_class_id" type="xsd:string"/>
+        <element minOccurs="0" name="tier_price" type="typens:catalogProductTierPriceEntityArray"/>
+        <element minOccurs="0" name="meta_title" type="xsd:string"/>
+        <element minOccurs="0" name="meta_keyword" type="xsd:string"/>
+        <element minOccurs="0" name="meta_description" type="xsd:string"/>
+        <element minOccurs="0" name="custom_design" type="xsd:string"/>
+        <element minOccurs="0" name="custom_layout_update" type="xsd:string"/>
+        <element minOccurs="0" name="options_container" type="xsd:string"/>
+        <element minOccurs="0" name="additional_attributes" type="typens:associativeArray"/>
+        <element minOccurs="0" name="stock_data" type="typens:catalogInventoryStockItemUpdateEntity"/>
+    </all>
+</complexType>
+(/code)
+
+Zu der Basis-Entität ist noch eine weitere Entität verfügbar. Diese kümmert sich darum das eigene Attribute ebenfalls über den SOAP-Webservice gefüttert werden können. Dazu auch hier ein Ausschnitt aus dem WSDL:
+
+(code lang: xml)
+<complexType name="associativeEntity">
+    <all>
+        <element name="key" type="xsd:string"/>
+        <element name="value" type="xsd:string"/>
+    </all>
+</complexType>
+<complexType name="associativeArray">
+    <complexContent>
+        <restriction base="soapenc:Array">
+            <attribute ref="soapenc:arrayType" wsdl:arrayType="typens:associativeEntity[]"/>
+        </restriction>
+    </complexContent>
+</complexType>
+(/code)
+
+<a href="http://www.agoradesign.at/blog/creating-or-updating-products-magento-soap-v2-api-very-challenging-adventure">agoradesign.at</a> liefert dazu folgendes Beispiel für einen Produkt-Import über die Api in der Version 2 mittels PHP:
+
+(code lang: php)
+$client = new SoapClient($pathToWsdl); // set path to your Magento WSDL
+$session = $client->login($apiuser, $apikey); // specify username and password
+
+$catalogProductCreateEntity = new stdClass();
+$additionalAttrs = array();
+
+$catalogProductCreateEntity->name = "product name";
+$catalogProductCreateEntity->description = "description";
+$catalogProductCreateEntity->short_description = "desc";
+$catalogProductCreateEntity->status = "1";
+$catalogProductCreateEntity->price = "99";
+$catalogProductCreateEntity->tax_class_id = "2";
+/* you can add other direct attributes here */
+
+$manufacturer = new stdClass();
+$manufacturer->key = "manufacturer";
+$manufacturer->value = "3";
+$additionalAttrs[] = $manufacturer;
+/* you can add other additional attributes here like $manufacturer */
+
+// finally we link the additional attributes to the $catalogProductCreateEntity object
+$catalogProductCreateEntity->additional_attributes = $additionalAttrs;
+
+// send the request
+$client->catalogProductUpdate($session, "your product id", $catalogProductCreateEntity, NULL, "id");
+
+// end session and enjoy your updated products :)
+$client->endSession($session);
+(/code)
+<h3>SOAP-Webservice v2 WS-I Compliance</h3>
+Zusätzlich gibt es noch einen weiteren Webservice. Dieser teilt sich zwar die eigentliche Implementierung mit dem Webservice v2 besitzt jedoch eigene WSDL-Dateien. Diese sind bzw. sollen <a href="http://de.wikipedia.org/wiki/Web_Services_Interoperability_Technology">WS-I</a> konform sein und somit auch mit .NET und Java problemlos laufen.
+<h3>XML-RPC - Remote Procudure Calls</h3>
+Zu meiner Schande muss ich gestehen das ich mich mit XML-RPC bis dato nicht beschäftigt hatte. Zu erwähnen sei das sie den selben Funktionsumfang wie die Magento API v1 bieten und auch ähnlich funktioniert. Dazu ein kleines Beispiel in PHP:
+
+(code lang: php)
+$client = new Zend_XmlRpc_Client('http://youmagentohost/api/xmlrpc/');
+
+// If somestuff requires api authentification,
+// we should get session token
+$session = $client->call('login', array('apiUser', 'apiKey'));
+
+$client->call('call', array($session, 'somestuff.method', array('arg1', 'arg2', 'arg3')));
+(/code)
+<h3>Einen eigenen Webservice erstellen?</h3>
+Um einen eigenen Webservice zu erstellen muss zuerst geklärt werden welcher Webservice angesprochen werden soll. Am einfachsten ist dabei sicherlich der SOAP-v1-Webservice oder  XML-RPC zu realisieren. Der einzelne Prozess ist dabei im <a href="http://www.magentocommerce.com/wiki/doc/webservices-api/custom-api">Magento Wiki</a> bereits recht gut beschrieben.
+
+Um eine SOAPv2 oder SOAP-WS-I Anbindung zu realisieren ist schon etwas mehr notwendig. Zuerst muss die API-v1 erweitert werden.Der Funktionsumfang kann dabei identisch sein - wichtig ist das eine Klasse existiert die auf <em>_V2</em> endet. Dazu ein Beispiel: In der Produkt-API werden die Request  zur API-Version 1 über die Klasse <em>Mage_Catalog_Model_Product_Api</em> abgearbeitet. Die Request der Version v2 dagegen über <em>Mage_Catalog_Model_Product_Api_V2</em>.
+
+Zusätzlich muss in der <em>api.xml</em> noch ein Namensmapping angegeben werden. So kann der Syntax der APIv1 auf die APIv2 gelenkt werden. In der Praxis sieht das wie folgt aus:
+
+(code lang: xml)
+<v2>
+    <resources_function_prefix>
+        <category>catalogCategory</category>
+        <category_attribute>catalogCategoryAttribute</category_attribute>
+    </resources_function_prefix>
+</v2>
+(/code)
+
+Danach muss im <em>etc/</em> des Modules noch eine <em>wsdl.xml</em> bzw. <em>wsi.xml</em> angelegt werden. Erste für die allgemeine WSDL-V2-Api, die zweite für die V2-WSI-Api. Wie der Aufbau genau aussieht würde den Rahmen sprengen. Da verweise ich jedoch gerne auf Amazon: <a id="static_txt_preview" href="http://www.amazon.de/gp/product/3827425492/ref=as_li_ss_tl?ie=UTF8&tag=magentwebguyd-21&linkCode=as2&camp=1638&creative=19454&creativeASIN=3827425492">Service-orientierte Architekturen mit Web Services: Konzepte - Standards - Praxis</a> (Link über Partnerprogramm bei Amazon)
+
+Beispiele dazu finden sich z.B. im Modul <em>app/code/core/Catalog</em>. Die Implementierung der Api ist dabei z.B. unter <em><em>app/code/core/</em>Catalog/Model/Product/Api*</em> zu finden.
+<h3>Persönliche Erfahrungen</h3>
+Persönlich schätze ich den Aufwand eines Magento-Webservice in Betrieb zu nehmen für relativ hoch ein. Dazu gehört einmal die Kompatibilität der verschiedenen Systeme: Wenn der Webservice in PHP einwandfrei läuft tut er das noch lange lange nicht in .NET oder Java. Somit ist es unter Umständen sehr aufwendig die Entwicklung hinsichtlich Fehler zu prüfen und natürlich auch diese zu beheben.
+
+Im weiteren muss natürlich ebenso auf die Performance des Webservices geachtet werden: Wie verhält sich das System wenn die andere Software x-Request gleichzeitig absetzt? Welcher Request wird zuerst behandelt und hat das Auswirkungen auf darauf folgende?
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2076

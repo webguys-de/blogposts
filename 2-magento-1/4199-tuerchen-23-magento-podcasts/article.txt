@@ -1,0 +1,90 @@
+Article-meta: 
+
+----
+
+Title: Türchen 23: Magento Podcasts
+
+----
+
+Date: 2014-12-23
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: nickweisser
+
+----
+
+Article-content: 
+
+----
+
+Intro: I love listening to good news and tech podcasts like <a href="http://twit.tv/show/this-week-in-tech" target="_blank">This Week in Tech</a>, <a href="http://freakonomics.com/radio/" target="_blank">Freakonomics Radio</a> or <a href="http://www.srf.ch/player/radio/sendung/echo-der-zeit?id=28549e81-c453-4671-92ad-cb28796d06a8" target="_blank">Echo der Zeit</a> from Swiss Radio SRF. It really sucked when the first Magento podcast - produced in German language - started in 2009 ground to a halt in March 2012 after a total of 15 episodes. After 2 1/2 years of silence, a new Magento podcast was born in September 2014, produced in English language by Phillip Jackson and Kalen Jordan and I have to admit it’s my absolute favorite podcast, not only because it is moderated by 2 fine Magento developers, but because it’s at least as funny as Beavis &amp; Butt-head. According to their own definition <a href="http://magetalk.com/" target="_blank">MageTalk</a> is not useful at all for actual e-commerce strategy. It’s more like inside baseball talk for the dev community.
+
+
+
+----
+
+Text: (image: beavis-and-butt-head-700x394.jpg)
+
+In only 4 months MageTalk published 16 episodes, 15 of which are publicly available. A highly recommendable bonus episode about debugging Magento can be downloaded for free if you subscribe to their newsletter.
+
+All episodes have funny names. Here’s a list of all currently available podcasts with some additional information which is not complete, but might give you a better idea of the various topics discussed.
+
+<ul><li>MageTalk: Episode 1 – The Voltron of Magento (Meet Magento NYC, Magicento, Magento 2 on GitHub)</li>
+    <li>MageTalk: Episode 2 – “Jag You Are” (Extension of the Week, Antipattern of the week)</li>
+    <li>MageTalk: Episode 3 – William Crush Wednesday (Interview with Kimberely Thomas about Meet Magento NYC)</li>
+    <li>MageTalk Episode 4 – “Give The Guys a Butt-Pat for me”</li>
+    <li>MageTalk Episode 5 – So Much Drama in the LBC (MageUnity, MageKarma)</li>
+    <li>MageTalk Episode 6: A Blogroll, a Webring, and a Paypal Link (Women in the Magento)</li>
+    <li>MageTalk Episode 7 – Real Live Intros in Your Area (Shellshock, Magento Security Vulnerability)</li>
+    <li>MageTalk Episode 8 – Magento Live Germany Interviews (Brent Peterson, Akeneo, Sylvain Rayé, Tobias Zander, Christian Münch)</li>
+    <li>MageTalk Episode 9 – Mage “Eratica” (MageHero)</li>
+    <li>MageTalk Episode 10 – MageHero (#magestackday)</li>
+    <li>MageTalk Episode 11 – “Kliptork Means Bed” & MageTitans (MageTitans Recap, Interview with Vinai Kopp)</li>
+    <li>MageTalk Episode 12 – Magento Enterprise 1.14.1 (Tons of Magento 2 Stuff)</li>
+    <li>MageTalk Episode 13 – The Dodecahedron Smotherer</li>
+    <li>MageTalk Episode 14 – Kalen Gets a New Bike (Discussions around new hires, i.e. Magento devs)</li>
+    <li>MageTalk Episode 15 – The MageTalk Drinking Game (Magento licensing discussion, Magento vs. Shopify partner programs)</li>
+</ul>
+
+There’s another podcast that should be mentioned which is not a pure Magento podcast, but targeted at e-commerce merchants in general. It is produced by Magento partner Classy Llama – who by the way also developed the new responsive theme for Magento 1 – under the name <a href="http://www.llamacommerceshow.com/" target="_blank">The Llama Commerce Show</a>. Here are 2 Magento related episodes:
+
+<ul><li>Episode 29: Top 5 Magento Conversion Fixes featuring ConversionIQ (Are simple errors killing your Magento conversion rates?)</li>
+    <li>Episode 32: The Power of the Magento Community featuring MageTalk (Classy Llama's Kurt Theobald and Brian Lange are joined by the hosts of MageTalk)</li>
+</ul>
+
+(youtube: https://www.youtube.com/watch?v=SfcVq8VpQ5o width:640 height:480)
+
+They have produced 34 episodes since May 2014!
+
+Last but now least, I’d like to mention another podcast about e-commerce in general, but focusing on developers, not purely for Magento, though, called <a href="https://soundcloud.com/roman-zenner" target="_blank">ShopTechTalks</a>. It is produced mainly in German language by Roman Zenner who also was one of the co-founders of the first German Magento podcast mentioned at the beginning.
+
+In episode 4 (Magento - Past, Present & Future) Tim Bezhashvyly and Roman talk about the beginnings of Magento, how it developed (especially since it has been acquired by eBay) and what its future could look like. They also discuss Tim's controversial presentation "The Harsh Truth of Magento Enterprise" at this year's Meet Magento event in Leipzig, Germany, have a closer look at the development of Magento 2 and find out how other shop systems such as osCommerce, OXID eShop and Shopware compare to Magento.
+
+In episode 11, <a href="http://www.matthias-zeis.com/" target="_blank">Matthias Zeis</a> from Vienna and Roman talk about the current state of Magento. The last episode was released only 11 days ago, so there will be more coming up in the near future.
+
+These Magento or Magento related podcasts are alive and kicking. You don't want to miss subscribing to them on iTunes, Soundcloud or YouTube. If you know about any other Magento or e-commerce podcasts, maybe even in other languages, that the community should know about, please leave a comment.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4199

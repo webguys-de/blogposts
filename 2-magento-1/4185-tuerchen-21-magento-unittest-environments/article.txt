@@ -1,0 +1,132 @@
+Article-meta: 
+
+----
+
+Title: Türchen 21: Magento Unittest environments
+
+----
+
+Date: 2014-12-21
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: bastian-ike
+
+----
+
+Article-content: 
+
+----
+
+Intro: <em>First of all: Thanks to Ingo for giving me his slot :) I hope I'm replacing you well. Also, for sure, thanks Tobi for doing this hard job of organizing as well as including me again :)</em>
+
+----
+
+Text: Now, several years after Magento came out, the community grew and a lot of developers started to extend the basic E-Commerce framework with useful and important tools and toolchains, as well as Unittesting libraries to support stable development of modules for Magento.
+
+The current de-facto standard for community module unittests is EcomDev<em>PHPUnit https://github.com/EcomDev/EcomDev</em>PHPUnit which provides all the necessary wrappers, fixtures, helpers, etc. to mock Magento, have dedicated testing databases, etc.
+
+Yet it is always annoying to setup a clean testing environment. Installing Magento can be automated with e.g. n98-magerun https://github.com/netz98/n98-magerun and the tests run with some shellscripts or using a tool like MageCI https://github.com/firegento/MageCI (original provided by EcomDev as well). Also we at AOE developed Mage_TestStand https://github.com/AOEpeople/MageTestStand, which I will focus on in this blogpost.
+
+The basic usage/setup is similar to MageCI.
+
+<h2>MageTestStand</h2>
+
+The basic purpose was to have an one-line testrunner for unittests of a specific Magento module, the development started with the TravisCI setup for our AOE modules.
+
+Basically it's using n98-magerun to install a clean Magento into a temporary directory, add EcomDev_PHPUnit using composer, links the original module into a .modman folder, links this (using modman) into Magento and runs the Unittests.
+
+The configuration of Aoe_MageTestStand is done using environment variables, similar to the way TravisCI handles it's environments, this allows MageTestStand to be easily used with both TravisCI and Jenkins.
+
+To cut things up: Just put
+
+(code)MAGENTO_VERSION=magento-ce-1.9.0.1 curl -sSL https://raw.githubusercontent.com/AOEpeople/MageTestStand/master/setup.sh | bash(/code)
+
+in your console (in the root of a Magento module) and everything is done automatically :)
+
+MageTestStand needs to have the (code)MAGENTO_VERSION(/code) environment variable set which is used to determine the Magento version you want to test against (it's passed to n98-magerun, so you can even test against Magento Enterprise in your local/companies buildserver).
+
+Possible environment variables are:
+
+(code)
+MAGENTO_DB_HOST  # magento database host, defaults to "localhost"
+MAGENTO_DB_USER  # magento database user, defaults to "root"
+MAGENTO_DB_PASS  # magento database password, defaults to "" (empty)
+MAGENTO_DB_NAME  # magento database name, defaults to "mageteststand"
+(/code)
+
+<h2>TravisCI setup</h2>
+
+Open Source extensions are often hosted on Github, therefore the free TravisCI testrunner makes sense to be used because it's both free (for open Github repositories) and flexible.
+
+A very basic .travis.yml file can be
+
+<pre>(code)language: php
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+matrix:
+  allow_failures:
+  - php: 5.6
+  - php: hhvm
+env:
+  - MAGENTO_VERSION=magento-ce-1.9.0.1
+  - MAGENTO_VERSION=magento-ce-1.8.1.0
+  - MAGENTO_VERSION=magento-ce-1.8.0.0
+  - MAGENTO_VERSION=magento-ce-1.7.0.2
+script:
+  - curl -sSL https://raw.githubusercontent.com/AOEpeople/MageTestStand/master/setup.sh | bash
+(/code)</pre>
+
+This let's travis test the extension with PHP versions 5.3-5.6 and HHVM, allows both 5.6 and HHVM to fail (because there are known issues with Magento core) and runs each with Magento CE 1.7.0.2, 1.8.0.0, 1.8.1.0 and 1.9.0.1.
+
+An example can be found here: https://travis-ci.org/AOEpeople/Aoe_Profiler
+
+<h2>Jenkins</h2>
+
+TravisCI is cool, but not always the tool of choice if you want to test things internal first, have closed-source module code or you just don't want to utilize all of Travis resources ;-)
+
+Jenkins can be setup to have a so-called "multi configuration job" which allows setups pretty similar to a Travis matrix setup.
+
+The basic steps are: - create a new "multiconfiguration" project - check your Magento module out (usign git/svn/whatever), e.g. use https://github.com/AOEpeople/Aoe<em>Profiler.git - set up a new configuration axis - set the axis name to MAGENTO</em>VERSION (this will be injected as an environment variable later) - set the options to:
+
+<pre>(code)magento-ce-1.9.1.0
+magento-ce-1.9.0.1
+... (all the versions you want)
+(/code)</pre>
+
+<ul><li>you can use another axis for e.g. the php-version you want to call or a couple of branches (add a (code)git checkout ${GIT_BRANCH}(/code) before you call MageTestStand and use GIT_BRANCH as a configuration axis))</li>
+    <li>add a new shell-build step, put (code)curl -sSL https://raw.githubusercontent.com/AOEpeople/MageTestStand/master/setup.sh | bash(/code)</li>
+    <li>save your job and run it :-)</li>
+</ul><h2>Conclusion</h2>
+
+Running tests is easy :) The argument to setup a test-environment doesn't count anymore, don't be lazy, write tests!
+
+Testing is not hard, and having some green bullets in jenkins or a "build passing" badge in your repo is cool ;-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4185

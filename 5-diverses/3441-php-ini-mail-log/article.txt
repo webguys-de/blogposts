@@ -1,0 +1,55 @@
+Article-meta: 
+
+----
+
+Title: php.ini: mail.log
+
+----
+
+Date: 2013-07-27
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Statt Magento durfte ich heute, der Urlaubsvertretung wegen, auf der Suche nach einer SPAM-Schleuder in PHP auf unserer Webhosting-Maschine gehen. Dabei entdeckt man doch auch neue Dinge in PHP. Heute war es die Option mail.log der php.ini
+
+
+
+----
+
+Text: Mit der Option <a href="http://php.net/manual/de/mail.configuration.php">mail.log</a> ist es nämlich möglich das Vorkommen aller Aufrufe der Methode mail() in ein Log-File zu schreiben. Richtig praktisch wenn irgendein PHP-Script durch einen Bug zu viel SPAM verschickt. Die Ausgabe sieht am Ende ungefähr wie folgt aus:
+
+(code)
+mail() on [/srv/../../../wp-includes/images/smilies/plugin.php:2]: To: ******** -- Headers: From: "********" <********>  Reply-To: "********" <********>  X-Priority: 3 (Normal)  MIME-Version: 1.0  Content-Type: text/html; charset="iso-8859-1"  Content-Transfer-Encoding: 8bit  
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3441

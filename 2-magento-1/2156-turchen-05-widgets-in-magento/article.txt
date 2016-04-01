@@ -1,0 +1,390 @@
+Article-meta: 
+
+----
+
+Title: Türchen 05: Widgets in Magento
+
+----
+
+Date: 2011-12-05
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: matthias-zeis
+
+----
+
+Article-content: 
+
+----
+
+Intro: Sie bieten Shopbetreibern nützliche Funktionalitäten, ohne dass diese Programmierkenntnisse mitbringen müssen. Entwickler können sie ohne großen Aufwand implementieren. Sie können bereits seit geraumer Zeit erstellt werden, nämlich seit Magento 1.4, das im Februar 2010 erschienen ist.
+
+Dennoch hört man erstaunlich wenig von <strong>Widgets</strong>. Ich gebe zu, dass auch bei unseren Kunden bisher wenig Interesse besteht und ich daher selten Widgets umgesetzt habe. Doch das sollte sich ändern: es ist höchste Zeit, diese Helferlein etwas näher vorzustellen. In diesem Türchen sehen wir uns die Konfigurationsmöglichkeiten von Widgets an.
+
+----
+
+Text: <h2>Was ist ein Widget?</h2>
+Vielleicht fragt ihr euch gerade: wovon spricht der überhaupt? Das habt ihr nicht wirklich gefragt, oder? Falls doch, dann ab zur offiziellen Magento-Website und die <a href="http://www.magentocommerce.com/blog/comments/introducing-magento-widgets/">Einführung zu Magento-Widgets</a> lesen.
+
+Im Prinzip handelt es sich um bei Widgets um <strong>Block-Klassen mit vordefinierten Konfigurationsmöglichkeiten</strong>. Sie können in den Content-Bereichen von CMS-Seiten etc. eingebunden und über Formulare im Backend einfach konfiguriert werden.
+<h2>Standard-Widgets</h2>
+Bei der Installation von Magento 1.6 CE werden 8 Widgets mitgeliefert:
+<ul><li><strong>CMS Page Link:</strong> Hiermit kann auf eine statische Seite verlinkt werden. Der Link wird in einer eigenen Zeile ("Link Block Template") oder mitten im Fließtext ("Link Inline Template") angezeigt.</li>
+	<li><strong>CMS Static Block</strong>: Dient zum Einfügen eines statischen CMS-Blocks.</li>
+	<li><strong>Catalog Category Link</strong>: Verlinkt zu einer Kategorieseite, wiederum in einer eigenen Zeile oder im Fließtext.</li>
+	<li><strong>Catalog New Products List</strong>: Stellt eine beliebige Anzahl neuer Produkte dar, entweder in der Listen- oder Gitter-Ansicht. Die Darstellung kann gecacht werden.</li>
+	<li><strong>Catalog Product Link</strong>: Was für eine Überraschung, man kann auch auf Produkte verlinken! Die Möglichkeiten sind dieselben wie bei den Kategorie- und CMS-Links.</li>
+	<li><strong>Orders And Returns</strong>: Dieses Widget dient vermutlich dazu, Bestellungen und Retouren einzusehen. Ich muss zugeben, dass ich es noch nie verwendet habe und dass es in meiner Demo-Installation von 1.6.1.0 auch nicht funktioniert.</li>
+	<li><strong>Recently Compared Products</strong>: Stellt eine beliebige Anzahl an Produkten dar, die der Kunde kürzlich verglichen hat (in Grid- oder Listen-Darstellung). Allerdings wird auch dieses Widget in der Demo-Installation nicht angezeigt.</li>
+	<li><strong>Recently Viewed Products</strong>: Stellt eine beliebige Anzahl an Produkten dar,, die der Kunde kürzlich angesehen hat (in Grid- oder Listen-Darstellung).</li>
+</ul><h2>Eigene Widgets erstellen</h2>
+Habt ihr Blut geleckt, dann könnt ihr Türchen 23 des letztjährigen Adventkalenders öffnen und lesen, <a href="http://www.webguys.de/magento/turchen-23-widgets-in-magento-erstellen/">wie man Widgets in Magento erstellt</a>. Mit dieser Basis sind wir gewappnet, diese Jahr einen noch genaueren Blick auf Widgets zu werfen.
+<h3>Grund-Angaben</h3>
+Nehmen wir für unser Kalendertürchen an, dass wir ein Youtube-Widget haben möchten. Dafür erstellen wir die Extension Emzee_Youtube. Welche Dateien dafür nötig sind, könnt ihr im letztjährigen Artikel nachlesen.
+
+Wir wenden uns direkt der Konfigurationsdatei <strong>widget.xml</strong> zu und sehen uns das grundlegende XML an:
+
+(code lang: xml)<?xml version="1.0" encoding="UTF-8"?>
+
+<widgets>
+
+    <emzee_youtube_embed type="emzee_youtube/widget" module="emzee_youtube" translate="name description">
+
+        <name>Youtube-Video</name>
+
+        <description type="desc">Einbetten eines Youtube-Videos</description>
+
+        <!--<is_email_compatible>1</is_email_compatible>-->
+
+        <parameters />
+
+    </emzee_youtube_embed>
+
+</widgets>(/code)
+<ul><li>Am Anfang geben wir unserem Widget einen eindeutigen <strong>Identifier</strong>, hier emzee_youtube_embed. Wir legen mit <strong>type</strong> die Block-Klasse fest (sie muss Mage_Widget_Block_Interface implementieren) und können wie gewohnt mit <strong>translate</strong> XML-Nodes übersetzbar machen.</li>
+	<li><strong>name</strong> definiert den offiziellen Namen, der im Dropdown der Widget-Auswahl angezeigt wird.</li>
+	<li><strong>description</strong> wird unterhalb des Dropdowns angezeigt, sobald man das Widget ausgewählt hat.</li>
+	<li>Mit <strong>is_email_compatible</strong> = 1 kann das Widget in E-Mails verfügbar gemacht werden.</li>
+	<li>In <strong>parameters</strong> werden die Konfigurationsmöglichkeiten definiert, die der Shopbetreiber über das Formular vornehmen kann. Diesen Punkt sehen wir uns gleich genauer an.</li>
+</ul><h3>Konfiguration von Widgets</h3>
+Jetzt kommen wir zum spannenden Teil, den <strong>Parametern</strong>. Durch sie wird es den Händlern möglich, das Widget selbst zu konfigurieren. Hier haben wir ein <strong>Beispiel</strong> für unser einfaches Youtube-Widget mit einem einzelnen Parameter:
+
+(image: widget_youtube_simple-650x323.png)
+
+Das dafür nötige XML sieht wie folgt aus:
+
+(code lang: xml)<?xml version="1.0" encoding="UTF-8"?>
+
+<widgets>
+
+    <emzee_youtube_embed type="emzee_youtube/widget" module="emzee_youtube" translate="name description">
+
+        <name>Youtube-Video</name>
+
+        <description type="desc">Einbetten eines Youtube-Videos</description>
+
+        <parameters>
+
+            <youtube_id translate="label description">
+
+                <label>Youtube-Id</label>
+
+                <description><![CDATA[Sie finden die ID in der Video-URL, z.B. http://www.youtube.com/watch?v=<strong>y_WTlIuzwRg</strong>]]></description>
+
+                <visible>1</visible>
+
+                <required>1</required>
+
+                <type>text</type>
+
+                <value>123456</value>
+
+            </youtube_id>
+
+        </parameters>
+
+    </emzee_youtube_embed>
+
+</widgets>(/code)
+<ul><li>Zu Beginn definieren wir einen <strong>Identifier</strong>, einen Namen für den Parameter. Dieser sollte gut gewählt werden, denn man greift über ihn später auf den Wert zu.</li>
+	<li>Das <strong>label</strong> steht für den Namen des Parameters, der im Dropdown etc. angezeigt wird.</li>
+	<li>Mit <strong>description</strong> kann eine Erklärung zu dem Parameter angegeben werden. Sie wird unterhalb des Parameters eingeblendet.</li>
+	<li><strong>visible</strong> = 1 gibt an, dass das Element sichtbar ist. Ist der Wert 0 oder nicht definiert, dann wird ein hidden-Formularelement erzeugt.</li>
+	<li>Bei einer Angabe von <strong>required</strong> = 1 muss der Parameter zwingend konfiguriert werden.</li>
+	<li>Durch <strong>type</strong> wird der Typ des Eingabefelds definiert. Im Beispiel fügt text ein einzeiliges Textfeld ein. Mit den verschiedenen Typen setzen wir uns gleich noch genauer auseinander.</li>
+	<li>Mit <strong>value</strong> kann ein Standardwert festgelegt werden.</li>
+</ul><h3>Die Konfigurationslemente</h3>
+Im Hintergrund des Konfigurationsformulars werkt eine normale Klasse Varien_Data_Form_Element_Fieldset. Und das heißt: man kann <em>theoretisch</em> jedes Formularelement verwenden, das im Verzeichnis Varien_Data_Form_Element zur Verfügung gestellt wird. In der Praxis bekommt man jedoch leider nicht alle Elemente problemlos zum Laufen.
+
+Ich gebe euch ein paar <strong>Beispiele</strong>, was leicht möglich ist.
+<ul><li><strong>Einzeiliges Textfeld</strong>
+Ein simples Eingabefeld wird wie folgt definiert:(code lang: xml)<type>text</type>(/code)
+
+Mitkann ein Standardwert vorgegeben werden.</li>
+	<li><strong>Einfache Auswahl (Dropdown)</strong>
+Für ein Dropdown gibt man an:(code lang: xml)<type>select</type>(/code)
+
+Natürlich muss man auch die <strong>Auswahlmöglichkeiten</strong> definieren.
+
+Das passiert entweder direkt im <strong>XML</strong>:
+
+(code lang: xml)<values>
+
+	<identifier1 translate="label">
+
+		<value>1</value>
+
+		<label>Eins</label>
+
+	</identifier1>
+
+	<identifier2 translate="label>
+
+		<value>2</value>
+
+		<label>Zwei</label>
+
+	</identifier2>
+
+</values>(/code)
+
+Oder indem man ein <strong>Source-Model</strong> angibt:
+
+(code lang: xml)<source_model>emzee_youtube/widget</source_model>(/code)
+
+Das Source-Model (in diesem Fall Emzee_Youtube_Model_Widget) muss die Methode toOptionArray() implementieren und ein Array mit assoziativen Arrays zurück geben:
+
+(code lang: php)public method toOptionArray()
+
+{
+
+    return array(
+
+        array('label' => 'Das Label', 'value' => 'Der Wert'),
+
+        array('label' => 'Das Label 2', 'value' => 'Der Wert 2')
+
+    );
+
+}(/code)
+
+Auch hier kann ein <strong>Standardwert</strong> mit angegeben werden. Man gibt dazu den Wert der jeweiligen Option an: im ersten Beispiel2, im zweiten BeispielDer Wert 2.</li>
+	<li><strong>Mehrfachauswahl (Multiselect)</strong>
+Die Mehrfachauswahl ist dem einfachen Select-Element sehr ähnlich. Als einzigen Unterschied schreibt man bim Typ:(code lang: xml)<type>multiselect</type>xml
+
+Möchte man <strong>mehrere Werte als Standard</strong> vorgeben, schreibt man sie komma-separiert in die value-Node:
+
+(code lang: xml)<value>1,2</value>(/code)</li>
+	<li><strong>Zeitangabe</strong>
+Wer eine Zeitangabe mit Stunden, Minuten und Sekunden benötigt, verwendet:(code lang: xml)<type>time</type>(/code)</li>
+</ul><h3>Ein kleines Beispiel</h3>
+Hier sehen wir nun ein kleines Beispiel, wie ein Widget mit den oben angegebenen Parametern aussehen könnte:
+
+(image: widget_youtube_example-650x652.png)
+
+Das XML für dieses Widget:
+
+(code lang: xml)<?xml version="1.0" encoding="UTF-8"?>
+
+<widgets>
+
+    <emzee_youtube_embed type="emzee_youtube/widget" module="emzee_youtube" translate="name description">
+
+        <name>Youtube-Video</name>
+
+        <description type="desc">Einbetten eines Youtube-Videos</description>
+
+        <parameters>
+
+            <youtube_id translate="label description">
+
+                <label>Youtube-Id</label>
+
+                <description><![CDATA[Sie finden die ID in der Video-URL, z.B. http://www.youtube.com/watch?v=<strong>y_WTlIuzwRg</strong>]]></description>
+
+                <visible>1</visible>
+
+                <required>1</required>
+
+                <type>text</type>
+
+                <value>123456</value>
+
+            </youtube_id>
+
+            <resolution translate="label description">
+
+                <label>Auflösung</label>
+
+                <description>Die Auflösung des Videos in Pixeln (mit vordefinierten Werten)</description>
+
+                <visible>1</visible>
+
+                <required>1</required>
+
+                <type>select</type>
+
+                <value>1920x1080</value>
+
+                <values>
+
+                    <res480x360 translate="label">
+
+                        <value>480x360</value>
+
+                        <label>480x360 (4:3)</label>
+
+                    </res480x360>
+
+                    <res1920x1080 translate="label">
+
+                        <value>1920x1080</value>
+
+                        <label>1920x1080 (4:3)</label>
+
+                    </res1920x1080>
+
+                </values>
+
+            </resolution>
+
+            <resolution_source_model translate="label description">
+
+                <label>Auflösung</label>
+
+                <description>Die Auflösung des Videos in Pixeln (mit Source Model)</description>
+
+                <visible>1</visible>
+
+                <required>1</required>
+
+                <type>select</type>
+
+                <value>1920x1080</value>
+
+                <source_model>emzee_youtube/resolutions</source_model>
+
+            </resolution_source_model>
+
+            <textarea>
+
+                <label>Beschreibung</label>
+
+                <description>Beschreibung des Videos</description>
+
+                <visible>1</visible>
+
+                <type>textarea</type>
+
+            </textarea>
+
+            <share_options translate="label description">
+
+                <label>Sharing-Links</label>
+
+                <description>Welche Sharing-Links sollen angeboten werden?</description>
+
+                <visible>1</visible>
+
+                <required>1</required>
+
+                <type>multiselect</type>
+
+                <value>facebook,twitter</value>
+
+                <values>
+
+                    <facebook translate="label">
+
+                        <value>facebook</value>
+
+                        <label>Facebook</label>
+
+                    </facebook>
+
+                    <googleplus translate="label">
+
+                        <value>googleplus</value>
+
+                        <label>Google+</label>
+
+                    </googleplus>
+
+                    <twitter translate="label">
+
+                        <value>twitter</value>
+
+                        <label>Twitter</label>
+
+                    </twitter>
+
+                    <xing translate="label">
+
+                        <value>xing</value>
+
+                        <label>XING</label>
+
+                    </xing>
+
+                </values>
+
+            </share_options>
+
+            <time>
+
+                <label>Uhrzeit</label>
+
+                <visible>1</visible>
+
+                <type>time</type>
+
+            </time>
+
+        </parameters>
+
+    </emzee_youtube_embed>
+
+</widgets>(/code)
+<h3>Geht noch mehr?</h3>
+Guess what: das war noch nicht alles, was sich über Widgets schreiben lässt.
+
+So ist es möglich,
+<ul><li>anstatt eines Varien_Data_Form-Elements eine beliebige <strong>eigene Klasse</strong> zu verwenden.</li>
+	<li>einen <strong>Helper-Block</strong> zu definieren, der anschließend an das eigentliche Form-Element eingebunden wird. Das verwendet Magento für die Produkt- und Kategorieauswahl.</li>
+	<li><strong>Abhängigkeiten</strong> zwischen Formular-Elementen einzubauen.</li>
+	<li>den Code mit der richtigen Herangehensweise mit minimalem Aufwand- sowohl als normalen Block in beliebigen Teilen des Webshops als auch als Widget in Template-Blöcken zu verwenden.- in verschiedenen Themes / Store-Views unterschiedlich zu gestalten.</li>
+</ul>
+Wir haben bisher nur an der Oberfläche gekratzt. Wer will, kann wesentlich fortgeschrittenere Widgets bauen. Doch das ist eine andere Geschichte.
+<h3>Darstellung im TinyMCE-Editor</h3>
+Leider gibt es im Editor <strong>keine Vorschau</strong>, wie das Widget mit den gewählten Einstellungen aussieht. (Falls ihr eine Umsetzung dafür kennt, meldet euch bitte in den Kommentaren!) Man kann aber zumindest seinem Widget durch ein <strong>eigenes Icon</strong> Individualität verleihen.
+
+Magento sucht im <strong>Verzeichnis</strong> [magentoroot]/skin/adminhtml/[package]/[theme]/images/widget/ nach einer <strong>GIF-Datei</strong> mit einem Dateinamen, der sich an der Klassen-Id des Widgets orientiert. Die Klassen-Id ist der String, der mit type="" angegeben wird.
+
+Im obigen <strong>Beispiel</strong> haben wir für das Widget die Block-Klassen-Id "emzee_youtube/widget" angegeben. Für den Dateinamen ersetzen wir den Schrägstrich durch zwei Unterstriche und hängen .gif an. Somit müssen wir unser Icon unter <strong>[magentoroot]/skin/adminhtml/[package]/[theme]/images/widget/emzee_youtube__widget.gif</strong> ablegen.
+<h2>Fazit</h2>
+Ich hoffe, ihr habt ein wenig Gefallen daran gefunden, euch intensiver mit Widgets auseinander zu setzen. Falls ihr gute Widgets kennt oder vielleicht sogar selbst welche entwickelt hat, freue ich mich über Meldungen in den Kommentaren. :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2156

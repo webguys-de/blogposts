@@ -1,0 +1,107 @@
+Article-meta: 
+
+----
+
+Title: Warum eigentlich immer alle Attribute eines Sets laden?
+
+----
+
+Date: 2011-08-22
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Besondere Anforderungen bringen besondere Probleme mit sich. So besitzt ein Kunden-Shop ca. 2500 Attribute in einem Attribute-Set. Davon sind aber längst nicht alle Werte immer gesetzt. Viel mehr war es beim automatischen Import nicht möglich diese logisch in Attribute-Sets zu gliedern. Leider brachte das einige Schwierigkeiten mit: Es wurde langsamer. Aber auch das konnten wir, erst mal mal schnell und "dreckig" lösen:
+
+
+
+----
+
+Text: Der Trick bestand darin nur die Attribute eines Produktes zu laden bei denen wir auch Werte erwarten können. Das lässt sich, sehr einfach mit einer einzelnen SQL-Anweisung und ein paar Unions verbinden:
+
+(code lang: sql)
+SELECT attribute_id FROM catalog_product_entity_varchar WHERE entity_id = XX
+(/code)
+
+Dieses SQL liefert uns alle Attribute vom Typ <em>varchar</em> die zum jeweiligen Produkt gesetzt sind. Wiederholen muss man das ganze nun für die übrigen Entitäten. Dazu gehören z.B. <em>decimal</em> oder <em>text</em>.
+
+Mit dem Wissen habe wir nun ganz böse und schnell die Mage_Eav_Model_Config gepachted. Diese ist dafür zuständig die Attribute zurückzugeben welche im nächsten Schritt geladen werden sollen. Heraus kamen ein paar Zeilen Code mit sehr guten Auswirkungen auf die Geschwindigkeit:
+
+(code lang: php)
+<?php
+
+class Codex_HideNoAttributes_Model_Eav_Config extends Mage_Eav_Model_Config {
+
+    protected $_attribute_prefix = 'customer_attribute_prefix';
+
+    public function getEntityAttributeCodes($entityType, $object=null) {
+
+        if ( $entityType->getEntityTypeCode() == 'catalog_product' && $object ) {
+
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_read');
+
+            $subselects = array();
+            foreach( array('catalog_product_entity_datetime',
+                           'catalog_product_entity_decimal',
+                           'catalog_product_entity_int',
+                           'catalog_product_entity_text',
+                           'catalog_product_entity_varchar') AS $tablename ) {
+
+                    $subselects[] = "SELECT attribute_id FROM $tablename WHERE entity_id=".$object->getId();
+            }
+
+            $result = $conn->fetchAll("SELECT DISTINCT attribute_code FROM eav_attribute WHERE attribute_code LIKE '".$this->_attribute_prefix."%' AND attribute_id IN ( ".join(' UNION ', $subselects )." )" );
+
+            $data = array();
+            foreach( $result AS $item ) {
+                $data[] = $item['attribute_code'];
+            }
+
+            foreach( parent::getEntityAttributeCodes( $entityType, $object ) AS $attribute_code ) {
+                list($str) = explode('_', $attribute_code);
+                if ( $str !=  $this->_attribute_prefix ) {
+                    $data[] = $attribute_code;
+                }
+            }
+
+            return $data;
+        }
+
+        return parent::getEntityAttributeCodes( $entityType, $object );
+    }
+
+}
+(/code)
+
+Natürlich räumen wir noch auf :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1770

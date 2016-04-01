@@ -1,0 +1,411 @@
+Article-meta: 
+
+----
+
+Title: Configurable Product: Attribute als Tabelle darstellen
+
+----
+
+Date: 2010-04-14
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento bietet von Haus aus nicht die Möglichkeit ein Configurable Product tabellarisch anzuzeigen - auch die Module auf Magento Commerce sind hierzu rar gesät. Also entwickeln wir doch einfach selbst ein Modul :)
+
+
+----
+
+Text: <h4>Fertiges Modul gesucht?</h4>
+Das Modul ist nun in ähnlicher Fassung, mit Warenkorb-Funktion, als <a href="http://www.webguys.de/magento-extensions-module/configurable-matrix-display-configurable-products-as-table/#screenshots">Paid-Modul für 99 €</a> verfügbar. <a href="http://www.webguys.de/magento-extensions-module/configurable-matrix-display-configurable-products-as-table/#screenshots">Jetzt Bestellen!</a>
+<h3>Das Ziel</h3>
+Kein Modul ohne eine klare Zieldefinition - kaum etwas ist schlimmer als einfach ins Blaue zu entwickeln. Unser Ziel soll es also sein alle zu einem Configurable Product zugewiesenen Simple Products in einer Tabelle anzuzeigen. Die Produkte sollten für das Erste ausschließlich dargestellt werden - ein direktes Hinzufügen zum Warenkorb per z.B. Radio-Auswahl ist nicht vorgesehen.
+
+Unser Ergebnis sollte also ungefähr so aussehen:
+<table class="basetable" style="width: 450px;"><tbody><tr><th>SKU</th>
+<th>Farbe</th>
+<th>Größe</th>
+<th>...</th>
+<th>...</th>
+<th>Preis</th>
+</tr><tr><td>1234-5</td>
+<td>Rot</td>
+<td>M</td>
+<td>...</td>
+<td>...</td>
+<td>0,55 €</td>
+</tr><tr><td>1234-5</td>
+<td>Blau</td>
+<td>M</td>
+<td>...</td>
+<td>...</td>
+<td>0,67 €</td>
+</tr><tr><td>1234-5</td>
+<td>Rot</td>
+<td>S</td>
+<td>...</td>
+<td>...</td>
+<td>0,75 €</td>
+</tr><tr><td>1234-5</td>
+<td>Blau</td>
+<td>S</td>
+<td>...</td>
+<td>...</td>
+<td>0,85 €</td>
+</tr></tbody></table>
+Die Attribute-Werte sollen dabei alphabetisch sortiert sein, zuerst nach Attribute 1, dann Attribute 2 usw. Die Tabelle erweitert sich automatisch auf die benötige Anzahl an Attributen. Angezeigt wird das ganze auf der Produkt-Detail-Seite (catalog/product/view.phtml)
+<h3>Was brauchen wir?</h3>
+Um unser Ziel zu erreichen benötigen wir im groben nur ein Template und einen Block. Der Block soll die benötigten Informationen zusammenfassen und an das Template übergeben. Das Template, wie sollte es auch anders sein, gibt die Daten als HTML aus.
+<h3>Woher bekommen wir die Daten?</h3>
+Nachdem Google und das Magento-Forum bei dieser Aufgabe leider keine große Hilfe waren musste ich mich näher dem Magento-Kern in Bezug auf Configurable Products widmen. Dabei stellen sich folgende Fragen:
+<ul><li>Welche Attribute des Configurable-Products sind konfigurierbar?</li>
+	<li>Welche Attributewerte kann das Attribute annehmen?</li>
+	<li>Wie lässt sich Anhand der ausgewählte Attribute ermitteln welches Simple-Product zutreffend ist?</li>
+</ul>
+Die ersten Fragen ließen sich relativ einfach klären - bei der letzten dauerte es leider etwas länger bis die richtige Stelle gefunden war.
+<h3>Grundlagen schaffen</h3>
+Bevor wir ordentlich anfangen sollten wir den benötigen Block anlegen, das Template mit einer Hallo Welt-Ausgabe erstellen und alles im catalog.xml einbinden. So sehen wir direkt, welche Auswirkungen unsere Änderungen haben und können kontrollieren, ob wir da eigentlich das richtiges tun - oder auch nicht ;)
+<h4>Block erstellen</h4>
+Um uns ein bisschen Arbeit beim Anlegen abzunehmen, arbeiten wir mit unseren Block im Ordner app/local/Mage - das gehört zwar nicht unbedingt zum guten Ton, bläht diesen Beitrag aber nicht unnötig auf. Erstellen wir also unseren Block:
+
+Datei: app/code/local/Mage/Catalog/Block/Product/View/Configurabletable.php
+
+(code lang: php)
+class Mage_Catalog_Block_Product_View_Configurabletable extends Mage_Core_Block_Template
+{
+/*
+Die Funktionen bauen wir nun Stück für Stück auf
+*/
+}
+(/code)
+<h4>Template anlegen</h4>
+Das Template soll, wie beschrieben, erstmal nur "Hallo Welt" ausgeben. So können wir relativ einfach kontrollieren, ob unser Template über den Block richtig ausgegeben wird und sich das Layout mit dem dazugehörigen XML wie gewünscht verhält.
+
+Datei: app/design/frontend/default/default/template/catalog/product/view/configurabletable.phtml
+
+(code)
+Hallo Welt
+(/code)
+
+<h4>Layout-XML anpassen</h4>
+Und nun müssen wir unseren Block mit dem Template noch dem Layout bekannt machen: "Hallo Catalog,xml ich bin der Block Tableview. Darf ich Ihnen meine Frau configurabletable.phtml vorstellen? Sie ist ein Template!"
+
+Datei: app/design/frontend/default/default/layout/catalog.xml
+
+(code language="xml")
+<catalog_product_view translate="label">
+	...
+	<reference name="content">
+		...
+		<block type="catalog/product_view" name="product.info" template="catalog/product/view.phtml">
+			...
+			<block type="catalog/product_view_description" name="product.description" as="description" template="catalog/product/view/description.phtml"/>
+
+			<!-- Folgende Zeile einfügen -->
+			<block type="catalog/product_view_configurabletable" name="catalog.product.configurabletable" as="configurabletable" template="catalog/product/view/configurabletable.phtml"/>
+			<!-- Bis hier einfügen -->
+
+			<block type="catalog/product_view_configurabletable" name="catalog.product.configurabletable" as="configurabletable" template="catalog/product/view/configurabletable.phtml"/>
+			...
+		</block>
+		...
+	</reference>
+	...
+</catalog_product_view>
+(/code)
+
+So, nun kennen sich Layout, Block und Template. Jedoch wird unser "Hallo Welt" noch an keiner Stelle ausgegeben. Dazu müssen wir app/design/frontend/default/default/template/catalog/product/view.phtml noch anpassen und an der gewünschten Stelle ein
+
+(code lang: php)<?php echo $this->getChildHTML('configurabletable');?>(/code)
+
+einfügen. Ich habe mich in meinen Beispiel dazu entschieden das genau unter der ShortDescription zu tun. Aussehen wird das ganze also bis jetzt wie folgt:
+
+(image: Anashria-Womens-Premier-Leather-Sandal_1271246044044-500x267.png)
+<h3>Block erstellen</h3>
+Nachdem wir nun unseren leeren Block mit einem einfachen Template vorbereitet haben und das ganze auch korrekt ausgegeben wird, benötigen wir noch einige Daten zum Configurable-Product. Dazu gehören die Attribute, die Attributwerte und die Kombination aus verschiedenen Attributen in Hinblick auf den Preis bzw. die SKU.
+
+Zuerst benötigen wir eine Funktion die uns sagt welches Produkt überhaupt dargestellt werden soll. Diese Information ist über die Mage-Registry durch den Product-View-Controller bereits gesetzt.
+
+(code language:php)
+protected function getProduct() {
+    return Mage::registry('current_product');
+}
+(/code)
+
+Die Funktion ist natürlich Bestandteil der Class "Mage_Catalog_Block_Product_View_Configurabletable".
+
+Sobald wir wissen, um welches Configurable-Product es sich handelt können wir recht einfach ermitteln, welche Simple-Products dem Configurable-Product zugewiesen sind. Auch das kapseln wir wieder in einer Funktion.
+
+(code language:php)
+public function getAllowProducts() {
+	$products = array();
+	$allProducts = $this->getProduct()->getTypeInstance(true)
+							->getUsedProducts(null, $this->getProduct());
+	foreach ($allProducts as $product) {
+		if ($product->isSaleable()) {
+			$products[] = $product;
+		}
+	}
+	return $products;
+}
+(/code)
+
+Jetzt wird es Zeit für einen ersten Test. Rufen wir aus dem Template doch einmal die getAllowProducts auf und stellen die zugeordneten SKUs dar.
+
+Datei: configurabletable.phtml
+
+(code language:php)
+Hallo Welt
+<?php foreach( $this->getAllowProducts() AS $_product ) : ?>
+	<?php echo $_product->getSku(); ?>
+<?php endforeach; ?>
+(/code)
+
+Bei dem Magento Demo-Produkt "Zolof The Rock And Roll Destroyer: LOL Cat T-shirt (Shirts T)" (SKU=zol) erhalten wir damit folgende Ausgabe:
+
+(code)
+Hallo Welt zol_r_sm zol_g_sm zol_r_med zol_g_med zol_r_lrg zol_g_lrg
+(/code)
+
+Wir sehen also, die erste Funktion tut was sie soll. Nun liegt es an uns herauszufinden welche Attribute bei dem Configurable Product denn überhaupt konfigurierbar sind. Auch hierzu basteln wir uns wieder eine Funktion bzw. klauen sie aus dem Magento-Kern.
+
+(code language:php)
+public function getAllowAttributes() {
+    return $this->getProduct()->getTypeInstance(true)
+        ->getConfigurableAttributes($this->getProduct());
+}
+(/code)
+
+Fehlt nur noch eine kleine Testausgabe in unserem Template:
+
+(code language:php)
+[.. siehe oben ..]
+<hr/>
+<?php foreach( $this->getAllowAttributes() AS $_attribute ) : ?>
+	<?php echo $_attribute->getProductAttribute()->getAttributeCode() ?>
+<?php endforeach; ?>
+(/code)
+
+Als Rückmeldung erhalten wir "shirt_size color" - das entspricht genau den Namen (Codes) der Attributen die konfigurierbar sind.
+
+Wir wissen nun also welche Attribute konfigurierbar sein sollen und welche Simple Products dem Configurable Product zugewiesen sind. Was hält uns also davon ab unsere Simple Products durchzulaufen und uns einen Attribute-Tabelle zu bauen an dessen Ende unser Simple Product steht?
+
+Ein Beispiel:
+
+(code)
+Array
+(
+    [0] => Array
+        (
+            [sku] => zol_r_sm
+            [product] => 'Für das Beispiel entfernt'
+            [items] => Array
+                (
+                    [0] => Small
+                    [1] => Red
+                )
+
+        )
+
+    [1] => Array
+        (
+            [sku] => zol_g_sm
+            [product] => 'Für das Beispiel entfernt'
+            [items] => Array
+                (
+                    [0] => Small
+                    [1] => Green
+                )
+
+        )
+
+    [.. gekürzt ..]
+
+)
+(/code)
+
+Wenn wir einen Schritt weiter denken hilft uns diese Struktur nachher sehr bei der Darstellung von Simple-Products in einer Tabelle. Jeder Eintrag in unserem Array ist quasi eine Reihe in unserer späteren Tabelle. In der Tabelle stellen wir dann zunächst alle Werte aus [items] nacheinander da um dann mit SKU und Preis aus [product] zu enden. Fehlt nur noch die Funktion die uns ein solches Array liefert:
+
+(code language: php)
+public function getTableData() {
+	$data = array();
+
+	foreach( $this->getAllowProducts() AS $product ) {
+		// Zuerst alle Simple-Products durchlaufen
+
+		$items = array();
+
+		foreach( $this->getAllowAttributes() AS $attribute ) {
+			// Dann zu jedem Simple Product die Attributewerte in Items speichern
+			$attrValue = $product->getResource()->getAttribute( $attribute->getProductAttribute()->getAttributeCode() )->getFrontend();
+			$items[] = $attrValue->getValue($product);
+		}
+
+		// Um letztlich dem Tabellenbody noch Informationen zum Product mitzugeben
+		if ( $items > 0 ) {
+			$data[] =  array( 	'sku' 		=> $product->getSku(),
+								'items' 	=> $items,
+								'product' 	=> $product
+								);
+		}
+
+	}
+
+	return $data;
+}
+(/code)
+
+Dann passen wir einmal unser Template an und stellen schon einmal eine vereinfachte Tabelle dar:
+
+Datei: configurabletable.phtml
+
+(code lang: php)
+<table>
+	<?php foreach( $this->getTableData() AS $tablerow ) : ?>
+		<tr>
+			<?php foreach( $tablerow['items'] AS $attribute ) : ?>
+
+				<td> <?php echo $this->htmlEscape( $attribute ); ?> </td>
+
+			<?php endforeach; ?>
+
+			<td> <?php echo $this->htmlEscape( $tablerow['product']->getSku() ); ?> </td>
+			<td> <?php echo $this->htmlEscape( $tablerow['product']->getPrice() ); ?> </td>
+		</tr>
+	<?php endforeach; ?>
+</table>
+(/code)
+
+Beim Aufruf des Beispiel-Produktes gibt es damit folgende Ausgabe im Browser:
+
+
+
+Mal abgesehen von einer schönen Formatierung, die wir besser den Grafikern bzw. CSS-Gurus überlassen wollen: Was fehlt noch? Richtig, eine ordentlich Tabellenüberschrift! Dabei können wir uns sehr einfach bereits bestehenden Funktionen bedienen - so müssen wir nur unser Template anpassen:
+
+Datei: configurabletable.phtml
+
+(code lang: php)
+<table>
+
+	<tr>
+		<?php foreach( $this->getAllowAttributes() AS $attribute ) : ?>
+			<th>
+				<?php echo $this->htmlEscape( $attribute->getLabel() ); ?>
+			</th>
+		<?php endforeach; ?>
+
+		<th><?php echo $this->__('SKU')?></th>
+		<th><?php echo $this->__('Preis')?></th>
+
+	</tr>
+
+	<?php foreach( $this->getTableData() AS $tablerow ) : ?>
+		<tr>
+			<?php foreach( $tablerow['items'] AS $attribute ) : ?>
+
+				<td> <?php echo $this->htmlEscape( $attribute ); ?> </td>
+
+			<?php endforeach; ?>
+
+			<td> <?php echo $this->htmlEscape( $tablerow['product']->getSku() ); ?> </td>
+			<td> <?php echo $this->htmlEscape( $tablerow['product']->getPrice() ); ?> </td>
+
+		</tr>
+	<?php endforeach; ?>
+</table>
+(/code)
+
+Mit ein ganz bisschen Formatierung sieht unser Endergebnis wie folgt aus:
+(image: Zolof-The-Rock-And-Roll-Destroyer-LOL-Cat-T-shirt_1271275886017-500x382.png)
+<h3>Fazit</h3>
+Tolles Ergebnis für ein paar Zeilen Code - die Hauptarbeit lag darin die Funktionalität von Simple und Configurable-Products zu recherchieren. Einmal verstanden ging es quasi wie von selbst :)
+
+Abschließend noch einmal den vollständigen Configurabletable Block:
+
+(code lang: php)
+<?php
+
+class Mage_Catalog_Block_Product_View_Configurabletable extends Mage_Core_Block_Template
+{
+
+	protected function getProduct() {
+		return Mage::registry('current_product');
+	}
+
+	public function getAllowProducts() {
+		$products = array();
+		$allProducts = $this->getProduct()->getTypeInstance(true)
+								->getUsedProducts(null, $this->getProduct());
+		foreach ($allProducts as $product) {
+			if ($product->isSaleable()) {
+				$products[] = $product;
+			}
+		}
+		return $products;
+	}
+
+	public function getAllowAttributes() {
+        return $this->getProduct()->getTypeInstance(true)
+            ->getConfigurableAttributes($this->getProduct());
+    }
+
+	public function getTableData() {
+		$data = array();
+
+		foreach( $this->getAllowProducts() AS $product ) {
+			// Zuerst alle Simple-Products durchlaufen
+
+			$items = array();
+
+			foreach( $this->getAllowAttributes() AS $attribute ) {
+				// Dann zu jedem Simple Product die Attributewerte in Items speichern
+				$attrValue = $product->getResource()->getAttribute( $attribute->getProductAttribute()->getAttributeCode() )->getFrontend();
+				$items[] = $attrValue->getValue($product);
+			}
+
+			// Um letztlich dem Tabellenbody noch Informationen zum Product mitzugeben
+			if ( $items > 0 ) {
+				$data[] =  array( 	'sku' 		=> $product->getSku(),
+									'items' 	=> $items,
+									'product' 	=> $product
+									);
+			}
+
+		}
+
+		return $data;
+	}
+
+}
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 164

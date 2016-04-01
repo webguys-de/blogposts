@@ -1,0 +1,204 @@
+Article-meta: 
+
+----
+
+Title: Türchen 20: Tier prices für Magento individuelle Optionen
+
+----
+
+Date: 2012-12-20
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: nikolai-krambrock
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento erlaubt Preis-Staffeln für Produkte und Preise für individuelle Optionen. Preis-Staffeln für individuelle Optionen werden dagegen nicht unterstützt. Diese werden vor allem dann benötigt, wenn eine Vielzahl von Produkten wie Werbeartikel oder Textilen bedruckt oder in anderer Form veredelt werden sollen. Die folgende Tabelle zeigt z. B. Preise für Kugelschreiber mit Bedruckung.
+
+
+
+----
+
+Text: <table><tbody><tr><td style="white-space: pre-wrap">Stück ab</td>
+<td style="white-space: pre-wrap">0</td>
+<td style="white-space: pre-wrap">50</td>
+<td style="white-space: pre-wrap">100</td>
+</tr><tr><td style="white-space: pre-wrap">€/St.</td>
+<td style="white-space: pre-wrap">0,45 €</td>
+<td style="white-space: pre-wrap">0,39 €</td>
+<td style="white-space: pre-wrap">0,37 €</td>
+</tr><tr><td style="white-space: pre-wrap">+ Lasergravur</td>
+<td style="white-space: pre-wrap">5,00 €</td>
+<td style="white-space: pre-wrap">0,19 €</td>
+<td style="white-space: pre-wrap">0,15 €</td>
+</tr><tr><td style="white-space: pre-wrap">+ Siebdruck</td>
+<td style="white-space: pre-wrap">4,50 €</td>
+<td style="white-space: pre-wrap">0,17 €</td>
+<td style="white-space: pre-wrap">0,13 €</td>
+</tr><tr><td style="white-space: pre-wrap">+ Tampondruck</td>
+<td style="white-space: pre-wrap">4,00 €</td>
+<td style="white-space: pre-wrap">0,16 €</td>
+<td style="white-space: pre-wrap">0,12 €</td>
+</tr></tbody></table>
+Der Preis soll abhängig von der bestellten Menge 0,45€, 0,39€, 0,37€, 0,35€ oder 0,27€ betragen. Die Druckkosten für einen Schriftzug sollen ebenfalls mit der Menge sinken. Sie sollen nicht als prozentualer Zuschlag zum Basispreis, sondern als eigene Preise angeben werden.
+<h2>Die Varianten</h2>
+Bei der Umsetzung bin ich verschiedene Varianten durchgegangen. Die letzte (und aus meiner Sicht beste) Variante wird im Detail beschrieben – wir haben sie in einem Kundenprojekt umgesetzt. Folgende Varianten habe ich ausprobiert:
+<table style="width: 600px" class="wrap"><tbody><tr><td style="white-space: pre-wrap">Variante</td>
+<td style="white-space: pre-wrap">Vorteile</td>
+<td style="white-space: pre-wrap">Nachteile</td>
+</tr><tr><td style="white-space: pre-wrap">Abbilden der Zuschläge über Warenkorbpreisregeln</td>
+<td style="white-space: pre-wrap">Außer ggf. Observern im Backend keine Änderungen im System</td>
+<td style="white-space: pre-wrap">Die Preisabschläge werden nur in Checkout und Rechnung und nur als eine Position angezeigt</td>
+</tr><tr><td style="white-space: pre-wrap">Simple Configurable Products / Better Configurable Products</td>
+<td style="white-space: pre-wrap">Gute Darstellung und Verwenden eines fertigen Moduls, um die Anforderungen umzusetzen</td>
+<td style="white-space: pre-wrap">Für jede Attributkonfiguration muss ein einfaches Produkt angelegt werden; außerdem starke Eingriffe ins Basissystem durch zahlreiche Rewrites</td>
+</tr><tr><td style="white-space: pre-wrap">Generieren von zusätzlichen individuellen Optionen mit Preisen</td>
+<td style="white-space: pre-wrap">Gute Darstellung und lediglich moderate Eingriffe ins Basissystem</td>
+<td style="white-space: pre-wrap">Backend enthält viele zusätzliche individuelle Optionen – dies ist für die manuelle Pflege ein wenig ungünstig</td>
+</tr></tbody></table><h2>Abbilden der Zuschläge über Warenkorbpreisregeln</h2>
+Das Abbilden der Zuschläge über Warenkorbpreisregeln ist die eigentlich eleganteste Variante, wenn eine Import-Schnittstelle zu einer Warenwirtschaft verwendet wird. Dann können während oder im Anschluss an den Import Warenkorbpreisregeln generiert werden, die Rabatte auf die jeweiligen Positionen liefern. Das Ganze hat allerdings einen entscheidenden Nachteil: Die Rabatte zu den Produkten werden im Checkout nur als eine Position angezeigt und lassen sich nicht unmittelbar zuordnen. Daher dürfte diese Variante in den seltensten Fällen ausreichen.
+<h2>Simple Configurable Product / Better Configurable Products</h2>
+Die vom Entwicklungsaufwand einfachste Lösung ist die Nutzung von Simple Configurable Product (<a href="http://www.magentocommerce.com/magento-connect/simple-configurable-products.html">http://www.magentocommerce.com/magento-connect/simple-configurable-products.html</a>) oder Better Configurable Products (<a href="http://www.magentocommerce.com/magento-connect/better-configurable-products.html">http://www.magentocommerce.com/magento-connect/better-configurable-products.html</a>). Letztlich habe ich es nur mit Better Configurable Products getestet, da hiervon eine aktuelle Version für Magento 1.7 zur Verfügung stand. Für jede Variante des Produkts, also z.B. Lasergravur, Siebdruck und Tampondruck wird ein zusätzliches konfigurierbares Produkt angelegt. Simple Configurable Product sorgt dann dafür, dass die Preis-Staffel aus dem einfachen Produkt übernommen wird. Bei vielen Produkte und vielen Varianten wird das aber schnell unübersichtlich. Gibt es neben den aufgeführten Druckarten rote, grüne und blaue Kugelschreiber und kann zwischen kleiner, mittlerer und großer Schrift gewählt werden, so ergibt dies statt drei 27 einfache Produkte. Diese müssen dann alle einem konfigurierbaren Produkt zugeordnet werden. Zudem haben alle 27 Produkte einen eigenen Lagerbestand. Zu guter Letzt greifen die beiden Module durch zahlreiche Rewrites tief in das System ein und geraten leicht mit weiteren Modulen in Konflikt.
+<h2>Generieren von zusätzlichen individuellen Optionen mit Preisen</h2>
+Das Generieren von zusätzlichen individuellen Optionen haben wir letztlich in einem Kundenprojekt umgesetzt. Die Grundidee ist einfach: Eine individuelle Option erlaubt nur einen Preiszuschlag, ich benötige aber 5 – einen je Staffel. Also lege ich 5 individuelle Optionen mit verschiedenen Preisen an. Vorteil dieser Lösung ist ein sinnvolles Erscheinungsbild und moderate Änderungen am System. Die von uns erstellte Lösung kommt mit zwei Oberservern aus – zusätzliche Rewrites von Blocks sorgen für ein besseres Erscheinungsbild. Da Magento bei dieser Lösung nach dem Warenkorb mit standardgetreuen individuellen Optionen arbeitet, ist im Folgenden auch nicht mit zusätzlichen Schwierigkeiten zu rechnen – also in Rechnungen, Lieferungen, Gutschriften, Export, etc. Der Nachteil dieser Lösung ist eine gewisse Unordnung in den individuellen Optionen im Backend.
+<h2>Eingabe von Staffelpreisen für individuelle Optionen</h2>
+Zur Nutzung des Moduls müssen im Backend sowohl eine Preis-Staffel als auch individuelle Optionen angelegt werden. Schließlich werden die Preise der individuellen Optionen für jede Preis-Staffel in neu generierte Optionen eingetragen. Wir beginnen mit der Preis-Staffel für das Produkt, die zunächst angelegt werden muss:
+
+(image: bild1-650x379.jpg)
+
+Im zweiten Schritt legen wir den Drucktyp als individuelle Option an:
+
+(image: bild2-650x266.jpg)
+
+Beim Speichern wird daraus die folgende Tabelle von individuellen Optionen, in welche dann die Staffelpreise für die ursprünglichen individuellen Optionen eingegeben werden:
+
+(image: bild3-650x700.jpg)
+
+Unter dem Titel preis-lasergravur-100 versteckt sich also der Preis für die Lasergravur bei einer Mindestabnahme von 100 Kugelschreibern. Entsprechend werden die anderen Felder ausgefüllt. Werden alle diese Felder ausgefüllt, so ist das Ergebnis im Checkout erwartungsgemäß. Bei 120 bestellten Kugelschreibern mit Lasergravur haben diese einen Preis von 0,35€ + 0,15€, also insgesamt 0,52€ pro Stück:
+
+(image: bild4-650x165.jpg)
+<h2>Entwicklung von Staffelpreisen für individuelle Optionen</h2>
+Die wesentliche Arbeit in dem Modul übernehmen zwei Observer. Der erste Observer generiert die individuellen Optionen im Backend. Der zweite Observer wählt die korrekte Option bei Änderungen im Warenkorb. Die vereinfache config.xml sieht also wie folgt aus:
+
+(code lang: php)
+<config>
+  <modules>
+    <C4B_Configurableprices>
+      <version>0.0.1</version>
+    </C4B_Configurableprices>
+  </modules>
+  <global>
+    <events>
+      <catalog_product_prepare_save>
+        <observers>
+          <c4b_configurableprices_catalog_product_observer>
+            <type>singleton</type>
+            <class>C4B_Configurableprices_Model_Catalog_Product_Option</class>
+            <method>updateProductCustomOptions</method>
+          </c4b_configurableprices_catalog_product_observer>
+        </observers>
+      </catalog_product_prepare_save>
+      <checkout_cart_save_before>
+        <observers>
+          <c4b_configurableprices_cart_observer>
+            <type>singleton</type>
+            <class>C4B_Configurableprices_Model_Checkout_Observer</class>
+            <method>applyConfigurablePrices</method>
+          </c4b_configurableprices_cart_observer>
+        </observers>
+      </checkout_cart_save_before>
+    </events>
+  </global>
+</config>
+(/code)
+<h2>Observer beim Speichern von Produkten im Backend</h2>
+Wird ein Produkt im Backend gesichert, so wird die Methode updateProductCustomOptions der Klasse C4B_Configurableprices_Model_Catalog_Product_Option ausgeführt. Diese sorgt dafür, dass zusätzliche individuelle Optionen angelegt werden. Bereits angelegte werden aber nicht überschrieben – die schon eingegebenen Preise sollen nicht entfernt werden. Dies übernimmt diese stark vereinfachte Methode:
+
+(code lang: php)
+  public function updateProductCustomOptions($observer) {
+    /* @var $product Mage_Catalog_Model_Product */
+    $product = $observer['product'];
+
+    $newOptionList = $this->_getNewOptionsList($product);
+
+    foreach($product->getOptions() as $option) {
+      foreach($option->getValues() as $value) {
+        $key = array_search(strtolower(trim($value->getSku())), $newOptionList);
+        if($key === false) {
+          $this->_deleteOptionValue($product, $option, $value->getSku());
+        } else {
+          unset($newOptionList[$key]);
+        }
+      }
+    }
+
+    foreach($newOptionList as $newOptionValue) {
+      $this->addNewOptionValue($product, 0, $newOptionValue);
+    }
+  }
+(/code)
+
+Zunächst ermittelt die Methode _getNewOptionsList alle Werte von generierten individuellen Optionen, die ein Produkt haben sollte, wie z. B. preis-lasergravur-100 und legt diese in das Array newOptionList ab. Dann geht die Methode alle Optionen und deren Werte des aktuellen Produkts durch. Nicht mehr benötigte Optionen werden gelöscht, bereits vorhandene aus der newOptionList gestrichen. Die verbleibenden Optionen werden im Anschluss mit der Methode addNewOptionValue erstellt.
+<h2>Observer beim Ändern des Warenkorbs</h2>
+Vor dem Sichern des Warenkorbs werden von der Methode applyConfigurablePrices der Klasse C4B_Configurableprices_Model_Checkout_Observer die zur aktuellen Preis-Staffel gehörenden Optionen gewählt. Hier ebenfalls die stark vereinfachte Methode:
+
+(code lang: php)
+  public function applyConfigurablePrices($observer) {
+    $items = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
+
+    foreach($items as $item) {
+
+      $itemQty  = $this->_getQuantityBoundary($item);
+      $options_ids = $this->_getNotGeneratedCustomOptions($item);
+
+      foreach ($options_ids as $optionId) {
+        $valueId = $item->getOptionByCode('option_' . $optionId)->getValue();
+        $productOption = $item->getProduct()->getOptionById($optionId);
+
+        $optionTitle = $productOption->getTitle();
+        $valueTitle = $productOption->getValueById($valueId)->getTitle();
+        $option =  $this->_getOptionByTitle($item->getProduct(), self::PREFIX . $optionTitle);
+
+        $valueSku =  self::PREFIX . $optionTitle . "-" . $valueTitle . "-" . $itemQty;
+        $this->_addOrUpdateOptionValue($item, 'option_' . $option->getId(),
+                                       $this->_getOptionValueIdBySku($option,$valueSku));
+        $options_ids .= strlen($options_ids) == 0 ? $option->getId() : "," . $option->getId();
+      }
+
+      $this->_addOrUpdateOptionValue($item, 'option_ids', $options_ids);
+    }
+  }
+(/code)
+
+In der Methode werden alle Positionen des Warenkorbs bearbeitet. Die Methode _getQuantityBoundary gibt die Mengengrenze zurück, also z. B. 100 für eine Menge von 120. Die Methode _getNotGeneratedCustomOptions gibt alle Werte ursprünglicher individueller Optionen zurück, die der Kunde gewählt hat. „lasergravur“ ist so ein ursprünglicher Wert, „preis-lasergravur-100“ wäre dagegen nicht in der Liste. Im Folgenden wird für jede Option (z. B. „lasergravur“ ) mit der Mengengrenze die generierte Option ermittelt und ausgewählt (z. B. „preis-lasergravur-100“), die letztlich zu dem Preiszuschlag führt. Im Anschluss (hier nicht gezeigt) muss die Preisberechnung neu angestoßen werden.
+<h2>Fazit</h2>
+Das Thema von Preis-Staffeln bei individuellen Optionen ist in Magento aufwendig und nur über Umwege umzusetzen. Zu allem Überfluss gibt es zahlreiche verlockende Optionen der Umsetzung, die letztlich nicht zufriedenstellend funktionieren. Der hier vorgestellte Ansatz ist bereits im Einsatz beim Kunden und führt im Frontend zu durchweg positiven Resultaten. Dieser Ansatz kann im eigenen Projekt ebenfalls eingesetzt werden. Wer dazu das Modul als Vorlage nutzen möchte, kann es gerne kostenlos (aber auch ohne Gewähr und Support) hier anfragen: http://www.krambrock.com/kontakt-impressum/. Ohne tiefgehende Magento-Kenntnisse lässt es sich allerdings nicht im eigenen Magento-Projekt integrieren. Über eine rege Diskussion und Verbesserungsvorschläge freue ich mich natürlich sehr!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3307

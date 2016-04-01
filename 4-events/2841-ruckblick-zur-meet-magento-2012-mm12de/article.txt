@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: Rückblick zur Meet Magento 2012 #mm12de
+
+----
+
+Date: 2012-05-24
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das war es schon, die Meet Magento geht zu Ende und uns bleibt nur noch die Möglichkeit einen kleinen Rückblick zu veröffentlichen. Mein persönlicher Fokus der Veranstaltung ist mittlerweile von Jahr zu Jahr immer mehr das eigentliche Networking. Aber fangen wir vorne an ..
+
+----
+
+Text: Unsere Meet Magento begann am Sonntag um 15 Uhr. Wir trafen uns gemeinsam bei <a href="http://www.code-x.de">code-x</a> und Jan, der beste Autofahrer der Welt, holte uns pünktlich in der Karl-Schurz-Straße ab. Nach 3h Fahrt trafen wir gegen 18 Uhr im Hotel Vier-Jahreszeiten in Leipzig ein. Um 19.30 Uhr stieß Damian dazu. Gemeinsam machten wir uns auf in Richtung Meet-Magento-Pre-Party. Dieses inoffizielle Event, organisiert von Timo, wird im übrigen von Jahr zu Jahr bekannter. Dieses Jahr waren über den Abend verteilt ungefähr 70-80 Entwickler und Magento-Fans anwesend. Meiner Meinung nach eine wirklich große Leistung von Timo und toll das dieses Event so gut angekommen wurde. Und es lohnt sich: viele spannende Gespräche und Networking. Wann trifft man sonst viele fähige Entwickler an einer Stelle?
+
+Nachdem Ingo, Jan und Thorsten bereits früh gingen begleiteten mich Vinai und Bastian nach Hause. Gott sei dank ist mein Hotel nicht weit vom WestIn entfernt sodass ich die letzten Meter trotz mangelnder Orientierung alleine bewerkstelligen konnte.
+
+Am nächsten Tag ging es gegen 9 Uhr zum offiziellen Teil: Der Meet Magento. Eine eher langweilige Keynote wurde durch einen eher spontanen Vinai Kopp sehr sympatisch aufgeheitert. Vinai war konsequent überrascht welche Folie als nächstes kam und was er dazu erzählen sollte - so entstand vermutlich auch die neue Berufsbezeichnung "Frontend-Verbesserer". Ein Lachen ging durch den Saal. Vinai erklärte sich im übrigen dazu bereit in einem kleinen Video-Interview die Wortneuschöpfung noch etwas "auszuschlachten". Das Video gibt es in ein paar Tagen. Leider müssen wir es noch etwas aufbereiten..
+
+Den übrigen Konferenz-Tag verbrachten wir mit Networking und natürlich den Vorträgen. Ein absolutes Highlight waren für mich dabei die Vorträge von Fabrizio Branca zum Thema "High-Performance in der Amazon-Cloud" und der Vortrag von Florian zum Thema "Testautomatisierung mit Selenium". Beides spannende Vorträge mit anschließender Diskussionsrunde. Alle Vorträge sind im übrigen zukünftig auf MeetMagento.de in Form von Videos online verfügbar - ein sehr toller Service wie ich finde.
+
+Der erste Konferenz-Tag endete, wie jedes Jahr, mit einem spannenden Abend in der Moritzbastei: Aftershow-Party inkl. Freibier gesponsert durch Skrill.
+
+Nach einer kurzen Nacht begann Tag zwei relativ spät um kurz nach 10 Uhr. Meiner Meinung nach könnte die Veranstaltung durchaus wieder eher beginnen und auch durchaus länger dauern. Der zweite Tag gehörte ausschließlich dem Entwickler-Barcamp. Der Raum war voll und die Themen Mage+, GermanSetup und ein komplettes Ajax-Frontend brachten viel Zündstoff. Heute bin ich mir recht sicher: Wenn wir es anpacken wird noch einiges passieren :)
+<h2>Noch mehr Rückblicke?</h2>
+<ul><li><a href="http://blog.limesoda.at/2012/05/meet-magento-6-12-leipzig/">Rückblick von Matthias Zeis</a></li>
+	<li><a href="http://kkoepke.de/aktuelles/meet-magento-2012-ein-ruckblick-und-personliche-eindrucke/">Rückblick von Kai Köpke</a></li>
+	<li><a href="http://www.openstream.ch/blog/das-achte-weltwunder-beim-sechsten-meet-magento/">Rückblick von Nick Weisser</a></li>
+	<li><a href="http://ecompunk.com/2012/05/23/thoughts-on-meet-magento-6-12/">Rückblick von Roman Zenner (en)</a></li>
+	<li><a href="http://www.coderblog.de/meet-magento-6-12-leipzig/">Rückblick von Simon Sprankel</a></li>
+	<li><a href="http://neoshops.de/2012/05/24/ruckblick-meetmagento-6-mm12de-in-leipzig/">Rückblick von Carmen Bremen</a></li>
+	<li><a href="http://blog.mittwald.de/community/ruckblick-meet-magento-6-12/">Rückblick von Florian Jürgens</a></li>
+	<li><a href="http://www.code-x.de/meet-magento-6-konferenz/">Rückblick von Thorsten Ising</a></li>
+</ul>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2841

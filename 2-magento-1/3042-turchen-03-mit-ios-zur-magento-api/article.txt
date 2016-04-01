@@ -1,0 +1,117 @@
+Article-meta: 
+
+----
+
+Title: Türchen 03: Mit iOS zur Magento-API
+
+----
+
+Date: 2012-12-03
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: jan
+
+----
+
+Article-content: 
+
+----
+
+Intro: Möchte man innerhalb einer iOS Applikation mit Daten eines Magento Shops arbeiten, z.B. um eine Liste der Produkte anzuzeigen, bieten sich Entwicklern verschiedene Wege. Zum einen besteht immer die Möglichkeit eine hybride Applikation zu bauen, welche Webviews einbettet.
+
+Der andere Weg, um den sich dieser Artikel drehen soll, führt über die Magento API. Daraus ergeben sich, je nachdem welches Ziel gesetzt wurde, unter Umständen verschiedene Vorteile. So kann man z.B. die Produktinformationen in Form eines Models (z.B. ein NSObject ohne größere Logik) repräsentieren. Bei der Integration und Darstellung wird man dadurch viel flexibler, den man kann alle Möglichkeiten von iOS nutzen. Der “Mehraufwand” ist, speziell mit der REST API, eher gering. In diesem Artikel schauen wir uns gemeinsam an wie man unter iOS anonym auf die REST API zugreifen kann und wie man eine Liste der Produkte in einem UITableViewController darstellen kann. Zu beachten ist jedoch, dass nicht alle Aspekte der iOS Klassen im Rahmen dieses Artikels erläutert werden können. Zudem arbeiten wir nur als Gast, da eine zusätzliche Erklärung der OAuth (1.0a) basierten Authentifizierung den Rahmen komplett sprengen würde.
+
+
+
+----
+
+Text: <h2>I. Vorbereiten der Entwicklungsumgebung</h2>
+Um mit der Magento API arbeiten zu können, ist der Zugriff auf einen Magento Shop inkl. Administratoraccount von nicht unerheblicher Bedeutung. Ich gehe an dieser Stelle davon aus, dass eine Entwicklungsumgebung existiert. Wichtig ist allerdings, dass die Community Edition ab Version 1.7 bzw. die Enterprise Edition ab 1.12 im Einsatz sein muss. In diesen Versionen wurde die REST API eingeführt. Wenn noch keine passende Entwicklungsumgebung bereit stehen sollte, wäre jetzt ein optimaler Zeitpunkt um sich darum zu kümmern. Zudem sollten einige Beispielprodukte existieren.
+
+Ein wichtiger Punkt den man zudem kontrollierten sollte, egal mit welcher Sprache der Zugriff erfolgt, ist die VirtualHost Konfiguration. Wenn Apache im Einsatz ist, muss in der Konfiguration “Options -MultiViews” gesetzt sein. Ansonsten greifen Rewrite Regeln unter Umständen nicht und das System bzw. die REST API liefern z.B. Fehler mit dem Statuscode 406 zurück. Um das herauszufinden können gut und gern ein paar Stunden vergehen ;-).
+<h3>Authorisierung und die REST API</h3>
+Die REST API arbeitet mit einem rollenbasierten Rechtesystem. Das bedeutet, man kann unterschiedliche Rechtestufen festlegen, unterschiedliche Aktionen zulassen und den Zugriff nur auf bestimmte Bereiche (Ressourcen) eines Shops erlauben. Vorgesehen sind in der Standardkonfiguration drei verschiedene Rollen:
+<ul><li>Guest - anonyme Gastzugriffe, ähnlich dem Konzept der Besucher im Shop Frontend</li>
+	<li>Customer - analog zu Kunden, die im Frontend eingeloggt sind</li>
+	<li>Administrator - entspricht dem Konzept des Backend Administrators</li>
+</ul>
+Dies Aufteilung kann man bei Bedarf verändern. In jedem Fall muss man jedoch, bevor man mit der API arbeiten kann, festlegen auf welche Bereiche Zugriff gewährt werden soll. Per Default ist der Zugriff auf keine der vorhandenen Ressourcen erlaubt. Ein Versuch Daten abzurufen führt somit gemäß der “Richtlinien für RESTful Services” zu einem Statuscode 403 sowie der Meldung “Access denied”.
+<h3>Zugriff auf Resourcen erlauben</h3>
+Die Freigabe von erlaubten Resourcen wird im Backend unter dem Menüpunkt “System / Web Services / REST - Roles” gepflegt. Dieser Artikel bezieht sich, um in einem vertretbaren Rahmen zu bleiben, nur auf Gastzugriffe ohne vorherige Authentifizierung. Daher ist für uns speziell die Rolle “Guest” wichtig. Diese editieren wir um dort “Ressource Access” auf “All” zu stellen. Alternativ kann man auch manuell bei “Resources” alle öffentlich verfügbaren Punkte aktivieren:
+
+Einem gesonderten Risiko bzgl. Datensicherheit setzt man sich bei Gastzugriffen nicht aus. Hier können nur Informationen ausgelesen werden, die auch im Frontend abrufbar wären.
+
+(image: image001.png)
+<h3>Zugriff auf Attribute freigeben</h3>
+Der zweite Schritt besteht nun darin den Zugriff zu verfeinern. Im ersten Schritten haben wir quasi global den Zugriff auf “Katalogprodukte”, “Bilder” usw. erlaubt. Im zweiten Schritt schalten wir nun Attribute, welche über die REST API verfügbar sind, frei:
+
+Im produktiven Betrieb ist es sinnvoll nur genutzte Attribute freizugeben. In unseren Fall erlauben wir jedoch einfach alle Zugriffe durch einen Klick auf die Checkbox vor “Catalog” bzw. durch die Auswahl von “All” in der Dropdown Liste “Resource Access”.
+
+(image: image01.png)
+<h3>Zugriff testen</h3>
+Bevor es los geht sollte man, z.B. mit dem RESTClient für Firefox oder ähnlichem, testen ob der Zugriff grundlegend funktioniert und ein oder mehrere Produkte im JSON-Format zurückgegeben werden. Wir rufen an der Stelle die URL “http://meinshop/api/rest/products” auf. Über den “Accept” Header teilen wir der API mit welches Format wir als Antwort erwarten. Die Auswahl haben wir zwischen JSON und XML. In der App arbeiten wir mit JSON, weshalb dies entsprechend anzugeben ist. Das Ergebnis sollte dann in etwa wie folgt aussehen:
+
+(image: image03-650x408.png)
+<h2>II. iOS Projekt anlegen und vorbereiten</h2>
+Los geht’s mit iOS. Zuerst legen wir über XCode ein neues Projekt an. Als Template eignet sich dazu wunderbar eine Single View Application. Im nächsten Schritt einen Projektnamen eingeben und “Use Storyboard” sowie “Use Automatic Reference Counting” aktivieren.
+
+Der Netzwerkzugriff erfolgt in unserem Beispiel mit der Hilfe der Bibliothek AFNetworking. Sie funktioniert sehr zuverlässig, muss jedoch noch installiert werden. Wie dies zu realisieren ist, kann optimal aus der offiziellen Dokumentation (siehe <a href="https://github.com/AFNetworking/AFNetworking/wiki/Getting-Started-with-AFNetworking">https://github.com/AFNetworking/AFNetworking/wiki/Getting-Started-with-AFNetworking</a>) entnommen werden. Um Fehler auszugeben, die Ladeanimation darzustellen und ggf. Erfolg zu vermelden verwende ich zudem SVProgressHUD. Details dazu können ebenfalls der offiziellen Dokumentation entnommen werden (siehe <a href="https://github.com/samvermette/SVProgressHUD">https://github.com/samvermette/SVProgressHUD</a>).
+<h3>Produkt Model anlegen</h3>
+Die erste Klasse welche erstellt werden muss, ist ein Model für unsere Produkte. Dies repräsentiert innerhalb von iOS die abgerufenen Produkte. Um den Rahmen nicht zu sprengen, beschränkte ich mich in den folgenden Abschnitten auf eine Erklärung der allgemeinen Struktur und wichtige Aspekte. Der Quellcode ist eigentlich ziemlich selbsterklärend und kann bei Github (Link siehe unten) nachgesehen werden.
+
+In unserem Beispiel ist die einzige Eigenschaft die verarbeitet wird der Produktname. Daher hat auch das Model nicht mehr Eigenschaften. Interessante Erweiterungen für den produktiven Betrieb sind jedoch z.B. die Id, URL zu einem Bild, Preis, usw.
+<h3>Resource Model für die API festlegen</h3>
+iOS arbeitet, genau wie Magento, mit dem MVC Muster. Da es sich bei iOS App um Anwendungen mit eine definierten Oberfläche handelt und kein HTML erzeugt wird, sieht die Praxis etwas unterschiedlich aus, folgt aber den gleichen Prinzipien bei der Trennung von Daten, Logik und Darstellung.
+
+Um nicht direkt im Controller mit der API kommunizieren zu müssen, ist es guter Stil sich ein Resource Model zu erzeugen. Dieses kommuniziert mit der API, ruft Daten von der API ab, kümmert sich um die Verarbeitung der Antwort im JSON Format und erzeugt entsprechende Instanzen der Produktklasse. Im Detail übergeben wir das Ergebnis in Form eines Arrays an einen Block, den wir im Aufrufer (unserem Controller) definieren.
+
+Analog zum Produktmodel legen wir also eine neue Klasse an. Diese erbt von AFHTTPClient anstatt von NSObject. Die Klasse nennen wir ProduktResource. In unserem Fall reicht dies aus, da wir nur ein ResourceModel erstellen. Guter Stil wäre zusätzlich für den HTTPClient eine eigene Klasse zu erstellen. Diese kann als Singleton in jedem ResourceModel wieder verwendet werden. Ganz und gar DRY-konform wird somit die URL, der Quellcode für den HTTP-Client und ggf. Logik zur Authentifizierung (hier nicht enthalten) nur in einer Klasse gepflegt.
+
+Spannend ist beim Resource Model vor allem die Methode “(void)fetchProducts:..” (siehe Github). Diese Methode rufen wir im Controller auf, um Produktinformationen auszulesen. Allerdings ist sie mit “void” als Rückgabewert deklariert. Wie kann das sein?
+
+Die Antwortet ist relativ einfach. Wir übergeben als Argument zwei Blöcke, welche im Fehler- bzw. im Erfolgsfall ausgeführt werden. Blöcke sind quasi Methoden oder Funktionen die man beim Aufruf (im Controller) auch an eine Methode übergeben kann. Die aufgerufene Methode (fetchProducts) kann den Block (den Quellcode) dann später ausführen. Konkret passiert das hier sobald wir eine Antwort oder einen Fehler von der API erhalten haben. Damit nicht die komplette Anwendung blockiert wird, bis eine Antwort vom Server kommt, geschieht dies im Hintergrund über Grand Central Dispatch.
+<h3>Tableview Controller</h3>
+Der Tableview Controller ist der letzte Schritt der noch fehlt. Hier iOS TableViews zu erklären würde erneut komplett den Rahmen sprengen. Da jedoch die API im Vordergrund steht und im ProduktViewController nichts passiert, was bei Interesse nicht auch in einem iOS Tutorial über UITableViewController zu finden wäre, denke ich dies stellt keinen großen Verlust dar.
+
+Nachdem die Klasse angelegt wurde, öffnen wir das Storyboard und fügen einen TableViewController hinzu. Diesem teilen wir mit, dass er von der Klasse ProduktViewController ist. Der leere ViewController wird entfernt.
+
+Zu beachten ist in erster Linie der Aufruf unseres Resource Models in der Methode viewDidAppear, welche automatisch durch iOS aufgerufen wird wenn die View angezeigt wird. An der Stelle starten wir den Download der Daten über das ResourceModel und definieren die Blöcke für den Erfolgs- und den Fehlerfall.
+
+Eine besondere Eigenschaft von Blöcken ist, dass diese auf Variablen und deren Inhalt aus dem Aufrufer, wo der Block definiert wurden, zugreifen können. Wir definieren den Block also im Controller, in dem z.B. unsere Eigenschaft “produkte” (die Produktliste) über eine Variable angesprochen werden kann. Wenn eine Antwort von der API vorliegt, führt das Resource Model den übergebenen success- bzw. failure-Block aus. Dem Block wird als Argument ein Array mit Instanzen der Klasse Produkt übergeben. Im Erfolgsfall speichern wir das Array in unserer Eigenschaft im Controller. Die Setter Methode des Produkt-Arrays kümmert sich dann darum die angezeigte Tabelle zu aktualisieren. Bei Problemen wird eine Fehlermeldung angezeigt. Für mehr Details siehe das Github Projekt.
+<h3>Das Ergebnis</h3>
+Wenn alles funktioniert hat, sollte sich eine sehr einfache, aber funktionierende iOS Applikation mit einer Tabelle öffnen. Ich habe, überaus kreativ wie ich bin, in meiner Testumgebung einfach die Magento Produkte mit den Namen “Türchen 3” und “Türchen 4” angelegt:
+
+(image: image02.png)
+<h2>Fazit</h2>
+Die REST API eignet sich wunderbar, um aus iOS Apps heraus Daten aus einem Magento Shop abzurufen. Ob eine Webview die richtige Wahl ist oder der Weg über native App gewählt wird, ist komplett von Budget und Anforderungen des Kunden abhängig. In jedem Fall ist es mit der REST API angenehmer und einfacher Daten abzurufen, als dies noch mit der SOAP Version vor Magento 1.7 (CE) bzw. Magento 1.12 (EE) der Fall war.
+<h3>Links:</h3>
+- Github: <a href="https://github.com/luckyduck/adventskalender2012">https://github.com/luckyduck/adventskalender2012</a>
+
+- SVProgressHUD:<a href="https://github.com/samvermette/SVProgressHUD"> https://github.com/samvermette/SVProgressHUD</a>
+
+- AFNetworking: <a href="https://github.com/AFNetworking/AFNetworking">https://github.com/AFNetworking/AFNetworking</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3042

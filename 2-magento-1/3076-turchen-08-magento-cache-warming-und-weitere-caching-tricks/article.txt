@@ -1,0 +1,173 @@
+Article-meta: 
+
+----
+
+Title: Türchen 08: Magento Cache Warming und weitere Caching Tricks
+
+----
+
+Date: 2012-12-08
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: fabrizio-branca
+
+----
+
+Article-content: 
+
+----
+
+Intro: Dass Caches bei Web-Applikationen eine besondere Rolle spielen ist schon lange kein Geheimnis mehr. Und dass Magento ohne richtiges Caching sehr langsam sein kann, leider auch nicht. Umso wichtiger ist es, die Caching-Strategien eines jeden individuellen Shops zu analysieren und auf die Produktupdate- und Deployment-Prozesse anzupassen.
+
+In diesem Blogpost schauen wir uns genauer an wie die serverseitigen Caches aufgewärmt werden können um zu verhindern, dass viele gleichzeitige ungecachte Requests die Server nach einem Deployment oder Produkt-Update in die Knie zwingen. Außerdem sollte man das zeitaufwendige Generieren der cachebaren Inhalte nicht den Besuchern und den Suchmaschinen zu überlassen, sondern die Seiten schon vor dem ersten Besucher erzeugt und im Cache eingelagert haben.
+
+
+
+----
+
+Text: <h2>Caching-Architektur</h2>
+
+Im einfachsten Fall betreibt man einen einzelnen Webserver auf dem Magento läuft. Die Magento-Instanz verwendet eines der verfügbaren Cache-Backends:
+
+(image: Cache_einfach.png)
+
+Wenn man es mit dem Shop ernst meint, sieht die Architektur dann vermutlich eher so aus:
+
+(image: Cache_erweitert.png)
+
+Mehrere Magento-Serverinstanzen teilen sich ein Backend-Storage (das wiederum aus mehreren Instanzen bestehen kann und sollte). Die gerenderten Seiten werden von einem Reverse Proxy Server wie beispielsweise Varnish gecacht. Aus Gründen der Ausfallsicherheit sollte es auch davon mindestens zwei Instanzen geben, die über einen Load-Balancer eingebunden sind.
+
+In beiden beiden Szenarien gilt: Man hat immer die volle Kontrolle über alle Caches, die in der eigenen Infrastruktur liegen (also rechts von der „Internetwolke“ in den Grafiken oben) aber keine Kontrolle über die Caches die außerhalb liegen, wie zum Beispiel die Browser-Caches oder ggf. die Caches anderer Proxy-Server.
+
+<h2>Cache Warming</h2>
+
+Je nach Produktupdate- und Deployment-Prozess gibt es Situationen in denen der gesamte Cache oder große Teile davon leer sind oder geleert werden müssen. In diesen Fällen kann man das Befüllen der Caches den Besuchern und Suchmaschinen überlassen oder es selbst in die Hand nehmen. Letzteres hat den Vorteil das kein Request eines echten Besuchers einen Cache-Miss erzeugt und überdurchschnittlich lange dauert.
+
+<h2>Generierung der Urls</h2>
+
+Für das Aufwaermen der Caches wird eine Liste der Urls benötigt, die sinnvoll gecacht werden können. Oft sind das folgende Seiten:
+<ul><li>Startseiten und Landingpages (für alle Store-Views)</li>
+	<li>Produktseiten</li>
+	<li>Kategorieseiten</li>
+	<li>CMS-Seiten</li>
+</ul>
+Natürlich muss dabei auch darauf geachtet werden, dass diese Seiten tatsächlich in Magento oder einem anderen Cache eingelagert werden. Standardmäßig ist Magento eher konservativ was das Caching betrifft und wird keine Produkt- und Kategorieseiten cachen. Abhilfe schafft da zum Beispiel die extension Aoe_Static in Verbindung mit Varnish (<a href="http://www.fabrizio-branca.de/make-your-magento-store-fly-using-varnish.html" title="http://www.fabrizio-branca.de/make-your-magento-store-fly-using-varnish.html">http://www.fabrizio-branca.de/make-your-magento-store-fly-using-varnish.html</a>).
+
+<h2>sitemap.xml</h2>
+
+Die einfachste Möglichkeit an eine Liste von relevanten Urls zu kommen ist das Google Sitemap Feature von Magento. 
+Dazu im Backend unter <em>"Catalog > Google Sitemap"</em> einen neuen Datensatz anlegen (z.B. mit dem Dateinamen sitemap.xml) und dann auf <em>"Save & Generate"</em> klicken:
+
+(image: google_sitemap2.png)
+
+Je nach Pfadeinstellung liegt nun vermutlich im Magento-Rootverzeichnis die <em>sitemap.xml</em>. Diese Datei kann direkt lokal verwendet werden falls das Cache-Warming-Skript auf dem gleichen Server laufen sollte oder per <em>curl</em> auf den entsprechenden Server heruntergeladen werden.
+
+Die Sitemap ist zunächst einmal eine große XML-Datei, die Links zu allen Produkt-, Kategorie- und CMS-Seiten enthält. 
+
+Mit dem Kommandozeilentool <em>"xpath"</em> (Ubuntu: <em>sudo apt-get install libxml-xpath-perl</em>) kann man nun leicht die Urls extrahieren:
+
+(code)cat sitemap.xml | xpath -q -e "/urlset/url/loc/text()" > tmp.urls(/code)
+
+Oder wenn man die Datei nicht lokal vorliegt:
+
+(code)curl --silent http://example.com/sitemap.xml | xpath -q -e "/urlset/url/loc/text()" > tmp.urls(/code)
+
+<h2>n98-magerun</h2>
+
+Kann man allerdings die Google-Sitemap nicht verwenden oder möchte man die Liste der Urls skriptgesteuert erzeugen, bietet das Kommandozeilentool <em>n98-magerun</em> eine elegante Lösung.
+
+<em>n98-magerun</em> ist leicht und schnell installiert (<a href="https://github.com/netz98/n98-magerun#installation" title="https://github.com/netz98/n98-magerun#installation">https://github.com/netz98/n98-magerun#installation</a>) und ist nicht nur für die Generierung einer Url-Liste ein tolles Tool, sondern hilft auch bei vielen anderen Problemen weiter.
+
+Eine Liste von Urls lässt sich folgendermaßen generieren: (siehe auch <a href="https://github.com/netz98/n98-magerun#list-urls" title="https://github.com/netz98/n98-magerun#list-urls">https://github.com/netz98/n98-magerun#list-urls</a>)
+
+(code)./n98-magerun.phar sys:url:list --add-all 4,5 > tmp.urls(/code)
+
+Wobei "4,5" in diesem Fall die Liste der Store-Ids ist. Anstatt <em>"--add-all"</em> kann man auch eine Kombination von <em>"--add-categories"</em>, <em>"--add-products"</em> und <em>"--add-cmspages"</em> verwenden um die Url-Typen in der Liste zu selektieren. 
+
+<h2>Direktes Cache-Warming</h2>
+
+Sollte der Webserver von außen unter dem normalen Hostnamen erreichbar sein, kann man nun einfach die List der Urls durchgehen und Requests an den Webserver senden. Am einfachsten geht das mit dem Tool <em>"siege"</em>:
+
+(code)siege -v -c 1 -r `cat tmp.urls | wc -l` -f tmp.urls(/code)
+
+Schöner geht das mit <em>curl</em>, weil man hier einen besseren Einfluss auf die Request-Header hat. Nicht selten halten Reverse Proxies (und die internen Caches der Web-Applikationen) verschiedene Versionen einer Seite anhand verschiedener Header vor. Am weit verbreitetsten ist “Vary: Accept-Encoding”, das besagt, dass für jeden unterschiedlichen Accept-Encoding-Header eine eigene Version vorgehalten werden muss. In der Regel senden die modernen Browser den Header „Accept-Encoding: gzip, deflate“. Inhalte dürfen also vom Webserver komprimiert werden. Andere Konfigurationen sehen zum Beispiel auch unterschiedliche Inhalte auf Basis des User-Agents vor.
+
+In jedem Fall müssen schon beim Cache-Warming die passender Header und idealerweise alle Headerkombinationen (sollten mehrere Vary-Header verwendet werden) berücksichtigt werden. Ansonsten werden irrelevante Cache-Inhalte eingelagert, die später troztzdem zu Cache-Misses führen. Verwendet man curl hat man auch Einfluss auf die Header:
+
+(code)for i in `cat tmp.url`; do
+  curl -H "Accept-Encoding: gzip, deflate" -s -X GET -I "$i"
+done(/code)
+
+Mit siege ist das ebenfalls möglich:
+
+(code)siege -v -c 1 --header="Accept-Encoding: gzip, deflate" -r `cat tmp.urls | wc -l` -f tmp.urls(/code)
+
+<h2>Indirektes Cache-Warming</h2>
+
+Verwendet man mehrere Reverse Proxies (siehe Grafik oben) und/oder ist das Deployment noch nicht unter dem Original-Hostnamen erreichbar, kann man die Proxies auch direkt ansprechen und den ursprünglichen Hostnamen als Header übermitteln. Auf diese Art und Weise können die Caches aller Reverse Proxies aufgewärmt werden. Dafür ist allerdings dann auch ein Vielfaches an Requests notwendig. 
+
+Führt man ein A/B-Deployment auf Verzeichnis- oder Serverebene durch (siehe <a href="http://www.fabrizio-branca.de/meet-magento-de-2012-high-performance-multi-server-magento-in-der-cloud.html" title="http://www.fabrizio-branca.de/meet-magento-de-2012-high-performance-multi-server-magento-in-der-cloud.html">http://www.fabrizio-branca.de/meet-magento-de-2012-high-performance-multi-server-magento-in-der-cloud.html</a>) oder möchte man vor einem (Re-)Launch die Seite crawlen bevor sie von außen erreichbar ist kann man das wie folgt machen:
+
+(code)for i in `cat tmp.urls`; do
+  echo $i
+  URLHOSTNAME=`echo "$i" | sed -e 's@.*//\([^/]*\)/*.*@\1@'`
+  URLPATH=`echo "$i" | sed -e 's@.*//[^/]*\(/*.*\)@\1@'`
+  for varnish in 'varnish1hostname varnish2hostname'; do
+    curl -H "Accept-Encoding: gzip, deflate" -H "Host: ${URLHOSTNAME}" -s -X GET -I http://$varnish/$URLPATH | egrep 'HTTP/|Age:|X-Cache'
+  done
+done(/code)
+
+In diesem Fall iteriert man zunächst über die Liste der Urls. Bei jeder Url wird der Hostname und der Rest der Url voneinenander getrennt. In einer inneren Schleife wird über alle IP-Adressen oder Hostnamen der Reverse Proxies iteriert. Diese müssen noch nicht von außen erreichbar sein. Hauptsache das Cache-Warmingskript hat Zugriff. Nun wird der Originalhostnamen durch den Hostnamen des Proxies ersetzt und der Originalhostname wird stattdessen als Header übergeben. (Genauso funktioniert übrigens auch das HTTP-Protokoll...)
+
+Achtung: Die Größe aller beteiligten Caches muss natürlich so groß gewählt werden, dass alle Seiten abgelegt werden können. Ansonsten werden – je nach Strategie der Caches – die ersten Seiten immer wieder von den neu hinzukommenden Seiten verdrängt.
+
+In einigen Situation ist der Produktkatalog so riesig, dass das Crawlen aller Urls zu lange dauern würde. In diesem Fall muss die Url-Liste auf die wichtigsten Urls beschränkt werden. Die Kategorieseiten sind hier vermutlich in den meisten Fällen eine gute Wahl.
+
+<h2>Cache-Prefix</h2>
+
+Führt man ein A/B-Deployment durch (egal ob auf Verzeichnisebene oder mit ganzen Servergruppen) ist es sinnvoll jedem Deployment sein eigenes Cache-Prefix in der local.xml zu vergeben:
+
+(code)<config>
+  <global>
+    <cache>
+      <prefix>FOO_PROD_<strong>197</strong>_</prefix>
+    </cache>
+  </global>
+</config>(/code)
+
+Auf diese Weise treten die Cache-Einträge des alten Deployments nicht in Konflikt mit den neuen Cache-Einträgen und können im selben Cache-Backend koexistieren. Dass setzen eines neuen Cache-Prefixes für das neue Deployment hat zur Folge, dass die Cache in diesem Namensraum zunächst einmal leer ist. Ein Grund mehr den Cache vor dem Liveschalten aufzuwärmen. 
+
+<h2>Weitere Herausforderungen</h2>
+
+In einer idealen Welt müssten Cache-Einträge niemals verfallen (siehe auch: <a href="http://martinfowler.com/bliki/TwoHardThings.html" title="http://martinfowler.com/bliki/TwoHardThings.html">http://martinfowler.com/bliki/TwoHardThings.html</a>). Sollte ein Cache-Eintrage invalidiert werden, kann ihn man aktiv aus allen Caches entfernen. Obwohl das einfach für den Magento-internen Cache geht und auch die Caches der Reverse Proxies bei Änderungen aktiv "gepurgt" werden können, ist das leider nicht für alle beteiligten Caches möglich (vor allem nicht für die Browsercaches). Hier gilt es nun eine Cache-Lifetime zu wählen die großzügig genug ist um die Server nicht unnötig mit neuen Requests zu belasten aber klein genug ist, um im Falle einer Änderung nicht zu lange alte Inhalte anzuzeigen. 
+
+Ein gängiger Trick hierbei ist die Cache-Lifetime für alle Caches über die wir die Kontrolle haben lange zu halten, aber die Cache-Lifetime für die Clients über die Cache-Header kurz zu halten. So hat man die volle Kontrolle über die Inhalte und im Client abgelaufene Requests werden schnell und effizient von den Reverse Proxies bearbeitet, die die Inhalte länger cachen dürfen. Wie das in Varnish gemacht werden kann ist hier zu finden: <a href="https://www.varnish-cache.org/trac/wiki/VCLExampleLongerCaching" title="https://www.varnish-cache.org/trac/wiki/VCLExampleLongerCaching">https://www.varnish-cache.org/trac/wiki/VCLExampleLongerCaching</a>
+
+<h2>Fazit</h2>
+
+Eine saubere Caching-Architektur und Prozesse im Umgang mit den Cache-Inhalten sind nicht trivial. Hat man dies allerdings im Griff ist das der Schlüssel zur Performance. Das Ausarbeiten eines ausgefeiltes Caching-Konzept, das Caches auf allen Ebenen berücksichtigt, ist sicher gut investierte Zeit und zahlt sich schnell durch erfolgreiche Projekte und zufriedene Kunden aus!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3076

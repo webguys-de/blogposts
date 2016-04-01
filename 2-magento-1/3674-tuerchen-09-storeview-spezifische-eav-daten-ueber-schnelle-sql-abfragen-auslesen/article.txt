@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: Türchen 09: StoreView-spezifische EAV-Daten über schnelle SQL-Abfragen auslesen
+
+----
+
+Date: 2013-12-09
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: pkxonu-de
+
+----
+
+Article-content: 
+
+----
+
+Intro: Mit direkten SQL-Abfragen lassen sich viele Daten aus der Magento-Datenbank oft deutlich schneller auslesen, auch wenn diese über EAV-Tabellen verteilt sind. Als Nachtrag zu dem Artikel wie man mit <a title="Attributwerte von Kategorien und Produkten über SQL-Abfragen zugreifen" href="http://magento.xonu.de/reports/attributwerte-von-kategorien-und-produkten-uber-sql-abfragen-zugreifen/">SQL-Abfragen Produkt- und Kategoriedaten schnell ausliest</a> wird hier gezeigt, wie man StoreView-spezifische Werte in einer Abfrage berücksichtigen kann, sodass die Abfrage weiterhin sehr schnell bleibt.
+
+
+----
+
+Text: Alle EAV-Tabellen (z.B. <em>catalog_product_entity_varchar</em>) verfügen über die Spalte <em>store_id</em>, die den StoreView bestimmt, für den der Wert gelten soll. Für Standardwerte enthält diese Spalte den Wert 0, für alle anderen StoreViews einen Wert größer 0. Wird z. B. der Name eines Produkts für einen StoreView festgelegt, wird in der EAV-Tabelle eine zweite Zeile für das gleiche Produkt und Attribut eingefügt. Wird im Backend der StoreView-spezifische Wert durch Setzen des Schalters <em>Standardwerte verwenden</em> gelöscht, wird auch die Zeile in der EAV-Tabelle gelöscht.
+
+Unser Ziel besteht nun darin, eine schnelle SQL-Abfrage zu formulieren, die für alle Produkte den Namen für ein StoreView (z. B. <em>store_id=2</em>) ausgibt. Ist der StoreView-spezifische Name nicht festgelegt, muss der Standardwert für <em>store_id=0</em> ausgegeben werden. Mit einem StoreView-Filter bestehend aus einer einfachen WHERE-Bedingung würde diese Abfrage für einige Produkte mehrere Zeilen liefern:
+(code lang: sql)SELECT entity_id, sku, eav_vc.value as name, store_id FROM catalog_product_entity
+JOIN catalog_product_entity_varchar eav_vc USING(entity_id)
+JOIN eav_attribute eav ON (eav_vc.entity_type_id=eav.entity_type_id AND eav_vc.attribute_id=eav.attribute_id
+AND eav.attribute_code = 'name')
+WHERE store_id IN (0, 2);(/code)
+Filtern wir nur die Zeilen mit <em>store_id=2</em>, bekommen wir nur die Produkte, bei den der Name für diesen StoreView festgelegt wurde. Gruppieren wir die Liste nach der <em>entity_id</em>, verschwinden die StoreView-spezifischen Werte aus der Liste, da die jeweilige Gruppe stets die erste Zeile mit dem Standardwert enthält.
+
+Der SQL-Trick besteht nun darin, durch Verschachtelung der Abfrage eine absteigende Sortierung <em>vor</em> der Gruppierung durchzuführen, sodass die Zeile mit der <em>store_id=2</em> immer als erste in jeweiliger Gruppe auftaucht:
+(code lang: sql)SELECT * FROM (
+  SELECT entity_id, sku, eav_vc.value as name, store_id FROM catalog_product_entity
+  JOIN catalog_product_entity_varchar eav_vc USING(entity_id)
+  JOIN eav_attribute eav ON (eav_vc.entity_type_id=eav.entity_type_id AND eav_vc.attribute_id=eav.attribute_id
+  AND eav.attribute_code = 'name')
+  WHERE store_id IN (0, 2)
+  ORDER BY store_id DESC
+) AS t
+GROUP BY entity_id;(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3674

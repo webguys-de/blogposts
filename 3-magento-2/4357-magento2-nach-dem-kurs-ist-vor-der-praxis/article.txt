@@ -1,0 +1,59 @@
+Article-meta: 
+
+----
+
+Title: Magento2: Nach dem MagentoU-Kurs ist vor der Praxis
+
+----
+
+Date: 2015-11-23
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nun habe ich den Magento2 Kurs absolviert. Aktuell frage ich mich ob ich mich nun Magento2 Trained Developer schimpfen darf. Ganz richtig fühlt sich dass allerdings noch nicht an. Aber wie war der Kurs zu Magento 2? Fühle ich mich schon fit?
+
+
+
+----
+
+Text: Generell fande ich persönlich den Kurs super interessant. Er hat mir doch sehr geholfen die Gründzüge des neuen Frameworks zu verstehen. Allerdings habe ich häufig dass Kurs-Programm verlassen und eigene Dinge probiert. Mal eben noch den Controller, ach ok so geht das mit dem Layout-XML nun - abgeschaut im Catalog-Modul. Ganz logisch - eigentlich.
+
+Durch die eigenen Tests und Spielchen konnte ich dann einige Folien schnell auf "Weiter" klicken. Das war ganz angenehm. Ebenfalls geholfen hat dass ich bereits mitbekommen hatte dass Module eigentlich anders bekannt gemacht werden als in Magento U erklärt. Da hat die Software die Schulung aktuell abgehängt. (kleiner Tipp: Unbedingt auch "<a href="http://devdocs.magento.com/guides/v2.0/extension-dev-guide/create_module.html">Create a Module</a>" in den Magento DevDocs lesen!)
+
+<h2>Erstes Fazit zu Magento 2?</h2>
+
+Das Framework ist für mich eine konsequente Weiterführung der Basis von Magento 1. Zwar können die Module nicht "einfach so" portiert werden aber unser Magento 1 wissen spielt weiterhin eine wesentliche Rolle. Es ist nicht so als würde man ein ganz neues System lernen - zumindest fühlt sich das aktuell so an.
+
+Meine nächsten Schritte bestehen nun darin unsere code-x Agentur-Module zu portieren, Schulung-Material für unser Team aufzubereiten und dafür zu sorgen dass wir alle kräftig in die Magento 2 Entwicklung einsteigen. Das wird toll :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4357

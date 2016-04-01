@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: Webinar zur neuen Magento Enterpise Edition
+
+----
+
+Date: 2010-04-15
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Vöglein <a href="http://twitter.com/#search?q=%23magento">zwitschern</a> es von den Dächern: Magento <a href="http://www.magentocommerce.com/blog/announcing-magento-enterprise-edition-version-18/">veröffentlicht</a> eine neue Version der Enterprise Edition. In Kurzform sollen folgende Neuerungen implementiert sein:
+<ul>
+	<li>Verbesserung der Suchqualität und Performance durch den Einsatz von Apache<em> </em>Solr</li>
+	<li>Allgemeine Performance Verbesserungen</li>
+</ul>
+Zudem gibt es noch einige neue Markting-Features wie verbesserten E-Mailmarketing und ein Modul das sich "Assisted Shopping Module" schimpft.
+
+Mehr Details gibt es wie immer kostenlos im <strong>Webinar am 20. April ab 18.00 Uhr.</strong>
+
+<strong>
+
+----
+
+Text: 
+
+Weitere Details unter:
+<ul><li><a href="http://lucene.apache.org/solr/">http://lucene.apache.org/solr/</a> [en]</li>
+	<li><a href="http://it-republik.de/php/news/Magento-mit-neuer-Enterprise-Edition-054962.html">http://it-republik.de/php/news/Magento-mit-neuer-Enterprise-Edition-054962.html</a></li>
+	<li><a href="http://www.magentocommerce.com/blog/announcing-magento-enterprise-edition-version-18/">http://www.magentocommerce.com/blog/announcing-magento-enterprise-edition-version-18</a> [en]</li>
+	<li><a href="http://www.internetworld.de/Nachrichten/Backoffice/Magento-Enterprise-in-Version-1.8-erschienen-Shopsoftware-nutzt-Solr-Suchmaschine">http://www.internetworld.de/Nachrichten/Backoffice/Magento-Enterprise-in-Version-1.8-erschienen-Shopsoftware-nutzt-Solr-Suchmaschine</a></li>
+</ul>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 257

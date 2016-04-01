@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Magento Stammtisch Bielefeld
+
+----
+
+Date: 2011-01-18
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Endlich habe ich es geschafft: Ich war beim Magento-Stammtisch in Bielefeld. Alle guten Dinge sind ja bekanntlich Drei und so verstand es sich irgendwie von selbst das ich beim Dritten Stammtisch endlich einmal dabei sein musste.
+
+
+
+----
+
+Text: Am Montag den 18. Jan fanden wir uns gegen 19 Uhr in der Tangente in Bielefeld ein. Nach dem man ein paar bekannten Gesichtern "Hallo" gesagt hatte schlossen wir, neben ein paar Getränken, eine kleine Vorstellrunde an. Insgesamt waren um die 15 Teilnehmer vor Ort - davon eine ganze Reihe kompetenter Magento-Entwickler :)
+
+Thematisch ging es selbstverständlich um Magento und den Stammtisch selbst. Zum Stammtisch will gesagt sein das er zukünftig alle zwei Monate stattfindet und das immer Dienstags. Der nächste Termin ist somit am 15. März - wieder in der Tangente in Bielefeld. (<a href="https://www.xing.com/net/pri1e7be2x/magentostammtisch">Termine und Koordination</a> bei <a href="https://www.xing.com/net/pri1e7be2x/magentostammtisch">Xing</a>)
+
+Natürlich gingen die Magento-Themen nicht unter: Wir verglichen Enterprise und Community-Edition, sprachen über Markenrecht und die Marke "Magento" und natürlich das alt bekannte Thema: Performance.
+
+Einen weiteren Erfahrungsbericht gibt es im <a href="http://blog.mittwald.de/hosting/dritter-magento-stammtisch-in-bielefeld/">Mittwald-Blog</a>. Weitere Informationen zum Stammtisch wie immer unter <a href="http://www.magento-stammtisch.de">www.magento-stammtisch.de</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1343

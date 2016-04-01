@@ -1,0 +1,81 @@
+Article-meta: 
+
+----
+
+Title: Details zur Magento Entwickler Zertifizierung
+
+----
+
+Date: 2011-10-28
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Am 02. November findet in Berlin die erste Magento-Zertifizierung in Deutschland statt. Die Zertifizierung ist dabei noch Beta. Das heißt am Ende gibt es zwar einen Punktestand jedoch ist noch nicht ganz klar bis zu welchem Punktestand man noch bestanden hat. Das wird im Anschluss anhand der Erfahrungswerte aus den Beta-Prüfungen über verschiedene statistische Verfahren ermittelt. Aber wie bereitet man sich nun vor?
+
+
+
+----
+
+Text: Genau dazu durfte ich mich mit Vinai Kopp, dem bekannten Autor des Magento-Entwickler-Handbuches, welcher mittlerweile bei Magento Inc. angestellt ist unterhalten. Vinai ist zusätzlich einer der Trainer des "Magento U" Programm - er weiß also wovon er spricht.
+
+Zuerst einmal gibt es zwei unterschiedliche Tests: Community und Enterprise. Bei Magento heißt das "Magento Certified Developer Exam" bzw. "Magento Certified Developer Plus Exam". Um die "Plus"-Zertifizierung zu bestehen ist laut Vinai definitiv Erfahrung mit der Enterprise Edition notwendig. Zudem sind noch erweiterte Fragen vorgesehen die noch etwas mehr ins Magento-Detail gehen.
+
+Beide Prüfungen bauen quasi aufeinander auf. Das heißt das für die "Plus"-Zertifizierung auch Fragen aus der Community-Edition beantwortet werden müssen. Zudem reicht es nicht alles aus der CE richtig zu haben und dafür alles bei EE falsch - damit wäre die Prüfung nicht bestanden. Beide Teilprüfungen müssen also zufriedenstellend absolviert werden. Ich für meinen Teil werde mich übrigens erst einmal die CE-Zertifizierung antun.
+<h3>Ein paar Fakten aus dem Interview</h3>
+<ul><li>Wer Code ließt anstatt nur Copy & Paste zu machen hat gute Chancen</li>
+	<li>Die Zertifizierung ist kein Geschenk</li>
+	<li>Es braucht Magento Erfahrung (am besten im Projekt) um bestehen zu können</li>
+	<li>Hilfsmittel sind nicht erlaubt</li>
+	<li>Alle Fragen <strong>genau</strong> lesen. In Teilen ist in der Frage die Antwort logisch verschlüsselt versteckt.</li>
+	<li>Der Test findet am Rechner statt. Die Fragen sind ausschließlich Multiple-Choice.</li>
+	<li>Eine Frage ist immer richtig oder falsch. Teilpunkte gibt es nicht.</li>
+	<li>Es sind ca. 100 zufällige Fragen. Jeder hat andere, in anderen Reihenfolgen.</li>
+	<li>Die Fragen sind in Englisch. Sie wurden jedoch auf geringe Sprachbarrieren optimiert. (verschiedene nicht Mutterspracher haben die Fragen angeschaut und verbessert)</li>
+	<li>Fragen zu denen man noch keine Antwort wusste können auf "Review" gestellt werden. So kann man sich nachher noch mal Gedanken machen</li>
+	<li>Vinai fande den Test in Ordnung und brauchte ca. 1h</li>
+	<li>In den USA dauerte der Test 2,5h.</li>
+	<li>Magento bietet eine <a href="http://info.magento.com/rs/magentocommerce/images/Magento_Certified_Developer_Exam_Self-Assessment_Checklist_(Beta).pdf">kleine Checkliste zur Selbsteinschätzung</a></li>
+</ul>
+Ich für meinen Teil werde mir wohl vorher ein paar Dinge die man eben nicht auswendig weiß anschauen. Dazu gehört z.B. was enthält die config.xml, wie erstellt man ein Shipping-Modul und was passiert mit Bestellungen (Quote + Order) in Magento. In wie weit hängen Rechnungen an einer Bestellung und was ist eigentlich dieses Shipping an der Bestellung?
+
+Der Test ist in erster Linie darauf ausgelegt das Unternehmen sich einigermaßen sicher sein können das zertifizierte Entwickler direkt produktiv eingesetzt werden können. Dementsprechend sind die Fragen auch ausgerichtet.
+
+Ich freue mich euch dort zu sehen und hoffe das meine vermutlich schlechte Vorbereitung trotzdem ein gutes Ergebnis mit sich bringt. Ansonsten gibt es ja laut Vinai einen Rabatt für alle die die Prüfung ein zweites mal ablegen :)
+
+<a href="http://www.magentocommerce.com/services/register-for-training">Zur Registrierung auf MagentoCommerce</a>
+<h3>Update: Mehr dazu im Web</h3>
+<ul><li><a href="http://www.matthias-zeis.com/archiv/erfahrungsbericht-magento-zertifizierung-beta-exam">http://www.matthias-zeis.com/archiv/erfahrungsbericht-magento-zertifizierung-beta-exam</a></li>
+	<li><a href="http://inchoo.net/ecommerce/magento/magento-certification-why-bother/">http://inchoo.net/ecommerce/magento/magento-certification-why-bother/</a></li>
+</ul>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1989

@@ -1,0 +1,59 @@
+Article-meta: 
+
+----
+
+Title: Rezension: Handbuch Online-Shop von Alexander Steireif und Rouven Rieker
+
+----
+
+Date: 2015-09-27
+
+----
+
+Description: 
+
+----
+
+Tags: buch
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Doch, ich habe mich gefreut als Alexander Steireif mich fragte ob ich eine Rezension zu seinem und Rouvens neuem Buch schreiben würde. Immerhin hat Autoren Team einige male in meiner Bachelor-Thesis als Quelle herhalten müssten :-) Diesmal geht es aber nicht um reines Magento und wie man seinen Online-Shop damit aufbaut sondern um E-Commerce im allgemeinen.
+
+
+
+----
+
+Text:
+
+<p>Generell haben sich die beiden in Ihrem neuen Werk „<a href="http://www.amazon.de/gp/product/3836229102/ref=as_li_tl?ie=UTF8&amp;camp=1638&amp;creative=19454&amp;creativeASIN=3836229102&amp;linkCode=as2&amp;tag=magentwebguyd-21">Handbuch Online-Shop: Erfolgsrezepte für den Online-Handel</a><img style="border: none !important; margin: 0px !important;" src="http://ir-de.amazon-adsystem.com/e/ir?t=magentwebguyd-21&amp;l=as2&amp;o=3&amp;a=3836229102" alt="" height="1" border="0" width="1">“ als Zielgruppe die E-Commerce Einsteiger vorgenommen. Aber genau die welche direkt zum Profi werden wollen.</p>
+<p><em>Vorab: Das Werk das beiden hat knapp 700 Seiten. Ich habe es also gelesen wie ein Fachbuch: Das Inhaltsverzeichnis und dann die einzelne Kapitel die mich gerade interessieren. So weiß ich dass ein Thema dort erwähnt ist und kann später noch mal schauen <img src="http://www.webguys.de/wp-includes/images/smilies/simple-smile.png" alt=":-)" class="wp-smiley" style="height: 1em; max-height: 1em;"></em></p>
+<p>Die beiden beginnen mit dem Versuch dem E-Commerce Anfänger die ganze Idee wieder auszureden. Dazu verweisen sie auf Anasylen und Vorbereitungen: Einige, gut erklärte, aber komplexe Fragen muss der E-Commerce-Starter sich selbst beantworten.&nbsp; Danach geht es erst weiter zu einem Technik-Roundtrip. Was ist eigentlich ein Shop-System und was der unterschied zwischen Open-Source und Software-As-A-Service?</p>
+<p>Hier wird versucht die einzelnen Stärken und Schwächen der einzelnen Anbieter bzw. Lösungen herauszuarbeiten. Persönlich finde ich das als guten Versuch: Generell bin ich aber der Meinung das es heute kaum einen Unterschied macht auf welche Technik man setzt. Viel wichtiger ist dass der Partner bzw. die Agentur diese zu beherrschen weiß. Ob ich nun BMW, VW oder Skoda fahre. Wenn ich das Auto in eine Werkstatt bringe die bis dato nur Fahrräder repariert hat geht es vermutlich schief. Für die nächste Ausgabe könnten noch ein paar Tipps zur Auswahl der Agentur ergänzt werden. Wie kann ich als Kunde bewerten ob die Agentur mir langfristig helfen kann? Oder baut sie nur schnell einen Shop und ist dann ganz schnell wieder in anderen Projekten verschwunden? Wie ernst werde ich als Kunde in der Agentur genommen usw.? Ich persönlich fände das als E-commerce Starter sehr sehr spannend. Hier lässt sich viel falsch machen und Geld verbrennen.</p>
+<p>Nachdem Technik-Roundtrip kommen wir über Katalog-Aufbau hin zu Usability und Design-Tipps. Überschlagt das Kapitel Katalog auf gar keinen Fall. Hier sind einige wertvolle Tipps zum Aufbau versteckt. Das Kapitel zu Zahlungsarten habe wegen <a href="http://www.webguys.de/magento/das-problem-mit-den-payment-anbietern/">aktueller negativer Erfahrungen</a> erst einmal übersprungen. Dafür ist die Integration des Online-Shops in die IT-Landschaft wieder spannend gewesen. Persönlich würde ich hier aber noch einen Stück weiter gehen: Die Integration des E-Commerce in die Unternehmenskultur. Prinziepiell spielen beide aber diese Karte in Kapitel 10 „Multichannel“ wieder aus. Weiter bin ich bis dato nicht gekommen wollte aber mit meiner Rezension nicht weiter warten. Ich glaube auch kaum dass sich nun noch böse Überraschungen auftun würden <img src="http://www.webguys.de/wp-includes/images/smilies/simple-smile.png" alt=":)" class="wp-smiley" style="height: 1em; max-height: 1em;"></p>
+<p>Ebenfalls sehr sympatisch ist dass sich beide Autoren generell bewusst dass die angebrachten Tipps oft gut funktionieren aber in der Praxis auch gerne einmal durch bessere Lösungen – gerade in einer speziellen Branche – ausgetauscht werden dürfen. So etwas mag ich. Daher kann ich das <a href="http://www.amazon.de/gp/product/3836229102/ref=as_li_tl?ie=UTF8&amp;camp=1638&amp;creative=19454&amp;creativeASIN=3836229102&amp;linkCode=as2&amp;tag=magentwebguyd-21">Buch generell zum Kauf empfehlen</a>. Es ist ein hilfreiches Werk sich durch den E-Commerce Dschungel zu schlagen. Aber laufen muss man natürlich noch selbst <img src="http://www.webguys.de/wp-includes/images/smilies/simple-smile.png" alt=":-)" class="wp-smiley" style="height: 1em; max-height: 1em;"></p>
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4330

@@ -1,0 +1,95 @@
+Article-meta: 
+
+----
+
+Title: Produktdatenbank leeren
+
+----
+
+Date: 2011-03-17
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nach den ganzen Test-Imports bei komplexeren Import-Schnittstellen ist es ab und zu mal an der Zeit die Datenbank wieder zu leeren. <a href="http://www.benfreke.com/blog-entries/work/20-removing-all-magento-products-and-categories.html">Ben Freke</a> erledigt das, wie in seinem Blog-Post mit dem Titel "<a href="http://www.benfreke.com/blog-entries/work/20-removing-all-magento-products-and-categories.html">Removing all Magento products and categories</a>" beschrieben, ganz einfach mit folgenden SQL.
+
+
+
+----
+
+Text: (code lang: sql)
+TRUNCATE TABLE `catalog_product_bundle_option`;
+TRUNCATE TABLE `catalog_product_bundle_option_value`;
+TRUNCATE TABLE `catalog_product_bundle_selection`;
+TRUNCATE TABLE `catalog_product_entity_datetime`;
+TRUNCATE TABLE `catalog_product_entity_decimal`;
+TRUNCATE TABLE `catalog_product_entity_gallery`;
+TRUNCATE TABLE `catalog_product_entity_int`;
+TRUNCATE TABLE `catalog_product_entity_media_gallery`;
+TRUNCATE TABLE `catalog_product_entity_media_gallery_value`;
+TRUNCATE TABLE `catalog_product_entity_text`;
+TRUNCATE TABLE `catalog_product_entity_tier_price`;
+TRUNCATE TABLE `catalog_product_entity_varchar`;
+TRUNCATE TABLE `catalog_product_link`;
+TRUNCATE TABLE `catalog_product_link_attribute`;
+TRUNCATE TABLE `catalog_product_link_attribute_decimal`;
+TRUNCATE TABLE `catalog_product_link_attribute_int`;
+TRUNCATE TABLE `catalog_product_link_attribute_varchar`;
+TRUNCATE TABLE `catalog_product_link_type`;
+TRUNCATE TABLE `catalog_product_option`;
+TRUNCATE TABLE `catalog_product_option_price`;
+TRUNCATE TABLE `catalog_product_option_title`;
+TRUNCATE TABLE `catalog_product_option_type_price`;
+TRUNCATE TABLE `catalog_product_option_type_title`;
+TRUNCATE TABLE `catalog_product_option_type_value`;
+TRUNCATE TABLE `catalog_product_super_attribute`;
+TRUNCATE TABLE `catalog_product_super_attribute_label`;
+TRUNCATE TABLE `catalog_product_super_attribute_pricing`;
+TRUNCATE TABLE `catalog_product_super_link`;
+TRUNCATE TABLE `catalog_product_enabled_index`;
+TRUNCATE TABLE `catalog_product_website`;
+TRUNCATE TABLE `catalog_product_entity`;
+
+TRUNCATE TABLE `cataloginventory_stock`;
+TRUNCATE TABLE `cataloginventory_stock_item`;
+TRUNCATE TABLE `cataloginventory_stock_status`;
+
+INSERT INTO `catalog_product_link_type`(`link_type_id`, `code`) values (1, 'relation'), (2, 'bundle'), (3, 'super'), (4, 'up_sell'), (5, 'cross_sell');
+
+INSERT INTO `catalog_product_link_attribute`(`product_link_attribute_id`, `link_type_id`, `product_link_attribute_code`, `data_type`) values (1, 2, 'qty', 'decimal'), (2, 1, 'position', 'int'), (3, 4, 'position', 'int'), (4, 5, 'position', 'int'), (6, 1, 'qty', 'decimal'), (7, 3, 'position', 'int'), (8, 3, 'qty', 'decimal');
+
+INSERT INTO `cataloginventory_stock`(`stock_id`, `stock_name`) values (1, 'Default');
+(/code)
+
+Wichtig sind die Insert-Anweisungen am Ende da sonst einige Grunddaten fehlen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1516

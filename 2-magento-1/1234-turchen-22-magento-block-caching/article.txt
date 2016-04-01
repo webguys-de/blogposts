@@ -1,0 +1,66 @@
+Article-meta: 
+
+----
+
+Title: Türchen 22: Magento Block Caching
+
+----
+
+Date: 2010-12-22
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: vinai-kopp
+
+----
+
+Article-content: 
+
+----
+
+Intro: <em>Türchen 22 ist ebenfalls etwas besonderes. Auch dieser Beitrag ist als Weihnachtsgeschenk an uns aus der Feder von <a href="http://www.netzarbeiter.de/">Vinai </a>entsprungen:</em> Da Magento ohne Caching nur schlecht skaliert lohnt es sich in der Regel das Caching-Verhalten einer Seite zu optimieren. Wie ein Block gecached wird bestimmen drei Eigenschaften der Block Klasse:
+
+
+
+----
+
+Text: <h2>1.) Die Lebenszeit</h2>
+Durch die Eigenschaft cache_lifetime wird die Gültigkeitsdauer des Cache-Eintrags bestimmt, angegeben in Sekunden. Wird der Wert 0 oder false gesetzt, wird die Block-Ausgabe für immer gecached. Um das Caching für einen Block zu deaktivieren muss der Wert auf null gesetzt werden. Die Cache Lifetime kann bei vielen Blöcken auf gut via Layout XML gesetzt werden:
+
+(code)
+<reference name=“name.des.blocks“>
+ <action method=“setCacheLifetime“<sec>3600</sec></action>
+</reference>
+(/code)
+
+So können viele Blöcke bei Bedarf gecached werden ohne das sie via <rewrite> überschrieben werden müssten. Der Default-Wert für cache_lifetime ist bei den meisten Blöcken null (deaktiviert).
+<h2>2.) Der Cache Key</h2>
+Der Cache Key identifiziert eindeutig einen Block-Cache-Eintrag. Sollen mehrere Variationen eines Blocks gecached werden, beispielsweise eine für jede Sprache, so muss sich die Eigenschaft cache_key für jede der Varianten unterscheiden. In der Regel wird letzteres erreicht in dem die aktuelle Store Id als Teil des Cache-Key gesetzt wird.
+
+Seit Magento 1.4 wird der Cache-Key eines Blocks aus den Elementen des von der Methode getCacheKeyInfo() zurückgelieferten Arrays aufgebaut. Der Default Cache-Key eines Blocks ist der Name im Layout XML.
+<h2>3.) Die Cache Tags</h2>
+Die Cache Tags eines Blocks sind ein Array von Strings. Sie dienen dazu den Cache-Pool von Magento zu segmentieren. So kann z.B. der HTML Block-Cache gelöscht werden, ohne das der Konfigurations Cache-Pool davon beeinflusst wird. Als Default-Wert für die Cache-Tags wird array('block_html') verwendet. Meistens ist das so ausreichend, unter Umständen kann es jedoch hilfreich sein den Cache weiter zu segmentieren. Zum Beispiel könnte ein komplexer Navigations-Block mit den Cache-Tags array('block_html', 'navi') gecached werden. Jedes mal wenn sich etwas an der Datenstruktur ändert, aus dem die Navigation aufgebaut wird, kann dann gezielt nur der Navi-Cache aktualisiert werden: Mage::app()->cleanCache(array('navi'));
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1234

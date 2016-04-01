@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: CeBIT 2013 und Magento
+
+----
+
+Date: 2013-03-03
+
+----
+
+Description: 
+
+----
+
+Tags: 
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ab Dienstag heißt es wieder CeBIT. Aber lohnt sich die große deutsche IT-Messe auch bezüglich Magento? Die Antwort ist einfach: Ja, klar! Dieses Jahr haben sich einige Magento Agenturen unter der Flagge der <a href="http://www.meet-magento.de/cebit-2013.html">Meet Magento</a> zusammengeschlossen und liefern den Zuhörern einige spannende Vorträge zu E-Commerce und Magento Themen. Ein Blick beim Stand <b>Halle 6 Stand L44</b> ist es sicher Wert :-)
+
+Ich selbst werde auch am Mittwoch und Donnerstag vor Ort sein. Wenn ihr Lust auf ein kurzes Meeting habt erreicht ihr mich natürlich über Twitter (<a href="http://www.twitter.com/tobi_pb">@tobi_pb</a>) oder über die Kommentare im Blog. Ich freu mich!
+
+
+
+----
+
+Text: 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3386

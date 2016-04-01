@@ -1,0 +1,204 @@
+Article-meta: 
+
+----
+
+Title: Türchen 10: Sass und Magento
+
+----
+
+Date: 2013-12-10
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das heutige Türchen im Adventskalender dreht sich mal nicht um die Programmierung, sondern richtet sich vornehmlich an die Frontend-Developer oder "Frontend-Verbesserer", wie Vinai sie nennt. Das CSS, wie es von Magento mitgeliefert wird, ist zwar nicht schlecht, jedoch merkt man nach einigen Projekten, dass man oft dieselben Änderungen vornimmt. Um sich diese Arbeiten ein wenig zu erleichtern, möchte ich euch Sass vorstellen.
+
+
+----
+
+Text: Sass (Syntactically Awesome Stylesheets) ist eine Stylesheet-Sprache, die als Präprozessor dem Frontend-Developer die Erzeugung von Stylesheets erleichtert. Alleine schon die Erwähnung von Variablen, Funktionen und Struktur lässt begeistert aufhorchen und erahnen, woher das "Awesome" in Sass kommt. Wie das ganze funktioniert, demonstrieren die folgenden Beispiele.
+
+Sass
+(code lang: css)
+.header-container
+  background: #FFFFFF
+  width: 100%
+ 
+  .header
+    background: #FF0000
+    width: 960px
+ 
+  a
+    text-decoration: underline
+    &:hover
+      text-decoration: none
+(/code)
+
+Aus diesem Schnipsel wird das folgende CSS kompiliert:
+
+(code lang: css)
+.header-container{
+  background: #FFFFFF;
+  width: 100%;
+}
+ 
+.header-container .header{
+  background: #FF0000;
+  width: 960px;
+}
+.header-container .header a{
+  text-decoration: underline;
+}
+.header-container .header a:hover{
+  text-decoration: none;
+}
+(/code)
+
+Eines der wesentlichen Vorteile von Sass fällt sofort ins Auge: die verschachtelten Regeln (nested rules). Diese Schreibweise ermöglicht es, selbst ein kompliziertes Konstrukt schnell und bequem zu erstelllen. Das wichtigste dabei: der logische Aufbau ermöglicht einen besseren und schnelleren Überblick. Dies zeigt sich auch beim Einsatz von Media-Queries:
+
+(code lang: css)
+.header-container .header
+  background: #ffffff
+  @media (min-width: 400px)
+    background: #f2f2f2
+(/code)
+
+Aus diesem Schnipsel wird das folgende CSS kompiliert:
+
+(code lang: css)
+.header-container .header {
+  background: #ffffff;
+}
+@media (min-width: 400px){
+  .header-container .header {
+    background: #f2f2f2;
+  }
+}
+(/code)
+
+Neben dem logischen Aufbau der Struktur stellt die räumliche Nähe bei dem Einsatz von Media-Queries eines Elements einen weiteren Vorteil dar. Diese Struktur erschließt sich dem geübten Auge sofort und erfordert keine längere Einarbeitungszeit in selbst umfangreiche Projekte.
+
+An dieser Stelle muss man sagen: für nur eine Magento-Installation lohnt sich der Umbau des originalen CSS nicht. Der Aufwand dafür steht in keinem Verhältnis zum Aufwand. Wenn man jedoch viele Magento-Instanzen erstellt, kann sich ein Umstieg lohnen. Vor allem, da man nicht sofort alles umbauen muss; auch ein teilweiser Umbau einzelner Stellen ist möglich, denn Sass bietet mehr als nur Struktur. Weitere Vorteile für den schnellen Aufbau bietet der Einsatz von  Variablen und Mixins.
+
+<strong>Variablen</strong>
+Sass eröffnet dem Entwickler mit der Definition von Variablen eine effektive Möglichkeit, um bestimmte Werte und/oder Anweisungen im CSS konsistent zu halten und leicht zu ändern. Diese werden im Kopf der Datei definiert und während des Kompilierens im gesamten Dokument ersetzt.
+
+(code lang: css)
+$link_color: #999999
+$link_decoration: none
+$link_hover_color: #000000
+$link_hover_decoration: underline
+
+a
+  :color = $link_color
+  :text-decoration = $link_decoration
+  &:hover
+    :color = $link_hover_color
+    :text-decoration = $link_hover_decoration
+(/code)
+
+Aus diesem Schnipsel wird das folgende CSS kompiliert:
+
+(code lang: css)
+a {
+  color: #999999;
+  text-decoration: none;
+}
+a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+(/code)
+
+<strong>Mixins</strong>
+
+Mixins sind Funktionen, die eine mehrfache Verwendung ganzer Anweisungsblöcke erlauben. So kann man sie super dazu einsetzen, um Änderungen zentral vorzunehmen. Mixins erlauben jedoch nicht nur ganze Code-Abschnitte, sondern können wiederum weitere geschachtelte Selektoren enthalten. So lassen sich auch komplexe Strukturen einfach, elegant und vor allem wiederverwertbar schreiben.
+
+Das folgende Beispiel weist einem Element gerundete Ecken mit einem übergebenen Radius zu:
+(code lang: css)
+@rundeecken ($radius: 4px) {
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -o-border-radius: $radius;
+  border-radius: $radius;
+}
+.header {
+  @include rundeecken(6px);
+}
+.main {
+  @include rundeecken(12px);
+}
+(/code)
+
+Aus diesem Schnipsel wird das folgende CSS kompiliert:
+
+(code lang: css)
+.header {
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+}
+.main {
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -o-border-radius: 12px;
+  border-radius: 12px;
+}
+(/code)
+
+Die obigen Beispiele sind allesamt im ursprünglichen Format Sass-Format geschrieben, in Anlehnung an das ursprüngliche CSS Format wurde SCSS entwickelt und dies erfreut sich mittlerweile weiter Verbreitung. Sehr groß sind die Unterschiede jedoch nicht. Die Verschachtelung der Selektoren basiert nicht mehr auf Einrückung, sondern über die altbekannten geschweiften Klammern; das Anweisungsende kennzeichnen Semikolons. Das ganze sorgt für ein wenig mehr Übersicht und sorgt gerade am Anfang für ein "Aha-Erlebnis", es fällt leichter und der Einstieg gelingt schneller.
+
+<strong>Sass und Magento</strong>
+
+Für Magento existiert bereits eine fertige SCSS-Extension (<a href="http://www.magentocommerce.com/magento-connect/catalog/product/view/id/14634/">Laurent_Sass</a>], die bereits intelligente Funktionen mitbringt und out-of-the-box funktioniert.
+(image: sass-system-650x293.png)
+
+Als erstes (und einziges) wird in das layout.xml die SCSS-Datei angegeben; die Extension kompiliert das CSS automatisch und bringt auch ein Caching-System mit, sodass die Datei nicht jedesmal neu compiliert werden muss. Bisher hatte ich damit noch keine Probleme.
+(image: layout-xml-650x20.png)
+
+Wie eingangs bereits geschildert, ist der Ansatz von Sass bzw. SCSS gut und bietet einige Funktionen, die das Leben eines Frontend-Verbesseres einfacher machen. Jedoch ist damit auch ein gewisser Aufwand verbunden, der sich - je nach Umfang - nicht sofort im zweiten Projekt amortisieren wird. Sollte man jedoch sogn. Basis-Shops anbieten, die sich sehr ähnlich sind, spielt SCSS alle Vorteile aus. Eine kleine Erweiterung ist dafür noch notwendig, das möchte ich ein einem kleinen Gedankenspiel verdeutlichen.
+
+Zusätzlich zu der oben genannten Erweiterung erstellt man eine eigene Extension, die die Variablen im SCSS ausliest und die Werte über ein Admin-Interface pflegbar macht. Auf diese Weise lässt sich auf die Schnelle projekt- und/oder kundenspezifische Werte eintragen, Firmenfarben, Schriftarten, -farben und -größen. Einmal gespeicht, werden die Werte in das SCSS geschrieben und schon hat man ein "individuelles" Layout - zumindest Farbwelt und sämtliche Einstellungen, die man im Vorfeld definiert hat.
+
+Die Vorteile liegen auf der Hand: es geht schnell, unkompliziert und es bedarf keinerlei CSS-Kenntnisse. Allerdings bedarf es (zumindest wirtschaftlich gesehen) einer gewissen Menge von gleichartigen Projekten, um rentabel zu sein.
+
+Dieser Haken ist leider nicht der einzige. Je individueller ein Shop ist, desto weniger eignet sich dieser Ansatz. Ein weiterer Nachteil ist der Wegfall von kleinen Helferlein wie <a href="http://david.dojotoolkit.org/recss.html" title="ReCss">ReCSS</a>, da das kompilierte SCSS unter einem zufälligen Namen gespeichert wird. Schnelle Änderungen sind so nicht mehr möglich, ebenso die ungefilterte Übernahme von "Live-CSS" aus der Konsole oder Firebug heraus, da es zuerst in die Struktur der Sass oder SCSSS-Datei eingefügt werden muss.
+
+Fazit:
+Sass ist eine gute Hilfe und bietet den Einsatz in zwei Ansätzen an:
+1. Ständiger Einsatz aufgrund leichter Anpassung fester Layouts
+2. Initialer Einsatz durch das Erzeugen einer kundenspezifischen Vorlage
+
+Sollte jedoch das nötige Arbeitsumfeld bestehen, lohnt sich ein genauer Blick auf Sass auf jeden Fall. 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3636

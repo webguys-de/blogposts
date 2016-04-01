@@ -1,0 +1,70 @@
+Article-meta: 
+
+----
+
+Title: Türchen 06: Die Reihenfolge in der Module geladen werden
+
+----
+
+Date: 2010-12-06
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 06 ist ein "Alles-Gute-Zum-Nikolaus"-Türchen. Wünscht dem guten alten Mann alles Gute und passt auf <a href="http://www.youtube.com/watch?v=cJpgQgAVBCY">Knecht Ruprecht </a>auf. Vielleicht kommt er ja auch zu euch wenn ihr ganz böse am Magento-Core bastelt? Neben viel Blödsinn ist natürlich auch heute wieder ein kleines Beispiel zu Magento im Kalender welches sich mit der Reihenfolge beschäftigt in der Module verarbeitet werden.
+
+
+
+----
+
+Text: Magento ist über die Layout-Updates, ich kann es nicht häufig genug sagen, ein sehr sehr mächtiges System. Problematisch wird es nur wenn zwei Layout-Updates eine gleiche Aktion auf ein und den selben Block aufrufen. Wer hat dann am Ende recht? Natürlich der der zuletzt kam. Aber wer kam zuletzt? Um die Frage zu klären betrachten wir einmal die Modul-Konfiguration mit der Magento mitgeteilt wird das es unser eigentlich Modul laden soll aus <em>app/etc/modules/Webguys_Optimizedcheckout.xml</em>
+
+(code lang: xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Webguys_Optimizedcheckout>
+			<active>true</active>
+			<codePool>community</codePool>
+            <depends>
+				<Mage_Checkout />
+			</depends>
+		</Webguys_Optimizedcheckout>
+	</modules>
+</config>
+(/code)
+
+Hier ist zu erkennen das im Module-Tag jeweils ein Tag mit dem Namen des Moduls erstellt wird. (Achtung: Case-Sensitive).  Dieser Tag, hier <em>Webguys_Optimizedcheckout</em>, beinhaltet weitere Konfigurationen zum Modul. So wird der Code-Pool gesetzt der letztlich bestimmt ob unser Modul aus <em>app/code/local</em> oder <em>app/code/community</em> geladen wird. Dann kommen wir zum eigentlich Teil dieses Artikels: <strong>Der Depends-Tag</strong>. Dieser Tag sagt Magento das unser Modul von einem anderen abhängt, es also ohne das andere nicht funktioniert und somit unbedingt erst nach diesem geladen werden muss. Dieser Tag kann eine beliebige Anzahl an weiteren Modulen enthalten. Jedes einzelne wird als einzelner Tag abgebildet und nicht ineinander verschachtelt.
+
+Über Depends ist es somit möglich das die eigenen Layout-Updates erst nach den Layout-Updates eines anderen Moduls abgearbeitet werden und es hier nicht zu Widersprüchen kommt.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1086

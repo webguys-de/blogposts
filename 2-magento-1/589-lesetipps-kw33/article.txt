@@ -1,0 +1,56 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW33
+
+----
+
+Date: 2010-08-22
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Am Ende der Woche gibt es nun zum zweiten Mal ein paar Lesetipps aus dem Magento-Umfeld. Dabei fiel mir auf das die deutschsprachigen Blogs z.Z. wirklich wenig Inhalt produzieren - also falls ihr noch ein paar Blogs wisst bei denen auch ein Beitrag für die Lesetipps dabei ist: Immer her damit!
+
+----
+
+Text: <ul><li>Das <a href="http://www.techdivision.com/shop/magento-handbuch-1">Benutzerhandbuch für Magento</a> ist in der 6. Auflage erschienen. Es beschreibt den Admin von Magento mit seinem Funktionen und kann für 29.90 € als PDF bei der <a href="http://www.techdivision.com/shop/magento-handbuch-1">TechDivision</a> gekauft werden.</li>
+	<li>Die Autoren der <a href="http://www.webshopnews.net/2010/08/neue-magento-extensions-im-uberblick.html">Webshopnews</a> stellen wieder ein paar tolle neue <a href="http://www.webshopnews.net/2010/08/neue-magento-extensions-im-uberblick.html">Extensions</a> vor.</li>
+	<li><a href="http://www.falk-opitz.de/magento-stammtisch-de-startet/">Falk-Opitz</a> ruft den <a href="http://www.Magento-Stammtisch.de">Magento-Stammtisch</a> ins Leben</li>
+	<li>Mit dem Thema <a href="http://kkoepke.de/online-shops/magento-cronjobs/">Cron-Jobs in Magento</a> beschäftigt sich Kai Koepke in seinem <a href="http://kkoepke.de/category/online-shops/">Magento-Blog</a></li>
+	<li>RackSpeed sammelt einige <a href="http://rackspeed.de/forum/2451-3-post">Performance-Probleme in Magento</a> und stellt Lösungen dazu vor</li>
+	<li>Wie sieht Magento eigentlich auf dem IPhone aus? <a href="http://www.webbewegung.de/index.php/2010/08/13/magento_demoshop_iphone_variante">Webbewegung hat eine Demo vorbereitet</a>.</li>
+	<li>Mittels <a href="http://connect.get-the-code.de/">connect.get-the-code.de</a> lassen sich Magento-Extensions noch einfacher Durchsuchen und auch (ohne die Verwendung von Magento-Connect) direkt herunterladen.</li>
+</ul>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 589

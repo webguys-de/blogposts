@@ -1,0 +1,84 @@
+Article-meta: 
+
+----
+
+Title: Türchen 06: Magento Design Exceptions mit Varnish
+
+----
+
+Date: 2011-12-06
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: bjoern-kraus
+
+----
+
+Article-content: 
+
+----
+
+Intro: Varnish Cache (<a href="https://www.varnish-cache.org">https://www.varnish-cache.org</a>) ist ein Reverse Proxy, mit dem man kostengünstig eine externe Full Page Cache (FPC) Lösung vor Magento schalten kann. Damit wird der Magento-Shop nicht nur extrem viel schneller, sondern man kann auch enorme Lastspitzen bei großen Marketing-Aktionen damit abpuffern.
+
+----
+
+Text: Um Magento und Varnish miteinander laufen zu lassen, gibt es mittlerweile eine handvoll Module (<a href="https://www.varnish-software.com/blog/doing-right-thing-magento-varnish-cache">https://www.varnish-software.com/blog/doing-right-thing-magento-varnish-cache</a>), welche einen schnellen Einstieg ermöglichen. Neben der Varnish-Konfiguration (VCL) liefern die Module im wesentlichen die HTTP-Header-Anpassungen in Magento, damit Varnish nur Seiten von sog. Non-Session-Users cached, also Seiten ohne Inhalt im Mini-Warenkorb oder Login. Ein weiterer, wichtiger Punkt ist das Leeren des Varnish Caches (purge) über das Magento Backend, damit Änderungen an den Produktseiten schnell im Frontend angezeigt werden können.
+
+Varnish verwendet ähnlich wie das Magento Block Caching „cache keys“, um seine Cache Elemente wieder zu finden. In der Regel wird die Domain oder IP + der URL-Pfad (/schuhe/sneakers.html) als Hash verwendet. Damit lässt sich pro URL genau eine Version einer Seite im Cache speichern.
+
+Was aber wenn ich pro URL mehrere Versionen z.B. für Sprachen oder verschiedene Devices im Cache halten will? Ein solcher Anwendungsfall sind z.B. die sog. <a href="http://magebase.com/magento-tutorials/magento-design-exceptions-explained/">Design Exceptions in Magento</a>, mit denen sich abhängig vom User-Agent (Browser) das Theme unter System/Konfiguration/Web ändern lässt, um bspw. für Mobile Geräte eine eigene Darstellung des Shops zu haben.
+
+(image: screenshot-650x516.jpg)
+
+Damit Varnish weiß, welche User-Agents nun die normale und welche die anpasste Shop-Seite sehen sollen, müssen wir diese Info mit in den Hash aufnehmen:
+
+(code)
+sub vcl_hash {
+    hash_data(req.url);
+    if (req.http.host) {
+        hash_data(req.http.host);
+    } else {
+        hash_data(server.ip);
+    }
+    if (!(req.url ~ "^/(media|js|skin)/.*\.(png|jpg|jpeg|gif|css|js|swf|ico)$")) {
+        call design_exception;
+    }
+    return (hash);
+}
+
+sub design_exception {
+    if (req.http.User-Agent ~ " iPhone|iPod|BlackBerry ") {
+        hash_data("theme_iphone");
+    }
+}
+(/code)
+
+Wenn die angefragte URL kein Bild, CSS o.ä. ist – dafür gibt es ja keine Browser-spezifischen Varianten -, wird die Funktion design_exception aufgerufen, welche über einen RegEx gegen den User-Agent den selben Ausdruck matched wie Magento bei den Design Exceptions. Fällt der User-Agent in unser Raster, wird dem Hash einfach noch ein zusätzlicher String hinzugefügt, so dass Varnish für diese Anfrage eine separate Seite von Magento anfordert. Diese wird dann von Magento genau mit der gewünschten Design Exception generiert und in Varnish als selbstständiges Cache Element für künftige Anfragen gespeichert.
+
+Das von uns entwickelte <a href="http://www.magentocommerce.com/magento-connect/pagecache-powered-by-varnish.html">PageCache powered by Varnish Modul</a> unterstützt Design Exceptions erstmals als Beta und liefert in der Enterprise Version auch Tools, um Design Exceptions in die VCL über das Magento Backend bequem einzufügen.
+
+Der Ansatz eignet sich grundsätzlich auch für andere Bereiche wie z.B. auch GeoIP. Zu beachten ist dabei allerdings, dass je mehr Varianten Varnish vorhalten soll, desto mehr Speicher wird benötigt und desto langsamer baut sich auch nach einen Purge der Cache wieder auf.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2187

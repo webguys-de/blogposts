@@ -1,0 +1,59 @@
+Article-meta: 
+
+----
+
+Title: Magento Event-Tipps zum Jahresende
+
+----
+
+Date: 2015-10-10
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nach der Event-Sommerpause geht es zum Jahres Ende für Magento Entwickler noch einmal richtig los. Eine spannende Dinge stehen uns noch bevor.
+
+
+
+----
+
+Text: Den Anfang macht die <a href="http://ch.meet-magento.com/conference/meet-magento-schweiz-2015/">Meet-Magento in der Schweiz am Freitag den 23.10</a>. Hier konnte ich letztes Jahr recht gut über den Tellerrand blicken und ein paar spannende Dinge in hinblick auf das E-Commerce in der Schweiz aufschnappen. Weiter geht es dort auch direkt am <a href="https://www.mage-hackathon.de/upcoming/zurich-24-25-10-2015.html">24.10 und 25.10 mit dem Firegento Magento Hackathon CH</a>. Generell auch ein super Tipp - hat letztes Jahres wirklich Spaß gemacht.
+
+Weiter geht es in Manchester mit den <a href="http://www.magetitans.co.uk/">Magetitans am 07.11.15.</a> Eine Verantstaltung über einen Tag speziell nur für Magento-Entwickler. Und das Dev Line-Up mit Ivan, Vinai, Ben und David (usw.) kann sich sehen lassen. Vorab gibt es noch eine kleinen Kurs zu Magento 2 gehalten von Vinai Kopp. Er kostet zwar extra aber die 10 Pfund sind mehr als fair. Hier bin ich dabei und ganz ehrlich: Ich war noch nie in Manchester, freue mich wie ein kleines Kind und bin schon sehr gespannt auf die Vorträge :)
+
+Zu guter letzt, wir wollen ja nicht träge werden, bietet das Jahr noch die Möglichkeit den <a href="https://www.mage-hackathon.de/upcoming/wuerzburg-14-11-2015-bis-15-11-2015.html">FireGento Magento Hackathon </a>in Würzburg zu besuchen. Angesetzt ist der 14.11 bis zum 15.11. Eine Anreise am 13.11 ist aber, gerade wegen dem Vorab-Networking, unbedingt zu empfehlen. Der Preis ist mit 35 € + Hotel auch absolut fair.
+
+Also Koffer gepackt, Tickets gebucht. Wir sehen uns :-)
+
+P.S. Viele Magento Events sind auch auf einen Blick im <a href="https://www.google.com/calendar/embed?src=9ns1e12ucfd84tpnsehekkc6g0@group.calendar.google.com">Magento Event Kalender von Simon Sprankel</a> zu finden.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4335

@@ -1,0 +1,94 @@
+Article-meta: 
+
+----
+
+Title: Türchen 18: Im Code zwischen Stores wechseln
+
+----
+
+Date: 2011-12-18
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: michael-augsten
+
+----
+
+Article-content: 
+
+----
+
+Intro: Im normalen Magento Programmieralltag steht man nicht allzu häufig vor der Frage, welches Template Area muss ich benutzen, welcher Storeview ist gewünscht und welche Sprache (Währung, Datumsformate,…) soll aktuell verwendet werden. Im Allgemeinen übernimmt diese Entscheidung Magento für einen. Es kommt eine Request und man liefert die Response.
+
+----
+
+Text: Schaut man sich z.B. die Generierung einer Magento Rechnung an, so sieht man, dass hier einiges an den "globalen" Einstellungen hin und her geschaltet werden muss. So wird sich beim Anlegen jeder Bestellung gemerkt, in welchem Store diese angelegt wurde. Mit dieser Information hat man die Möglichkeit eine Rechnung zu generieren, die die gewünschte Sprache und die eingestellten Optionen des Stores beinhalten.
+
+Vor der Magento Version 1.5 musste man ich selber darum kümmern, die gewünschten Einstellungen, ein und wieder auszuschalten:
+<ul><li>Setzen des entsprechenden Areas (frontend, admin)</li>
+	<li>Umschalten auf den gewünschten Store</li>
+	<li>Sprachtabellen für die Übersetzungen laden</li>
+	<li>Und nach getaner Arbeit alles wieder zurück</li>
+</ul>
+Seit der Version 1.5 findet man im Paket Core neben dem app/Area Modell, das Modell app/ Emulation. Die Klasse übernimmt nun die einfache Umschaltung der Store abhängigen Daten.
+
+Im Allgemeinen langt folgendes Codefragment aus:
+
+(code lang: php)
+$appEmulation = Mage::getSingleton('core/app_emulation');
+$initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($storeId);
+try {
+	// 	Logik
+	// …
+} catch (Exception $exception) {
+	// Stop store emulation process
+   $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+   throw $exception;
+}
+// Stop store emulation process
+$appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+(/code)
+
+Als Rückgabewert erhalten wir die aktuellen Einstellungen, die über die Methode '<em>Mage_Core_Model_App_Emulation::stopEnvironmentEmulation</em>' zurückgesetzt werden sollten. Die Methode '<em>Mage_Core_Model_App_Emulation::startEnvironmentEmulation</em>' bietet die Möglichkeit weitere Parameter zu übernehmen:
+
+Die Methode '<em>Mage_Core_Model_App_Emulation::startEnvironmentEmulation</em>' bietet die Möglichkeit weitere Parameter zu übernehmen:
+<ul><li><em>storeId</em>
+Ist die gewünschte StoreId</li>
+	<li><em>area</em> (Default frontent)
+Neben Frontent und AdminHtml wären theoretisch weitere Design Areas denkbar</li>
+	<li><em>emulateStoreInlineTranslation</em> (Default false)
+Hier hat man die Möglichkeit die Übersetzungen, die über den Modus "Translate inline" hinzugefügt wurden, zu berücksichtigen.</li>
+</ul>
+Über den Sinn der Funktion "Translate inline" kann sicherlich ein eigener Artikel geschrieben werden. Diese Funktionen versuche ich meinen Kunden nicht zu zeigen, da sich dann die Suche nach dem Ort der Übersetzung weiter verkompliziert. Hier sollten in meinen Augen die CSV Sprachfiles benutzt werden.
+
+Eingesetzt wird diese Klasse von Magento vor allem bei der Generierung der E-Mails, den Rechnungen, Lieferscheinen und Gutschriften. Interessant für diese Klasse wird es immer dann, wenn man aus der Umgebung eines Stores, die Darstellungsvorschriften eines anderen Stores benötigt. Also z.B. die Generierung Store abhängiger Daten innerhalb eines Cronjob, welcher im Admin-Modus läuft.
+
+Der Eine oder Andere wird sich jetzt fragen, was ist so besonderes an diese Klasse. Ich habe die Klasse lieben gelernt, da ich Magento öfters für etwas artfremde Projekte einsetze. So z.B. für ein Projekt, indem innerhalb eines Konzerns verschiedenste Dokumente generiert werden und dies zukünftig in bis zu 23 Sprachen. Als Produkte stehen dem Mitarbeiter, u.a. Visitenkarten, individualisierbare Marketing-Maßnahmen bis hin zu Produktkatalogen, zur Auswahl. Auch der Magento Warenkorb wird hier verwendet, nur das die Mitarbeiter nicht mit einer Kreditkarte bezahlen, sondern mit Auftrags- und Abrechnungskonten. Und damit nicht wild bestellt wird gibt es pro Abteilung ein Budget, welches pro Monat nicht überzogen werden darf.
+
+Da man sich nicht immer sicher sein kann, was sich die Magento Entwickler noch einfallen lassen, bin ich über die Zusammenfassung in diese Basis-Klasse begeistert.
+
+Ich wünsche allen Magento-aner ein arbeitsfreies Weihnachtsfest und gute Geschäfte im nächsten Jahr.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2065

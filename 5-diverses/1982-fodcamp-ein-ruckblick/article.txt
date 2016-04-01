@@ -1,0 +1,95 @@
+Article-meta: 
+
+----
+
+Title: Fodcamp - Ein Rückblick
+
+----
+
+Date: 2011-10-24
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es war wieder <s>Foocamp</s> Fodcamp. Dieses kleine aber feine Event, organisiert von Damian, fand dies mal in Tossens an der Nordsee statt. Insgesamt waren 15 Magento-Entwickler von unterschiedlichen Agenturen bzw. Unternehmen anwesend um gemeinsam Know-How auszutauschen, neue Ideen voranzutreiben. 
+
+----
+
+Text: Grundvoraussetzung des FodCamp (=Friends Of Damian) ist das Damian einläd. Er organisiert das Event und bestimmt wer kommen darf. Dabei verhält es sich aber sehr sehr fair und akzeptiert auch Vorschläge. Wichtig ist das alle anwesenden Entwickler auf ihrem Gebiet Experte sind.
+
+Dazu kommt das jeder Entwickler eine Präsentation mitbringen muss - zu einem Thema welches er im Vorfeld selbst bestimmt. Zu Beginn stimmen wir dann ab welche Vorträge gehört werden. Alle sind, das Wissen wir aus Erfahrung, oft nicht möglich.
+<h2>Neue Module braucht die Welt</h2>
+Neben den Vorträgen, ein paar Bier und einer Nahrungsmittelaufnahme im drei Stunden-Takt (Frühstück, Mittag, Kuchen, Abend, Mitternachts-Snack) sind wir mit der Entwicklung zweier Module begonnen. Das erste, welches die größere Gruppe betreut, bleibt vorerst noch ein bisschen Geheim. Das zweite kann aber als Alpha schon einmal das Licht der Welt erblicken :)
+<h3>CuteSave - Schnelles Speichern von Mage::getModel('catalog/product') - auch mittels SOAP</h3>
+Das Modul hat seinen Namen von der Queue. Die Idee besteht darin das, falls mehrere Produkte gespeichert werden müssen, es deutlich schneller geht zusammen zu speichern als einzeln. Dabei werden mehrere Inserts in die Entity-Tabellen zu einem Insert zusammengefasst.
+
+Das ganze wäre ein riesiger Aufwand hätte uns Magento mit dem neuen Import/Export nicht schon eine große Ecke an Arbeit abgenommen. Dieser verfolgt nämlich fast das gleiche Prinzip. Unsere Aufgabe bestand also darin Mage_Catalog_Model_Product in das Format des Importes zu konvertieren. Das haben wir geschafft - zumindest zu einem großen Teil und so das es knapp als Alpha zählen darf :)
+
+<strong>Ein erster Test</strong>
+
+(code lang: php)
+for($i=0;$i<5000; $i++) {
+    $product = Mage::getModel('catalog/product');
+    $product->setData(...);
+    Mage::getSingleton('fod_cutesave/queue')->add($product);
+}
+Mage::getSingleton('fod_cutesave/queue')->write();
+(/code)
+
+Für 5000 Produkte benötigen wir ca. 45 Sekunden über das Model als Container.
+
+<strong>Ein Test über die SOAP-Api</strong>
+
+(code lang: php)
+..
+for($i=0;$i<1000; $i++)
+    ...
+    $client->call($session, 'cutesave_product.update', array('aaa', $newProductData));
+}
+$client->endSession($session);
+(/code)
+
+Für 1000 Produkte benötigen wir ca. 20 Sekunden über die SOAP-Api.
+
+Weitere Informationen gibt es bei <a href="https://github.com/fodcamp">GitHub</a>. Bis zur Stable wird es aber noch etwas dauern :)
+<h3><em>Vielen Dank an..</em></h3>
+<ul><li>aijko GmbH - Agentur für Medienentwicklung (<a href="http://www.aijko.de">www.aijko.de</a>),</li>
+	<li>Flagbit GmbH & Co. KG (<a href="http://www.flagbit.de">www.flagbit.de</a>)</li>
+	<li>SYNAXON AG (<a href="http://www.synaxon.de">www.synaxon.de</a>),</li>
+	<li>code-x GmbH - Internet & Marketing (<a href="http://www.code-x.de">www.code-x.de</a>),</li>
+	<li>ITabs GmbH (<a href="http://www.itabs.de">www.itabs.de</a>),</li>
+	<li>Netresearch GmbH & Co.KG (<a href="http://www.netresearch.de">www.netresearch.de</a>),</li>
+	<li>IcyApp (<a href="http://www.icyapp.de">www.icyapp.de</a>)</li>
+</ul>
+Ohne deren Unterstützung ein solches Event nicht möglich wäre!<cite></cite>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1982

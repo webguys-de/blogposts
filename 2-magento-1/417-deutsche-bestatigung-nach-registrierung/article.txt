@@ -1,0 +1,50 @@
+Article-meta: 
+
+----
+
+Title: Deutsche Bestätigung nach Registrierung
+
+----
+
+Date: 2010-07-28
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nach erfolgreicher Registrierung gibt Magento, trotz deutscher Lokalisierung diese Meldung aus: "Thank you for registering with shopname.". Ein kleiner Blick in das Template löst den ersten Ansatz in Luft aus, denn auch an dieser Stelle wird die Übersetzungsfunktion aufgerufen.
+
+
+----
+
+Text: Daraufhin schaut man in der passenden csv Datei nach, die man unter "<em>app/locale/de_DE/Mage_Customer.csv</em>" findet. Auf den ersten Blick findet man ca. in Zeile 339 den passenden Eintrag und wundert sich, warum Magento die Übersetzung nicht übernimmt. Erst auf den zweiten Blick fällt auf, das der abschließende Punkt bei "Thank you for registering with %s" fehlt. Fügt man diesen hinzu wird auch die dafür vorgesehene Übersetzung aufgerufen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 417

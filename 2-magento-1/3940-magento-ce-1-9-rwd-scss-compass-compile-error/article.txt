@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Magento CE 1.9 - RWD - SCSS / Compass compile error
+
+----
+
+Date: 2014-10-30
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Abweichend zu meinem MacBook bekam ich nach dem Upgrade auf OSX Yosemite beim compilen von SCSS des RWD-Themes immer denselben Fehler: <i>NoMethodError: undefined method `specificity' for [:not(.button)]:Array</i>. Zuerst habe ich gedacht, diesen Fehler zu beseitigen, würde mein Problem lösen. Jedoch kamen dann immer neue Fehlermeldungen. Ärgerlich, denn entspanntes Arbeiten sieht anders aus. 
+
+
+----
+
+Text: Da eigentlich Rechner eigentlich gleich sind, bin ich erst später darauf gekommen, die Versionen von SASS zu vergleichen. Und siehe da, die funktionierende Version auf dem MacBook ist SASS 3.4.5 und die nicht funktionierende Version auf dem iMac ist SASS 3.4.6.
+
+Einfache Lösung:
+
+<strong>1. Deinstallieren</strong>
+(code lang: shell)gem uninstall sass(/code)
+
+<strong>2. Installieren</strong>
+(code lang: shell)gem install sass -v 3.4.5(/code)
+
+Sollten die Schreibrechte nicht ausreichen, einfach mit sudo arbeiten und Passwort bereithalten. 
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3940

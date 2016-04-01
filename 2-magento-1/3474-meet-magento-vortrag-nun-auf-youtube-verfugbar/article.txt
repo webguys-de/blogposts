@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento Vortrag nun auf Youtube verfügbar
+
+----
+
+Date: 2013-09-06
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Mein Votrag auf der diesjährigen Meet-Magento ist nun bei YouTube online. Vielen Lieben Dank an alle Organisatoren und, wie ich im Video recht häufig sage: "Ich freue mich!"
+
+
+----
+
+Text: <h3>Layered Navigation mit Magento</h3>
+<iframe src="//www.youtube.com/embed/3YdRDN58fL8" height="480" width="640" allowfullscreen="" frameborder="0"></iframe>
+
+Die <a href="http://www.webguys.de/praesi/magento-layered-navigation/">Folien findet ihr übrigens hier</a> und eine kleine <a href="http://de.nr-apps.com/blog/2013/09/06/magento-layered-navigation/">Zusammenfassung</a> gibt es im <a href="http://de.nr-apps.com/blog/2013/09/06/magento-layered-navigation/">Blog der Magento nrappfactory</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3474

@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Kurzer Rückblick zur Magento Zertifizierung in Berlin
+
+----
+
+Date: 2011-11-20
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich war sehr froh das ich, mit einigen anderen, zur <a title="Details zur Magento Entwickler Zertifizierung" href="http://www.webguys.de/magento/details-zur-magento-entwickler-zertifizierung/">Magento Developer Zertifizierung in Berlin</a> eingeladen wurde. 
+
+----
+
+Text: Meine Vorbereitung lief aufgrund des knappes Zeitplanes leider sehr dürftig aus. Zusätzlich hatte ich mich aus heutiger Sicht mit falschen Fokus vorbereitet. Ich konzentrierte mich viel zu sehr auf die wenigen komplexen Fragen anstelle auch die Grundlagen noch einmal zu wiederholen. Ich dachte das ich den Grundlagen-Teil doch recht gut beherrschen müsste – schließlich mache ich doch täglich nichts anderes als aus meinem Grundlagen Wissen komplexere Problemstellungen zu lösen. Leider habe ich mich damit „verzockt“. Es ist besteht teils ein gravierender Unterschied zwischen „im Quelltext gucken“ und einer Multiple-Choice-Frage. Im zweiten Fall muss das Wissen dazu wirklich sitzen – sonst fängt schnell der Zweifel an ob nun A, B, C richtig ist – gerade wenn doch alles auf einmal plausibel klingen könnte. In dem Modulen mit denen ich in der letzten Zeit gearbeitet hatte lief es dagegen gut. Probleme hatte ich dagegen im Payment-Teil. Ich wusste zwar das die Prüfung einen Fokus auf den Teil legte und hatte mich teils darauf vorbereitet jedoch hatte ich das Wissen zuvor nie in einem Projekt angewendet. Müsste ich mich noch einmal auf die Prüfung vorbereiten würde ich dazu deutlich mehr Zeit einplanen und dabei kleine Beispiel-Module zu den von Vinai im kommenden PHP-Magazin genannten Themengebieten schreiben. Das hilft doch erheblich das Wissen zu vertiefen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2020

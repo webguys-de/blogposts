@@ -1,0 +1,341 @@
+Article-meta: 
+
+----
+
+Title: Türchen 19: Dependency Injection in Magento 2
+
+----
+
+Date: 2013-12-19
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: carmen-wingenbach
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento 2 lauert vor den Toren der Magento-Welt und wartet mit neuen Konzepten auf. Eines davon hat einen Namen, den ich ungerne laut ausspreche, weil selbst „native Speaker“ dabei klingen, als sollten sie das mit dem Englisch doch besser lassen: „Dependency Injection“. In diesem Beitrag kratze ich ein bisschen an der theoretischen Oberfläche rum, was das überhaupt ist und wie es im Groben in Magento verwendet wird. Denn nicht nur das Mage::getModel() ist dem zum Opfer gefallen, sondern auch das Überschreiben von Klassen ändert sich dadurch. 
+
+
+
+----
+
+Text: <h2>Was ist „Dependency Injection“?</h2>
+
+Wenn man so vor sich hin entwickelt, braucht man immer mal wieder irgendeine Komponente, die man dann im Normalfall zur Laufzeit lädt. Im simpelsten Fall eine Datenbankverbindung oder eine Session. Ich schreibe also eine Klasse und entscheide, was diese so braucht, wenn sie es  denn braucht. So wie man vielleicht in Magento ein Modul schreibt und irgendwann auf die Idee kommt ein Produkt zu laden und daher Mage::getModel('catalog/product') aufruft. Genau das will Dependency Injection nicht.  
+
+Die Idee hinter Dependency Injection ist die Anwendung des sogenannten „Hollywood Prinzips“, das so nett als „Don´t call us, we´ll call you!“ beschrieben wird. Das bedeutet nichts anderes, als dass die Verantwortung für die Dinge, die man so braucht, nicht bei den Klassen selbst liegt, sondern beim Framework. Das Instanzieren von Objekten wird nicht über „new“ gelöst (okay, das gab's in Magento auch vorher nicht) – aber auch nicht mehr über „Mage::getModel()“. Nix mehr mit: ich nehme wir, was ich brauche, wenn es soweit. Was man braucht ist schon längst entschieden und wird "injeziert", lang bevor darauf zugegriffen wird. 
+
+Es gibt unterschiedliche Arten der "Injektion". <i>Interface Injection</i>, <i>Setter Injection</i> und die <i>Constructor Injection</i>. Dies aber nur am Rande und der Vollständigkeit halber. 
+
+Das Ziel von Dependency Injection ist, Abhängigkeit zu minimieren – und auch leichter erkennbar zu machen. Damit wird alles testbar, aber auch wartbarer und flexibler. Magento wird nun also von Haus aus für den Einsatz von Unit-Tests gerüstet sein...
+
+Was meint Abhängigkeit genau? Wenn Klasse Eins im Laufe ihres Lebens Klasse Zwei lädt - dann ist sie von ihr abhängig. Punkt. Was aber, wenn man irgendwann Änderungen an Klasse Zwei machen möchte/muss und Klasse Zwei dafür z.B. einen Parameter braucht - dann gräbt man sich durch sein Projekt und sucht diese Abhängigkeiten, um dann an zig Stellen einen Parameter zu übergeben. Doof. Wenn man nun Klasse Eins testen will, diese aber Klasse Zwei lädt, muss Klasse Zwei mitgetestet werden. Auch Doof. 
+
+
+Ein Beispiel. So sieht's aus <strong>ohne</strong> Dependency Injection:
+
+(code lang: php)
+class KlasseEins 
+{
+	protected $_klasseZwei;
+	
+	public function __construct() 
+	{
+		$this->_klasseZwei = new KlasseZwei();
+	}
+}
+
+$klasseEins = new KlasseEins();
+(/code)
+
+Und das Ganze <strong>mit</strong> Dependency Injection - aber <strong>ohne</strong> Framework dahinter: 
+
+(code lang: php)
+class KlasseEins
+{
+protected $_klasseZwei;
+
+public function __construct (KlasseZwei $klasseZwei) 
+	{
+		$this->_klasseZwei = $klasseZwei;
+	}
+}
+
+$klasseZwei = new KlasseZwei();
+$klasseEins = new KlasseEins($klasseZwei);
+(/code)
+
+Die Idee dahinter ist also, dass die Abhängigkeiten klar sind - und vorhanden sind - BEVOR die KlasseEins anfängt zu arbeiten, sie werden in die Klasse „injiziert“ - ob nun über den Konstruktor, wie in diesem Beispiel oder über Setter-Methoden. 
+
+Die Vorteile sind - hoffentlich - in diesem Mini-Beispiel deutlich geworden. Die Klassen sind unabhängig von einander. Änderungen an den Klassen sind leichter durchführbar. Um herauszufinden, was eine Klasse braucht, reicht es, sich den Konstruktor anzusehen. Dadurch ist alles übersichtlicher und wartbarer. Und die Tester unter Euch würden jetzt noch das Wort "Mock" in den Mund nehmen, weil Klassen "gemockt" werden können und man nur noch testen muss, was man testen will. 
+
+Beispiel 3 wäre dann eine Dependency Injection <strong>mit</strong> Framework dahinter. Und hier sind wir dann im Grunde bei Magento 2 angekommen. Das meint, dass irgendjemand in der ganzen Applikation sich mit dem Instanzieren von Objekten auskennen muss, damit man nicht alle Klassen, die man injizieren möchte, laden muss, bevor man seine Klasse Eins aufruft. Ziel ist also, Klasse Eins aufzurufen OHNE vorab Klasse Zwei zu Instanzieren, diese aber dennoch im Konstruktor geladen werden kann. Dafür muss also irgendjemand wissen, wer eigentlich was braucht. Und das ist der DIC. Der Dependency Injection Container.
+
+Sprich: der Aufruf von Klasse Eins soll nicht so aussehen:
+
+(code lang: php)
+$klasseZwei = new KlasseZwei();
+$klasseEins = new KlasseEins($klasseZwei);
+(/code)
+
+sondern so:
+
+(code lang: php)
+$klasseEins = $allesRanSchaffer->get('KlasseEins');
+(/code)
+
+<h2>Dependency Injection in Magento 2</h2>
+
+Wenn man (wie ich, als ich davon hörte, dass Magento 2 Dependency Injection nutzt) so hinter Dependency Injection hinterher surft, findet man allerlei Definitionen und schöne Beispiele. Über diese geht Magento ein klein wenig hinaus. Es geht nicht nur darum, Abhängigkeiten zu injizieren, sondern diese darüber hinaus auch in einem Container zu verwalten. Magento 2 erweitert das Konzept der Dependency Injection also um den Dependency Injection Container. DIC. Denn es geht nicht nur darum, Abhängigkeiten zu injizieren, sondern diese auch irgendwie zu verwalten. 
+
+<h2>Der ObjectManager</h2>
+
+Aber kurz nochmals einen Schritt zurück... Dependency Injection in Magento 2 wird über die Klasse Magento\App\ObjectManager abgewickelt.  
+
+Das passiert in etwa so wie im folgenden Script, das im ersten Schritt zeigen soll, wie man via ObjektManager eine Klasse instanziert.
+
+(code lang: php)
+use Magento\App\ObjectManager;
+require_once 'app/bootstrap.php';
+
+class MeineTestKlasse {}
+
+$objectManager = new ObjectManager();
+$meineTestKlasse = $objectManager->get('MeineTestKlasse');
+echo get_class($meineTestKlasse);
+(/code)
+
+Im Browser steht nun: "MeineTestKlasse".
+
+Das kann natürlich nicht alles gewesen sein, denn es geht ja um Abhängigkeiten von anderen Klassen. Daher will das folgenden Scriptchen zeigen, wie die injizierte Abhängigkeit aussieht: 
+
+(code lang: php)
+use Magento\App\ObjectManager;
+require_once 'app/bootstrap.php';
+
+class DieInjezierteKlasse
+{
+    public function doSomething()
+    {
+        return 'Bald ist Weihnachten';
+    }
+}
+
+class MeineTestKlasse {
+
+    protected $_dieInjezierteKlasse;
+
+    public function __construct(DieInjezierteKlasse $dieInjezierteKlasse)
+    {
+        $this->_dieInjezierteKlasse = $dieInjezierteKlasse;
+    }
+
+    public function getSomething()
+    {
+        return $this->_dieInjezierteKlasse->doSomething();
+    }
+}
+
+$objectManager = new ObjectManager();
+$meineTestKlasse = $objectManager->get('MeineTestKlasse');
+echo $meineTestKlasse->getSomething();
+(/code)
+
+Im Browser steht nun "Bald ist Weihnachten"...
+
+<h2>Der Dependency Injection Container in Magento 2</h2>
+
+Zuständig für die Container ist die Klasse Magento\ObjectManager\ObjectManager. Wer von wem nun abhängig ist, wird konfiguriert. Aber auch, wer sonst noch was braucht. Und Magento wäre nicht Magento, wenn dies nicht via XML passieren würde.... Es gibt eine neue nette xml-Datei, die in den Modulen liegt: di.xml. 
+
+Die "di.xml" liegt im Modul-Konfigurations-Ordner "etc". also - fast wie in Magento 1 - in "app/code/NameSpace/ModulName/etc/di.xml". 
+
+Und hier kommt nun auch was Neues zu Tage. Die Unterschiede in der Konfiguration zwischen den einzelnen Konfigurationsbereichen (frontend, adminhtml) wird nicht mehr über die XML-Knoten gelöst, sondern über Verzeichnisse. Es gibt also für Abweichungen in der Konfiguration zum frontend die Datei: ect/frontend/di.xml. 
+
+In der di.xml wird also geregelt, was die Klasse braucht – an anderen Klassen, aber auch an anderen Parametern wie Arrays oder Strings. Darüber hinaus kann dort festgelegt werden, ob der Übergabewert z.B. ein Integer sein muss. 
+
+Ich werfe einen Blick in die di.xml des Catalog-Moduls und will wissen, was die Produkt-Helper-Klasse so braucht. 
+
+So sieht der Konstruktor der Produkt-Helper-Klasse aus: 
+
+(code lang: php)
+     public function __construct(
+        \Magento\App\Helper\Context $context,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Model\Session $catalogSession,
+        \Magento\View\Url $viewUrl,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Catalog\Model\Attribute\Config $attributeConfig,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Core\Model\Config $coreConfig,
+        $typeSwitcherLabel
+    )
+(/code)
+
+Ist voll geworden.... der Konstruktor (in anderen Klassen ist er noch länger....).
+
+Und so sieht der passende Eintrag in der di.xml unter /app/code/Magento/Catalog/etc/di.xml aus: 
+
+(code lang: php)
+  <config>
+    <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" 
+    	type="Magento\Catalog\Model\ProductTypes\Config" />
+    <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" 
+    	type="Magento\Catalog\Model\ProductOptions\Config" />
+...
+    <type name="Magento\Catalog\Helper\Product">
+        <param name="typeSwitcherLabel">
+            <value>Virtual</value>
+        </param>
+    </type>
+...
+  </config>
+(/code)
+
+Es beginnt mit dem config-Knoten (der muss nehme ich an nicht weiter erklärt werden...). Dann kommen "preference" und "type". 
+
+Type sagt: 
+Wenn die Klasse „ Magento\Catalog\Helper\Product“ geladen wird, wird folgendes gebraucht: 
+- ein Parameter mit Namen "typeSwitcherLabel". 
+- wenn nix anderes übergeben wird, ist der Wert "Virtual"
+
+Man kann statt eines Values z.B. auch bestimmen, von welchem Typ die Klasse ist, die übergeben werden soll. Dann würde statt <value>Virtual</value> dort stehen: 
+
+(code lang: php)
+<instance type="NameSpace\ModulName\Model\ClassName" />. 
+(/code)
+
+Dann kann man z.B. auch angeben: 
+
+(code lang: php)
+<value type="int">64</value>
+(/code)
+
+Auch das ist neu in Magento 2: wer jetzt echt mehr wissen will, was alles definiert werden kann, kann sich die ganzen Möglichkeiten ansehen unter: 
+lib/Magento/ObjectManager/etc/config.xsd
+
+Nun noch ein letzter Blick auf den Knoten "preference" ganz oben in der Konfiguration. 
+
+(code lang: php)
+  <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" 
+        type="Magento\Catalog\Model\ProductTypes\Config" />
+(/code)
+
+Das meint folgendes: 
+
+Wann auch immer die Klasse "Magento\Catalog\Model\ProductTypes\ConfigInterface" gefordert ist, wie hier in der Product-Helper-Klasse:
+
+(code lang: php)
+    public function __construct(
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
+        \Magento\Catalog\Model\Product\Type\Pool $productTypePool,
+        \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
+    )
+(/code)
+
+dann lade NICHT \Magento\Catalog\Model\ProductTypes\ConfigInterface (was auch einen Fehler gäbe, weil's ein Interface ist), SONDERN lade:  Magento\Catalog\Model\ProductTypes\Config.
+
+Das heißt: die benötigte Klasse ist abhängig von einem Interface, das bestimmt, welche Voraussetzungen (oder Methoden) die Klasse haben muss, die übergeben wird. Im Konstruktor steht das Inferface - welche Klasse aber tatsächlich geladen wird steht in der Container-Konfiguration.
+
+Noch ein Beispiel: 
+
+Wenn man also einfach mal in irgendeiner Klasse nach einem Interface sucht, alsoooo (Suchgeräusche) z.B. im Import-Export-Model in der Import-Klasse. Da soll folgende Klasse geladen werden: 
+
+(code lang: php)
+    /**
+     * @var \Magento\ImportExport\Model\Import\ConfigInterface
+     */
+    protected $_importConfig;
+(/code)
+
+die über den Konstruktor injiziert wird: 
+
+(code lang: php)
+  public function __construct(
+	...
+	\Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
+	...
+  )
+(/code)
+
+Welche aber tatsächlich geladen werden soll, ist zu finden in der di.xml: 
+
+(code lang: php)
+  <config>
+    <preference for="Magento\ImportExport\Model\Import\ConfigInterface" 
+    	type="Magento\ImportExport\Model\Import\Config" />
+    <preference for="Magento\ImportExport\Model\Export\ConfigInterface" 
+    	type="Magento\ImportExport\Model\Export\Config" />
+  </config>
+(/code)
+
+Okay? Dann noch ein letztes Wort zu den....
+
+<h2>Rewrites in Magento 2</h2>
+
+Und zu guter letzt, ergibt sich daraus auch, wie in Magento 2 nun Klassen überschrieben werden. Dies geschieht nun auch in der di.xml:
+
+(code lang: php)
+  <config>
+	<preference for="NameSprace/ModulName/Model/ClassName" 
+		type="NameSpraceNew/ModulNameNew/Model/ClassName" />
+  </config>
+(/code)
+
+Also z.B.: 
+
+(code lang: php)
+  <config>
+	<preference for="Magento/Catalog/Model/Product" 
+		type="Wegbuys/AdvancedCatalog/Model/Product" />
+  </config>
+(/code)
+
+<h2>Fazit</h2>
+
+Magento (man verzeihe mir, dass ich "Magento" personifiziere, so wie man gerne "im Internet kauft") sagte mal, dass die Einarbeitungszeit für Magento 1 etwa ein halbes Jahr beträgt und für Magento 2 sich das Ganze auf drei Monate verkürzen wird. 
+
+Pffffft..... 
+
+Ich glaube, das bezieht sich eher auf die Frage: wie schnell komme ich zum Ziel, wenn ich nicht wirklich das Ganze verstanden habe. Da brauchte man in Magento 1 - vielleicht - länger, weil man an viel mehr Stellen Fehler machen konnte. Das hat sich - vielleicht - reduziert. Aber ob es tatsächlich so ist, dass man Magento jetzt schneller kapiert - pffffft..... Kannichnichsagen. Der Wikieintrag zu Dependeny Injection existierte noch nicht zum Zeitpunkt dieses Türchens...
+
+Wenn dieser Artikel geholfen hat, ein wenig Einblick in ein neues Konzept und ein paar Andersmachereien unter Magento 2 zu gewinnnen und die Einarbeitungszeit sich um ein paar Stunden verkürzt hat, freue ich mich...
+
+(code lang: php)
+    <type name="Webguys\Adventskalender\Model\Tuerchen20">
+	<param name="letzteWorte">
+            <value>Frohe Weihnachten!</value>
+        </param>
+    </type>
+(/code)
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3808

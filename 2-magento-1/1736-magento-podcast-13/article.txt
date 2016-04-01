@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Magento Podcast #13
+
+----
+
+Date: 2011-08-01
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Richtig was zu erzählen hatten wir dies mal. Über 60 Minuten Magento Know-How zu aktuellen Themen sind es dies mal geworden. Aber es war ja auch viel passiert: Vom Ebay-Deal, zu Gerüchten von Magento 2.0 und als kleines Spezial zur richtigen Entwicklungsumgebung.
+
+<a href="http://magentopodcast.de/2011/08/magento-podcast-13">Weiter auf Magento-Podcast.de</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1736

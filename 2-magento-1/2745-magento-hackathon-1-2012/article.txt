@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Magento Hackathon 1/2012
+
+----
+
+Date: 2012-04-10
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,allgemein
+
+----
+
+Author: karl
+
+----
+
+Article-content: 
+
+----
+
+Intro: Der erste <a href="http://www.magento-hackathon.de">Magento Hackathon</a> ist leider vorbei. Vom 30.03.2012 - 01.04.2012 haben sich ca. 30 Magento-Entwickler in München getroffen und an einem Wochenende zusammen 5 Projekte auf die Beine gestellt. <a title="Damian Luszczymak" href="http://icyapp.de/">Damian Luszczymak</a> und <a title="Jarlssen" href="http://www.jarlssen.de">Jarlssen</a> haben den Hackathon organisiert und auch gesponsert. Das hatte den großen Vorteil das wir in den Räumlichkeiten von Jarlssen entfalten durften. Viel Platz, gute Infrastruktur, Hardware zum präsentieren waren vorhanden und wurden reichlich genutzt. Und wenn Damian etwas organisiert bleibt auch keiner hungrig oder durstig. Am Freitag haben sich alle die Lust hatten für die Vorfeier im Barschwein eingefunden. Hier wurden die ersten Ideen entwickelt und man hatte die Gelegenheit zu Twitter-Accouts und IRC-Namen endlich auch mal ein Gesicht zu sehen.
+
+----
+
+Text: Am Samstag ging es dann so richtig zur Sache. Erst zwei Talks von Alistear Stead und Bastian Ike und dann ging es an die Team und Aufgabenverteilung. Den Rest des Tages haben wir mit dem Rechner und natürlich Magento verbracht. Um 4 Uhr morgens lag ich dann auch im Bett und war zufrieden und ehrlich erstaunt was man so alles schaffen kann.
+
+Am Sonntag haben alle ihre Projekte vorgestellt. OK vielen (inkl. mir) sah man die lange Nacht an.
+
+Insgesamt haben wir:
+<ol><li><a title="GridControl" href="https://github.com/magento-hackathon/GridControl">GridControl</a></li>
+	<li><a title="DiscountForATweet" href="https://github.com/magento-hackathon/DiscountForATweet">DiscountForATweet</a></li>
+	<li><a title="TemplateCleanup" href="https://github.com/magento-hackathon/TemplateCleanup">TemplateCleanup</a></li>
+	<li><a title="magento-responsive-theme" href="https://github.com/magento-hackathon/magento-responsive-theme">magento-responsive-theme</a></li>
+	<li><a title="Logger" href="https://github.com/magento-hackathon/Logger">Logger</a></li>
+	<li><a title="MongoDB-OrderTransactions" href="https://github.com/magento-hackathon/MongoDB-OrderTransactions">MongoDB-OrderTransactions</a></li>
+</ol>
+Wer sich einen Überblick verschaffen will der sei auf <a title="GitHub" href="https://github.com/magento-hackathon">GitHub</a> und <a title="Magento Hackathon" href="https://www.facebook.com/magento.hackathon">Facebook</a> verwiesen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2745

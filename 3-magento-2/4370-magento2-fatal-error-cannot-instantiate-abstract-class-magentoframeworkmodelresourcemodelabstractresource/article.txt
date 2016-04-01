@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: Magento2: Fatal error: Cannot instantiate abstract class Magento\Framework\Model\ResourceModel\AbstractResource
+
+----
+
+Date: 2016-01-10
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nachdem ich gerade Easytemplate auf Magento 2 portiere hatte ich einige Zeit Probleme mit der Meldung "Fatal error: Cannot instantiate abstract class Magento\Framework\Model\ResourceModel\AbstractResource". Hier wollte das Object-Manager von Magento ein Abstractes-Model instanzieren und mir wurde überhaupt gar nicht klar warum.
+
+
+
+----
+
+Text: Nachdem meine Erfahrungen mit dem Object-Manager aber noch sehr gering sind versuchte ich die di.xml anders zu konfiguieren. Was natürlich unsinn ist. Die Sache ist eine Ecke einfacher.
+
+Wenn wir in ein Model eine weitere Dependency aufnehmen:
+
+(code lang: php)public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Webguys\Easytemplate\Model\Config $config,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [] ) { .. }
+    )(/code)
+
+Müssen wir das immer <strong>vor den optionalen Parametern</strong> tun. Der Object-Manager übergibt nämlich hier nur die Pflicht Parameter.
+Der Trick bestand also darin die <em>\Webguys\Easytemplate\Model\Config $config</em> über den ersten Parameter mit einem Default zu schieben.
+
+ 
+
+ 
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4370

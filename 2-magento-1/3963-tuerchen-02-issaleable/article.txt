@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: Türchen 02: isSaleable
+
+----
+
+Date: 2014-12-02
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: timbezhashvyly
+
+----
+
+Article-content: 
+
+----
+
+Intro: While working with Magento templates you definitely stumbled upon <em>isSalable</em>() method applied to product object. The method physically exists but it only checks if product has enabled status and salable check should not be skipped. Then the is_salable property of the product object is returned.
+
+
+
+----
+
+Text: The obvious question is when this property is set. After product is loaded it is already set on model but it is not an attribute and is not a column in product flat table.
+
+As usual, all the bizarre stuff in Magento is done by observers. Mage_Cataloginventory is observing <em>catalog_product_load_after</em> event and there it comes down to <em>Mage_CatalogInventory_Model_Resource_Stock_Status::getProductStatus</em> and the following query:
+
+(code lang: sql)
+SELECT `cataloginventory_stock_status`.`product_id`, `cataloginventory_stock_status`.`stock_status` FROM `cataloginventory_stock_status` WHERE (product_id IN('241319')) AND (stock_id=1) AND (website_id=3);
+(/code)
+
+It is clearly visible that the decision if product is salable or not is made during reindexing. And disregard stock_id which is sort of unfinished functionality which will also pop out later.
+
+So we are ending up in a place no sane Magento developer will willingly go .. the indexer. Catalog inventory indexer in our case. After quick travel through the maze of <em>Mage_CatalogInventory_Model_Indexer_Stock::_processEvent</em>, <em>Mage_Index_Model_Indexer_Abstract::reindexAll</em> and <em>Mage_CatalogInventory_Model_Resource_Indexer_Stock::reindexAll</em> we discover that each product type has it’s own stock indexer which resides in <em>app/code/core/Mage/CatalogInventory/Model/Resource/Indexer/Stock</em>.
+
+Each type has a <em>_getStockStatusSelect</em> method where an SQL query finally decides if the product is in salable or not. Even though the query may seem massive the logic behind is not complicated.
+
+The big part of code here is again this rudimentary stuff. Seems like core developers made a fine attempt to allow having different stock levels for different websites but for some reason this functionality was never finished.
+
+So for instance the check of simple products stock availability only contains of verifying that product is enabled and quantity is positive spiced with a stock management flags. Queries for configurable and grouped products varies a bit due to product type specifics.
+
+And this is the story behind the modest <em>isSalable</em>() method.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3963

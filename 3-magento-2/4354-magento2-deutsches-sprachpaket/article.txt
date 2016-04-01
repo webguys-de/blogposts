@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Magento2: Deutsches Sprachpaket
+
+----
+
+Date: 2015-11-21
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Für Magento 2 gibt es aktuell noch kein deutsches Sprachpaket. Aber, wie der Rouven mir gerade erklärte,  (danke!) wird gerade unter  <a href="https://crowdin.com/project/magento-2/de">https://crowdin.com/project/magento-2/de</a> daran gearbeitet.
+
+Ich für meinen Teil helfe etwas mit :)
+
+(image: Bildschirmfoto-2015-11-21-um-22.16.06-650x402.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4354

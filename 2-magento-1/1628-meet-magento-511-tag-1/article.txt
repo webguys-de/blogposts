@@ -1,0 +1,79 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento #511 Tag 1
+
+----
+
+Date: 2011-05-16
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Da sind wir also auf der Meet-Magento 2011: Es begann gestern mit der Pre-Party - organisiert von Timste im Spizz. Ungefähr 50 Magento-Teilnehmer, davon viele Entwickler, fanden sich zum Meet-And-Greet zusammen. Spannende Gespräche, Erfahrungen und Ideen garantiert!
+
+----
+
+Text: (image: wpid-2011-05-15-21.44.391.jpg)
+
+Nach einer kürzeren Nacht begann der Tag Eins der Meet-Magento in Leipzig wie üblich mit Lärm. Diesmal nur kein schreiendes Kleinkind vom Nachbarn, das mich weckte, sondern die Bahn. Aber egal, ist ja Meet-Magento. Also aufstehen, duschen und kein Frühstück im Hotel. Da wollen die 11 € für haben - ich bin zwar nicht arm aber auch nicht bekloppt. Laptop untern Arm und bei der Meet-Magento frühstücken. Viel besser, lecker und tolle Gespräche. Gratis natürlich auch :)
+
+Angekommen stellten wir erschreckend fest wie "riesig" doch der Raum für die Entwickler war. Gefühlt passten 1/3 aller interessieren rein. Ich durfte leider draußen bleiben - war ja voll. Damian und Vinai, in diesem Fall quasi die Helden der Entwickler-Front, "vertrieben" die Business-Leute für den zweiten Vortrag "Anpassung des neuen Import/Exports Moduls" aus dem größeren Raum. Aber leider war der auch nicht groß genug - einige durften stehen. Für Morgen gilt also: Wer früh kommt oder lange bleibt darf vlt. sitzen. Zumindest so lange sich der Raum nicht spontan ändert. Aber nun zum Inhatlichen.
+<h2>Der neue Import-Export von Magento</h2>
+Nach dem Vortrag von Vinai löst das Modul einige Probleme und ist zudem relativ einfach zu benutzen. Es muss quasi ausschließlich ein Source-Model geschaffen werden welches die Daten für Magento aufbereitet. Magento kümmert sich dann um das Generieren von schnellen SQL-Queries und validiert natürlich. (<a href="http://netzarbeiter.de/media/mm11/ImportExport.pdf">Präsentation als PDF</a>)
+
+(image: wpid-2011-05-16-11.36.471.jpg)
+<h2>Barcamp</h2>
+Der Ansturm auf das Barcamp war leider weniger groß. Die anwesenden Entwickler hatten, bis auf wenige Ausnahmen, nichts großartiges vorbereitet und wollten auch weniger gern spontan etwas zum Besten geben. Sehr schade eigentlich - vlt. macht es für die Zukunft wieder Sinn anstelle des großen Barcamps einige Vorträge mehr anzunehmen. Dennoch gab es einige spannende Neuerungen:
+<h3>Jirafe</h3>
+Das neue Analytics entwickelt direkt von Magento. Es integriert sich vollständig in Magento. Das betrifft natürlich auch das Look-and-Feel. Ganz schick bedenkt man das es so auf die Eigenarten von Magento besser eingehen kann als das generische Google-Analytics. Dennoch wird das Rad teilweise neu erfunden? Am besten selbst eine Meinung unter <a href="http://jirafe.com/">http://jirafe.com/</a> bilden. Zukünftig soll die Plattform in kostenlose einfache Auswertungen und komplexere Premium-Features unterteilt werden.
+<h3>Devtool</h3>
+Ste[f|ph]an von NetResearch stellt seine neue Entwicklung zum Developing in Magento vor. Diese Toolbar ermöglicht es euch an verschiedenen Stellen z.B. Logs, Layouts oder Events einzusehen. Sie ist jedoch noch in der frühen Beta hat jedoch potenzial. Unter <a href="https://github.com/netresearch/Mage-Devtool">https://github.com/netresearch/Mage-Devtool</a> gibt es mehr dazu. Alternativ lässt sich natürlich auch die <a href="http://www.magentocommerce.com/magento-connect/alanstorm/extension/3941/commerce_bug">Erweiterung von Alan Storm mit dem Namen Commerce-Bug </a>($50) einsetzen.
+<h3>MyraCache</h3>
+Eigentlich sollte der Vortrag zum Thema "Caching & Performance" stattfinden. Stattdessen wurde ein Produkt vorgestellt. Gut war: Das Produkt ist, gerade für kleinere Shops, schon recht cool, vom Preis fair und skaliert wohl recht gut. Ich persönlich hätte mich gefreut wenn der Titel des Vortrags <a href="http://soprado.com/myracache/magento/myracache-intelligent-cache-magento-performance">MyraCache</a> gewesen wäre :) Da hätte ich direkt gewusst was auf mich zukommt. Wie es funktioniert? Mittels Reverse-Proxy, der vor eurem Magento-Shop sitzt, werden diverse statische Magento-Seiten ohne PHP und Apache direkt mittels C gecached und ausgeliefert. Das erhöht die Performance deutlich. Nachteilig fande ich das die Lösung ausschließlich durch MyraCache gehostet wird. Eigene Infrastrukturen haben dort keine Chance. Dennoch ein guter Ansatz.
+<h3>A/B-Preis-Tests mit Magento</h3>
+Ich habe ganz kurz etwas zu den Möglichkeiten von A/B Tests mit Magento erzählt. Die Folien dazu findet ihr hier nicht mehr. Ist irgendwie doof seinen eigenen Vortrag zu bewerten ;) Aber fragen wir Damian: "Jaja, war interessant". Klingt für mich ja eher nach "Leck mich" - aber gut, seine Meinung :D
+<h3>Magento SUCKS</h3>
+Stefan und, leider weiß ich den Namen nicht mehr, haben eine Runde moderiert der sich darum drehte was uns an Magento stört. Ich selbst habe nicht mitgeschrieben hoffe jedoch einiges aus dem Gedächtnis rekonstruieren zu können:
+<ul><li>Magento fehlt ein Long Term Support</li>
+	<li>Entwurfsmuster sind teilweise unvollständig umgesetzt</li>
+	<li>Dokumentation ist "spärlich"</li>
+	<li>Bei Deprecated-Functions fehlt oft die Nennung der Alterantive</li>
+</ul>
+Vlt. hat Thomas ja noch den Link zum Wiki für uns, dort kann man alles nachlesen.
+<h2>Fazit</h2>
+Neue Räumlichkeiten sind sehr sehr schick, professioneller aber leider ein wenig zu klein. Ich freue mich auf die Aftershow-Party, bis gleich!
+
+P.S. Vielen Dank an Damian für das Internet. Ich hätte sonst keins :(
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1628

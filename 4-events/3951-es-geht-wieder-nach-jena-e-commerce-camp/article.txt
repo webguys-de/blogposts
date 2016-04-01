@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Es geht wieder nach Jena: E-Commerce Camp
+
+----
+
+Date: 2014-11-15
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Das E-Commerce Camp in Jena gehört weiterhin zu meinen Camp Highlights aus 2013 und 2014 - sehr spannende Themen und eine tolle bodenständige Organisation. Da lassen ich mir es auch dieses Jahr nicht nehmen etwas die Werbetrommel zu rühren.
+
+Also bitte, <strong>liebe Magento-Community,</strong> lasst und dafür sorgen dass wir uns mal im größeren Kreis dort blicken lassen. <strong>Im Moment sind uns Oxid und Shopware was Themen und Manpower angeht um Welten überlegen</strong>. Reserviert Euch doch also mal den 12. bis 14. März 2015 (Donnerstag Abend, Freitag auf Samstag). Ein Ticket kostet 35 € - für die Übernachtung sorgt ihr selbst. Ingo und Ich freuen uns sehr Euch dort zu sehen!
+
+<a href="http://www.ecommerce-camp.de/">Zur Camp-Seite</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3951

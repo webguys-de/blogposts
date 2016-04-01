@@ -1,0 +1,50 @@
+Article-meta: 
+
+----
+
+Title: OpenText stellt vor: Spike
+
+----
+
+Date: 2009-04-20
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,smalltalk-reddot,reddot,analyse
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: In einem Webinar wurde heute Spike vorgestellt - ein kleiner Helfer aus dem Hause <a href="http://www.opentext.de">OpenText</a>. Auf dem Server des Management Server installiert sammelt er alle Informationen zu dem Projekt auf Knopfdruck in einer Datei, um bei eventuellen Problemen dem Support mehr Informationen anbieten zu können. 
+
+----
+
+Text: Die Reports gibt es in drei unterschiedlichen Detailgraden "Standard", "Extended" und "Special" - das Ergebnis dieser Daten versetzt den Support in die Lage schnellen Einblick in das Projekt zu gelangen, um so genauer Probleme erkennen zu können. Ich bin gespannt auf das erste Projekt und Erfahrung mit Spike.<a class="more-link" href="../2009/04/21/opentext-stellt-vor-spike/#more-308">
+</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 50

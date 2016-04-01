@@ -1,0 +1,108 @@
+Article-meta: 
+
+----
+
+Title: local.xml zur Entwicklungs-Unterstützung
+
+----
+
+Date: 2010-07-28
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Da Magento eher eine Enterprise-Shop-Lösung ist sollte auch die Entwicklung mit Enterprise-Methoden erfolgen. Das bedeutet natürlich das bei der Entwicklung auf Versionsverwaltung durch z.B. Subversion geachtet wird. Dazu gehört jedoch genau der Testbetrieb durch den Kunden auf einem Staging-Server. Erst nach Abnahme wird die Entwicklung, in der Regel halbautomatisch, auf die Kundenserver verteilt.
+
+Nun besteht die Herausforderung daran, gerade sobald mehrere Entwickler an einem Projekt arbeiten, den Entwickler das Leben möglichst einfach zu machen. Dazu kann z.B. eine gemeinsame Magento-Datenbank gehören - das verhindert das jeder Entwickler Produkte selbst pflegen muss bzw. ständig seine Datenbank aktuell hält. Bei dieser Lösung stolpert man jedoch schnell über eine Stelle: Die Projekt-URL wird von Magento in der Datenbank gespeichert. Dadurch lässt sich nicht "mal eben" ein Dump von der Live-Instanz lokal einspielen und testen. Hier kann jedoch die local.xml in app/etc Abhilfe schaffen. Mit ihr lassen sich problemlos die Einstellungen aus dem Magento-Admin überschreiben.
+
+
+----
+
+Text: Um z.B. die Store-Adresse zu überschreiben ergänzen wir die local.xml wie folgt:
+
+(code lang: xml)
+<config>
+[..]
+<stores>
+	<default>
+		<web>
+			<unsecure>
+				<base_url>http://localhost.magento/tobi/</base_url>
+			</unsecure>
+			
+			<secure>
+				<base_url>http://localhost.magento/tobi/</base_url>
+			</secure>	
+		</web>
+	</default>
+	
+	<admin>
+		<web>
+			<unsecure>
+				<base_url>http://localhost.magento/tobi/</base_url>
+			</unsecure>
+			
+			<secure>
+				<base_url>http://localhost.magento/tobi/</base_url>
+			</secure>				
+		</web>
+	</admin>	
+	
+</stores>
+[..]
+</config>
+(/code)
+
+Genauso einfach lassen sich aber auch die Template-Hints aktivieren. Dazu wird der Block Default/Web einfach um folgenden Code ergänzt:
+(code lang: xml)
+<config>
+	[..]
+	<stores>
+		<default>
+			[..]
+			<dev>
+				<debug>
+					<template_hints>1</template_hints>	
+				</debug>			
+			</dev>			
+			[..]
+		</default>
+	</stores>
+	[..]
+</config>
+(/code)
+
+Auf diesem Wege lässt sich jedes Attribute in der Konfiguration überschreiben. Wer nicht weiß wie es heißt guckt sich einfach den Namen des Eingabefeldes an. Dieser ist immer im selben Schema aufgebaut: Die ersten beiden Teile getrennt durch einen Unterstrich (_) sind ein verschachtelter XML-Tag. Das Übrige umgibt dann den Wert der gesetzt werden soll.
+
+<strong>Fazit:</strong> Als Entwickler lässt sich so auf einfachem Wege, ohne große Anpassung, Einstellungen die Online viel Sinn machen konsequent lokal deaktivieren ohne sich jedes mal die Mühe machen zu müssen alles wieder manuell umzustellen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 402

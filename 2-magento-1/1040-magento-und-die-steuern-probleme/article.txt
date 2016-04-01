@@ -1,0 +1,86 @@
+Article-meta: 
+
+----
+
+Title: Magento und die Steuern: Probleme?
+
+----
+
+Date: 2010-11-25
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: "Darf ich mal was beisteuern?" Das würde ich ganz gerne einmal zu Magento Inc sagen. Amerikaner wissen augenscheinlich nicht ganz wie man richtig mit Steuern umgeht - müssen Sie aber auch nicht. Schließlich werden die Preise dort sowieso fast überall Netto ausgewiesen und man muss, damit man weiß was es am Ende kostet, selber noch rechnen. Aber wie kritisch ist die Steuerberechnung in Magento 1.4.1.1 nun wirklich?
+
+----
+
+Text: <strong>Update: <a href="http://www.webguys.de/magento/magento-1-5-und-die-steuern-eine-losung/">Bitte beachte auch den neuen Beitrag aus 2011 zum Thema Steuern mit dem Titel "Magento 1.5 und die Steuern: Eine Lösung?"</a></strong> Mit Magento 1.5 gehören die hier genannten Probleme der Vergangenheit an.
+<h2>Vorwort</h2>
+Für alle Szenarien gilt: Wir sind ein deutscher Shop-Betreiber und möchten unseren Kunden Brutto-Preise ausgeben. Im Backend pflegen wir ebenfalls Brutto-Preise.  Das bedeutet das Magento, rein technisch, nun auch Brutto-Preise in die Datenbank schreibt.
+
+Datenbankeintrag zum Preis
+(image: phpmyadmin.png)
+
+Unser Produkt soll 47 € kosten. 47 kann man nämlich total doof, ohne  Rundungsfehler, mit 19% multiplizieren bzw. dividieren. Ein Beispiel: <em>47 / 1.19 = 39,4957</em> Gehen wir also nun fälschlicher Weise von 39,49 € Netto aus und multiplizieren das nun wieder mit 1.19 ergibt sich ein Preis von 46,9931 - schon haben wir einen Cent Rundungsdifferenz.
+<h2>Szenario 1: Ein deutscher Kunde</h2>
+Beim deutschen Kunden verhält sich das System vollständig korrekt. Die Bruttopreise sind schließlich als Bruttopreise in der Datenbank gespeichert und beim Ausweisen der Mwst. muss man mitunter kaufmännisches Auf- bzw. Abrunden damit am Ende der Rechnungsbetrag keine Differenzen aufweist. Das heißt: Bestellt ein deutscher Kunde im deutschen Shop läuft das System problemlos.
+
+(image: warenkorb_de.png)
+
+<h2>Szenario 2: Ein französischer Kunde</h2>
+Für Auslandslieferungen haben wir unterschiedliche Möglichkeiten die Mwst. auszuweisen. Für das europäische Ausland ist es jedoch üblich (oder sogar Pflicht?) die Rechnung mit deutscher Mwst. zu erstellen. Das bedeutet für uns das wir eine Steuerregel für Frankreich erstellen:(image: create_steuern_fr.png)
+Diese so erstellte Regel wird zusätzlich unter "Steuerregeln verwalten" hinzugefügt. Nun noch schnell wieder unser Produkt für 47 € in den Warenkorb, im Checkout die Rechnungsadresse auf Frankreich gestellt und was sehen wir?
+
+(image: warenkorb_fr.png)
+
+Genau. Rundungsfehler. Der Produkt mit gleicher Mwst. kostet urplötzlich einen Cent mehr - also 47,01 €.
+<h2>Szenario 3: Prozentuale Rabatte</h2>
+Lieber Kunde, wenn du bei mir kaufst gibt es 3% Rabatt auf alles außer Tiernahrung. Mit Magento eigentlich kein Problem aber wie verhalten sich die Steuern?
+
+Steuern in Magento mit Gutschein
+(image: Zur-Kasse_1290718434356.png)
+
+Also rechnen wir das mal nach:
+<ul><li>Wir haben ein Produkt im Warenkorb. Dieses kostet 47 €. Stimmt.</li>
+	<li>3% von 47,00 € sind 1,41 €. Stimmt.</li>
+	<li>Versandkosten betragen 9,90 €. Stimmt.</li>
+	<li>Gesamtsumme Brutto sind dann 47,00 - 1,41 + 9,90 = 55,49 €. Stimmt.</li>
+	<li>Alle Artikel, auch der Versand, hat 19,00 % Mwst.</li>
+	<li>55,49 € Gesamt - 9,08 € Steuern ergeben 46,41 € Netto.</li>
+	<li>46,41 € + 19% Mwst. sind 55,23. <strong>Stimmt nicht!</strong></li>
+</ul>
+Was ist passiert? Magento hat leider wieder die Mwst. falsch ausgerechnet. Richtig wären hier 8,86 ( = 55.49 - 55.49 / 1.19 ).
+<h2>Fazit</h2>
+Magento ist ein gutes System hat aber im Moment ein paar Probleme mit dem deutschen Steuersystem. Ich würde diese total gerne im Rahmen eines Foocamp vollständig fixen. Was wir dazu brauchen? Natürlich den <a href="http://www.willcodeforfood.de/">Damian Luszczymak</a> als Organisator und ein paar Sponsoren die uns Geld für Anreisen, Räume und Nahrung zu Verfügung stellen möchten. Meldet euch unter <a href="mailto:tobi@webguys.de">tobi@webguys.de</a> - so früher desto besser :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1040

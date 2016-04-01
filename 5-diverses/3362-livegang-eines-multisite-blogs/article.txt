@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Livegang eines Multisite-Blogs
+
+----
+
+Date: 2013-01-08
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,development-wordpress
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: WordPress bietet mit der Multisite-Version ein gutes Werkzeug, um schnell und mit minimaler Redundanz mehrsprachige Webseiten zu erstellen. Die Vorteile einer Multisite-Installation sind sowohl für Entwickler als auch für Redakteure zu spüren. Jedoch gibt es kleine Tücken in der Entwicklung, die es zu meistern gilt.
+
+
+----
+
+Text: Viele Unternehmen betreiben eine eigene Internetseite, kleine Änderungen werden meist sofort durchgeführt, bei größeren stellt sich oft die Frage nach dem "Wie". WordPress wird meist nicht über eine Versionsverwaltung kontrolliert, daher ist ein Test-System ratsam. Vor allem bei der Multisite-Umsetzung, da sich etwaige Skriptfehler über den gesamten Internetauftritt ziehen. Das bedeutet: Zuerst werden Änderungen im Test-System erledigt und dann auf das Live-System übertragen.
+Das es jedoch unterschiedliche Datenbanken sind, ist bei den meisten Änderungen an Plugins nicht schlimm, da die Änderungen ebenfalls auf der Live-Seite vorgenommen werden. Problematisch wird dies erst bei einzelnen Blogs einer Multisite-Installation. 
+Aufgrund des Baustellen-Charakters ist es ratsam, die neue Sprachversion auf der Testumgebung zu erstellen und die Pflegearbeiten durchzuführen. Im Anschluss wird die Sprachversion auf dem Live-System ebenfalls angelegt und die entsprechenen Datenbanktabellen - erkennbar an der Namensgebung <em>wp_IdDesBlogs_NameDerTabelle</em><strong> - von der Live-Umgebung auf die Live-Umgebung zu kopieren.
+Jetzt müssen nur noch die Benutzer dem Blog hinzugefügt werden, damit die Reakteure ihrer Rolle gemäß innerhalb der Seite arbeiten können.</strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3362

@@ -1,0 +1,95 @@
+Article-meta: 
+
+----
+
+Title: Türchen 07: Praktische Tools für die Magento Entwicklungsumgebung
+
+----
+
+Date: 2011-12-07
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: jan
+
+----
+
+Article-content: 
+
+----
+
+Intro: Dank einer Einladung der Webguys erhalte ich die Chance einen kleinen Beitrag zum Magento Adventskalender zu leisten. Ich befasse mich seit über 10 Jahren aus Leidenschaft mit Opensource Software, speziell mit Lösungen im Web- und Hosting Umfeld. Seit ca. 1,5 Jahren arbeite ich nun intensiver mit Magento. Ich bin in der dankbaren Situation meine eCommerce Abenteuer teilweise zusammen mit den Webguys Ingo und Tobias bei der code-x GmbH erleben zu dürfen. Zudem bin ich ebenfalls als Magento Freelancer tätig. Mein "Türchen" stellt praktische Tools vor die einem Magento Entwickler bei seiner täglichen Arbeit helfen können.
+
+----
+
+Text: <h2>1. PhpStorm</h2>
+Nach vielen Experimenten mit anderen IDEs wie Netbeans, Zend Studio und Eclipse sowie alternativen Ansätzen wie z.B. <a href="http://www.vim.org/">vim</a> arbeite ich nun seit ca. 6 Monaten absolut zufrieden mit <a href="http://www.jetbrains.com/phpstorm/">PhpStorm</a>. Die IDE kostet in der Tat etwas Geld, ist aber die erste IDE bei der ich bisher keiner Probleme hatte. Für interessierte gibt es eine kostenlose Testversion. Wer täglich mit Magento oder allgemein mit PHP arbeitet und es nicht ohnehin schon gemacht hat sollte PhpStorm unbedingt ausprobieren.
+
+Mehr Informationen: <a href="http://www.jetbrains.com/phpstorm/">PhpStorm Homepage</a>
+<h2>2. LAMP Server inkl. Xdebug</h2>
+<div>Über die Notwendigkeit eines Webservers direkt auf der Workstation kann man sich streiten. Speziell die <a href="http://xdebug.org/">Xdebug</a> PHP-Extension, die das Debugging von PHP Code unheimlich erleichtert, sollte jedoch nicht auf einem Livesystem genutzt werden. Xdebug hat einen mess- und (teilweise) spürbaren Einfluss auf die Performance von Webservern und kann auf produktiven Systemen sowohl Speicherverbrauch als auch die Zeit für dass Verarbeiten von PHP Quellcode in negativer Hinsicht beeinflussen. Wer keine dedizierte Testumgebung besitzt ist daher mit einer lokalen LAMP Installation sehr gut beraten.</div>
+<div>Mehr Informationen:</div>
+<div>
+<ul><li>Apache und PHP Installation: <a href="https://help.ubuntu.com/11.04/serverguide/C/httpd.html">Ubuntu Server Guide - Apache</a></li>
+	<li>MySQL Installation: <a href="https://help.ubuntu.com/11.04/serverguide/C/mysql.html">Ubuntu Server Guide - MySQL</a></li>
+	<li>Xdebug Installation: <a href="http://scottfaisal.com/installing-xdebug-on-ubuntu-10-04/">http://scottfaisal.com/installing-xdebug-on-ubuntu-10-04/</a></li>
+</ul><h2>3. phpMyAdmin</h2>
+</div>
+Auf einem Entwicklungssystem darf <a href="http://www.phpmyadmin.net/home_page/index.php">phpMyAdmin</a> nicht fehlen. Für die Verwaltung von MySQL Datenbanken ist es eine unheimlich große Hilfe. Dies fängt bei dem Erstellen und Verwalten von Datenbanken und Inhalten an, ist aber ebenso bei der Entwicklung selbst von großer Hilfe. So kann man Datenbankabfragen die in Magento ausgeführt werden manuell untersuchen, prüfen ob eigene Extensions korrekte Daten in der Datenbank ablegen usw. Man sollte jedoch darauf achten dass phpMyAdmin auf einem Produktivsystem nicht öffentlich zugänglich ist. Ein Angreifer könnte sich sonst z.B. über Bruteforce Attacken unerlaubten Zugang zur Datenbank verschaffen.
+<h2>4. Versionskontrolle</h2>
+Mit Tools wie z.B. <a href="http://subversion.tigris.org/">Subversion</a>, <a href="http://git-scm.com/">Git</a> oder <a href="http://mercurial.selenic.com/">Mercurial</a> kann ein Magento Entwickler die einzelnen Entwicklungsschritte von Dateien protokollieren. Alle Änderungen werden in einem sogenannten <strong>Repository</strong> erfasst. Verursacht z.B. eine Änderung an der Software Probleme kann jederzeit eine <strong>vorherige Version</strong> einer Datei wiederhergestellt oder Unterschiede zwischen einzelnen Versionen angezeigt werden. Bei der Fehlersuche und Problembehebung kann dies sehr hilfreich sein.
+
+Ein weiterer Aspekt der für die Versionskontrolle spricht ist das Stichwort <a href="http://de.wikipedia.org/wiki/Softwareverteilung">Deployment</a>. Wenn der Quellcode z.B. mit Git oder Subversion verwaltet wird kann dieser in Form eines "Checkouts" (einer "Kopie" des Repositories) sowohl auf einem Testserver als auch auf dem Produktivsystem hinterlegt werden. Werden Änderungen am Quellcode vorgenommen wird auf dem Testsystem ein Update durchgeführt und getestet. Wenn die Änderungen nun auf das Livesystem übertragen werden sollen muss dort nur noch die Kopie des Checkouts aktualisiert werden. Im Detail auf Deployment Strategien und Tools wie Subversion oder Git im einzelnen einzugehen würde den Rahmen sprengen.
+
+Mehr Informationen:
+<ul><li>Online Buch zu Subversion: <a href="http://svnbook.red-bean.com/">Version Control with Subversion</a></li>
+	<li>Offizielle Git Dokumentation: <a href="http://git-scm.com/documentation">http://git-scm.com/documentation</a></li>
+</ul><h2>5. MySQL Workbench</h2>
+Man kann MySQL Tabellen, z.B. bei der Erstellung von neuen Extensions, mit phpMyAdmin erstellen. Sehr praktisch ist vor allem bei komplexeren Anforderungen an die Datenbank diese vorab zu planen. So sieht man den gesamten Zusammenhang in der Übersicht, entwickelt vielleicht noch weitere Ideen und kann vor allem redundante Datenhaltung vermeiden. Ideal dafür ist die MySQL Workbench:
+<ul><li>Es gibt eine grafische Darstellung der Tabellen und deren Relationen.</li>
+	<li>Fremdschlüssel können sehr einfach verwaltet werden.</li>
+	<li>Der Datenbankentwurf kann direkt auf einen MySQL Server übertragen werden.</li>
+</ul><div>Vorteil gegenüber dem Entwurf mit alternativen Tools oder auf Papier ist die Möglichkeit Datenbanken bzw. Tabellen direkt auf einen MySQL Server übertragen zu können.</div>
+<div>Mehr Informationen: <a href="http://wb.mysql.com/">MySQL Workbench Homepage</a></div>
+<h2>6. Kiki</h2>
+Wer reguläre Ausdrücke (RegExp) entwickelt kann diese mithilfe von <a href="http://code.google.com/p/kiki-re/">Kiki</a> vorab testen. Dazu wird in Kiki einfach eine zu erwartende Zeichenkette als Beispieltext hinterlegt und über eine separate Zeile der reguläre Ausdruck definiert. Lässt man den Ausdruck nun von Kiki auf den Text anwenden wird der gefundene Text farbig hervorgehoben. So kann man sehr komfortabel den passenden Ausdruck entwickeln.
+
+Mehr Informationen: <a href="http://code.google.com/p/kiki-re/">Kiki Homepage</a>
+<h2>7. Mindmeister</h2>
+Durch die Erstellung von Mindmaps kann man auf sehr natürlichem Weg unstrukturierte Gedanken zu einem bestimmten zentralen Thema, sei es eine neue Extension oder eine Dokumentation, strukturieren. Wikipedia beschreibt MindMaps wie folgt:
+<blockquote>Eine <strong>Mind-Map</strong> (englisch: <em>mind map</em>; auch: <em>Gedanken[land]karte</em>, <em>Gedächtnis[land]karte</em>) beschreibt eine besonders von Tony Buzan geprägte kognitive Technik, die man z. B. zum Erschließen und visuellen Darstellen eines Themengebietes, zum Planen oder für Mitschriften nutzen kann. Hierbei soll das Prinzip der Assoziation helfen, Gedanken frei zu entfalten und die Fähigkeiten des Gehirns zu nutzen. Die Mind-Map wird nach bestimmten Regeln erstellt und gelesen. Den Prozess bzw. das Themengebiet bzw. die Technik bezeichnet man als <strong>Mind-Mapping</strong>.</blockquote>
+Es gibt neben kommerziellen Tools und der Möglichkeit Mindmaps mit Stift und Papier zu erstellen, den Webservice <a href="http://www.mindmeister.com/?r=1634">Mindmeister</a>. Eine absolut tolle Umsetzung der Mindmapping-Idee die sowohl im Browser als auch auf Smartphones und Tablets genutzt werden kann.
+
+Mehr Informationen: <a href="http://www.mindmeister.com/?r=1634">Mindmeister</a>
+<h2>8. Pagespeed & YSlow</h2>
+Die Pagespeed Extension von Google gibt es sowohl für Google Chrome als auch für Firefox. Es werden die verschiedensten Kriterien, welche direkten oder indirekten Einfluss auf die Geschwindigkeit beim Seitenaufbau haben, geprüft. Einige der Tests und Vorschläge beziehen sich auf die Server- und Hostingebene. Für den Entwickler interessanter sind die Empfehlungen zur Performance Optimierung von HTML, CSS und JavaScript.
+
+Ergänzend zu Pagespeed gibt es als weiteres Plugin YSlow (gelesen "why-slow", was übersetzt bedeutet "warum langsam?"). Auch YSlow führt eine Reihe von Tests aus und schlägt Optimierungen vor. Viele Empfehlungen der beiden Plugins decken sich natürlich. Wer gerne das Maximum herausholen möchte sei dennoch die Verwendung von beiden Plugins empfohlen.
+
+Mehr Informationen: <a href="http://code.google.com/speed/page-speed/">Pagespeed</a> bzw. <a href="http://developer.yahoo.com/yslow/">YSlow</a>
+
+Die Liste erhebt natürlich keinen Anspruch auf Vollständigkeit. Weitere Vorschläge sind mehr als willkommen. Welche Tools nutzen andere und sollten hier unbedingt erwähnt werden? Auf Kommentare und Anregungen freuen wir uns!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1488

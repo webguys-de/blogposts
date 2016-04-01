@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Exklusive Entwicklerschulung Versionsverwaltung mit Magento
+
+----
+
+Date: 2010-10-27
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Mir liegt das Thema Versionsverwaltung in Enterprise-Projekten persönlich sehr am Herzen. Häufig sehe ich das auf (gute) Deployment-Strategien fast vollständig verzichtet wird. Das hat den Nachteil das, gerade wenn mehrere Entwickler an einem Projekt arbeiten, es fast unmöglich ist die Änderungen der anderen im Blick zu behalten und so z.B. schnell auf Probleme reagieren zu können. Zudem ist Versionsverwaltung das Instrument um langfristige Entwicklungen durchzuführen und parallel das Live-System um kleine Features zu erweitern.
+
+Genau zu diesem Thema hält Vinai Kopp mit Lee Saferite einen exklusiven Workshop  - einen Tag vor der Meet-Magento in Leipzig: <a href="http://www.meet-magento.de/tickets/exklusiv-entwickler-workshop.html"><strong>GIT als Multifunktions-Werkzeug bei der Magento-Entwicklung</strong></a>.
+
+Der Workshop ist absolut zu empfehlen - ein Muss für alle die sich noch nicht intensiv mit dem Thema beschäftigt haben.
+<h3>50 € Rabatt für Webguys-Leser</h3>
+Alle Teilnehmer die sich direkt unter <a href="mailto:vinai@netzarbeiter.de%20">vinai@netzarbeiter.de </a>anmelden und Webguys erwähnen zahlen anstelle von 499 € nur <strong>449 €</strong>. <strong>Also 50 € gespart</strong>.
+
+<a href="http://www.meet-magento.de/tickets/exklusiv-entwickler-workshop.html"><strong>Weitere Informationen zum Workshop</strong></a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 940

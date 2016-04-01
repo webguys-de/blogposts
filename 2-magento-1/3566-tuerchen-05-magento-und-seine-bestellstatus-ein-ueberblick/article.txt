@@ -1,0 +1,122 @@
+Article-meta: 
+
+----
+
+Title: Türchen 05: Magento und seine Bestellstatus - ein Überblick
+
+----
+
+Date: 2013-12-05
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: christoph-massmann
+
+----
+
+Article-content: 
+
+----
+
+Intro: Magento bietet seit Version 1.5 (CE) die Möglichkeit, benutzerdefinierte Bestellstatus komfortabel über das Backend anzulegen und zu verwalten. Dennoch sehe ich in meiner täglichen Freelancer-Tätigkeit, dass diese Funktionalität insbesondere bei kleineren Magento-Shops in vielen Fällen noch völlig vernachlässigt wird. Daher möchte ich in diesem Adventskalender-Türchen dieses Feature etwas näher betrachten und einige Tipps für den Umgang mit den Bestell-Status geben. Sofern nicht explizit angegeben, beziehe ich mich im Folgenden immer auf die Magento Community-Edition ohne zusätzlich installierte Extensions.
+
+
+
+----
+
+Text: <h2>Die Status-Theorie - oder: wieso wird meine Bestellung nicht als <em>vollständig</em> markiert?</h2>
+Die Status <em>Pending</em>, <em>Processing</em> und <em>Complete</em> (bzw. deren lokalisierte Pendants) sind sicherlich jedem geläufig - sei es als Magento Shop-Betreiber oder -Entwickler. Daneben existieren in einer unmodifizierten Magento 1.8 Installation noch weitere eher unbekannte Status wie <em>PayPal Canceled Reversal</em> oder <em>Suspected Fraud</em>. Die Status in Magento im Allgemeinen repräsentieren den aktuellen Zustand einer Bestellung im System und können beispielsweise, wie die beiden zuletztgenannten, auf mögliche Fehler (in diesem Fall der PayPal-Zahlungsabwicklung) hinweisen.
+
+Magento unterscheidet zwischen Status, die dem Backend-Anwender sowie Kunden im Benutzerkonto im Frontend angezeigt werden und sog. States (Zuständen). State und Status sind über eine 1:n-Beziehung miteinander verknüpft, wobei jeder State einen Standard-Status definiert. Ein Status ist über den Statuscode eindeutig identifizierbar und kann unterschiedliche Bezeichnungen pro StoreView erhalten.
+
+Die verschiedenen Status und deren Zuordnung sind in der Datenbank-Tabelle <em>sales_order_status_state</em> festgelegt und können über das Magento-Backend unter dem Menüpunkt <em>System->Order Statuses</em> geändert und zugeordnet werden:
+<img alt="" src="http://www.vianetz.com/data/screen_magento_grid_order_statuses_1800.png" width="650" border="0">
+
+State-Wechsel erfolgen code-seitig oder durch verschiedene Backend-Aktionen, wie beispielsweise die Rechnung oder den Lieferschein erstellen.
+Status-Wechsel sind im Magento Backend über die Kommentar-Funktion auf Bestell-Ebene möglich - allerdings limitiert auf den aktuellen State.
+
+Das folgende Schaubild zeigt den zugrunde liegenden, vereinfachten Zustandsautomaten ohne Berücksichtigung der von der Zahlungsart abhängigen Status und ohne Schleifen:
+<img alt="" src="http://www.vianetz.com/data/magento_order_statuses_state_machine_100_bw.png" width="650">
+
+Die Transition des States <em>new</em> in <em>processing</em> erfolgt über das Flag
+(code)$order->setIsInProcess(true)(/code)
+
+Der spezielle Status <em>holded</em> kann sowohl aus dem Status <em>pending</em> als auch aus dem Status <em>processing</em> heraus gesetzt werden und speichert über die Magic Setter
+(code)$order->setHoldBeforeState()(/code)
+bzw.
+(code)$order->setHoldBeforeStatus()(/code)
+den vorherigen Zustand.
+<h3>Welche Möglichkeiten habe ich im Code, um den Status bzw. State der Bestellung zu ändern?</h3>
+<ol><li>Analog zur Handhabung über das Backend, kann auch im Code durch das Hinzufügen eines Kommentars der Bestellstatus geändert werden:
+<pre>(code)Mage_Sales_Model_Order::addStatusHistoryComment()(/code)</pre>
+ändert mit dem Statuscode als zweitem Parameter den Status der Bestellung bzw. setzt den Default Status, sofern (code)true(/code) übergeben wird.</li>
+	<li>Die Funktion (code)addStatusHistoryComment()(/code) ruft intern den Magic Setter
+<pre>(code)$order->setStatus()(/code)</pre>
+auf, der natürlich auch direkt verwendet werden kann.</li>
+	<li>Status- und State-Wechsel können zudem über die Methode
+<pre>(code)Mage_Sales_Model_Order::setState()(/code)</pre>
+erreicht werden.
+
+Eine <strong>Ausnahme</strong> bilden hierbei die States <em>complete</em> und <em>closed</em>, diese können nicht explizit über die genannten Methoden gesetzt werden, da sie per Intention nur über den oben gezeigten Workflow erreicht werden sollen.
+Vorausgesetzt, man weiß was man tut (!), kann dieser Schutzmechanismus allerdings über einen Aufruf der internen Methode (code)$order->_setState()(/code) mit dem fünften Parameterwert (code)$shouldProtectState = false(/code) nach entsprechendem Rewrite umgangen werden.
+</li>
+</ol><h3>Was kann <span style="text-decoration: underline">schief gehen</span>?</h3>
+Der State wird automatisch über die Methode (code)Mage_Sales_Model_Order::_checkState()(/code)
+bei jedem Speichern des Order-Objekts gesetzt. Unglücklicherweise prüft Magento beim Setzen der Status über die oben genannten Methoden nicht, ob die Status/State-Zuordnung eingehalten wurde.
+D.h. es ist zum Beispiel möglich - und wird leider in manchen Extensions auch so gehandhabt - über den Aufruf
+(code)$order->setStatus('pending')->save();(/code)
+im State <em>complete</em> den (nicht zugeordneten) Status <em>pending</em> zu setzen, was natürlich nicht im Sinne des Erfinders sein dürfte:
+<img alt="" src="http://www.vianetz.com/data/magento_order_overview_pending_1800.png">
+
+Dies führt unter anderem dazu, dass im Backend das Status-Dropdown über dem Kommentarfeld nicht mehr mit dem aktuellen Bestellstatus übereinstimmt und ein Shop-Mitarbeiter, der lediglich einen Kommentar einstellen möchte, ungewollt den Bestellstatus ändert:
+<img alt="" src="http://www.vianetz.com/data/magento_order_comment_complete_1800.png">
+
+Abhilfe schafft hier <a target="_blank" href="https://gist.github.com/vianetz/7768207">ein kleines Modul</a>, das die Status/State-Integrität über einen Observer auf das Event <em>sales_order_save_before</em> sicher stellt:
+Befindet sich der gewünschte Status nicht im zugeordneten State, verhindert eine Exception das Speichern des Order-Objekts.
+Somit entstehen keine inkonsistenten Status/State-Zuordnungen in der Datenbank und das oben angesprochene Setzen des Status <em>pending</em> wäre nicht möglich gewesen.
+
+Durch die Tatsache, dass der (code)_checkState()(/code)-Aufruf in der Reihenfolge nach dem Observer aufgerufen wird, ist es in der Implementierung leider notwendig, die Logik zu replizieren, wenn man nicht die Alternative über einen Rewrite gehen möchte.
+<h2>Wie kann ich Prozesse auf Basis dieser Status definieren?</h2>
+Wir haben in den vorangegangenen Abschnitten gesehen, wie das Status-Handling in Magento implementiert ist und welche Fallstricke es bieten kann. Im Folgenden soll die Frage beantwortet werden, wie bestimmte Aktionen ausgeführt werden können, wenn eine Bestellstatus-Transformation erfolgt ist.
+Hierzu eignet sich das Event <em>sales_order_save_after</em>, in dem über
+(code)$order->getOrigData('status')(/code)
+an den Bestellstatus vor der Speicherung zugegriffen werden kann. Für den Fall, dass ein Unterschied zum aktuellen Status besteht, liegt ein Statuswechsel vor und die gewünschte Aktion kann ausgeführt werden.
+Denkbar wäre hier zum Beispiel die Implementierung eigener (code)dispatchEvent()(/code) Aufrufe für jeden Status-Übergang, eine eigene, flexible Konfiguration im Backend, etc.
+
+<h2>Und was ist mit Magento 2?</h2>
+Abschließend werfen wir einen kurzen Blick in das <a href="https://github.com/magento/magento2">offizielle Magento 2 Github-Repository</a>
+(2.0.0.0-dev54):
+Abgesehen von der neuen Namenskonvention hat sich an der Order Status/State-Thematik bis dato nichts verändert; die Status- und Statecodes sind identisch, so dass der oben gezeigte Zustandsautomat (zumindest momentan) auch weiterhin anwendbar ist.
+
+Ich hoffe, ich konnte mit diesem Artikel etwas zu diesem sehr informativen Adventskalender beitragen, der immer wieder klasse Tipps rund um das Thema Magento bietet.
+
+In diesem Sinne eine frohe und besinnliche Weihnachtszeit mit Euren Magento-Shops;-)
+
+<small>
+<span style="text-decoration: underline">Quellen</span>:
+http://www.duden.de/rechtschreibung/Status ;-)
+</small>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3566

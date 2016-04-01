@@ -1,0 +1,91 @@
+Article-meta: 
+
+----
+
+Title: Dabei sein ist alles: erste Magento Unconference weltweit – im März in Berlin!
+
+----
+
+Date: 2015-02-27
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: fabian-blechschmidt
+
+----
+
+Article-content: 
+
+----
+
+Intro: <p align="justify"><i>Highlights von Konferenzen sind oftmals die Gespräche dazwischen und die Kontakte, die man knüpft. Und nicht immer highlightverdächtig sind die vorgegebenen (und teilweise werbeverdächtigen) Vortragsthemen. Aus diesem Grunde sind Un-Konferenzen entstanden, die Pausen, Gespräche und die Wünsche der Teilnehmer in den Vordergrund stellen. Und aus diesem Grunde gibt es jetzt auch eine solche Konferenz für Magento: die Magento Unconference.</i></p>
+
+<span style="font-family: Calibri, sans-serif">
+
+----
+
+Text: <span style="font-family: Calibri, sans-serif">Wer kennt das nicht – man lümmelt auf einer Konferenz rum, findet mal hier und mal da einen Vortrag interessant – aber man hätte doch gerne noch etwas ganz anderes gehört. Und nicht nur das, dann ist der Vortrag vorbei und man hätte liebend gerne noch eine Weile darüber diskutiert oder Fragen entwickelt, und das länger, als die Wer-hat-noch-Fragen-Minuten vorsehen und das auch gerne in einer anderen Form als in der klassischen Face-to-Faces-Formation.</span>
+
+<span style="font-family: Calibri, sans-serif">Das alles – und noch mehr – löst eine „UNconference“. Das „UN“ steht quasi für „UNgeplant“, „UNbeworben“, „UNmittelbar“, „UNkonventionell“, „UNvorhergesehen“ und ganz bestimmt für „UNgewöhnlich“. </span>
+
+<span style="font-family: Calibri, sans-serif">Die Magento Unconference mit dem Akronym MUC ist die erste ihrer Art. Sie ist organisiert von der Community (für die Community) und verfolgt daher keinerlei kommerzielle Interessen. Initiator des Ganzen ist der <a href="http://firegento.com/">FireGento e.V.</a> (und maßgeblich unser werter <a href="https://twitter.com/Fabian_ikono">Herr Blechmschmidt)</a>. Und weil sie (die MUC) die erste ihrer Art ist, macht sich eine Art Pioniergeist breit, gerade und unbedingt vor dem Szenario des Verkaufs oder Börsengangs von eBay Enterprise und damit von Magento. Die UNverkäufliche Community macht ihre eigene Konferenz – und jeder kann, darf und soll mitreden und sich beteiligen.</span>
+
+<h3><span style="font-family: Calibri, sans-serif">Und was wird da jetzt gemacht? </span></h3>
+
+<span style="font-family: Calibri, sans-serif">Das ist einfach: das, was die Teilnehmer wollen. Es wird darüber geredet, worüber die meisten reden und mehr wissen wollen. Was gibt es Neues in Magento 2? Oder was eigentlich die beste Art und Weise ist, Produkte zu importieren? Oder wo eigentlich der Unterschied zwischen reindexAll() und reindexEverything() liegt?. Den Fragen sind keine Grenze gesetzt und diese werden daher zunächst gesammelt. Danach dürfen alle Teilnehmer für ihr Lieblingsthema abstimmen und wenn sich dann noch ein Vortragender findet (was wahrscheinlich ist), wird es darüber einen Vortrag geben – und eine halbstündige anschließende Lass-uns-Drüber-Reden-Pause, so dass das Thema weiter beackert, beleuchtet und befragt werden kann. Es muss aber kein Vortrag sein, auch das ist Bestandteil einer Unconference, es kann auch ein Workshop werden oder eine Diskussionrunde. Wichtig ist das Gespräch und der Austausch, nicht der „Lehrvortrag“ an sich. </span>
+
+<h3><span style="font-family: Calibri, sans-serif">Nun aber zu den Abläufen:</span></h3>
+
+<span style="font-family: Calibri, sans-serif">Offizieller Start ist am Samstag, 7. März 2015 in Berlin Grunewald um 9.00 Uhr. Und offizielles Ende des ersten Tages ist um 17 Uhr. Aber da es auch Gemeinsamkeiten von Konferenzen und Unkonferenzen geben muss, findet eine Preparty vor dem ersten Tag statt, dem Freitag Abend, wo sich alle bereits Angereisten in einer Berliner (noch zu definierenden) Lokalität bei mindestens drei gesponserten Freigetränken zusammenfinden können. Am Samstag Abend findet dann die After-Show-Party mit Gegrilltem und Getränken statt. Am zweiten Tag, dem Sonntag, startet die Konferenz daher zu einer moderateren Zeit um 10 Uhr und endet um 16 Uhr. Essen und Getränke sind im Ticket enthalten. </span>
+
+<span style="font-family: Calibri, sans-serif">Wenn der Name Programm ist, kann man sich freuen, dass das Ganze im „Abenteuerzentrum“ stattfindet; und wieso ein Abenteuerzentrum im Eichhörnchensteig angesiedelt ist (worin also der Zusammenhang zwischen Abenteuer und Eichhörnchen besteht), kann man ja gemeinsam heraus finden. Und auch wenn im März Eichhörnchen wahrscheinlich ruhen, so tun das BBQs im Normalfall auch, aber es geht hier ja um das UNnormale …</span>
+
+<span style="font-family: Calibri, sans-serif">Die Ticketpreise sind studententauglich. 34 Euro für „Normalos“ oder „Magentos“, heißt: ohne Rechnung und Mehrwertsteuer. 89 Euro für „gewerbliche“ Ticket-Käufer, die eine Rechnung mit ausgewiesener MwSt benötigen. Einen Who-got-Which-Ticket-Unterschied auf der Konferenz gibt es nicht. Alle bekommen das gleiche Essen, sogar vegan, wenn gewünscht, und dasselbe W-Lan und alle (rechtzeitig angemeldeten) erhalten ein UNconference-T-Shirt. </span>
+
+<h3><span style="font-family: Calibri, sans-serif">Zum Ausschneiden: </span></h3>
+
+–––––––––––––––––––––––––––––
+
+<span style="font-family: Calibri, sans-serif">Wann: 07. - 08.03.2015</span>
+
+<span style="font-family: Calibri, sans-serif">Wo: Abenteuerzentrum im Grundewald, Eichhörnchensteig 3, 14193 Berlin</span>
+
+<span style="font-family: Calibri, sans-serif">Hashtag: #mageuc15</span>
+
+<span style="font-family: Calibri, sans-serif">Webseite: <a href="http://mageunconference.org/">http://mageunconference.org/</a></span>
+
+<span style="font-family: Calibri, sans-serif">Organisator: http://firegento.com/</span>
+
+<span style="font-family: Calibri, sans-serif">Ansprechpartner: <a href="https://twitter.com/Fabian_ikono">https://twitter.com/Fabian_ikono</a></span>
+
+<span style="font-family: Calibri, sans-serif">Tickets: <a href="https://www.mage-hackathon.de/upcoming/mage-unconference.html">https://www.mage-hackathon.de/upcoming/mage-unconference.html</a></span>
+
+–––––––––––––––––––––––––––––
+
+„<span style="font-family: Calibri, sans-serif">So jung kommen wir nicht mehr zusammen“, sagt der Rheinländer (Rheinländer treten im Übrigen solitär auf). Übertragen auf die Magento-Welt, hieße das: „so eBay-enterprisig kommen wir nicht mehr zusammen“, denn wie auch immer sich eBay von eBay Enterprise und damit von Magento trennt – es wird sich aller Wahrscheinlichkeit nach etwas für Magento ändern. Verkauf oder Börsengang, Stiefkind oder Lieblingskind. Alles möglich. Die Community ist groß und UNveräußerlich. Und sie trifft sich im März. In Berlin. Und jeder, der Magento mag ist ein Teil davon und dort willkommen. Ach ja, was vielleicht noch wichtig ist: die Konferenzsprache ist Englisch – auch wenn mir das schwerfallen wird, weil mir spontan nie Übersetzungen für „Lass-uns-Drüber-Reden-Pause“ oder „Eichhörnchensteig“ einfallen. Ich werde mir Simultanübersetzer suchen, die sich stets in meiner Nähe aufhalten, wenn jemand Fragen, zu den mir permanent einfallenden UNwörter haben sollte …</span>
+
+<span style="font-family: Calibri, sans-serif">Diesen Beitrag über die erste Magento Unonference schrieb <a href="http://neoshops.de/">Carmen Bremen von http://neoshops.de/</a></span>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4230

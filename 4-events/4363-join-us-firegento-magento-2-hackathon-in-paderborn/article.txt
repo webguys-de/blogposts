@@ -1,0 +1,63 @@
+Article-meta: 
+
+----
+
+Title: Join us! FireGento Magento 2 Hackathon in Paderborn (22. - 24.01.2016)
+
+----
+
+Date: 2015-12-15
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Since Magento 2 has been released some weeks ago, we would like to arrange the first <strong>FireGento Magento 2 Hackathon in Paderborn</strong> (Germany).
+
+<ul><li>Get and share some knowledge about Magento 2</li>
+    <li>Port existing FireGento-Extensions to Magento 2</li>
+    <li>Bring your own ideas to learn or improve</li>
+    <li>Meet the community and be a part of it</li>
+    <li><strong>Knowledge about Magneto 2 is not required!</strong></li>
+</ul><p style="text-align: center;">>> <a href="https://www.mage-hackathon.de/upcoming/firegento-magento-2-hackathon-in-paderborn-23-24-1-2016.html" target="_blank">FURTHER INFORMATION & BOOKING</a> <<
+
+<h2 style="text-align: left;">Location</h2>
+
+<p style="text-align: left;"><strong>code-x Gmbh</strong>
+Karl-Schurz-Straße 35
+33100 Paderborn
+<a href="https://goo.gl/maps/Dj9ajNmubvF2" target="_blank">Find on maps</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4363

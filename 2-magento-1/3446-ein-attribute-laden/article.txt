@@ -1,0 +1,54 @@
+Article-meta: 
+
+----
+
+Title: Ein Attribute laden
+
+----
+
+Date: 2013-08-01
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Manchmal vergisst man Dinge die man schon tausend mal getan hat. Heute musste ich wirklich überlegen wie man noch einmal ein Attribute, dessen Code man kennt, einfach laden kann. Dabei ist es doch mit Magento-Board-Mitteln ganz einfach.
+
+
+----
+
+Text: (code lang: php)
+$attr = Mage::getModel('eav/config')->getAttribute('catalog_product', $attributeCode);
+(/code)
+
+Und schon hat man das Attribute in Magento in der Variable $attr zur Verfügung und kann böse Dinge tun :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3446

@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Magento2: An error has happened during application run.
+
+----
+
+Date: 2015-06-13
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wenn Magento2 einen liebevoll mit "An error has happened during application run. See exception log for details. Could not write error message to log. Please use developer mode to see the message." begrüßt stimmt irgendwas nicht. Was tun?
+
+
+
+----
+
+Text: Das ist einfach. Am besten direkt den Entwickler Modus per htaccess aktivieren. Dazu im Root die .htaccess öffnen und die erste Zeile auskommentieren:
+
+(code lang: bash)
+SetEnv MAGE_MODE developer
+(/code)
+
+Danach gibt es mehr oder weniger hilfreiche Fehlermeldungen :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4279

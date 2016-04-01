@@ -1,0 +1,177 @@
+Article-meta: 
+
+----
+
+Title: Türchen 01: Konfiguration unnötig
+
+----
+
+Date: 2013-12-01
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: fabian-blechschmidt
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es ist schon wieder Dezember und mit Freude, darf ich dieses Jahr wieder den Anfang machen, lieber <a href="http://www.webguys.de/author/tobi/">Tobi</a>, lieber <a href="http://www.webguys.de/author/ingo/">Ingo</a>, danke für die Gelegenheit. Ich möchte mit einer kleinen Geschichte anfangen. Ich hatte letzte Woche eine Unterhaltung mit einem Kunden, der HTML und CSS Dateien direkt auf dem Live-Server bearbeitet hat. Wir waren uns darin einig, dass das leider keine gute Idee war, denn die Dateien und Änderungen landen nicht in der Versionskontrolle. Diese Unterhaltungen werden glücklicherweise seltener. Wir verwalten unseren Code im git oder SVN und liefern ihn kontrolliert mit aus, mit einem ```git pull```, ```cap deploy``` (<a href="http://www.designdisclosure.com/2012/04/deploy-magento-with-capistrano/">capistrano</a>) oder ```svn up```. Es gibt sicher noch ein paar andere schöne Skripte, aber im großen und ganzen ist das Problem des inkonsisten Codes auf Dateiebene gelöst.
+
+
+
+----
+
+Text: <h3>Änderungen in der Datenbank</h3>
+Aber Dateien sind ja nur die eine Hälfte von Magento. Die andere Hälfte, sprich die Datenbank, ist leider nicht so leicht zu kontrollieren und zu versionieren.
+
+Konsequent benutzte Install-Skripte können hier einige der größten Probleme lösen. Attribute, auch solche für Produkte, sollten nur mit Skripten angelegt werden, Kategorien, Kategoriebäume, Websites, Storegroups und Stores werden auch nur mit Skripten erzeugt. Mit diesem Vorgehen hat man schon einen relativ konsistenten Stand zwischen Entwicklungsumgebung, Testsystem, Staging und Live-System. (An dieser Stelle denken wir uns beliebige andere Systeme, z.B. ein Contionous-Integration System auf dem die Tests laufen oder beliebig viele Entwicklungssysteme für die einzelnen Entwickler). Das Problem ist, dass alle Tests, ob automatisiert oder durch einen Menschen, wenig verlässlich sind, wenn die Systeme nicht gleich konfiguriert sind. Daneben bleiben noch einige Bereiche: unter anderem alles unter (code)System > Konfiguration(/code).
+
+Dieser Blogbeitrag soll sich aber der Konfiguration widmen und eine Methode vorstellen, die euch hoffentlich in der täglichen Arbeit hilft. Ich bin noch nicht überzeugt, dass das folgende eine gute Idee ist. Ich freue mich über eine rege Diskussion in den Kommentaren.
+<h3>Mage_Core_Model_Config</h3>
+Die Magentokonfiguration speist sich aus vielen verschiedenen Quellen, <a href="http://neoshops.de/2013/10/09/jahresruckblick-magento-im-jahr-2013/">Carmen aka neoshops</a> hat im letzten Jahr einen <a href="http://www.webguys.de/magento/adventskalender/turchen-10-die-magento-xml-dateien/">tollen Beitrag zu dem Thema geschrieben</a>, der weiter in die Tiefe geht als ich jetzt.
+<h4>Konfigurationsquellen</h4>
+Kurz gesagt, Magento lädt folgende Dateien:
+(code)app/etc/local.xml
+app/etc/*.xml
+app/etc/modules/*.xml
+app/code/<codePool>/<Namespace>/<Module>/etc/config.xml
+app/etc/local.xml
+(/code)
+Man beachte hierbei, dass am Ende des Prozesses die local.xml noch einmal geladen wird. Das hat zur Konsequenz, das alles was in der (code)local.xml(/code) steht garantiert in der Konfiguration landet - mit einer Ausnahme: Konfigurationswerte aus der Datenbank.
+<h3>Scope</h3>
+Die Konfiguration hat drei Scopes:
+<ul><li>Storeview</li>
+	<li>Website</li>
+	<li>Default</li>
+</ul>
+Magento bietet die Möglichkeit Konfigurationswerte, also z.B. die Base-URL, den Namen des Stores oder die verwendete Sprache auf verschiedenen Ebenen zu definieren. Die Ebenen vererben die Einstellungen an ihre Kinder.
+(code)Default
+|-- DVD und Video Shop (Website)
+|   |-- deutscher Shop (Store Group / Store)
+|   |   |-- deutsch (Store / Store View)
+|   |   +-- englisch (Store / Store View)    
+|   +-- schweizer Shop (Store Group / Store)
+|       |-- französisch (Store / Store View)
+|       |-- italienisch (Store / Store View)
+|       +-- schweizerdeutsch (Store / Store View)
+|
++-- Shirt und Pullover Shop (Website)
+...
+(/code)
+
+Leider hat Magento irgendwann die Bezeichnungen getautscht. So ist im Code von Website, Storegroup und Store die Rede, aber im Backend von Website, Store und Store View.
+
+(code)
+alt         |   neu
+Website     |   Website
+Store Group |   Store
+Store       |   Store View
+(/code)
+
+<h6>Beispiel:</h6>
+Das Impressum für die beiden Websites ist gleich (default), aber beide Websites haben unterschiedliche Namen. Diese werden allerdings an alle Storeviews vererbt. Abschließend stellen wir unabhängig von Website und Default auf Storeview-Ebene die Sprache ein.
+<h3>System > Konfiguration</h3>
+Bei den meisten Shops läuft es so, dass jemand in das Backend geht und die Einstellungen macht. Diese werden dann in der Datenbank gespeichert. Im besten Fall, wird die Datenbank kopiert und auf die verschiedenen Systeme gespielt. Im schlimmsten Fall, "kopiert" jemand die Einstellungen manuell und vergisst dabei hoffentlich keine. Ich möchte eine Alternative dazu vorstellen.
+<h4>Konfigurationsvariablen</h4>
+Alan Storm hat einen <a href="http://alanstorm.com/magento_loading_config_variables">langen, langen Artikel zum Thema Konfigurationsvariablen</a> geschrieben, wer also mehr technischen Hintergrund haben möchte zu dem folgenden, einfach dem Link folgen.
+<h3>Aufbau der Konfiguration</h3>
+Die verschiedenen Scopes werden in der Konfiguration folgendermaßen abgebildet:
+(code)<config>
+    <default>
+    </default>
+    <websites>
+        <admin></admin>
+        <base></base>
+    </websites>
+    <stores>
+        <admin></admin>
+        <default></default>
+    </stores>
+</config>
+(/code)
+Magento kümmert sich beim Laden der Konfiguration bereits darum, die Vererbung durch kopieren der Knoten zu realisieren, d.h. wenn folgende Knoten und Werte gibt
+(code)default/general/imprint/shop_name        => Mein cooler Shopname
+websites/admin/general/imprint/shop_name => Adminshop
+(/code)
+aber keine Knoten
+(code)websites/base/general/imprint/shop_name
+stores/admin/general/imprint/shop_name
+stores/default/general/imprint/shop_name
+(/code)
+kopiert Magento die Werte an die entsprechenden Stellen unterhalb der Vererbungshierarchie:
+(code)stores/admin/general/imprint/shop_name   => Adminshop
+websites/base/general/imprint/shop_name  => Mein cooler Shopname
+stores/default/general/imprint/shop_name => Mein cooler Shopname
+(/code)
+<h3>Mage_Core_Model_Config->_xml</h3>
+Die Konfiguration innerhalb des Konfigurationsmodels wird auch nach dem zusammenführen aller Quellen weiter als XML behandelt. Wichtig hierbei ist, dass wir jeden Knoten innerhalb der Konfiguration aus vielen XML-Dateien beinflussen können.
+<h4>local.xml, *.xml, config.xml, local.xml</h4>
+Insbesondere halte ich hier die (code)app/etc/local.xml(/code), alle anderen XML-Dateien in (code)app/etc/*.xml(/code) und alle (code)config.xml(/code)-Dateien der verschiedenen Module für erwähnenswert. Theoretisch geht auch eine beliebige (code)app/etc/modules/*.xml(/code), aber um Himmels willen, lasst das sein, an dieser Stelle sucht NIEMAND, wenn es Probleme gibt! Die Grundkonfiguration kann entweder in einer (code)config.xml(/code) stehen oder in einer beliebigen XML-Datei in (code)app/etc/(/code). Die Konfiguration kann z.B. so aussehen:
+(code)<?xml version="1.0"?>
+<config>
+    <stores>
+        <de>
+            <general>
+                <store_information>
+                    <name>Deutscher Store View</name>
+                </store_information>
+            </general>                        
+        </de>
+    </stores>
+    <websites>
+        <another_website>
+        </another_website>
+        <websiteA>
+            <general>
+                <store_information>
+                    <name>Website A</name>
+                </store_information>
+            </general>
+        </websiteA>
+    </websites>
+    <default>
+        <admin>
+            <security>
+                <use_form_key>1</use_form_key>
+                <use_case_sensitive_login>1</use_case_sensitive_login>
+            </security>
+            <dashboard>
+                <enable_charts>1</enable_charts>
+            </dashboard>
+            <captcha>
+                <enable>0</enable>
+            </captcha>
+        </admin>
+    </default>
+</config>
+(/code)
+Diese Konfiguration, die für alle Instanzen gelten soll, wird also in (code)app/etc/local.live.xml(/code) gespeichert. Alle Daten, die in den Instanzen unterschiedich sind, also z.B. URLs und Datenbankzugangsdaten werden zusätzlich in (code)app/code/local.xml(/code) gespeichert. Auf diese Weise wandert die komplette Konfiguration auch in die Versionsverwaltung.
+<h3>Tipps zum Ende</h3>
+Um die Konfiguration das erste Mal in die Datei zu kriegen, kann man diese im Backend erstellen und ein kleines Script schreiben um die Datei zu erzeugen. Ich habe bisher die Datei immer von Hand erstellt, weil es mich furchtbar nervt mich durch das Backend zu klicken. Falls jemand ein kleines Script hat, einfach rein in die Kommentare.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3537

@@ -1,0 +1,92 @@
+Article-meta: 
+
+----
+
+Title: Türchen 22: Mobile Themes in Magento
+
+----
+
+Date: 2012-12-22
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: rouven-rieker
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das Mobiltelefon ist in der heutigen Zeit fast nicht mehr wegzudenken und wurde über die letzten Jahre hinweg zu einem festen Bestandteil des täglichen Lebens vieler Menschen. Im Zuge der rasanten technologischen Entwicklung und der zunehmenden Verbreitung von internetfähigen, mobilen Endgeräten entwickelte sich einhergehend neben dem klassischen Bereich des E-Commerce auch der Bereich des Mobile Commerce. Aktuelle Studien zeigen, dass heutzutage bereits 28% der mobilen Nutzer auch schon mobil einkaufen - Tendenz stark steigend. Dennoch wird das Thema Mobile Commerce von vielen Händlern immer noch sehr stiefmütterlich behandelt. In diesem Artikel wollen wir deshalb die Möglichkeiten mit Magento detaillierter behandeln.
+
+
+
+----
+
+Text: Auch Magento ist das Potential des Mobile Commerce nicht verborgen geblieben, weshalb sie sich schon relativ früh Gedanken und entsprechende Lösungen bereitgestellt haben. Zum einen wurde schon relativ früh ein <strong>mobiles Template</strong> mit ausgeliefert haben. Leider wurde dieses von Magento anfangs eher etwas stiefmütterlich behandelt und vernachlässigt. Seit Version 1.7 liefert Magento nun jedoch ein komplett überarbeitetes mobiles HTML5 Template aus. Zusätzlich dazu bietet die Magento-Produktpalette seit September 2010 auch die Möglichkeit anhand des eigenen Produktkataloges eine <strong>native App</strong> für diverse Plattformen zu erstellen und den Kunden in den jeweiligen Marketplaces bereitzustellen. Gestaltet und entwickelt man in einem Kundenprojekt ein Design von Grund auf neu, bietet sich hier auch die Möglichkeit ein <strong>Responsive Webdesign</strong> zu erstellen. Dies bedeutet, den grafischen Aufbau und die Strukurierung der Seitenelemente unter Berücksichtigung der Anforderungen der zu betrachtenden Endgeräte zu gestalten und umzusetzen.
+<h2>Native App</h2>
+Mit Magento ist es möglich, aus dem Administrationsbereich heraus jeweils eine native App für das iPhone, das iPad und/oder das Android-Gerät zu erstellen. Das Modul für das Anlegen und Konfigurieren einer App wird bereits von Haus aus mit Magento mitgeliefert und ist kostenfrei. Es fallen hier jedoch Kosten für die Generierung und Einreichung der App in den jeweiligen Marketplaces an Allerdings übernimmt Magento an dieser Stelle den kompletten Einreichungsprozess und noch viele andere Vorgänge:
+
+(image: rr_bild1-650x288.jpg)
+
+Alle Informationen rund um das Thema “Magento Mobile” finden Sie unter <a href="http://www.magentocommerce.com/product/mobile">http://www.magentocommerce.com/product/mobile</a>
+<h2>Mobiles Template</h2>
+Wie eingangs schon erwähnt liefert Magento standardmäßig ein optimiertes Template für mobile Endgeräte mit, welches Sie bequem im Administrationsbereich aktivieren und testen können.
+
+Gehen Sie hierzu im Administrationsbereich zu <em>System -> Konfiguration -> Allgemein -> Design</em> und fügen Sie im Abschnitt <em>Themes</em> eine neue Ausnahme hinzu. Um möglichst alle mobilen Webbrowser hiermit abfangen zu können, tragen Sie im Feld <em>Passender Ausdruck</em> bitte folgenden Wert ein:
+
+<em>iPhone|iPod|BlackBerry|Pre|Palm|Googlebot-Mobile|mobi|Safari Mobile|Windows Mobile|Android|Opera Mini|mobile</em>
+
+Im Feld <em>Betrag</em> muss nun noch der Namen des entsprechenden Magento-Templates angegeben werden. Um das Standardmäßig mitgelieferte Design zu verwenden müssen Sie hier nun dei Eingabe “iphone” tätigen. Sollten Sie das mobile Magento-Design anpassen wollen, finden Sie die entsprechenden Layout-Dateien unter <em>app/design/frontend/default/iphone/</em> sowie die Skin- Dateien unter <em>skin/frontend/default/iphone/</em>.
+
+Magento selbst ist jedoch nicht der einzigste Hersteller von mobilen Templates auf dem Markt. Exemplarisch möchte ich an dieser Stelle noch folgende Lösungen vorstellen:
+
+“<strong>rEvolution iPhone Theme for Magento” von aheadWorks</strong>
+
+Das “rEvolution iPhone Theme vor Magento” erkennt automatisch ob der Kunde mit einem iPhone, iPad oder Android-Gerät auf den Shop zugreift und unterstützt derzeit Apple iOS 6, Windows Mobile, Android sowie Blackberry OS 6. Sollte man auch bereits andere Erweiterungen von aheadWorks nutzen ist hier ein paar davon auch eine entsprechende Unterstützung geben. Das Theme setzt ausschließlich HTML, CSS und JavaScript ein.
+
+Alle weiteren Informationen und Features rund um das Theme finden Sie unter: <a href="http://ecommerce.aheadworks.com/magento-extensions/iphone-theme.html">http://ecommerce.aheadworks.com/magento-extensions/iphone-theme.html</a>
+
+“<strong>Magento RED Mobile Theme” von RedLightBlinking</strong>
+Das “Magento RED Mobile Theme” basiert vollständig auf HTML5 und jQuery Mobile und ist derzeit für iPhone, Android, Blackberry, Palm und Windows Mobile optimiert. Das Modul ist so aufgebaut, dass ein Kunde automatisch zu der Mobilen Website umgeleitet wird, sollte er mit einem mobilen Endgerät die Seite betreten.
+
+Alle weiteren Informationen und Features rund um das Theme finden Sie unter: <a href="http://www.redlightblinking.com/store/magento-mobile-themes.html">http://www.redlightblinking.com/store/magento-mobile-themes.html</a>
+<h2>Responsive Webdesign</h2>
+Responsive Webdesign, zu deutsch “reaktionsfähiges Webdesign” stellt Webentwickler und Webdesigner vor neue Herausforderungen, da man sich vom klassischen Design mit fixen Breiten lösen muss und sich mehr auf die Flexibilität des Webs rückbesinnen muss. Denn die Geräte, mit denen wir Websites und Online-Shops besuchen, werden immer vielfältiger und unterschiedlicher, z.B. in Bezug auf die Bildschirmgröße.
+
+Ziel des Responsive Webdesign ist, dass ein Kunde jedes Mal wenn er den Online-Shop besucht eine für sein Gerät passende Version der Website angezeigt bekommt und dabei je nach Bildschirmgröße die Inhalte auch passender strukturiert, hinzufügt oder auch weggelassen werden. Während man bei großen Bildschirmauflösungen, z.B. Notebook, mehr Inhalte auf der Website unterbringen kann, muss man bei kleineren Bildschirmauflösungen, z.B. iPhone, das Design sinnvoll entschlacken und reduzieren, damit die Seite nicht überladen wirkt und der Kunde die Seite wieder verlässt.
+
+Auch im Bereich Magento gibt es bereits mehrere Ansätze zu dem Responsive Webdesign. So wurde beispielsweise auf einem “Magento Hackathon” (bitte Verlinken auf <span style="color: #1155cc;"><span style="text-decoration: underline;"><a href="http://www.magento-hackathon.de/">http</a><a href="http://www.magento-hackathon.de/">://</a><a href="http://www.magento-hackathon.de/">www</a><a href="http://www.magento-hackathon.de/">.</a><a href="http://www.magento-hackathon.de/">magento</a><a href="http://www.magento-hackathon.de/">-</a><a href="http://www.magento-hackathon.de/">hackathon</a><a href="http://www.magento-hackathon.de/">.</a><a href="http://www.magento-hackathon.de/">de</a><a href="http://www.magento-hackathon.de/">/</a></span></span>) von einem Team ein Responsive Webdesign Theme für Magento erstellt. Sie finden es auf Github unter folgender URL: <span style="color: #1155cc;"><span style="text-decoration: underline;"><a href="https://github.com/magento-hackathon/magento-responsive-theme">https</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">://</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">github</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">.</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">com</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">/</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">magento</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">-</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">hackathon</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">/</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">magento</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">-</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">responsive</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">-</a><a href="https://github.com/magento-hackathon/magento-responsive-theme">theme</a></span></span>
+
+Den Herstellern von kommerziellen Magento Themes ist das Potential des Responsive Webdesigns ebenfalls nicht verborgen blieben. Ich möchte deshalb exemplarisch einmal zwei kommerzielle Magento Themes vorstellen, welche bereits von Haus aus “responsive” sind:
+<ul><li><a href="http://themeforest.net/item/shopper-magento-theme-responsive-retina-ready/full_screen_preview/3139960">http://themeforest.net/item/shopper-magento-theme-responsive-retina-ready/full_screen_preview/3139960</a> (Dank an @nickweisser für den Tweet)</li>
+	<li><a href="http://themeforest.net/item/megashop-responsive-magento-theme-/full_screen_preview/3055544">http://themeforest.net/item/megashop-responsive-magento-theme-/full_screen_preview/3055544</a></li>
+</ul><h2>Fazit</h2>
+Sie sehen, dass Sie gerade mit einem mobilen Template oder einem responsive Design relativ schnell vielversprechende Ergebnisse erzielen können und Kunden auch im mobilen Webbrowser ein besonderes Einkaufserlebnis in Ihrem Online-Shop bieten können.
+
+Letztendlich nutzt aber auch das beste mobile Template nichts, wenn Ihre Kunden primär über einen Webbrowser an einem PC/Notebook einkaufen. Es sollte deshalb unabdingbar sein, entsprechende Webanalyse-Tools im Einsatz zu haben um das Kundenverhalten und die technischen Gegenbenheiten bei Ihren Kunden zu analysieren um sich anschließend Rückschlüsse ziehen zu können und ggf. die eigene, mobile Strategie entsprechend anzupassen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3336

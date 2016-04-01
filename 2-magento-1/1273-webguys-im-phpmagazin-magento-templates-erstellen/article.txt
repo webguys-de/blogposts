@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Webguys im PHPmagazin: Magento Templates erstellen
+
+----
+
+Date: 2010-12-27
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: .. und es ist doch ein schönes Gefühl im Handel zu stehen und dort ein Fachmagazin in den Händen zu halten das einen Artikel veröffentlicht hat der aus der eigenen Feder stammt. So geschehen in der aktuellen Ausgabe des <a href="http://it-republik.de/php/php-magazin-ausgaben/No-SQL-000423.html">PHPmagazin der Ausgabe 1.2011</a>.
+
+
+
+----
+
+Text: <blockquote>
+<h3>Ein schönes Geschäft – Wie Sie selbst ein richtiges Magento-Design erstellen können</h3>
+(image: IMG_20101227_143317-650x487.jpg)
+
+Das Erstellen eines Magento-Themes ist oftmals weit mehr als das  Anpassen einiger Stylesheets. In der Regel muss an der HTML-Struktur  gearbeitet, Blöcke verschoben und das System auf Kundenansprüche  optimiert werden. Je nach Produktwelt lässt sich schließlich mit einem  speziell entworfenen Design die Conversion-Rate zum Teil signifikant  steigern. Aber wie geht man hier sinnvoll vor? Und was ist zu beachten,  um die Updatefähigkeit nicht zu verlieren? Antworten auf diese Fragen  erhalten Sie im folgenden Artikel.
+
+<strong><a href="http://it-republik.de/php/php-magazin-ausgaben/No-SQL-000423.html">Ausgabe des PHPmagazins online bestellen</a></strong></blockquote>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1273

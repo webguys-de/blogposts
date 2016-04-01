@@ -1,0 +1,89 @@
+Article-meta: 
+
+----
+
+Title: 5 Dinge, die Deine Magento-Extension besser machen
+
+----
+
+Date: 2015-07-18
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Jetzt schreibe ich selbst auch schon solche Überschriften - wollte ich eigentlich nie machen. Dennoch ist es in diesem Fall sehr passend. Viele Extensions da draußen sind wirklich super und tun genau was sie sollen - allerdings hat man immer wieder Probleme sie in bestehende Projekte zu integrieren oder zu erweitert, weil einfache Dinge nicht beachtet wurden.
+
+<h2>1. Event-Prefix für Models</h2>
+
+Um auf die ganzen _after_load, _before_save, _after_save, _delete_before, _delete_after Events der neuen Entitäten hören zu können, muss man im entsprechenden Model die Variable $_eventPrefix setzen. Jetzt hat es sich im Magento-Core irgendwie so eingebürgert, dass man die Variable nicht einfach im Konstruktor setzt, sondern die Variable in der erbenden Klasse neu deklariert. Ich hasse es zwar, wenn das jemand tut (so versteht doch niemand, dass diese in den vererebenden Klassen bereits verwendet wird), aber da halten wir uns einfach mal an den Core und gehen diesen unschönen Weg mit.
+
+(code lang: php)
+protected $_eventPrefix = 'my_entity';
+(/code)
+
+Ich ärgere mich immer, wenn das fehlt und man dadurch auf core_abstract hören muss, man dann im Observer auf den Typen prüft und das Event am Ende auf den ersten Blick niemand versteht.
+
+<h2>2. Eigene Events implementieren</h2>
+
+Helft den Nutzern eurer Extensions die Logik ohne Rewrites zu erweitern/abzuändern. Das spart jede Menge Ärger bei Updates und macht den Code leserlicher. Und am Ende sind es doch nur wenige Zeilen code mehr.
+
+<h2>3. Anständige ACL pflegen</h2>
+
+Ich weiß, das ist anstrengend und man vergisst das gerne. Allerdings ist es wirklich nützlich, wenn die Extension etwas komplexer wird und es z.B. viele Entitäten gibt. Aber auch sonst legen wir für Kunden häufig Accounts mit eingeschränkten Rechten an - dann ist es immer sehr anstrengend, wenn man die 3rd Party Extension nicht in den ACLs findet oder diese falsch implementiert sind. Dauert nur wenige Minuten das ordentlich zu machen und man wird es euch danken. Seit dem letzten Patch ist das Thema noch einmal etwas kritischer geworden - <a href="http://www.webguys.de/magento/zugriff-verweigert-die-folgen-von-supee-6285-und-acls/">wir berichteten hier</a>.
+
+<h2>4. Den Profiler mit Daten füttern</h2>
+
+Gerade wenn es am Ende um Performance-Optimierungen geht, ist man als Entwickler sehr dankbar, wenn man möglichst genau einschränken kann, wo die Probleme auftreten. Der Profiler ist dabei ja wirklich einfach gestrickt, einfach nur Start und Stop mit einem eindeutigen Identifier aufrufen und schon ist man fertig. Also nur wenige Zeilen mehr für sehr viel Mehrwert!
+
+(code lang: php)
+Varien_Profiler::start('my_module_complex_action');
+// ... Logik
+Varien_Profiler::stop('my_module_complex_action');
+(/code)
+
+An dieser Stelle möchte ich noch einmal den <a href="https://github.com/AOEpeople/Aoe_Profiler" target="_blank">AOE-Profiler von Fabrizio</a> empfehlen.
+
+<h2>5. Caching korrekt implementieren</h2>
+
+Viele Daten kann man in den Magento-Cache schieben. Gerade etwas komplexere Blöcke für das Frontend sollte man in den Magento-Cache packen. Das geht auch wirklich einfach:
+
+<ul><li>entweder, man überschreibt die Funktion <span class="pl-en">getCacheLifetime im eigenen Block</span></li>
+    <li>oder man setzt einfach den Wert cache_lifetime (setCacheLifetime) des Blocks (z.B. über Layout-XML)</li>
+</ul>
+
+Für andere Entitäten einfach mal mit Cache-Tags beschäftigen. Sehr einfach und in wenigen Minuten gelernt.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4311

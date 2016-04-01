@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Rückblick Magento Stammtisch Bielefeld #4
+
+----
+
+Date: 2011-03-15
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Der vierte Magento in Bielefeld ist vorbei und ich lasse es mir nicht nehmen einen kleinen Rückblick zu schreiben - so lange die Eindrücke noch frisch sind.
+
+----
+
+Text: Anwesend waren ca. 15-20 Magento-Interessierte. Wir begannen, wie üblich, mit einer kleinen Vorstellungsrunde - so konnten wir die Neulinge an Board holen. Zudem haben wir im vierten Anlauf es endlich geschafft zwei kleine Vorträge zu halten. Dazu hatte Johannes von HDNet Beamer und Leinwand ganz spontan noch aufgetrieben. Vielen Dank!
+
+Ich begann mit meinem Vortrag vom <a title="Das Foocamp" href="http://www.webguys.de/magento/das-foocamp/">Foocamp</a> zum Thema Magento-Checkout (Der auf der Meet-Magento hat einen anderen Fokus).  Zusätzlich hat <a href="https://www.xing.com/profile/Karl_Spies2">Karl Spies </a>uns das Produkt-Tagging von Magento ein wenig näher gebracht. Ich wusste bis dato nicht welche Probleme es hier zum Teil noch gibt und das eine Pflege aus dem Admin nur schwer möglich ist.
+
+Alles in allem ein spannender Abend. Der nächste Stammtisch findet übrigens kurz nach der Meet Magento am 24. Mai statt. Ich freue mich schon drauf - dann hoffentlich auch mal mit Ingo ;)
+
+Anbei noch ein Foto geschossen von Markus Krueger welches mich beim Vortrag zeigt - Stammtisch-typisch mit einem Bier in der Hand.
+
+(image: HDR-650x483.jpg)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1520

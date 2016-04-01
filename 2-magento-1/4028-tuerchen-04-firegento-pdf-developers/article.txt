@@ -1,0 +1,102 @@
+Article-meta: 
+
+----
+
+Title: Türchen 04: FireGento PDF for Developers
+
+----
+
+Date: 2014-12-04
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: simon-sprankel
+
+----
+
+Article-content: 
+
+----
+
+Intro: FireGento PDF is a free Magento community extension which enables shop owners to have beautiful and customisable PDFs for their store. It is developed and maintained by <a href="https://github.com/firegento/firegento-pdf/graphs/contributors" target="_blank">many contributors</a> which work under the umbrella of <a href="http://firegento.com/" target="_blank">FireGento</a> - a nice club of Magento developers, which also organises <a href="https://www.mage-hackathon.de/" target="_blank">hackathons</a>. Most of you probably know how ugly and non-adjustable the default Magento invoices, credit memos and shipments are. But as a starter, here is a comparison of the default Magento invoice layout and the one which comes with FireGento PDF.
+
+
+----
+
+Text: (image: magento-e1409734931115-1024x791-647x500.png)(image: firegento-353x500.png)
+
+<div style="clear: both"></div>
+
+FireGento PDF can be downloaded from <a href="http://www.magentocommerce.com/magento-connect/firegento-pdf.html" target="_blank">Magento Connect</a> as well as from <a href="https://github.com/firegento/firegento-pdf/" target="_blank">GitHub</a>. For developers, GitHub should definitely be the way to go as the extension also comes with modman and composer support. Since the whole development happens on GitHub, feel free to open an issue or - even better - create a pull request if you have any problems or ideas.
+
+<h2>Engines</h2>
+
+Although the document models like `Mage_Sales_Model_Order_Pdf_Invoice`, are rewritten, the default Magento layout can still be used. That is possible by the concept of so-called engines. An engine is basically a specific document layout, which can be selected by the end user in the configuration. FireGento PDF ships with two engines. The first one is simply the default Magento layout. The second one called "Standard Germany" is the cleaner and more customisable layout shown above. If you need to change many things in the layout, you can write your completely own engine. If configured correctly, your new engine can also be selected by the end user in the configuration. Therefore, you simply put the following configuration in your `config.xml`:
+
+(code lang: xml)
+<global>
+    <!-- module declaration, model declaration etc. -->
+    <pdf>
+        <!-- or firegento_shipment_engines or firegento_creditmemo_engines -->
+        <firegento_invoice_engines>
+            <namespace_module_default>
+                <class>namespace_module/firegento_pdf_engine_invoice_default</class>
+                <label>Standard MyModule</label>
+            </namespace_module_default>
+        </firegento_invoice_engines>
+    </pdf>
+</global>
+(/code)
+
+FireGento PDF will search for additional engines in the XML nodes shown above like `firegento_invoice_engines` and will display all models it can find there to the end user in the configuration. For invoices, this is done in <a href="https://github.com/firegento/firegento-pdf/blob/development/src/app/code/community/FireGento/Pdf/Model/System/Config/Source/Invoice/Engine.php#L56" target="_blank">`FireGento_Pdf_Model_System_Config_Source_Invoice_Engine`</a>. You probably do not want to write your own engine from scratch, but you want to extend a FireGento engine. Hence, you create a file under `Namespace/Module/Model/Firegento/Pdf/Engine/Invoice/Default.php` with the following content:
+
+(code lang: php)
+<?php
+
+class Namespace_Module_Model_Firegento_Pdf_Engine_Invoice_Default extends FireGento_Pdf_Model_Engine_Invoice_Default
+{
+    protected function insertLogo(&$page, $store = null)
+    {
+        // do not print logo (maybe because it is already on the stationery)
+    }
+}
+(/code)
+
+And there you go, now the end user can select your custom engine in the configuration and thus use your custom layout.
+
+<h2>Dispatched Events</h2>
+
+In many cases, only small changes have to be done to the default layout. Therefore, one of the provided events can be used:
+
+- `firegento_pdf_imprint_load_after` (dispatched <a href="https://github.com/firegento/firegento-pdf/blob/61e61501e56bd1302fb5903cd65c039a9043a9cf/src/app/code/community/FireGento/Pdf/Model/Engine/Abstract.php#L966" target="_blank">here</a>): This event allows developers to alter the imprint after it has been loaded and before it is used by the engine. For instance, as shown in the <a href="https://github.com/firegento/firegento-pdf/wiki/FAQs#how-can-i-change-or-remove-elements-from-the-imprint" target="_blank">FAQ</a>, fields like the `tax_number` could be removed, so that they are not shown on the documents.
+- `firegento_pdf_invoice_edit_page` / `firegento_pdf_creditmemo_edit_page` / `firegento_pdf_shipment_edit_page` (dispatched <a href="https://github.com/firegento/firegento-pdf/blob/61e61501e56bd1302fb5903cd65c039a9043a9cf/src/app/code/community/FireGento/Pdf/Model/Engine/Abstract.php#L738" target="_blank">here</a>): This event allows developers to add random stuff to the page. The newly created page object as well as the order object is assigned to the event. It is dispatched each time after a new page is created and the footer is added. The extension itself uses this event to add the barcode to the shipment.
+- `firegento_pdf_invoice_insert_note` / `firegento_pdf_creditmemo_insert_note` / `firegento_pdf_shipment_insert_note` (dispatched <a href="https://github.com/firegento/firegento-pdf/blob/61e61501e56bd1302fb5903cd65c039a9043a9cf/src/app/code/community/FireGento/Pdf/Model/Engine/Abstract.php#L914" target="_blank">here</a>): This event allows developers to add custom notes to the document. The order object and the mode (invoice / creditmemo / shipment) is assigned to the event as well as a result object, which is simply used to transfer the notes. The extension itself uses this to add notes to the invoice or to add the shipping method to the shipment.
+
+
+<h2>Conclusion</h2>
+
+I hope this article helps developers to better understand and use FireGento PDF. As already written, feel free to get in touch by creating an issue or pull request! And have fun with all the other posts :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4028

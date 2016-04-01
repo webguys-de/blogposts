@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Codeschnipsel: Von Simple zum Configurable-Product
+
+----
+
+Date: 2010-11-24
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Configurable-Products setzen sich aus Simple-Products zusammen. Bei einem Produktimport kann es nun vorkommen das sich am Simple-Product ändert was eventuell Einfluss auf das Configurable-Product hat. Wie lässt sich also von einem Simple-Product das passende Configurable finden? Ganz einfach.. 
+
+----
+
+Text: (code lang: php)
+$simple_product = Mage::getModel('catalog/product')->load( 1234 /* Ein Simple-Product laden */ );
+$configurable_ids = $simple_product->loadParentProductIds()->getData('parent_product_ids') );
+(/code)
+
+Ab <strong>Magento 1.4.2</strong> ist die Funktion so nicht mehr verfügbar. Stattdessen ist folgendes zu verwenden:
+
+(code lang: php)
+$configurable_product_model = Mage::getModel(‘catalog/product_type_configurable’);
+$parentIdArray = $configurable_product_model->getParentIdsByChild($simple_product_id);
+(/code)
+
+Mit Dank an Simon Sprankel.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1035

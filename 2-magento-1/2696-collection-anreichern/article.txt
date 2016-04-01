@@ -1,0 +1,92 @@
+Article-meta: 
+
+----
+
+Title: Collections anreichern
+
+----
+
+Date: 2012-03-06
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Eine Collection ist eine Sammlung von Daten, die für die verschiedenste Zwecke verwenden kann. Die Informationen einer Collection ist meist auf das notwendigste beschränkt, kann jedoch erweitert werden, um  (fast) jedem Wunsch gerecht zu werden. Als praktische Anwendung wenden wir uns der Zubehör-Produkte eines Artikels zu.
+
+
+----
+
+Text: Die Zubehör-Produkte eines Produktes erhält man über die passende Collection, ich gehe in diesem Beispiel von einer Implementierung in der <i>view.php</i> im Ordner <i>app/design/frontend/default/default/themes/catalog/product</i> aus.
+
+Die Collection holen wir uns vom aktuellen Produkt, in diesem Fall von <i>$_product</i>;
+(code lang: php)
+$relProducts = $_product->getRelatedProductCollection();
+(/code)
+
+Die Produkte dieser Collection kann man vorzüglich in einer Schleife verwenden, sodass dieses Snippet entsteht:
+(code lang: php)
+<ul>
+<?php foreach( $_product->getRelatedProductCollection() AS $_item ) : ?>
+<li>
+<a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>"><?php echo $_item->getName(); ?></a>
+</li>
+<?php endforeach; ?>
+</ul>
+(/code)
+
+Wenn man sich in der Schleife jedoch anstatt des Names, das Bild anzeigen lassen möchte, wird man sich mit folgender Zeile weiterhelfen:
+(code lang: php)
+...
+<a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->keepFrame(false)->resize(37,85) ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" /></a>
+...
+(/code)
+
+Im Anschluss wird sich jedoch herausstellen, dass das Bild nicht angezeigt wird, sondern der eingepflegte Platzhalter angezeigt wird. Um das Bild anzuzeigen, bieten sich nun zwei Wege an.
+1. Das Produkt in der <i>foreach-Schleife</i> laden
+2. Die Collection erweitern.
+
+Auf die erste Möglichkeit möchte ich nicht eingehen, dies ist der absolut falsche Weg und führt nur zu erhöhter Last auf dem Server und zu extrem langen Wartezeiten; bleibt der zweite und auch elegante Weg. Wie im Snippet zu sehen, benötigen wir das Attribut <i>small_image</i> innerhalb der Collection. Das Modell der Collection bietet uns über <i>addAttributeToSelect()</i> die Möglichkeit, der Collection weitere Attribute hinzuzufügen.
+
+In unserem Beispiel wäre dies das Ergebnis:
+(code lang: php)
+<ul>
+<?php foreach( $_product->getRelatedProductCollection()->addAttributeToSelect('small_image') AS $_item ) : ?>
+<li>
+<a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->keepFrame(false)->resize(37,85) ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" /></a>
+</li>
+<?php endforeach; ?>
+</ul>
+(/code)
+
+Nun wird das Bild des Zubehör-Artikels wie gewünscht angezeigt und das ebenso elegant und performant - darüber hinaus bietet dieser Ansatz, die Gelegenheit sich noch einmal mit Collectionen auseinander zu setzen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2696

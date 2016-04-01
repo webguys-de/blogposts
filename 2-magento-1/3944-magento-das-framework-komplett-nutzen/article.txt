@@ -1,0 +1,104 @@
+Article-meta: 
+
+----
+
+Title: Magento - das Framework komplett nutzen
+
+----
+
+Date: 2014-11-01
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Immer wieder sehe ich, wie man mit normalen PHP-Funktionen versucht, Dinge zu erledigen, welche aber von Magento entweder anders vorgesehen sind, oder für die es im Zend-Framework schon Lösungen gibt. Diese müssen aber eben nur genutzt werden. Umso besser man das Framework kennt, desto einfacher und schneller kommt man zu dem gewünschten Ergebnis.
+
+
+
+----
+
+Text: Nun behaupte ich natürlich nicht, dass ich alles kenne - dafür muss man sicher sehr viel länger mit dem Framework arbeiten als ich es getan habe. Und vor allem muss man auf bestimmte Probleme gestoßen sein um dessen Lösung zu kennen.
+
+In diesem Artikel möchte ich einfach ein paar Beispiele nennen und eher darauf aufmerksam machen, dass man beim Entwickeln immer versuchen sollte, eine Lösung per Framework zu finden, als direkt PHP-Funktionen zu nutzen. Aber warum?
+<ul><li>Weil man so zum Beispiel den anderen Entwicklern die Chance gibt, Probleme mit dem eigenen System an einer zentralen Stelle zu lösen, anstatt den ganzen Code zu durchsuchen.</li>
+	<li>Oder auch, weil andere die Logik verändern wollen. Gerade Magento hat etliche Helper, welche für die einfachsten Aufgaben herangezogen werden. Nutzt man diese fleißig, kann man an einer Stelle das Verhalten des gesamten Shops verändern - und das, ohne einzelne Extensions Patchen zu müssen.</li>
+	<li>Die Entwickler des Frameworks berücksichtigen in den einzelnen Funktionen schon die Serverkonfiguration und verhalten sich an einigen Stellen anders, wenn z.B. eine PHP-Erweiterung fehlt. Oder haben Probleme mit php-Funktionen in bestimmten Versionen gefixt. Mit dem Einsatz dieser Funktionen umgeht man also eventuell Probleme, die man auf dem eigenen Server erst gar nicht bemerkt, sondern irgendwann auf dem Kundensystem auffallen. Und dann wird lange gesucht.</li>
+</ul>
+Hier mal eine Liste, welche ich in den letzten Wochen während der täglichen Arbeit mit Magento zusammengestellt habe. Manches schien mir eventuell einfach zu trivial um es aufzuführen, anderes ist es für Euch wahrscheinlich trotzdem. Weiterhin habe ich mir vorgenommen, die Liste zu aktualisieren wenn mir mehr einfällt.
+
+(code lang: php)
+$param = $controller->getRequest()->getParam('paramname', false);
+# statt
+$param = $_GET['paramname'] ?: false;
+
+throw Mage::exception('Mage_Core', Mage::helper('customer')->__('Invalid login or password.'), self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD);
+# statt
+throw new Exception('Invalid login or password.');
+
+Mage::helper('core')->jsonEncode($jsonData);
+# statt
+json_encode($jsonData);
+
+// Header senden
+$this->getResponse()->setHeader('Content-Type', 'application/json');
+# statt
+header('Content-Type', 'application/json');
+
+// Dateidownloads
+$this->_prepareDownloadResponse($fileName, $pdfdata, 'application/x-pdf');
+# statt
+$this->getResponse()->setHeader('Content-Type', 'application/x-pdf');
+echo $pdfdata;
+exit;
+
+// CSV-Dateien
+$file = new Varien_File_Csv();
+$file->getData('/path/to/file');
+# statt
+fopen('/path/to/file', 'r'); fgetcsv(...); fclose();
+
+$dateTimestamp = Mage::getModel('core/date')->timestamp();
+# statt
+$dateTimestamp = time();
+
+$timeStamp = Varien_Date::toTimestamp($date);
+# statt
+strtotime($date);
+
+Zend_Validate::is($email, 'EmailAddress');
+# statt
+preg_match('...');
+(/code)
+
+Wie sind Eure Erfahrungen? Ich freue mich über Ergänzungen in den Kommentaren.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3944

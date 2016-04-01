@@ -1,0 +1,107 @@
+Article-meta: 
+
+----
+
+Title: Türchen 18: Von GermanSetup zu MageSetup
+
+----
+
+Date: 2013-12-18
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: andreas-von-studnitz
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ein Gutteil der deutschen Magento-Shops nutzt mittlerweile das Modul <strong>GermanSetup von FireGento</strong> für eine vereinfachte Konfiguration und die Vorbereitung für den Deutschen Markt. Seit meinem ersten <a href="http://www.avs-webentwicklung.de/nc/blog/artikel/magento-german-setup-die-alternative-zu-market-ready-germany-ua.html" target="_blank">Artikel über GermanSetup</a> Anfang 2012 hat sich viel getan. Neben dem kontinuierlichen Support von neuen Magento-Versionen und einigen neuen Funktionalitäten ist der auffälligste Punkt die <strong>Umbenennung in MageSetup</strong>. Ich nutze diesen Artikel (vielen Dank an Tobi für die erneute Organisation des Adventskalenders!), um die wichtigsten Fragen rund um GermanSetup und MageSetup zu klären.
+
+
+
+----
+
+Text: <p style="text-align:center"><img class="alignright" alt="" src="http://www.magentocommerce.com/magento-connect/media/catalog/product/cache/9/image/468x300/9df78eab33525d08d6e5fb8d27136e95/m/a/magesetup-02_1.jpg" width="262" height="168">
+
+<h3>Warum die Umbenennung?</h3>
+GermanSetup war ausschließlich für den deutschsprachigen Raum bestimmt und hat Deutschland, Österreich und die Schweiz unterstützt. Dabei wurden ausschließlich deutsche Inhalte eingesetzt, beispielsweise für CMS-Seiten wir Impressum oder AGB, sowie für Email-Vorlagen. Innerhalb der deutschen Magento-Community kam mehrfach die Frage auf, ob GermanSetup auch ausländische Shops unterstütze. Auslöser für die Internationalisierung  war dann schließlich der Wunsch, die <a href="http://de.nr-apps.com/store/app-store/lokale-magento-editionen.html" target="_blank">lokalisierten Magento-Editionen</a> für weitere Länder umzusetzen - GermanSetup bildet einen integralen Bestandteil der Lokalisierungen.
+
+Da der Name "GermanSetup" für russische, britische oder französische Magento-Shops etwas unpassend gewesen wäre, haben wir uns entschlossen, das Projekt in <strong>MageSetup</strong> umzubenennen.
+<h3>Wie international ist MageSetup?</h3>
+Aktuell werden folgende Länder vollständig unterstützt:
+<ul><li>Deutschland</li>
+	<li>Österreich</li>
+	<li>Schweiz (in deutscher und/oder französischer Sprache)</li>
+	<li>Großbritannien</li>
+	<li>Frankreich</li>
+	<li>Italien</li>
+	<li>Russland</li>
+</ul>
+Geplant sind außerdem:
+<ul><li>Niederlande</li>
+	<li>Polen</li>
+	<li>Spanien (hier sind die Steuereinstellungen bereits vorbereitet, es fehlen nur noch die Übersetzungen).</li>
+</ul>
+Prinzipiell können mit wenig Aufwand weitere Länder unterstützt werden. Für andere EU-Länder stehen alle Mechanismen bereit, ebenso für Länder mit einfacher Steuerkonfiguration (wie z.B. Russland). Den meisten Aufwand macht die Übersetzung der Texte, CMS-Seiten und Emails. Eine Anleitung zur Konfiguration für weitere Länder haben wir <a href="https://github.com/firegento/firegento-magesetup/blob/development/docs/contribute/contribute.markdown" target="_blank">auf GitHub</a>  (in Englisch) bereit gestellt.
+<h3>Was unterscheidet MageSetup außerdem von GermanSetup?</h3>
+Wir haben die Internationalisierung weiter geführt und unterstützen jetzt auch verschiedensprachige StoreViews, für die die CMS-Inhalte und die Email-Templates jeweils separat automatisiert angelegt werden. Es gibt die Seiten "Impressum", "AGB" und "Datenschutz" also beispielsweise einmal in Deutsch und einmal in Englisch. Das zugehörige erweiterte Formular sieht wie folgt aus:
+
+<a href="http://www.integer-net.de/wp-content/uploads/2013/12/ScreenShot058.png"><img class="size-medium wp-image-1122 alignnone" alt="MageSetup - Setup Screen" src="http://www.integer-net.de/wp-content/uploads/2013/12/ScreenShot058-680x426.png" width="680" height="426"></a>
+
+Wegen der Vielzahl der Funktionen ist es schwierig, weitere einzelne Features herauszupicken. So wurde beispielsweise die Steuerkonfiguration deutlich vereinfacht, was es ermöglicht, einfacher neue Länder zu konfigurieren.
+<h3>Gibt es eine Übersicht, was MageSetup alles kann?</h3>
+Eine der Schwächen von GermanSetup war die mangelhafte Dokumentation. Dies haben wir mit MageSetup jetzt geändert: auf GitHub gibt es jetzt eine vollständige und laufend aktualisierte <a href="https://github.com/firegento/firegento-magesetup/blob/development/docs/features/features.markdown" target="_blank">Liste aller Funktionen von MageSetup</a> mit vielen Screenshots. So werden z.B. die einzelnen Elemente des Setup-Formulars ausführlich erläutert und alle weiteren Funktionen mit deren Konfigurationsmöglichkeiten im Detail vorgestellt.
+<h3>Sollte ich für bestehende oder neue Projekte MageSetup oder GermanSetup einsetzen?</h3>
+Da die Entwicklung von GermanSetup eingestellt wurde, empfehlen wir, ab sofort nur noch MageSetup für neue Shops einzusetzen. Es beinhaltet alle Funktionen von GermanSetup und wird laufend gepflegt und weiterentwickelt.
+
+Bestehende Shops müssen nicht zwingend auf MageSetup aktualisiert werden, wenn sie stabil laufen. Sollten jedoch Fehler mit GermanSetup auftreten, empfehlen wir als erstes immer ein Update auf MageSetup.
+<h3>Wie funktioniert ein Update von GermanSetup auf MageSetup?</h3>
+Ganz einfach: MageSetup installieren. GermanSetup wird automatisch deaktiviert und alle Einstellungen werden automatisch übernommen. Die GermanSetup-Dateien können, müssen aber nicht, anschließend entfernt werden.
+
+Sollten Anpassungen an den von GermanSetup genutzten Templates gemacht worden sein, müssen die Pfade der angepassten Dateien bearbeitet werden. Aus <em>src/app/design/frontend/base/default/template/<strong>germansetup</strong>/</em> wird <em>src/app/design/frontend/base/default/template/<strong>magesetup</strong>/</em>, aus <em>src/skin/frontend/base/default/css/<strong>germansetup</strong>/</em> wird <em>src/skin/frontend/base/default/css/<strong>magesetup</strong>/</em>.
+
+Sollten Rewrites von GermanSetup-Klassen gemacht worden sein, müssen diese natürlich ebenfalls angepasst werden.
+<h3>Wo kann ich MageSetup herunterladen?</h3>
+Die bevorzugte und immer aktuelle Quelle ist grundsätzlich GitHub. Das Repository findet sich unter <a href="https://github.com/firegento/firegento-magesetup" target="_blank">https://github.com/firegento/firegento-magesetup</a>. Im Branch "master" befindet sich dabei immer die stabile, gründlich getestete Version. Wer die neuesten Features und Korrekturen ebenfalls nutzen will, nutzt den meistens ebenfalls recht stabilen Branch "development".
+
+Per <a href="http://www.webguys.de/magento/adventskalender/turchen-02-composer-fur-magento/" target="_blank">Composer</a> kann das Modul über den Namen "<strong>firegento/magesetup</strong>" integriert werden, sofern das Repository <a href="http://packages.firegento.com/" target="_blank">packages.firegento.com</a> eingebunden ist.
+
+Seit Kurzem ist <a href="http://www.magentocommerce.com/magento-connect/catalog/product/view/id/20763/s/firegento-magesetup/" target="_blank">MageSetup ebenfalls auf MagentoConnect</a> verfügbar.
+<h3>Was mache ich, wenn ich Probleme mit MageSetup habe?</h3>
+Bitte: keine Emails an mich oder andere Entwickler des Moduls schreiben. Ein schlechter Ort für sepzifische Anfragen ist auch der Kommentarbereich zu diesem Beitrag. Support leisten wir ausschließlich auf GitHub - bitte hierfür einen neuen Eintrag unter <a href="https://github.com/firegento/firegento-magesetup/issues" target="_blank">https://github.com/firegento/firegento-magesetup/issues</a> einstellen. Bitte beachten: wir entwickeln das Modul in unserer unbezahlten Freizeit und geben auch Support ausschließlich auf freiwilliger Basis. Es besteht also kein Anspruch auf Antworten, Fehlerbehebungen oder ähnliches. Bei freundlichen Anfragen kümmern wir uns häufig allerdings dennoch darum.
+<h3>Wer steckt hinter MageSetup?</h3>
+Wie schon bei GermanSetup sind wir eine Gruppe von Magento-Entwicklern (Freelancer, Angestellte, Selbstständige), die das Projekt in ihrer Freizeit laufend weiterentwickeln. Wir haben uns unter dem Namen <strong>FireGento</strong> zusammen geschlossen, um nicht-kommerzielle Software für die Community zu entwickeln - seit letztem Jahr sind wie auch ein eingetragener Verein. Die aktivsten Entwickler seit der Umstellung auf MageSetup sind Rouven Rieker (ITABS GmbH), Sylvain Rayé (Diglin GmbH), Francesco Marangi (mzentrale GmbH) und Andreas von Studnitz (integer_net GmbH).
+<h3>Wie kann ich MageSetup unterstützen?</h3>
+Falls ein gefundener Fehler selbst korrigiert werden konnte oder ein neues Feature hinzugefügt wurde, freuen wir uns über einen Pull Request über GitHub. Eine einzige Bedingung haben wir dafür: der Pull Request sollte immer auf dem Branch "development" basieren.
+
+Auch über neue Ideen können wir uns gern im Rahmen der <a href="https://github.com/firegento/firegento-magesetup/issue" target="_blank">GitHub-Issues</a> austauschen.
+
+Viele FireGento-Mitglieder trifft man auch auf den <a href="http://www.mage-hackathon.de/" target="_blank">Magento-Hackathons</a>, die ca. dreimal im Jahr im deutschsprachigen Raum stattfinden. Der nächste ist für Anfang 2014 in Oldenburg geplant, ein genauer Termin steht derzeit noch nicht fest.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3821

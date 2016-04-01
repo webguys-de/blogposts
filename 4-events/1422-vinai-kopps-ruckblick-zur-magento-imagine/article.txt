@@ -1,0 +1,76 @@
+Article-meta: 
+
+----
+
+Title: Vinai Kopps Rückblick zur Magento Imagine 
+
+----
+
+Date: 2011-02-15
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: vinai-kopp
+
+----
+
+Article-content: 
+
+----
+
+Intro: ﻿Vom 7. bis zum 9. Februar gab sich Magento Inc. die Ehre in Los Angeles die erste Fachkonferenz unter dem Namen "Magento Imagine" zu veranstalten. Ich hatte das Glück als Sprecher eingeladen zu sein, ansonsten hätte mich der Preis verschreckt. Hier meine Eindrücke aus Sicht eines freien Entwicklers. Ich habe bewusst auf einige Vorträge verzichtet, um entweder an meiner Präsentation zu feilen oder weil ich es vorzog zu "networken".
+
+----
+
+Text: Und damit habe ich auch schon ein wichtigen Punkt abgedeckt - das beste an der Konferenz war die Leute zu treffen und kennen zu lernen, zum Teil alte Bekannte (hi @riconeitzel, @damicity, @ProContractors, @nickweisser, @aschroder), zum Teil neue Bekanntschaften (hey @snowdog), @ontapgroup, @brentwpeterson), und zum Teil Personen die ich bisher nur virtuell kannte (@unirgy, @alanstorm, @monocat, @benmarks). Die Twitter Handle Listen sind unvollständig und in keiner besonderen Reihenfolge und ich bitte um Entschuldigung für alle die ich vergessen habe.
+<h2>Tag 1</h2>
+Das Event war extrem kurzweilig. Am Abend des ersten Tages war ein Get Together angesetzt. Es gab freie Drinks, diverses (Fleisch & auch veggie) Essen, DJ-Mukke, jede Menge Spielereien (Handygehäuse-Gravur, Daumenkino-Aufnahme, ...) und alle waren schnell in Feierlaune. Als dann die im Programm notierte Schluss-Zeit von 21:00 Uhr erreicht war wurde aber ruck-zuck eingepackt und alle Gäste fanden sich leicht verdattert auf den Gängen des Hilton wieder. Die Magentorianer wissen wie man ne Party schmeisst, aber man muss sich ranhalten! Dementsprechend ging es daraufhin in der Bar weiter, aber der Interruptus war geschehen und ich bin dann doch recht früh so um 0:30 gut angesäuselt ins Bett gefallen. Fazit: viele Leute getroffen, guter Auftakt!
+<h2>Tag 2</h2>
+Am Tag 2 ging es richtig los morgens um 6:00 Uhr - Laufen am Venice Beach (zugegeben, das war kein offizieller Programmpunkt, nur ein paar Wahnsinnige mit Jetlag: Thomas & Thomas, Kuba, Ashley, Amith und ich). Das Programm nach dem Frühstück ging mit den Keynotes weiter. In Deutschland haut man meiner Erfahrung nach eher nicht so Richtig auf den Putz, irgendwie wirkt es hier eher peinlich, aber in den USA gibt es solche vornehme Zurückhaltung nicht. Big is beautiful, und dementsprechend wurde Magento gehyped wie nur möglich. Auf der Positivseite: sehr unterhaltsam!
+
+Abgesehen von dem Release der Versionen 1.5 (CE) und 1.10 (PE + EE) wurden die Produkte "Magento Go" und die "Magento Go Plattform" bekannt gegeben. Zu "Magento Go" kann ich nicht wirklich etwas sagen, das Produkt ist für eine gänzlich andere Zielgruppe welche ich gar nicht kenne. Die "Magento Go Plattform" jedoch ist im Prinzip eine neue API um Magento anzupassen und zu erweitern, und die Funktioniert mit allen Magento Versionen (Go, CE, PE und EE). Das ganze ist eine <a href="http://docs.opensocial.org/">OpenSocial</a> Implementierung für Magento (<a href="http://docs.opensocial.org/">http://docs.opensocial.org/</a>).
+
+Am folgenden Tag auf der UnConference gab es dann von dem Produktmanager Jonathan Beri noch mehr technische Details dazu. Ich für meinen Teil freue mich sehr über diese Entwicklung. Da ich bisher noch nie mit OpenSocial gearbeitet habe freue ich mich sehr endlich wieder neuen Stoff zu lernen... die bisherige Magento Architektur ist ja seit 2008 schon etwas in die Jahre gekommen und hat nicht an der rasanten Entwicklung der Webtechnologien teilgehabt; diese Lücke wird hier teilweise geschlossen. Vermutlich wird die neue REST API die Integrationen welche die SOAP/XML-RPC arbeiten bald ablösen.
+
+Im Performance Panel von Philipp Humeau und Alexey Samorukov gab es wenig neues, ausser die (wenigen) Infos von Alexey - die waren wirklich klasse ("You never want to use DB Session storage". Ich wünschte mir er hätte mehr Zeit gehabt und hätte mehr in die Tiefe gehen können (ein paar Fotos von seinen Slides am Ende des Beitrags).
+
+"Best Practices for Debugging Magento" von Eric Hansen war gut, aber nichts neues.
+Darauf folgte "Unit Testing with Magento" von Alistair Stead, der auch über ihre CI Umgebung mit Hudson und phpUnderControll berichtet hat. <a href="http://www.slideshare.net/astead/quality-assurancemagento">Hier seine Präsentation auf Slideshare</a> . Sein Magento Unit Test Modul ist unter <a href="https://github.com/ibuildings/Mage-Test">https://github.com/ibuildings/Mage-Test</a> zu finden. Ein sehr schöner, praxisnaher Vortrag, der mich inspiriert und motiviert hinterlassen hat.
+
+Den Rest des Nachmittages habe ich blau gemacht (sprich meine Präsentation fertiggestellt und mit anderen Teilnehmern geredet. Abends die Party im Magento HQ war cool, am schönsten war Daim der am hauseigenen Farbkopierer Magento-Dollars gefälscht hat! #epic
+<h2>Tag 3</h2>
+Schließlich der 3. Tag. Ich fühlte mich schon etwas gedämpft, Muskelkater vom Lauf am Vortag und das ständige Reden mit so vielen Leuten kostenen langsam ihren Tribut. Dementsprechend habe ich die Keynotes sausen lassen, auch wenn ich Yoav gerne gehört hätte.
+
+Der Vortrag "Mash-up of Magento and Salesforce.com" hatte ein paar technische Schwierigkeiten, war aber interessant im Hinblick auf eine erste praktische Nutzung der neuen REST API. Kudos an Jon Jessup für gutes Improvisieren! Um dann endlich war ich dran mit meinem Vortrag zur Nutzung des neuen <a href="http://netzarbeiter.com/media/MagentoImagine/ImportExport.pdf">ImportExport Modul in Magento</a> 1.5 in eigenen Modulen (<a href="http://netzarbeiter.com/media/MagentoImagine/ImportExport.pdf">http://netzarbeiter.com/media/MagentoImagine/ImportExport.pdf </a>). Ich war recht nervös - aber trotzdem wurde der Vortrag gut aufgenommen. Wie nicht anders erwartet hat die Langsamkeit der bisherigen Schnittstellen zum Produktimport vielen Entwicklern graue Haare bereitet, und dementsprechend groß ist das Interesse.
+
+Nach dem Mittag dann die closing Keynotes (bin leider auf dem Sitz eingeschlafen) und dann die UnConference für die Entwickler, währen die Partner wohl zu einem special Dinner eingeladen wurden. Der Teil hat mir am besten gefallen - die Infos von Jon Bari zur OpenSocial Implementation waren klasse. Die Q&A Session mit den Core Entwicklern Dimitry, Vasiliy und Alexey war erhellend, mehr davon! Wieder mal wurde mehr Transparenz angekündigt, mehr Kontakt zu Core Entwicklern, aber das kennen wir ja schon aus den vergangenen Jahren - en Fünkchen Hoffnung habe ich trotzdem noch. Ein Highlight war jedoch die Ansage von Yoav Kuttner das jeder der ein MCA unterzeichnet hat Zugriff auf das Magento JIRA und u.U. auch auf ein Core Repository mit Schreibrechten bekommt . Ich bin gespannt (das MCA habe ich schon im Okt. 2009 eingeschickt)....
+
+Den UnConference Beitrag von dem PayPal-Sprecher habe ich schnell verdrängt, anders die Beiträge von Ashley Schroeder (modman - <a href="http://www.aschroder.com/wp-content/uploads/2011/02/MagentoImagine-Feb-2011.pdf">http://www.aschroder.com/wp-content/uploads/2011/02/MagentoImagine-Feb-2011.pdf</a> ) und Alan Storm (<a href="http://alanstorm.com/2011/projects/magento/Magento_Imagine_UnConference_Widgets.pdf">Widgets</a>) waren ausgezeichnet.
+
+Und das war es auch schon... Der Abend und der nächste Tag war geprägt von Verabschiedungen und netten Gesprächen. Ich war müde und zufrieden, wie die meisten anderen Teilnehmer auch. Es bleibt zum Glück spannend um Magento, auch wenn Jochen Krisch das aud Business-Sicht anders sieht (<a href="http://www.excitingcommerce.de/2011/02/magento-imagine-conference.html">http://www.excitingcommerce.de/2011/02/magento-imagine-conference.html</a>).
+
+Im Herbst wird es eine Imagine Konferenz in Europa geben - ich will dabei sein!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1422

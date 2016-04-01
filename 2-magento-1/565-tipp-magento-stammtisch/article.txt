@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Tipp: Magento Stammtisch
+
+----
+
+Date: 2010-08-18
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Ein tolles neues Community-Projekt stellt Falk Opitz auf die Beine: den Magento-Stammtisch. Auf der Webseite <a href="http://www.Magento-Stammtisch.de">Magento-Stammtisch.de</a> erfährt man die aktuell geplanten Stammtische nach Städten und soll sich sogar zukünftig direkt online dafür anmelden können. Ich werde es mir persönlich nicht nehmen lassen den ein oder anderen Magento-Stammtisch in Bielefeld zu besuchen. Hoffentlich sind einige Leute dabei :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 565

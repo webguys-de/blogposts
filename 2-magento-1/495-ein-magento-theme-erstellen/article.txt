@@ -1,0 +1,188 @@
+Article-meta: 
+
+----
+
+Title: Ein Magento Theme erstellen (Update)
+
+----
+
+Date: 2010-08-09
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,themes-magento,headline
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Heute möchte ich gerne einmal erläutern wie wir Webguys ein Magento-Theme erstellen. Wichtig ist es uns dabei  die Updatefähigkeit des Magento-Systems möglichst beizubehalten. Zudem ist es wichtig Übersicht über seine Änderungen am Magento-System zu behalten. 
+
+----
+
+Text: Hier gibt es zwei Grundregeln:
+<ol><li>Niemals etwas am Kern oder Base-Theme ändern</li>
+	<li>Alle Änderungen über Versionsverwaltung (z.B. Subversion) protokollieren.</li>
+</ol>
+Hält man sich an diese Regeln hat man zumindest die Chance Fehler bei Updates oder im Live-Betrieb einigermaßen zeitnah zu finden. Muss man sich erst durch tausende Zeilen Magento-Code wühlen weil man irgendwo mal etwas geändert hatte kommt das eher der Suche der Nadel im Heuhaufen gleich als einem konzentrieren Debugging.
+<p style="padding-left: 30px;">Voraussetzung für den Beitrag ist das man den Unterschied zwischen Blöcken, Templates und der Layout-XML-Dateien einigermaßen kennt und verstanden hat.
+
+<h3>Interface erstellen</h3>
+Ein Interface kümmert sich in Magento, neben dem Skin, um die Darstellung des Shops. Das Interface baut dabei die HTML-Konstrukte auf - der Skin formatiert sie dann im Anschluss hübsch. Das schöne am Interface in Magento ist das es eine Fallback-Routine gibt. Diese sorgt dafür das, falls eine Datei im gewählten Interface nicht gefunden wurde, diese automatisch aus dem Base-Interface geladen wird. Das Base-Theme wird im übrigen immer mit Magento mitgeliefert und enthält prinzipiell alles was ein Webshop benötigt - nur eben ohne echte Formatierungen.
+
+Zudem kann ein Interface eigene Layout-XML-Dateien enthalten bzw. andere überschreiben.  Dadurch ist es möglich Abweichungen vom Standard zu definieren um z.B. die zuletzt angesehenen Produkte anstatt auf der rechten Seite auf der linken anzuzeigen usw. Die Layout-XML-Dateien sind dabei ein sehr sehr mächtiges Werkzeug das beinahe alle Darstellungen möglich macht.
+
+Zu Anfang brauchen wir, um eben Ordnung zu bewahren, ein eigenes Modul das eigene Layout-XML-Dateien beinhaltet. Diese Layout-XML-Dateien überschreiben in unserem Fall die Standarddarstellungen. Dazu legen wir zuerst die Datei app/etc/modules/Webguys_Layout.xml mit folgendem Inhalt an:
+
+(code lang: php)
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Webguys_Layout>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Page />
+                <Mage_Catalog />
+                <Mage_Widget />
+            </depends>
+        </Webguys_Layout>
+    </modules>
+</config>
+(/code)
+
+Durch die Attribute im Block-Depends legen wir fest das unser Modul möglichst spät geladen wird da es von Mage_Page/ Mage_Catalog und Mage_Widget abhängt. In der Praxis verhält sich das mit den Layout-XML-Dateien wie folgt: Zuerst sammeln Magento alle XML-Dateien und baut dann, über einen internen Parser, ein großes XML. Über die Depends-Regeln wird festgelegt in welcher Reihenfolge die XML-Dateien zusammengefasst werden. Damit wir mit unserer XML-Datei die Standard überschreiben können muss diese natürlich möglichst spät geladen und verarbeitet werden - sonst macht uns nachher das Originalmodul einen Strich durch die Rechnung.
+
+Nun müssen wir das Modul noch mitteilen das es XML-Dateien besitzt die für die Verarbeitung von Layouts eine Rolle spielen. Dazu erstellen wir die Datei app/code/local/Webguys/Layout/etc/config.xml und befüllen sie wie folgt:
+
+(code lang: php)
+<config>
+    <frontend>
+        <layout>
+            <updates>
+                <webguysreset>
+                    <file>webguys_reset.xml</file>
+                </webguysreset>
+                <webguyscustom>
+                    <file>webguys_custom.xml</file>
+                </webguyscustom>
+            </updates>
+        </layout>
+    </frontend>
+</config>
+(/code)
+
+Nun weiß Magento das es zwei neue Layout-Dateien gibt die es zu Verarbeiten gilt. Wir können uns also endlich um unser eigentlich Interface kümmern.
+
+Dazu erstellen wir unter app/design/frontend/ einen Ordner mit den Namen unseres Interfaces. In unserem Fall heißt das Ding natürlich "webguys" - wie sollte es auch anders sein! In dem Interface erstellen wir erst einmal die übliche Ordnerstruktur:
+
+webguys/default/
+webguys/default/etc
+webguys/default/layout
+webguys/default/template
+
+Im Layout-Ordner erstellen wir die zwei Layout-Dateien webguys_reset.xml und webguys_custom.xml. webguys_reset.xml sorgt dabei dafür erst mal alles was an Magento so nervt zu entfernen. Dazu gehören z.B. Umfrage-Blöcke oder die Infobox mit der Hotline. Genauso entfernen wir per Default der Multishipping von der Darstellung erst einmal komplett. Die webguys_reset.xml sieht dabei z.Z. wie folgt aus:
+
+(code lang: php)
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<default>
+
+	        <reference name="right">
+
+	       		<!-- Mage_Poll -->
+	       		<remove name="right.poll" />
+
+	       		<!--  Paypal Werbung -->
+	       		<remove name="paypal.partner.right.logo" />
+
+	       		<!-- Newsletter -->
+	       		<remove name="left.newsletter" />
+
+	       		<!-- Callouts -->
+	       		<remove name="right.permanent.callout" />
+
+	        </reference>
+
+	        <reference name="left">
+
+	        	<!-- Callouts -->
+	        	<remove name="left.permanent.callout" />
+
+	        	<!--  Tags -->
+	        	<remove name="tags_popular"/>
+
+	        </reference>
+
+    </default>
+
+    <customer_account>
+        <!-- Mage_Tag -->
+        <remove name="customer_account_navigation" />
+    </customer_account>
+
+    <customer_account_index>
+        <!-- Mage_Tag -->
+        <remove name="customer_account_dashboard" />
+    </customer_account_index>
+
+    <catalog_product_view>
+         <!-- Mage_Tag -->
+        <remove name="product.info.additional" />
+    </catalog_product_view>
+
+    <checkout_cart_index>
+
+        <remove name="checkout.cart.shipping" />
+
+        <remove name="checkout.cart.methods.multishipping" />
+
+    </checkout_cart_index>
+
+</layout>
+(/code)
+
+Nachdem unser Magento so auch von der Paypal-Werbung befreit ist können wir mit der webguys_custom.xml richtig loslegen. Diese Datei ist im Anfang leer und wir von uns Stück für Stück, je nach Designwunsch, gefüllt. Dabei strukturieren wir die Datei in logische Blöcke z.B. nach Katalog oder CMS. So findet man schnell mal etwas wieder wenn etwas gesucht wird.
+
+Über die übliche Strukturen der Layout-XML-Dateien lässt sich auf diesem Wege quasi alles überschreiben. Zu beachten ist dabei das, wenn ein innerer Block geändert werden soll, nur der Name des Blockes angegeben wird. Keines Falls noch der Type oder das Template - sollte sich hier dann mal etwas ändert verwendet Magento wieder die Basiseinstellungen und die Chancen das das Shop weiterhin funktioniert stehen gut.
+
+Nicht alles lässt sich natürlich per Layout-XML lösen. In vielen Fällen muss das Template auch direkt angefasst werden. In diesem Fall wird das Original-Template einfach vom Base-Ordner in unser Interface webguys/template/ kopiert. Zu beachten ist dabei das die Ordner-Struktur natürlich genauso aufgebaut sein muss wie im Original.
+<h3>Interface aktivieren</h3>
+Wenn das Interface soweit vorbereitet ist muss es natürlich in Magento noch aktiviert werden. Dazu meldet man sich im Admin an und setzt unter System/ Konfiguration/ Gestaltung/ Paket (Interface)/ "Aktueller Paketname" den Namen des eigenen Interfaces an: in unserem Fall webguys.
+
+Noch einmal die Vorteile des Vorgehens auf einen Blick:
+<ul><li>Es erfolgen keine Änderungen am Kern, das System kann aktualisiert werden</li>
+	<li>Das Interface enthält nur Dateien die vom Kern abweichen</li>
+	<li>Alle Änderungen der Layout-XML-Dateien sind an einer Stelle gebündelt, man kann sich schnell einen Überblick verschaffen was vom Standard abweicht</li>
+	<li>Es ist nicht nötig ewig lange Layout-XMLs mit dem Original zu vergleichen</li>
+	<li>Andere Entwickler können schnell ins Boot geholt werden</li>
+	<li>Das Interface kann einfach über die Administration deaktiviert werden</li>
+</ul><em>Das war es soweit. Ich denke das es, bei genügend Resonanz zu dem Thema, natürlich noch einige Folgebeiträge geben kann.</em>
+<h3>Update</h3>
+Layout-Updates lassen sich im eigenen Interface auch bequem über die <a href="http://www.webguys.de/magento/layout-updates-uber-die-local-xml/">local.xml</a> ändern. Mehr dazu erfährst du <a href="http://www.webguys.de/magento/layout-updates-uber-die-local-xml/">hier</a>.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 495

@@ -1,0 +1,101 @@
+Article-meta: 
+
+----
+
+Title: Türchen 03: Artikelpflege in Magento mit cobby
+
+----
+
+Date: 2014-12-03
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: sonjariesterer
+
+----
+
+Article-content: 
+
+----
+
+Intro: Zu einem Online-Shop gehört in der Regel ein Produktsortiment, das im Shop-Backend eingepflegt und anschließend im Frontend zum Verkauf angeboten wird. In Magento gibt es im Backend drei unterschiedliche Möglichkeiten, wie Artikel gepflegt werden können.
+
+
+
+----
+
+Text: <ul><li>die einzelne Bearbeitung eines Artikels</li>
+	<li>die Massenaktion</li>
+	<li>Artikel-Export / -Import</li>
+</ul>
+Während in der einzelnen Bearbeitung eines Artikels alle Informationen zum gewählten Artikel verändert werden können, ist die Bearbeitung über die Massenaktion, also die gleichzeitige gleichartige Bearbeitung mehrerer Artikel, auf einige Artikelattribute beschränkt. Außerdem kann sie nur dann angewendet werden, wenn alle dabei bearbeiteten Artikel für ein Attribut denselben Wert haben sollen.
+
+Für das Einpflegen von neuen Informationen bei bestehenden Artikeln ist die Massenaktion das Mittel der Wahl. Für das Anlegen neuer Artikel ist sie jedoch nicht nutzbar. Gerade zum Launch eines neuen Magento-Shops sind jedoch meist größere Artikelzahlen auf einmal anzulegen. Außerdem merkt man bei der Arbeit im Backend schnell, wie Ladezeiten beim Speichern oder beim Artikelbildupload den Arbeitsfluss stören.
+
+(image: Warten-Magento-Backend-650x231.jpg)
+
+Über den Magento Artikel-Export / -Import können Artikeldaten in einer CSV-Datei abgelegt werden. Diese Datei wird dann im Datenverzeichnis des Shop-Servers hinterlegt. Das ist auch bereits die erste Schwierigkeit: Der Shop-Betreiber, der meist für die Artikeldatenpflege zuständig ist, wird bei einer Shop-Betreuung durch eine Agentur nur selten im Datenverzeichnis des Shops unterwegs sein. Er wird deshalb hier auf für ihn unbekanntes Terrain geschickt.
+
+Magento selbst empfiehlt, zur Nutzung des Artikelimports zunächst <a href="http://www.magentocommerce.com/knowledge-base/entry/tutorial-using-magentos-import-export-profiles">einen Export zu erstellen</a>, damit die CSV-Datei als Vorlage dienen kann. Wer bei einem neuen Shop keine Sample Data hat und somit auf der grünen Wiese anfängt, der kann diese Orientierungshilfe nicht nutzen. Die initiale Artikelpflege wird damit noch schwieriger.
+
+An dieser Stelle hat sich bei unseren Projekten das von mash2 entwickelte <a href="http://www.mash2.com/cobby-die-integrierte-magento-losung-mit-excel/">Excel-Plugin cobby</a> als ideales Werkzeug erwiesen. Die Extension verbindet Magento mit Microsoft Excel, sodass alle bisher in Magento vorhandenen Produkte mit all ihren Attributen aufgeteilt in Attributsets in Excel angezeigt werden. Sind die technischen Voraussetzungen erfüllt (Magento CE ab 1.5 oder EE ab 1.12, Excel ab 2007, Windows) können mithilfe von cobby direkt in Excel neue Artikel angelegt, bearbeitet oder miteinander als konfigurierbare Artikel verknüpft werden. Um sicherzustellen, dass die richtige Magento-Installation mit Excel verknüpft wird, muss im Magento-Backend und in cobby ein übereinstimmender Lizenzschlüssel hinterlegt sein.
+
+<h2>Schnellere Artikelpflege mit cobby</h2>
+Ein großer Vorteil der Arbeit mit cobby ist die enorme Zeitersparnis. Zunächst spart man sich die Speichervorgänge für einzelne Artikel oder Bilder. Denn erst wenn man seine Änderungen durchgeführt hat, werden die Neuerungen gesammelt an Magento übertragen. Dadurch kann man ohne Unterbrechungen arbeiten.
+
+Insbesondere gleichartige Artikel lassen sich mit cobby dank der verfügbaren Standardfunktionen von Excel schnell erstellen. Auch die für Tabellenkalkulationen typischen Formeln sind bei einigen Bereichen der Artikelpflege ein Segen: Sei es, um schnell Artikelnamen zu generieren wie beispielsweise mit <i>=[[@ModelName]]&" "&[[@Color]]&" "&[[Size]]</i> für Namen einfacher Artikel in der Manier von <i>Vans Slip-On Black 42</i> in einem konfigurierbaren Produkt oder um Meta-Daten zu erstellen – mit Textschablonen lässt sich Zeit sparen. Die Artikelbeschreibungen sollte man natürlich besser selbst formulieren, um nicht wegen Retorten-Texten in Suchmaschinen abzustürzen.
+
+(image: Cobby-Formeln-650x194.png)
+
+Nützlich sind auch die Filterfunktionen von Excel, die bei der Aufspürung einzelner Artikel präzise arbeiten. Besonders bei mehrsprachigen Artikeldaten sind diese Filter ein gutes Hilfsmittel um noch fehlende Attributwerte oder Übersetzungen zu finden. Die Übersetzungen können auch direkt in cobby angelegt werden, indem man die Artikeldaten der einzelnen StoreViews anzeigen lässt.
+
+Für Datenpflege-Teams ist cobby außerdem eine Unterstützung, weil es durch sein Ampelsystem darauf hinweist, falls gleichzeitig Änderungen an einem Artikel vorgenommen und dadurch überschrieben werden könnten. Aber auch für Einzelkämpfer ist diese Ampel eine Hilfe, um zu verhindern, dass in Excel mit veralteten Daten gearbeitet wird. Ein Datenabgleich zwischen Magento und der lokalen Excel-Version über den cobby Server macht dies möglich. Bei einem grünen Icon ist alles in Ordnung, cobby und Magento sind auf demselben Stand. Ein gelbes Icon bedeutet, dass man selbst diesen Artikel gerade in cobby ändert, Magento hat noch einen älteren Stand. Rot signalisiert, dass der Artikel in Magento aktueller ist als in cobby oder von einem anderen Nutzer gerade bearbeitet wird. Vor einer weiteren Bearbeitung sollten zunächst die neuesten Daten geladen werden.
+
+(image: Ampeln.jpg)
+
+Ein Nebeneffekt der Artikelpflege in Excel ist außerdem, dass man von dort aus sehr leicht eine Datensicherung durchführen kann. Dazu werden die aus Magento geladenen Artikel als Excel-Datei lokal abgespeichert, die eine schnell verfügbare Ergänzung zum Shop-Backup bildet.
+<h3>Die Grenzen – Excel und cobby können nicht alles</h3>
+Wer bereits einmal in den Genuss gekommen ist, ein komplexes Produktsortiment in Magento anzulegen, der weiß, wie umfangreich die Artikeldatensätze in Magento schon mit den Standardfunktionen sein können. Nicht alle davon können in cobby abgedeckt werden, bei komplexen Produkten wird es schwierig.
+
+Zunächst das Gute: Konfigurierbare Produkten kann man über cobby erstellen. Dafür werden zunächst die einfachen Artikel angelegt. Wurden diese einmal an Magento geschickt und wieder neu in cobby geladen, kann ein konfigurierbarer Artikel erstellt und das verknüpfende Attribut ausgewählt werden. cobby erstellt dann automatisch eine Liste der passenden einfachen Artikel, die man nur noch per Checkbox in der cobby Task Pane auswählen muss.
+
+(image: Konfigurierbare-Produkte-650x106.png)
+
+Bei Bündel-Artikeln kann man die Verknüpfung jedoch nicht über cobby herstellen. Stattdessen ist nach Anlage aller benötigten einfachen Artikel ein Wechsel in das Magento-Backend notwendig. Auch Individualisierungsoptionen lassen sich leider noch nicht mit cobby erstellen, sie stehen aber bereits auf der Roadmap für die Weiterentwicklung.
+
+Bei Attributen bietet cobby dieselben Auswahlwerte an, wie es im Backend der Fall ist. Allerdings ist das Excel-Plugin weniger restriktiv: Die Eingabe eines von den Auswahlwerten abweichenden Wertes in cobby führt dann zur Neuanlage dieses Attributwerts im Magento-Backend. Für Datenhygieniker ist es ein Grund für Bauchschmerzen, für andere ist es eine unkomplizierte Möglichkeit vorhandene Auswahlwerte zu ergänzen.
+
+cobby wäre außerdem nicht Teil der Magento-Welt, wenn es seine Nutzer nicht auch ab und zu vor neue Herausforderungen stellen würde. Aus diesem Grund gibt es den deutschsprachigen cobby Helpdesk und automatische E-Mail-Benachrichtigungen bei Fehlern. Außerdem wird cobby ständig weiterentwickelt, wobei weitere Funktionen integriert und die Nutzeroberfläche verbessert werden.
+
+Weil für die Kommunikation zwischen Magento und Excel stets Server bereitgehalten werden müssen, werden für die Nutzung des Services monatliche Kosten fällig, die sich nach der Anzahl der verwalteten Artikel richteen.
+
+<h2>Der cobby-Nutzer – wem dieses Plugin nützt</h2>
+Durch seine schnelle Einsatzbereitschaft und die unkomplizierte Anbindung an Magento bildet cobby nur geringe Einstiegshürden in die Artikelpflege außerhalb von Magento, anders als es bspw. bei einer komplexen Warenwirtschaft der Fall sein kann. Sowohl Shop-Betreiber mit geringem Magento-Know-How als auch Agenturen können von der Lösung profitieren. Komplett ohne Erfahrung mit Magento sollte man jedoch nicht mit cobby loslegen. Denn cobby arbeitet mit Magento zusammen und befolgt deshalb die Magento Denkweise, sei es beim Aufbau konfigurierbarer Produkte, bei StoreView-Strukturen oder dem Hinzufügen und Entfernen von Artikelbildern. Wenn man Magento nicht kennt, wird eine leere oder auch eine sehr volle Excel-Tabelle schnell zur Überforderung führen.
+
+Wir selbst nutzen cobby bei Shop-Projekten, die neu mit Magento umgesetzt werden. In Excel kann die initiale Artikelpflege vor dem Launch deutlich schneller und sauberer durchgeführt werden, als es über das Magento-Backend möglich ist. Gerade haben wir einen Shop mit knapp 800 Produkten befüllt, jeweils in 4 Sprachen, darunter konfigurierbare Artikel mit bis zu 40 Varianten plus Individualisierungsoptionen und Bündel-Artikel, auch diese mit Individualisierungsoptionen. Soweit möglich wurde alles in cobby umgesetzt, denn jeder Ausflug ins Backend erhöhte den Zeitaufwand. Auch weitaus größere Artikelmengen können mit diesem Plugin bearbeitet werden, 10.000+ in einer Magento-Installation auf zwei Websites verteilt ist kein Problem.
+
+Wer mit Artikeldatenpflege in Magento beauftragt ist, der sollte prüfen, ob der Einsatz von cobby ihm nicht wertvolle Zeit sparen und gleichzeitig die Qualität seiner Daten verbessern kann.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3955

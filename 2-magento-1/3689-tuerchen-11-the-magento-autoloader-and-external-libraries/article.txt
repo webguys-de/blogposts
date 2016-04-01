@@ -1,0 +1,172 @@
+Article-meta: 
+
+----
+
+Title: Türchen 11: The Magento Autoloader and External Libraries
+
+----
+
+Date: 2013-12-11
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: vinai-kopp
+
+----
+
+Article-content: 
+
+----
+
+Intro: Using existing libraries in order to not have to reinvent the wheel has been common within the PHP development scene for a long time, but with the advent of the <a href="http://getcomposer.org">composer</a> dependency manager it has taken another big jump in popularity. The Magento core, too, is built on top of many third party libraries, as a look into the lib/ directory reveals.
+
+
+----
+
+Text: Back in 2007, when the main body of work on the Magento core was being done, Autoloading still was a rather new concept for PHP.
+
+The idea that more then a single active autoloader would be necessary seemed far fetched.
+Fast forward to present day. Almost all libraries use an autoloader. The "PHP Framework Interoperability Group" (FIG) has released the autoloader standard <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR-0</a> years ago. Almost all polar libraries conform to PSR-0 today. The Magento autoloader also conforms to this standard.
+<h2>So whats the problem?</h2>
+<h3>What does an autoloader do?</h3>
+<ol><li>Map a PHP class name to a file</li>
+<li>Include that file</li>
+</ol>
+That is exactly what the Varien_Autoload::autoload() method does. But, as so often, the problem lies in the implementation details. After mapping the class name to a file name, the Magento autoloader doesn't check if the file actually exists, it simply calls <i>include $classFile;</i>.
+If the file is missing, this will trigger a Warning.
+(code lang: php)
+Warning: include(The/Class/To/Be/Loaded.php): failed to open stream: No such file or directory
+(/code)
+The problem about this becomes obvious considering when autoloading is used: whenever a class name is referred to that isn't known to PHP. This typically happens during class instantiation, loading parent classes, or when using class constants. But it also is used when the PHP function class_exists() is called.
+(code lang: php)
+bool class_exists( string $class_name[, bool $autoload = true] );
+(/code)
+
+And it is this last use case that creates an issue. The Magento core code only calls <i>class_exists()</i> with the second parameter set to false , or within a try/catch block.
+But some libraries use <i>class_exists()</i> to check which library components are installed.
+They don't expect a Warning to be triggered during autoloading. One example for that is PHPUnit_Util_GlobalState , which is used by PHPUnit_TextUI_ResultPrinter while displaying test results. If the PHPUnit extensions phpunit/DbUnit, phpunit/PHPUnit_Selenium or phpunit/PHPUnit_Story are not present, breakage occurs:
+(code lang: php)
+Warning: include(): Failed opening 'PHPUnit/Extensions/Story/TestCase.php for inclusion
+(/code)
+
+Often autoloader issues are resolved by setting the third argument to spl_autoload_register to true, which causes the autoloader to be prepended to the list of existing autoloaders.
+But simply prepending the library autoloader before the Magento autoloader doesn't resolve the issue, since class_exists should be safe to use without warnings or exceptions, even in the case the class doesn't exist.
+I mean, if we know it exists, why use class_exist in the first place, right?
+If a class_exist is used with a class that doesn't exist, the Magento autoloader would still be triggered and thus issue the include warning.
+
+To summarize:
+Autoloaders should not trigger errors or exceptions if the class file does not exist.
+This was even included as a requirement in the recently released <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md">PSR-4</a> recommendation (in section 2.4):
+
+<blockquote>Autoloader implementations MUST NOT throw exceptions, MUST NOT raise errors of any level, and SHOULD NOT return a value.</blockquote>
+
+<h2>From Warning to Exception</h2>
+Whats worse, the problem is emphasized by the Magento error handler.
+If developer mode is enabled, the error handler will throw an exception on any Warning or Error!
+(code lang: php)
+if (Mage::getIsDeveloperMode()) {
+    throw new Exception($errorMessage);
+} else {
+    Mage::log($errorMessage, Zend_Log::ERR);
+}
+(/code)
+
+Instead of a Warning, the result now is a fatal exception:
+
+(code lang: php)
+Fatal error: Uncaught exception 'Exception' with message 'Warning: include(PHPUnit/Extensions/Story/TestCase.php): failed to open stream: No such file or directory
+(/code)
+No more PHPUnit test results! :(
+
+<h2>Solutions (umm... workarounds)</h2>
+The lame solutions would be to either disable the developer mode (really?!?), or install all required library extensions. The proper solution would be to patch Varien_Autoload::autoload to check if a file exists before attempting to include it.
+(code lang: php)
+if (stream_resolve_include_path($classFile)) {
+    return include $classFile;
+} else {
+    return false;
+}
+(/code)
+
+<h3>Fixing the Autoloader</h3>
+(image: sCY9o0M-650x487.jpg)
+Changing the file lib/Varien/Autoload.php is no option, because it would be overwritten during upgrades.
+
+This leaves us with having to choose the least ugly approach how to get rid of the include Warnings and Exceptions.
+
+<h3>Include Path Hack</h3>
+The usual approach to amend the Magento autoloader is to copy the autoloader to app/code/community/Varien/Autoload.php . This works, but since a number of great extensions already use that approach, this might lead to conflicts (for example the excellent <a href="https://github.com/fbrnc/Aoe_ClassPathCache">Aoe_ClassPathCache</a>).
+
+<h3>Event Observer</h3>
+Alternatively the autoloader can be changed in an event observer.
+Arguably the best event for that purpose is resource_get_tablename (in  scope), because it is the first event dispatched during the Magento initialization. Also, it is dispatched regardless if Magento is processing a browser request, a cron job or a custom shell script.
+On the downside, the event is dispatched <strong>very often</strong>. So the observer has to be smart enough only to run it's business logic once, to keep the overhead as low as possible.
+This approach is also used by some extensions to modify the autoloader, for example the <a href="https://github.com/magento-hackathon/Magento-PSR-0-Autoloader">Magento-PSR-0-Autoloader</a>.
+<strong>Hack:</strong> using reflection to unset
+(code lang: php)
+Mage_Core_Model_App::_events['global']['resource_get_tablename']['observers']['your_observer']
+(/code)
+is very ugly but works great - if you're into such things :)
+
+<h3>In a bootstrap script</h3>
+Maybe the autoloader exceptions only are an issue in external scripts (like PHPUnit), and you would like to keep things simple. In cases such as this it might be enough to wrap the autoloader in a closure inside a bootstrap script. The following will negate autoloader include exceptions when added to a script after including app/Mage.php .
+(code lang: php)
+spl_autoload_unregister(array(Varien_Autoload::instance(), 'autoload'));
+spl_autoload_register(function($class) {
+  try {
+    return Varien_Autoload::instance()->autoload($class);
+  } catch (Exception $e) {
+    if (false !== strpos($e->getMessage(), 'Warning: include(')) {
+      return null;
+  } else {
+      throw $e;
+  }
+}
+(/code)
+
+<h3>Changing the Error Handler</h3>
+Instead of fixing the autoloader, it also works to change the error handler to swallow include warnings from Varien_Autoload.
+(code lang: php)
+// Get the error handler by pushing a dummy handler on the stack.
+// Then, set the real handler wrapping the original.
+$mageHandler = set_error_handler(function () {});
+set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($mageHandler) {
+  if (E_WARNING === $errno
+    && 0 === strpos($errstr, 'include(')
+    && substr($errfile, -19) == 'Varien/Autoload.php'
+  ){
+    return null;
+  }
+  return call_user_func($mageHandler, $errno, $errstr, $errfile,￼$errline);
+});
+(/code)
+I prefer this approach simply because it targets the exact issue, and doesn't cause issues when Varien_Autoload already has been altered.
+
+<h3>Summary</h3>
+Currently there is no perfect way to changing the Magento 1 autoloader. Each workaround works, even if all of them are rather hackish. It depends on your personal preferences which one to choose, and on how and where external libraries are used in a Magento project.
+Until Magento 2 arrives we will have to make do with such interim solutions. In the mean time, lets hack on and enjoy finding creative solutions :)
+We might miss them in the time to come, when everything can be done in a standard way!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3689

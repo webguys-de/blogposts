@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: Dateidownload im Backend erstellen
+
+----
+
+Date: 2011-09-20
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Einige Bereiche von Magento bieten die Möglichkeit an, nach Selektion bestimmter Kriterien, die entsprechenden Daten als Download herunterzuladen. Dies kann jedoch auch für eigene Extensions sehr nützlich sein. Magento bietet hierzu eine Funktion an, die dies ermöglicht.
+
+
+----
+
+Text: Der Controller der eigenen Extension erbt von Methoden von <em>Mage_Core_Controller_Varien_Action</em>, darunter auch die für den Download relevante Methode <i>_prepareDownloadResponse</i>. Der folgende Code zeigt eine exemplarische Anwendung.
+(code lang: php)
+...
+   public function exportYourDataAction(){
+      $fileName   = 'your_csv.csv';
+      $type       = 'text/csv';
+      $content    = 'content-of-your_csv.csv';
+      $this->_prepareDownloadResponse($fileName, $content, $type);
+   }
+...
+(/code)
+Im Controller wird der Methode <i>_prepareDownloadResponse</i> ein Dateiname, sowie der Inhalt übergeben, die Angabe eines Typs ist optional. Auf diese Weise kann dem Redakteur eine Vielzahl an Dateien zum Download angeboten werden, von weiteren csv- als auch temporär erstellten Dateien.
+Sollte man sich bei dem Application header nicht ganz sicher sein, so reicht dazu folgender Befehl in der Shell:
+(code lang: shell)
+file -i deine-datei
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1896

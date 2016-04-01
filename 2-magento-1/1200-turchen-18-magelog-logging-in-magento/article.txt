@@ -1,0 +1,83 @@
+Article-meta: 
+
+----
+
+Title: Türchen 18: Mage::Log - Logging in Magento
+
+----
+
+Date: 2010-12-18
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 18 schreibt alles mit. Es ist ein Log-Türchen. So ist es in Magento relativ einfach möglich mittels der Methode <em>Mage::Log</em> Einträge in die Magento eigene Log-Datei zu schreiben.
+
+
+----
+
+Text: Dabei ist der erste Schritt das aktivieren der Log-Dateien selbst. Dazu einfach unter <em>System/ Configuration/ Developer/ Log</em> Enabled auf Yes setzen.
+
+(image: Configuration-System-Magento-Admin_1292503920121-650x211.png)
+
+Nun schreiben alle Module, die noch Debug-Ausgaben besitzen, diese nach var/log. Ausnahmen, also Exceptions, werden bei in der <em>exception.log</em> gespeichert, reine Informationen (Strings) in der <em>system.log</em>. Unterschieden wird dies manuell durch den Aufruf von <em>Mage::Log</em> bzw. <em>Mage::logException</em>
+
+Somit führt
+
+(code lang: php)Mage::Log("Hallo Welt");(/code)
+
+zu einem Eintrag im system.log und
+
+(code lang: php)
+try {
+  throw new Exception("Ein Ausnahmefehler");
+} catch( Exception $e ) {
+  Mage::logException($e);
+}(/code)
+
+zu einem Eintrag in der exception.log.
+
+Mage::Log bietet dabei noch die Möglichkeit anzugeben in welche Datei das Logging erfolgen soll und ob das Logging, unabhängig von den Einstellungen im Admin, stattfindet:
+
+(code lang: php)
+     /**
+     * log facility
+     *
+     * @param string $message
+     * @param integer $level
+     * @param string $file
+     * @param bool $forceLog
+     */
+    public static function log($message, $level = null, $file = '', $forceLog = false)
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1200

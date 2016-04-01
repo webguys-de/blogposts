@@ -1,0 +1,135 @@
+Article-meta: 
+
+----
+
+Title: Türchen 17: Funktionales Testen und Continues Integration in 5 Schritten
+
+----
+
+Date: 2013-12-17
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: nikolai-krambrock
+
+----
+
+Article-content: 
+
+----
+
+Intro: Viele Entwickler schrecken davor zurück, funktionale Tests zu nutzen. Hauptargumente sind die langen Ausführungszeiten und das aufwendige Setup. Die langen Ausführungszeiten sind allerdings akzeptabel, wenn die Tests unabhängig von der Entwicklung auf einem entfernten Rechner ausgeführt werden. Das Setup möchte ich hier in fünf einfachen Schritten beschreiben.
+
+
+
+----
+
+Text: Voraussetzung für alle weiteren Schritte ist ein Versionsmanagement – genauer SVN oder Git. Es wird ein Versionsmanagement benötigt, auf den die Continues Integration zugreifen kann – ein interner GIT-Server taugt hier zum Beispiel ebenso wie GitHub oder Bitbucket.
+<h2>Schritt 1: Selenium</h2>
+(image: SeleniumIDE.jpg)
+Die Selenium IDE ist vielen bekannt und ein denkbar einfach zu bedienendes Plugin für Firefox. Mit dem Plugin kann Interaktion mit einer Webseite aufgezeichnet und später wieder ausgeführt werden. Bei komplexeren Webseiten sind vor allem zwei Arten von Nacharbeiten notwendig: Werden Ajax-Request ausgeführt, so muss Selenium mitgeteilt werden, woran der erfolgreiche Abschluss erkannt werden kann. Außerdem müssen gelegentlich die Pfade der HTML-Elemente überarbeitet werden, um ein stabiles Ergebnis zu erhalten. Lässt sich der Selenium-Test erfolgreich ausführen, ist Schritt 1 abgeschossen. Das Ergebnis wird als Selenium-HTML-Datei gespeichert und in Schritt 5 wieder benötigt.
+Weiterführende Informationen zu Selenium:
+<ul><li><a href="http://seleniumhq.org/"> http://seleniumhq.org/</a></li>
+	<li><a href="http://www.infoq.com/articles/testing-ajax-selenium"> http://www.infoq.com/articles/testing-ajax-selenium</a></li>
+	<li><a href="http://hedleyproctor.com/2011/05/tutorial-writing-xpath-selectors-for-selenium-tests/"> http://hedleyproctor.com/2011/05/tutorial-writing-xpath-selectors-for-selenium-tests/</a></li>
+</ul><h2>Schritt 2: Ubuntu aufsetzen</h2>
+(image: Proxmox-650x584.jpg)
+Nun benötigen wir einen Server mit einem aktuellen Ubuntu; auch eine virtuelle Maschine reicht in aller Regel aus. Natürlich funktionieren auch andere Linux-Systeme, die allerdings teilweise mit anderen Paket-Managern daherkommen. Entsprechend werden dann auch andere Befehle zur Installation benötigt. Auf dem System müssen wir nun imagemagick, git, java und ggf. firefox installieren. Dazu benötigen wir in einer Shell die folgenden Befehle:
+
+(code lang: bash)
+apt-get install imagemagick
+ apt-get install git
+ apt-get install openjdk-7-jdk
+ apt-get install firefox
+(/code)
+
+Der letzte Befehl ist nur dann notwendig, wenn Firefox nicht bereits installiert ist.
+<h2>Schritt 3: Xvfb – Virtuellen Bildschirm installieren</h2>
+(image: Uhr.jpg)
+Das System soll mit Selenium einen Browser steuern und dieser Browser benötigt einen Bildschirm. Da wir aber (in aller Regel) keinen Bildschirm an das System anschließen können oder wollen, muss unser Bildschirm virtuell sein. Dazu installieren wir X Window Virtual Framebuffer – kurz Xvfb:
+
+(code lang: bash)
+ apt-get install xvfb
+ (/code)
+
+Den virtuellen Bildschirm testen wir zunächst mit der Dummy-Applikation xclock, die eine Uhr darstellt:
+
+(code lang: bash)
+ /usr/bin/Xvfb :5 -ac -screen 0 1024x768x8 &
+ xclock -display :5.0 &
+ xwd -root -display :5.0 -out outputfile
+ convert outputfile outputfile.png
+ (/code)
+
+Geht alles gut, so ist die oben abgebildete Uhr im outputfile.png zu sehen. Im nächsten Schritt führen wir den gleichen Test mit Firefox durch:
+
+(code lang: bash)
+ /usr/bin/Xvfb :5 -ac -screen 0 1024x768x8 &
+ export DISPLAY=:5.0
+ firefox
+ xwd -root -display :5.0 -out outputfile
+ convert outputfile outputfile.png
+ (/code)
+
+Läuft Firefox nicht, muss es möglicherweise nachinstalliert werden. Weitere Informationen zum gesamten Schritt 3 finden sich hier: <a href="http://centripetal.ca/blog/2011/02/07/getting-started-with-selenium-and-jenkins/">http://centripetal.ca/blog/2011/02/07/getting-started-with-selenium-and-jenkins/</a>
+<h2>Schritt 4: Hudson installieren</h2>
+(image: Hudson.jpg)
+Nun installieren wir das Continues Integration System: Hudson. Der Prozess sollte mit Jenkins analog funktionieren, ich habe es allerdings nicht ausprobiert. Hierzu sind ein paar Schritte notwendig, deren Bedeutung in den Links am Ende des Abschnitts nachvollzogen werden können:
+<div>(code lang: bash)
+ sh -c "echo 'deb http://hudson-ci.org/debian binary/' > /etc/apt/sources.list.d/hudson.list"
+ apt-get update
+ apt-get install hudson</div>
+<div>(/code)
+
+</div>
+Der Port, unter dem Hudson läuft, wird in der Datei /etc/default/hudson der Port auf 8081 umgestellt, denn den Standard-Http-Port 80 benötigen wir für Selenium. Dann wird Hudson (oder wenn nicht bekannt wie, der ganze Server) neu gestartet.
+Nun beginnt die Arbeit mit Hudson im Web-Browser. In unserem Fall ist Hudson unter http://c4b-hudson.c4b.local:8081/ zu finden. In Hudson selbst sollte zunächst ein Benutzerkonto angelegt werden, um den öffentlichen Zugriff zu verhindern. Dann müssen die folgenden Plugins für Hudsons nachinstalliert werden: „Seleniumhq“ und „Selenium“ HTML. Dies ist in Hudson unter „Manage Hudson“ und dann „Manage Plugins“ möglich.
+
+Schließlich benötigen wir eine aktuelle Version des Selenium Standalone Servers. Dieser ist unter <a href="http://www.seleniumhq.org/download/">http://www.seleniumhq.org/download/</a> zu haben und wird im Server unter <em>/var/lib/hudson/</em> abgelegt. Der Besitzer der Datei muss mit chown auf hudson gesetzt werden. Zurück im Browser wird in Hudson unter Magage Hudson und Configure System die Einstellung Selenium Remote Control auf den Pfad des Selenium Standalone Servers gesetzt, also z.B. /var/lib/hudson/selenium-server-standalone-2.38.0.jar.
+Weiterführendes Links zu Hudson:
+<ul><li><a href="http://www.seleniumhq.org/download/"> http://hudson-ci.org/</a></li>
+	<li><a href="http://wiki.hudson-ci.org/display/HUDSON/Seleniumhq+Plugin"> http://wiki.hudson-ci.org/display/HUDSON/Seleniumhq+Plugin</a></li>
+</ul><h2>Schritt 5: Selenium und Hudson</h2>
+Innerhalb von Hudson muss nun ein Build angelegt werden. Voraussetzung ist ein GIT-Server, der vom Hudson-Server aus zugänglich ist. Im folgenden Bild werden allgemeine Daten angelegt und der virtuelle Bildschirm als Parameter angegeben. Existieren später mehrere Tests, die parallel laufen sollen, so benötigen sie unterschiedliche Nummern für die verschiedenen Bildschirme.
+
+(image: HudsonSelenium1-650x450.jpg)
+
+Dann werden wird der Zugriff auf das Versionsmanagement eingetragen. Wir nutzen unser GIT per http hinter einer Firewall, so dass der Zugriff denkbar einfach ist. Bei komplizierten Zugriffen ist möglicherweise ein Blick ins Hudson-Handbuch notwendig.
+
+(image: HudsonSelenium2-650x283.jpg)
+
+Dann werden drei Befehle konfiguriert, die später von Hudson in der Shell ausgeführt werden und schließlich wird Selenium selbst gestartet. Der Erste Befehl startet den virtuellen Bildschirm. Der zweite und dritte Befehl löschen den Cache und setzten Berechtigungen zurück – sie können bei korrekte Konfiguration entfallen, für den Test lassen wir sie drin:
+
+(image: HudsonSelenium3-650x491.jpg)
+
+Voraussetzung ist, dass unter dem Pfad selenium/Hach.html aus dem Git auch wirklich eine Selenium-Datei liegt. Diese wurde in Schritt 1 erzeugt. Außerdem muss ein Zugriff auf http://c4b-hudson.c4b.local/hach/ möglich sein und auf das Projekt zeigen. Dazu muss ein Symbolischer Link Verzeichnis /var/www auf das Projekt gelegt werden.
+
+Wenn alles geklappt hat, ist es nun geschafft: Hudon zeigt die erfolgreichen Tests an:
+
+(image: HudsonSuccess.jpg)
+<h2>Fazit</h2>
+Gewusst wie ist sind funktionale Tests mit Selenium in einer Continues Interation eine Aktion von wenigen Stunden von nichts bis zum funktionierenden Setup. Für einen einzelnen Entwickler von fraglichem Nutzen profitiert schon ein kleines Team von dieser Kombination sehr.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3773

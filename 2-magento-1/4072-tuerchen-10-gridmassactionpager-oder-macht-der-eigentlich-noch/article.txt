@@ -1,0 +1,156 @@
+Article-meta: 
+
+----
+
+Title: Türchen 10: GridMassActionPager (oder: "Macht der eigentlich noch was?!")
+
+----
+
+Date: 2014-12-10
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: viktor-franz
+
+----
+
+Article-content: 
+
+----
+
+Intro: In diesen Türchen geht es um ein kleines Modul, das an Entwickler gerichtet ist, die Anwendern ein bisschen mehr Usability spendieren möchten.
+
+
+
+----
+
+Text: Eine häufige Anforderung an Entwickler ist die Implementierung eines Grid im Magento Backend, um Anwendern die Übersicht über bestimmte Daten zu erleichtern und damit zusammenhängende Aktionen bereitzustellen.
+Ein repräsentatives Beispiel an dieser Stelle ist ein Produkt-Grid zum Export bestimmter Produkte an einen externen Service.
+
+Wer sich intensiver mit dem Magento Widget Grid befasst hat, wird bereits wissen, dass es die MassAction Erweiterung für das Grid gibt. Diese macht es möglich, beliebig viele Datensätze im Grid zu selektieren und eine zuvor definierte Aktion mit diesen Datensätzen auszuführen. So kann man zunächst bestimmte Produkte über das Grid suchen und die gefundenen Produkte unter Zuhilfenahme der MassAction zum Beispiel mit wenigen Klicks deaktivieren.
+
+(image: 1_massaction-650x421.png)
+
+Bei ressourcenintensiven Operationen in Kombination mit vielen selektierten Datensätzen kann es vorkommen, dass die ausgeführte Aktion vorzeitig durch den Server abgebrochen wird. Wie und wann sich ein solcher Fehler bemerkbar macht, ist abhängig von der Serverkonfiguration. Auch wenn durch die Konfiguration des Servers ausreichend Ressourcen bereitstellt sind, kann bei sehr langer Ausführungszeit der Eindruck entstehen, dass die ausgeführte Action fehlgeschlagen ist, und man wird dazu verleitet F5 zu drücken oder die Seite zu verlassen.
+
+Um solchen Situationen entgegen zu wirken, haben wir ein kleines Modul entwickelt, das einen MassAction-Request in mehrere Requests mit einer definierten Anzahl an Datensätzen aufteilt. Dabei wird dem Anwender jeweils mitgeteilt, wie viele Datensätze bereits verarbeitet wurden und wie viele noch für die Verarbeitung ausstehen.
+
+<h2>Einsatz</h2>
+
+Das Modul funktioniert nicht "out of the box" sondern ist eine PHP und JavaScript Methoden-/Funktionssammlung die in einem eigenen Modul Verwendung finden kann.
+
+Am Ende des Artikels findet Ihr einen Link auf das GitHub Repository des Models IntegerNet_GridMassActionPager und einen Link auf das Demo Modul IntegerNet_GridMassActionPagerDemo.
+
+Es sind 3 Schritte nötig, um den GridMassActionPager in die Grid MassAction zu integrieren:
+
+1.) In dem Kontext, in dem der GridMassActionPager eingesetzt werden soll, muss die JavaScript-Datei (code)gridmassactionpager.js(/code) eingebunden werden.
+Dies kann wie gewohnt über eine Layout XML bewerkstelligt werden, oder einfach durch die folgende Helper-Methode in der Grid Controller Action nach der Direktive (code)$this-&gt;loadLayout();(/code)
+(code)Mage::helper('integernet_gridmassactionpager')-&gt;addScript();(/code)
+
+Gesamtes Beispiel aus dem Demo Modul <strong>IntegerNet_GridMassActionPagerDemo</strong>:
+
+(code lang: php)
+public function indexAction()
+{
+    $this->loadLayout();
+
+    Mage::helper('integernet_gridmassactionpager')->addScript();
+
+    $this->_setActiveMenu('integernet_gridmassactionpagerdemo');
+    $this->_title($this->__('GridMassActionPager Demo'));
+
+    $this->_addContent($this->getLayout()->createBlock('integernet_gridmassactionpagerdemo/adminhtml_product'));
+
+    $this->renderLayout();
+}
+(/code)
+
+2.) Die Grid MassAction muss als ein AJAX Request ausgeführt werden, damit der Pager funktioniert, dazu einfach das Argument `use_ajax` setzen: <em>$this->getMassactionBlock()->setData('use_ajax', true);</em>
+
+Jede MassAction, die den Pager nutzt, muss die Funktion <em>integerNetGridMassActionPager</em> aus dem Schritt 1) geladenen JavaScript Datei aufrufen. Dazu muss lediglich der Funktionsname <em>integerNetGridMassActionPager</em> dem Argument <em>complete</em> gegeben werden.
+
+Vollständiger Auszug der _<em>prepareMassaction</em> Methode aus dem Demo Modul <strong>IntegerNet_GridMassActionPagerDemo</strong>:
+
+(code lang: php)
+protected function _prepareMassaction()
+{
+    $this->setMassactionIdField('entity_id');
+    $this->getMassactionBlock()->setData('form_field_name', 'id');
+    $this->getMassactionBlock()->setData('use_ajax', true);
+    $this->setData('no_filter_massaction_column', true);
+
+    $this->getMassactionBlock()->addItem('export', array(
+        'label' => Mage::helper('integernet_gridmassactionpagerdemo')->__('Export'),
+        'url' => $this->getUrl('*/*/massExport'),
+        'confirm' => Mage::helper('integernet_gridmassactionpagerdemo')->__('Are you sure?'),
+        'complete' => 'integerNetGridMassActionPager',
+    ));
+
+    return $this;
+}
+(/code)
+
+3.) Als letzter Schritt muss noch die eigentliche Controller Action an die Verwendung mit dem Pager angepasst werden. Zunächst ein vollständiger Auszug aus dem Demo Modul <em>IntegerNet_GridMassActionPagerDemo</em>:
+
+(code lang: php)
+public function massExportAction()
+{
+    /** @var IntegerNet_GridMassActionPager_Model_GridMassActionPager $gridMassActionPager */
+    $gridMassActionPager = Mage::getModel('integernet_gridmassactionpager/gridMassActionPager');
+
+    if ($productIds = (array)$this->getRequest()->getParam('id')) {
+
+        $gridMassActionPager->init($productIds, 100);
+
+    } elseif ($pageIds = $gridMassActionPager->getPageIds()) {
+
+        $this->_process($pageIds);
+
+        $gridMassActionPager->next();
+    }
+
+    $message = Mage::helper('integernet_gridmassactionpagerdemo')->__('Export product<br />{{from}} to {{to}} of {{of}}');
+
+    $this->getResponse()->setHeader('Content-Type', 'application/json');
+    $this->getResponse()->setBody($gridMassActionPager->getStatus(true, $message));
+}
+(/code)
+
+In der Action-Methode wird ein Objekt des GridMassActionPager instanziert und bei der Übergabe der Datenreferenzen initiiert. Bei der Initiierung werden die Datenreferenzen in Pages aufgeteilt, die nach und nach verarbeitet werden. Die Größe der Pages wird über das zweite Argument der init Methode definiert (100).
+Die Action-Methode wird automatisch so lange durch das eingebundene JavaScript aufgerufen, bis alle Pages verarbeitet wurden. Die eigentliche Verarbeitung der Daten wird im Beispiel durch die Methode `_process` durchgeführt, alle anderen Direktiven in der Action Methode sind Bestandteil des GridMassActionPager.
+
+Wird nun eine MassAction ausgeführt, erhält der Anwender folgende Ausgabe:
+
+(image: 2_massactionpager_init-650x421.png)
+
+(image: 3_massactionpager_run-650x421.png)
+
+<h3>Links</h3>
+
+<ul><li><a href="https://github.com/integer-net/IntegerNet_GridMassActionPager">IntegerNet_GridMassActionPager</a></li>
+    <li><a href="https://github.com/integer-net/IntegerNet_GridMassActionPagerDemo">IntegerNet_GridMassActionPagerDemo</a></li>
+</ul>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4072

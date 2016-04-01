@@ -1,0 +1,76 @@
+Article-meta: 
+
+----
+
+Title: Türchen 12: Doppelt hält besser - Magento Backend Login mit Google Authenticator
+
+----
+
+Date: 2011-12-12
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: jweller
+
+----
+
+Article-content: 
+
+----
+
+Intro: Vor einiger Zeit bin ich beim Durchstöbern meiner Feeds auf den Google Authenticator gestoßen und das Thema hat mich sofort fasziniert. An einem ruhigen Samstagabend beschloss ich das System einmal in das Magento-Backend-Login zu integrieren. Das entstandene Modul möchte ich euch hier gern vorstellen.
+
+----
+
+Text: Um es vorwegzunehmen und möglicher Paranoia vorzubeugen: Google ist lediglich der Herausgeber der Software. Für die Nutzung wird weder ein Google-Account benötigt, noch werden irgendwelche Daten an die Datenkraken Google übertragen.
+<h2><strong>Zweifaktor-Authentifizierung</strong></h2>
+(image: zweifach-gesichert-150x150.jpg)Viele von euch kennen sicher <a href="http://de.wikipedia.org/wiki/SecurID">RSA-Token</a>. Der Token generiert in einem festen Intervall einen Zahlencode, der beim Login zusätzlich zum Benutzernamen und Passwort angegeben werden muss. Ein gestohlenes Passwort ist also zu verschmerzen, solange der Angreifer nicht auch im Besitz des RSA-Tokens ist.
+
+Mit Googles Authenticator gibt es eine flexible und kostenlose Open Source Alternative, bei der man statt zusätzlicher Hardware nur ein Smartphone benötigt. Die zur Code-Generierung benötigte App gibt es für Android, iOS, Blackberry und ist jeweils auch als <a href="http://code.google.com/p/google-authenticator/source/browse/#hg%2Fmobile">Quellcode</a> verfügbar.
+<h2><strong>Das Magento Modul</strong></h2>
+Das Modul kann aktuell per <a href="https://github.com/Flagbit/magento-google-authenticator">github</a> bezogen werden.
+Nach der Installation erscheint in der Magento Backenduser-Verwaltung ein neuer Tab "Google Authenticator".
+
+(image: Magento-Backenduser-Form-without-Secret-650x135.png)
+
+Klickt man den Button "generate Secret Key" wird automatisch ein Schlüssel erzeugt. Dieser Key wird für die Generierung der Zahlenfolge benötigt, die beim Login abgefragt wird.
+Zusätzlich wird der Schlüssel als <a href="http://de.wikipedia.org/wiki/QR-Code">QR-Code</a> angezeigt, der eine einfache Übergabe an ein Smartphone ermöglicht.
+
+(image: Magento-Backenduser-Form-with-Secret-650x405.png)
+
+Scannt man den QR-Code mit dem Smartphone ein, wird in der Google-Authenticator-App ein Eintrag für die Magento Instanz erzeugt und alle 30 Sekunden ein neuer Zahlencode für den Backend-Login angezeigt.
+
+(image: iphone-scan-secret-as-qrcode-333x500.png)(image: iphone-secret-generator-333x500.png)
+
+Beim Aufrufen des Magento Backends wird jetzt ein erweitertes Loginformular angezeigt, bei dem zusätzlich ein Verification-Code eingegeben werden muss. Benutzer, bei denen im Backend ein "Secret Key" hinterlegt wurde, müssen dieses Feld ab jetzt ausfüllen. Ist beim Benutzer kein "Secret Key" angelegt, kann der Login auch ohne Eingabe des Sicherheitscodes wie gewohnt erfolgen. Auf diese Weise kann bei weniger kritischen Logins auf die zusätzliche Sicherheit verzichtet werden.
+
+(image: Magento-Login.png)
+<h3>Bitte beachtet:</h3>
+<ul><li>Das Modul ist mit Sicherheit noch nicht ausgereift, ich habe es bisher nur mit der Magento Version 1.6.0 erfolgreich getestet</li>
+	<li>Wie viele Lösungen, die eine Zweifaktor-Authentifizierung ermöglichen, wird der Zahlencode nach einem bestimmten Algorithmus errechnet. Als variable Komponente kommt hier immer die Uhrzeit ins Spiel - und das ist ein sensibler Punkt. Stimmt die Zeit bei den beiden Partnern (Webserver und Smartphone) nicht überein, wird zwangsläufig ein anderer Code errechnet. Beim Abgleich führt dies zu einem Fehler und ein Login ist nicht möglich.</li>
+	<li>Ja, Rouven ich weiß, die Kommentare im Quellcode fehlen noch ;-)</li>
+</ul><strong><a href="https://github.com/Flagbit/magento-google-authenticator">→ Modul Download</a></strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2301

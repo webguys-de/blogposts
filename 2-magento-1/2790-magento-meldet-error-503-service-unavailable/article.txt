@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Magento meldet: "Error 503: Service Unavailable"
+
+----
+
+Date: 2012-04-27
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wenn man durch Magento nur noch mit einem 'Service Temporarily Unavailable'  begrüßt wird ist noch lange nicht Hopfen und <a href="http://de.wikipedia.org/wiki/Mals">Malz</a> verloren. Die Meldung 'The server is temporarily unable to service your request due to maintenance downtime or capacity problems. Please try again later.' sagt in den meisten Fällen nichts anderes als das der Wartungsmodus von Magento aktiviert wurde.
+
+
+
+----
+
+Text: Um ihn zu deaktivieren muss einfach im Root-Ordner die Datei 'maintenance.flag' entfernt werden. Schon läuft es wieder.
+
+(image: maintenance.flag_-650x361.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2790

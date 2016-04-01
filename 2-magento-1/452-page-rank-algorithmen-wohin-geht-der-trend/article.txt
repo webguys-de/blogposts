@@ -1,0 +1,304 @@
+Article-meta: 
+
+----
+
+Title: Page Rank Algorithmen: wohin geht der Trend?
+
+----
+
+Date: 2010-08-08
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: "Die besten Sites der Welt wären nichts wert, gäbe es nicht den Generalschlüssel zum Web - die Suchmaschine. Über 70 Prozent der Webuser starten ihre Online-Sitzung mit der Eingabe von Suchbegriffen in eine Suchmaschine. Um aus dem unzähligen Wald herauszuragen, muss jedoch mehr getan werden, als bloß eine Site im Web zu veröffentlichen." [1]
+
+Neben dem reinen Finden einer Information aus Sicht des Benutzers gibt es, auf Unternehmensseiten, ein Interesse daran möglichst schnell, umfangreich und aussagekräftig gefunden zu werden.
+
+----
+
+Text: "Kein Wunder also, dass fast ausschließlich solche Webseiten erfolgreich sind, die an prominenter Stelle in den Suchergebnissen gelistet sind. So zeigen aktuelle Studien zum Suchverhalten folgendes:
+<ul><li>Die ersten 3 Plätze in den Suchergebnissen werden von 100% der Suchenden gelesen. Auf Platz 10 schauen dann nur noch 20%.</li>
+	<li>87% der Klicks erfolgen auf natürliche Suchergebnisse und nicht etwa auf Adwords</li>
+</ul>
+Diese Erkenntnisse sind allemal interessant. Sie sind aber noch viel mehr. Für kommerzielle Webprojekte enthalten sie den Schlüssel zum Überleben. Denn wer Suchmaschinen-Optimierung mit gekauften Suchbegriffen gleichsetzt oder auf die Optimierung seiner Seiten verzichtet, wird seine Internetseite kaum erfolgreich gestalten können." [2]
+
+Wie gewichtet jedoch eine Suchmaschine die Menge an Resultaten, was ist dieser Google PageRank, welche Rolle spielt er für mich bzw. für die Optimierung meiner Seite an sich und welche Faktoren spielen eventuell zudem eine Rolle?
+<h3>1.1 Zielsetzung</h3>
+Die folgende Ausarbeitung soll ein Grundverständnis des PageRank Algorithmus ermöglichen und die daraus resultierenden Schlussfolgerungen aufzeigen. Zudem wird, um auf die zukünftigen Trends eingehen zu können, ebenfalls der Google-Algorithmus beleuchtet.
+<h3>1.2 Struktur dieser Arbeit</h3>
+Im ersten Teil dieser Arbeit wird die Entwicklung des PageRank-Algorithmus erläutert. Dann folgt eine Erklärung die die Berechnung durch einige Rechenbeispiele darstellt. Der Teil endet mit den daraus resultierenden Schlussfolgerungen. Im zweiten Teil wird der PageRank-Algorithmus um weitere Bewertungsfaktoren erweitert. Dabei werden nur einige wenige wichtige Faktoren beleuchtet. Eine vollständige Auflistung erlaubt der Umfang dieser Arbeit nicht. Die Arbeit schließt mit einem Fazit ab. Die Arbeit entstand im Rahmen meines berufsbegleitenden Studiums an der FHDW Bielefeld.
+<h2>2. Google PageRank</h2>
+<h3>2.1 Historische Entwicklung</h3>
+Im Laufe der Zeit hat es viele Versuche gegeben automatische Verfahren zur Bewertung von Dokumenten zu implementieren. Ein wichtiger Bestandteil der Analyse war natürlich das Vorkommen des Suchwortes. Dieses reichte jedoch schnell, bei exponentiell steigenden Inhalten im Web, nicht mehr um gute und relevante Suchergebnisse zu liefern. Zudem musste ein sich in den Anfängen von Suchmaschinen noch nicht abzeichnendes Bild von Manipulationen der Inhalte gelöst werden: "However, the Web of 1997 is quite different. Anyone who has used a search engine recently, can readily testify that the completeness of the index is not the only factor in the quality of search results. Junk results often wash out any results that a user is interested in. [3]
+
+Lawrence Page und Sergey Brin nahmen sich diesem Problem an und entwickelten ganz nebenbei in ihrem Studium die Suchmaschine Google. Der ursprüngliche Erfolg von Google ist, neben dem klaren und einfachen Interface, somit auf den Einsatz eines neuen Algorithmus zurückzuführen: Dem PageRank. Dieser hat seinen Namen, obwohl es nahe liegend wäre, nicht vom englischen Wort "Page" sondern vom Nachnamen seines Schöpfers Lawrence Page. [4] Zum Page-Rank-Verfahren veröffentlichten beide eine wissenschaftliche Arbeit mit dem Titel "The Anatomy of a Large-Scale Hypertextual Web Search Engine".
+<h3>2.2 Konzept</h3>
+Zu den Grundzügen von Google gehörte schon frühzeitig die Analyse von Linkstrukturen innerhalb und außerhalb der Webseite. So beschäftigen sich die beiden Urbegründer von Google bereits 1997 mit dem Thema. Ihr Ziel war es dabei die Qualität der Suchergebnisse zu verbessern (Improved Search Quality). [5]
+
+"The citation (link) graph of the web is an important resource that has largely gone unused in existing web search engines. We have created maps containing as many as 518 million of these hyperlinks, a signicant sample of the total. These maps allow rapid calculation of a web page's "PageRank", an objective measure of its citation importance that corresponds well with people's subjective idea of importance. Because of this correspondence, PageRank is an excellent way to prioritize the results of web keyword searches. For most popular subjects, a simple text matching search that is restricted to web page titles performs admirably when PageRank prioritizes the results [..] For the type of full text searches in the main Google system, PageRank also helps a great deal." [6]
+
+Das entscheidende Konzept für die Relevanz von Dokumenten besteht also in der bis dato von anderen Suchmaschinen ungenutzten Linkstruktur der Webseiten untereinander. Die Idee besteht darin das, sobald eine Seite auf eine andere verweist, dies als Empfehlung verstanden wird. Dabei wird davon ausgegangen, dass je häuger eine Seite von anderen verlinkt wird, desto höher ihre Relevanz im Web ist.
+<h3>2.3 Berechnung</h3>
+Die Berechnung des PageRank erfolgt durch folgende Formel:
+
+(image: img1.png.jpg)
+
+Dabei sei PR(A) der PageRank der Seite A. PR(T1) beschreibt den PageRank der Seite T1 und C(T1) die Anzahl der aller Links der Seite T1. Der Dämpfungsfaktor sei durch die Variable d repräsentiert. Die Formel beschreibt somit einen iterativen Algorithmus. Das heißt eine Methode sich der Lösung eines Rechenproblems schrittweise, durch wiederholendes Anwenden desselben Verfahrens anzunähern. Eine Eigenart dieser Verfahren ist es, dass der Startwert, mit dem begonnen wird, keine Rolle spielt. Er hat ausschließlich Einfluss auf die Anzahl der durchzuführenden Wiederholungen. [7] Google selbst gab 1997 an den PageRank aller Seiten im Web mit einer mittleren Workstation in ein paar Stunden berechnen zu können: "Also, a PageRank for 26 million web pages can be computed in a few hours on a medium size workstation. There are many other details which are beyond the scope of this paper." [8] Zur Berechnung des PageRank wird also jede Seite mit einem beliebigen Startwert initialisiert. Dann wird der PageRank ermittelt in dem der PageRank der Seiten, die auf die zu berechnende Seite verweisen, aus dem Lauf zuvor genommen und durch die Anzahl aller Links der Seite dividiert wird. Diese Schritte werden so oft wiederholt bis der PageRank aller Seiten konvergiert und sich somit ausreichend angenähert hat. Nun hat das PageRank-Konzept, im Gegensatz zum ausschließlichem Zählen der eingehenden Links eines Dokumentes, um dessen Rang zu ermitteln (=Link-Popularity), den Vorteil, dass es die Wahrscheinlichkeit, dass ein typischer Benutzer einem Link folgt, mit einbezieht. Dieser typische Benutzer wird als "Random Surfer" bezeichnet. Diese Wahrscheinlichkeit wird als Faktor "d", oder auch Dämpfungsfaktor ausgedrückt. Der Dämpfungsfaktor ist der Grund dafür, weswegen der PageRank von Seite A mit einem ausgehenden Link nicht vollständig an Seite B weitergegeben wird. In der Praxis wird davon ausgegangen, dass der Dämpfungsfaktor 0,85 beträgt. Somit werden, unter der Annahme, dass die verlinkende Seite A nur einen Link besitzt, ausschließlich 85% plus der Untergrenze des PageRank an die verlinkte Seite B weitergegeben. Die PageRank Untergrenze ist als 1-d definiert. Dies lässt sich wie folgt darstellen:
+
+(image: SeiteA-SeiteB-500x91.png)
+
+Zu erkennen ist das, wie erwähnt, Seite A ausschlieÿlich auf Seite B verlinkt. Daraus
+lässt sich der PageRank von Seite B wie folgt ermitteln:
+
+(image: img3.png.jpg)
+
+Natürlich ist es sehr unwahrscheinlich, dass eine Seite ausschließlich auf eine einzelne Seite verlinkt. In der Regel verlinken Seiten auf mehrere andere Seiten - das hat natürlich eine Auswirkung auf den PageRank. Wie in Abbildung 2 zu erkennen ist verlinkt Seite A nun auf Seite B und auf Seite C. Der PageRank der beiden Seiten errechnet sich demnach wie folgt:
+
+(image: A_PR5_link_auf_B_C-500x74.png)
+
+(image: img5.png.jpg)
+
+Bei einem Vergleich zum obigen Beispiel fällt auf, dass sich der vererbte PageRank beinahe halbiert hat. Daraus lässt sich folgern, dass jeder zusätzliche Link von Seite A eine mitunter starke Auswirkung auf den PageRank von Seite B und C hat. Dies resultiert aus dem Verhältnis von PR(Tn )zu C(Tn ), welches ausdrückt, dass bei einer zunehmenden Anzahl von Links die Bedeutung jedes einzelnen Links für die verlinkte Seite abnimmt. Nun ist das Web in der Realität nicht, wie in diesen Beispielen, hierarchisch organisiert, sondern folgt der Struktur eines Netzes. Das bedeutet, dass theoretisch jede Seite einen Link zu jeder anderen Seiten setzen könnte.
+
+(image: komplexes-web-500x278.jpg)on überall rauscapti
+
+An der Darstellung ist zu erkennen, dass die Verlinkung der Seiten schon deutlich komplexer zu berechnen ist. Um den PageRank zu ermitteln, ist es nun notwendig, die Anzahl der Links einer Seite und die Seiten, die eine Seite verlinken, zu kennen. Diese sind für das Beispiel folgende:
+<table><tbody><tr><td align="CENTER">Seite</td>
+<td align="CENTER">Links eingehend von</td>
+<td align="LEFT">Links gesamt = C(Seite)</td>
+</tr><tr><td align="CENTER">A</td>
+<td align="CENTER">B,C</td>
+<td align="LEFT">1</td>
+</tr><tr><td align="CENTER">B</td>
+<td align="CENTER">A</td>
+<td align="LEFT">1</td>
+</tr><tr><td align="CENTER">C</td>
+<td align="CENTER">D</td>
+<td align="LEFT">2</td>
+</tr><tr><td align="CENTER">D</td>
+<td align="CENTER">C</td>
+<td align="LEFT">1</td>
+</tr></tbody></table>
+Anhand der folgenden Formeln ist es nun möglich, den PageRank zu errechnen. Dabei habe ich die in der Praxis angewandte iterative Berechnung genutzt. Der PageRank einer neuen Seite, also der Initialwert, beträgt per Denition in diesem Beispiel Eins.
+
+(image: img9.png.jpg)
+
+(image: img10.png.jpg)
+
+(image: img11.png.jpg)
+
+(image: img12.png.jpg)
+<table style="height: 244px;" width="355"><tbody><tr><td align="CENTER">Iterationen</td>
+<td align="CENTER">PageRank(A)</td>
+<td align="CENTER">PageRank(B)</td>
+<td align="CENTER">PageRank(C)</td>
+<td align="CENTER">PageRank(D)</td>
+</tr><tr><td align="CENTER">0</td>
+<td align="CENTER">1,000</td>
+<td align="CENTER">1,000</td>
+<td align="CENTER">1,000</td>
+<td align="CENTER">1,000</td>
+</tr><tr><td align="CENTER">1</td>
+<td align="CENTER">1,4300</td>
+<td align="CENTER">0,000</td>
+<td align="CENTER">0,000</td>
+<td align="CENTER">0,000</td>
+</tr><tr><td align="CENTER">2</td>
+<td align="CENTER">0,000</td>
+<td align="CENTER">1,3613</td>
+<td align="CENTER">0,6388</td>
+<td align="CENTER">0,5750</td>
+</tr><tr><td align="CENTER">3</td>
+<td align="CENTER">1,5785</td>
+<td align="CENTER">1,3613</td>
+<td align="CENTER">0,6388</td>
+<td align="CENTER">0,4215</td>
+</tr><tr><td align="CENTER">4</td>
+<td align="CENTER">1,5785</td>
+<td align="CENTER">1,4918</td>
+<td align="CENTER">0,5082</td>
+<td align="CENTER">0,4215</td>
+</tr><tr><td align="CENTER">5</td>
+<td align="CENTER">1,6340</td>
+<td align="CENTER">1,4918</td>
+<td align="CENTER">0,5082</td>
+<td align="CENTER">0,3660</td>
+</tr><tr><td align="CENTER">6</td>
+<td align="CENTER">1,6340</td>
+<td align="CENTER">1,5389</td>
+<td align="CENTER">0,4611</td>
+<td align="CENTER">0,3660</td>
+</tr><tr><td align="CENTER">...</td>
+<td align="CENTER">...</td>
+<td align="CENTER">...</td>
+<td align="CENTER">...</td>
+<td align="CENTER">...</td>
+</tr><tr><td align="CENTER">...</td>
+<td align="CENTER">...</td>
+<td align="CENTER">...</td>
+<td align="CENTER">...</td>
+<td align="CENTER">...</td>
+</tr><tr><td align="CENTER">24</td>
+<td align="CENTER">1,6654</td>
+<td align="CENTER">1,5656</td>
+<td align="CENTER">0,4344</td>
+<td align="CENTER">0,3346</td>
+</tr><tr><td align="CENTER">25</td>
+<td align="CENTER">1,6654</td>
+<td align="CENTER">1,5656</td>
+<td align="CENTER">0,4344</td>
+<td align="CENTER">0,3346</td>
+</tr></tbody></table>
+Das Beispiel konvergiert nach ca. 25 Iterationen und ist damit hinreichend genau. Wäre der PageRank statt mit 1 mit 10 initialisiert wären 75 Iterationen von Nöten. [9]
+<h3>2.4 Schlussfolgerungen</h3>
+Eingehende und ausgehende Links haben einen Einuss auf den PageRank der einzelnen Seiten. "Jeder eingehende Link erhöht den PageRank der Seite. In gewisser Weise repräsentieren diese Links die Meinung anderer Seitenbetreiber zur eigenen Seite. Denn normalerweise wird ein Link auf eine Seite gesetzt, wenn diese auf irgendeine Weise für den verweisenden Seitenbetreiber interessant oder relevant ist." [10] Es hilft jedoch wenig die eigene Seite in z.B. groÿe Linkkataloge einzutragen - hier tendiert, durch die hohe Anzahl an ausgehenden Links, selbst bei einem hohen PageRank des Linkkatalogs der Effekt gegen Null.
+
+In der Praxis besteht ein Internetauftritt aus mehreren einzelnen Seiten, die jeweils einen einzelnen PageRank besitzen. So kann es vorkommen, dass, falls eine Unterseite des Internetauftritts deutlich häuger verlinkt ist als die Startseite, diese einen höheren PageRank besitzt. Der PageRank eines Internetauftritts ist also, rein rechnerisch, die Summe aller PageRanks seiner Seiten. Das bedeutet, dass jeder ausgehende Link, auf Grund des Verhältnisses von PageRank zu Seiten, in Summe den PageRank des eigenen Internetauftritts senkt. Die Schlussfolgerungen nun gar keine externen Links zu setzen widerspricht jedoch den Grundprinzipien des World Wide Web. [11] Zudem kann davon ausgegangen werden, dass Google einen qualitativ hochwertigen externen Link eventuell auch in die Beurteilung der Seite mit einfließen lässt, die den Link gesetzt hat. [12]
+<h2>3 Wohin geht der Trend?</h2>
+Immer wieder wird der PageRank als das absolute Messinstrument zur Suchmaschinenoptimierung genannt. Doch wie wichtig ist der PageRank wirklich? Welche Faktoren spielen zusätzlich eine Rolle und wie stark sind diese, im Vergleich zum PageRank, zu gewichten? Zu den Anfangszeiten von Google und dem Beginn der kommerziellen Suchmaschinenoptimierung war der PageRank noch eines der elementarsten Werkzeuge, das zum Erfolg führte. Diese Zeiten haben sich jedoch weitgehend verändert. So gehen die Tendenzen zur Zeit immer weiter Richtung anderer Faktoren - der PageRank hat als Faktor der die Position in einem Suchergebnis angibt, seine besten Zeiten hinter sich. Lange Zeit wurde der PageRank trotzdem als Messinstrument verstanden, das die geleistete Arbeit des Suchmaschinenoptimierers widerspiegelt und zeitnah abgelesen werden konnte. Das war ein Irrtum wie folgende Tabelle der bisherigen veröffentlichen PageRank-Updates durch Google zeigt:
+<table><tbody><tr><td align="CENTER">Update am</td>
+<td align="RIGHT">Tage seit dem vorherigen Update</td>
+</tr><tr><td align="CENTER">03.04.2010</td>
+<td align="RIGHT">92</td>
+</tr><tr><td align="CENTER">31.12.2009</td>
+<td align="RIGHT">62</td>
+</tr><tr><td align="CENTER">30.10.2009</td>
+<td align="RIGHT">128</td>
+</tr><tr><td align="CENTER">24.06.2009</td>
+<td align="RIGHT">28</td>
+</tr><tr><td align="CENTER">27.05.2009</td>
+<td align="RIGHT">55</td>
+</tr><tr><td align="CENTER">02.04.2009</td>
+<td align="RIGHT">91</td>
+</tr><tr><td align="CENTER">31.12.2008</td>
+<td align="RIGHT">94</td>
+</tr><tr><td align="CENTER">28.09.2008</td>
+<td align="RIGHT">64</td>
+</tr><tr><td align="CENTER">26.07.2008</td>
+<td align="RIGHT">8</td>
+</tr></tbody></table>
+(Quelle: <a href="http://www.seo-united.de/blog/google/google-bisherige-pagerank-updates.htm">http://www.seo-united.de/blog/google/google-bisherige-pagerank-updates.htm</a>)
+
+Daraus lässt sich folgern dass, anstatt vom PageRank zu sprechen viel mehr der Fokus auf dem "Google-Algorithmus" liegen sollte. [13] Der Google-Algorithmus ist, wie sollte es anders sein, die Erfolgsformel Googles zu einer erfolgreichen Suche im Web und somit auch zum nanziellen Erfolg des Unternehmens. Im Algorithmus werden viele unterschiedliche Faktoren wie z.B. das Alter einer Seite, semantische Nähe, Suchwörter in eingehenden Links, berücksichtigt. Die genauen Bewertungsmaßstäbe sind selbstverständlich nicht vollständig bekannt bzw. werden stetig angepasst. Udi Manber, der bei Google als "Vice Presidents of Engineering" eingestellt ist, nahm in einem Interview Bezug zum Google Algorithmus:
+
+"What makes Google philosophically dierent from all the other search engines? What is Google searching for that others aren't? I don't think it's about philosophy. It's about getting people what they need, and about getting the results to be as accurate and fast as possible. We're innovating, and concentrating just on the relevancy of results. Last year we made over 450 improvements to the algorithm." [14]
+
+Da er von knapp 450 Änderungen bzw. Optimierungen innerhalb eines Jahres spricht, sollte an dieser Stelle nachvollziehbar sein, dass der Algorithmus stetig im Wandel ist und somit auf eventuelle Manipulationen und Änderungen am Markt kurzfristig reagieren kann. Trotz häuger Änderungen am Algorithmus lassen sich die Bewertungsmaßstäbe grob in zwei Faktoren untergliedern. Auf der einen Seite stehen die On-Page-Faktoren, die die eigentliche Seite, deren Struktur und Inhalte widerspie- geln und somit direkt beeinussbar sind. Auf der anderen Seite befinden sich die On-Page-Faktoren. Diese befassen sich z.B. mit der Analyse der Linkstruktur einer Seite im World Wide Web.
+<h3>3.1 On-Page-Faktoren</h3>
+Damit Google die jeweilige Seite korrekt indizieren kann und die einzelnen Strukturen und Elemente korrekt bewertet, ist der Grundaufbau einer Seite wichtig. "Viele Webentwickler verwenden auch heute noch Elemente aus längst vergangenen HTML-Zeiten oder bauen ihre Dokumente schlichtweg falsch auf. Dabei ist es dank der Cascading Stylesheets einfach, optimierte Webseiten zu erstellen. Durch CSS kann man Inhalt und Design von Webseiten vollständig trennen. [15]
+Das bedeutet das eine Webseite im eigentlichen HTML ausschlieÿlich die Struktur der Seite abbildet. Dies lässt sich grob mit einer wissenschaftlichen Arbeit vergleichen: Es beginnt mit einem Titel, dann folgt eine Überschrift der ersten Ordnung, ein Absatz, mindestens zwei Überschriften der zweiten Ordnung mit zugehörigen Texten und endet mit einem Absatz. Zwei Überschriften der ersten Ordnung sind in der Regel auf Webseiten wenig sinnvoll - sie sind in der Praxis als zwei getrennte Seiten abzubilden. Wichtig bleibt dabei auf korrektes und somit valides HTML zu achten da sonst der Spider [16], der die Seite indexiert, eventuell Probleme mit der korrekten Interpretation der Gliederung des Dokumentes haben kann. So ist davon auszugehen das eine Seite, die sich bereits in der ersten Ordnung mit einem Thema beschäftigt und dieses Stück für Stück weiter aufgliedert, relevanter zu bewerten ist als eine Seite die ein Thema nur als Randbemerkung anschneidet. [17]
+
+Nach dem die Relevanz einer einzelnen Seite nun teilweise anhand der Gliederung der einzelnen Seite bewertet ist ieÿt sie in die Bewertung die Strukturen des vollständiges Internetaufritts ein. Auch hier gilt das eine Seite in logische Themenblöcke gegliedert werden sollte. Eine der führenden deutschen SEO-Agenturen Abakus rät dazu folgendes: "Beachten Sie, dass die einzelnen Verzeichnisse jeweils einem Thema zugeordnet sind. Dem Themenfaktor messen die Suchmaschinen zunehmend Bedeutung zu. Verzichten Sie daher nach Möglichkeit darauf, zu viele Themen im selben Verzeichnis unterzubringen!" [18] Daraus folgt jedoch nicht die Annahme, dass der Google-Algorithmus die Seite besser bewertet wenn jede einzelne Seite in einem seperaten Verzeichnis mit einem eigenen Themengebiet platziert wird. Für den Google-Spider bedeutet das Indexieren einer Seite Rechenzeit und somit Kosten. Wird eine Unterseite, z.B. wegen mangelnder interner Verlinkung, als unwichtig angesehen verzichtet der Spider im ersten Schritt vollständig auf eine Indexierung. [19] Suchmaschinen gehen somit davon aus, das die Bedeutung von Dokumenten abnimmt, je tiefer sie in der Verzeichnisstruktur liegen. [20]
+
+Die neusten Analysen gehen an dieser Stelle durch den Einsatz der latent semantische Indizierung [21] noch einen Schritt weiter. Bis dato waren Ergebnisse in den Suchergebnissen aufgelistet die genau das Suchwort enthielten. Bei der latent semantischen Indizierung wird jedoch versucht den Sinn und Inhalt einer Webseite zu interpretieren. Dadurch können Ergebnisse auch von Webseiten die das Suchwort nicht explizit erwähnen angezeigt werden. Möglich macht dies eine eine genauere Analyse der Semantik [22]. In wie weit eine Webseite semantisch nahe einem Suchwort ist hängt dabei von Wörtern, Phrasen, Wortkombinationen, Synonymen usw. ab. [23]
+<h3>3.2 Off-Page-Faktoren</h3>
+Neben den On-Page-Faktoren spielen die Off-Page-Faktoren eine elementare Rolle zur Analyse einer Seite. Hier sind die Grundzüge des PageRanks noch am meisten erkennbar, da sich die Off-Page-Faktoren ebenfalls zu einem großen Teil mit der Verlinkung der jeweiligen Seite im World Wide Web beschäftigen. Diese gehen jedoch noch ein Stück weiter: Neben der reinen Anzahl an Links wird die Kernkompetenz einer Seite immer stärker daran ermittelt mit welchem Linktext sie empfohlen wird. Ein zugegebener Maÿen abstraktes Beispiel für die Mächtigkeit dieser Aussage ist das kleine Wort "hier". Eine Suche nach dem Wort verweist zum Download des Adobe Reader und das obwohl auf der Seite kein einziges mal das Wort "hier" erwähnt ist. Wie kann das kommen? Diese Frage ist leicht beantwortet: Eine große Anzahl an Seiten verlinken mit den Worten "Sie können den Adobe Reader hier herunterladen" auf die Seite von Adobe. Dabei ist jedoch nur das Wort "hier" mit der Adobe-Seite verknüpft - Google geht also davon aus dass, wenn so viele Seiten behaupten dass es sich bei der Adobe Seite thematisch um das Thema "hier" handelt, dies schon seine Richtigkeit haben muss. Selbst dann wenn das eigentlich Suchwort auf der Seite gar nicht auftaucht.
+
+Als weiterer Bewertungsfaktor von Links gilt die Nachbarschaft. Hier können heute in der Regel Aussagen wie eine Empfehlung über die eigene Region hinaus ist wichtiger als eine innerhalb der eigenen Region getroffen werden. Eine Region ist dabei ein IP-Bereich. "Sofern der C-Block der IP des Linkgebers und Linkempfängers identisch ist, so kommen sie mit hoher Wahrscheinlichkeit vom selben Provider. Dieses Rankingkriterium beugt dem unangemessenen Ausschlag von Nachbarschaftsverlinkungen sowie dem Verlinken unterschiedlicher Seiten aus den eigenen Reihen vor. Eine wertvolle Backlinkstruktur [24] ist also eine solche, die über regional verstreute Backlinks von unterschiedlichen Domains verfügt." [25]
+<h2>Fazit</h2>
+Letztlich bleibt der PageRank ein wichtiges Bewertungskriterium. Jedoch nicht zur Bestimmung der eigentlichen Platzierung in der Suchmaschine sondern vielmehr um die Ursprungsseite bei doppelten Inhalten zu identizieren, eine vorselektierte Ergebnismenge zu ermitteln oder Crawl Priority und Craw Depth einer Seite zu bestimmen. Die Sortierung des Suchergebnisses übernehmen in Teilen die genannten Faktoren - die einzelnen Gewichtungen sind jedoch nicht hinreichend bekannt. [26]
+<h3>Fussnoten</h3>
+1 Koch, 2007, S. 11
+2 Koch, 2007, S. 11
+3 S. Brin, 1998, S. 3
+4 vgl. Koch, 2007, S.49f
+5 vgl. S. Brin, 1998, S. 3
+6 S. Brin, 1998, S. 3
+7 vgl. Koch, 2007, S.54
+8 S. Brin, 1998, S. 5
+9 Die Anzahl der Iterationen ist abhängig von der gewünschten Genauigkeit des Ergebnisses
+10 Koch, 2007, S.54
+11 vgl. Fischer, 2009, S.350
+12 vgl. Koch, 2007, S.56f
+13 vgl. Wall, 2010
+14 vgl. Derene, 2010
+15 Koch, 2007, S. 129
+16 Spider bezeichnet Programme, die sich kontinuierlich von Link zu Link durch das Internet bewegen. Dabei analysieren sie die Inhalte von Websites, um diese später indexieren zu können.Diese indexierten Daten werden von Suchmaschinen gesammelt und für eine Suche aufbereitet
+17 vgl. Koch, 2007, S. 130
+18 Abakus-Team, 2008
+19 vgl. Abakus-Team, 2008
+20 vgl. Koch, 2007, S. 99
+21 engl. Latent Semantic Indexing (LSI)
+22 Die Semantik (Bedeutungslehre) ist das Teilgebiet der Sprachwissenschaft (Linguistik), das sich mit Sinn und Bedeutung von Sprache beziehungsweise sprachlichen Zeichen befasst [http://www.woxikon.de/wort/semantik.php]
+23 vgl. eisy, 2008
+24 Backlinks (englisch für rückwärtszeigende Links) sind Links die von anderen Websites auf die eigene Website zeigen. Suchmaschinen nehmen das als Empfehlung und bestimmen aus Anzahl und Art der Backlinks die Link Popularität
+25 vgl. Johnny, 2010
+26 vgl. Wall, 2010
+<h3>Quellenverzeichnis</h3>
+<strong>Monographien</strong>
+
+Fischer, Mario:
+<a href="http://www.amazon.de/gp/product/3826617037?ie=UTF8&tag=magentwebguyd-21&linkCode=as2&camp=1638&creative=19454&creativeASIN=3826617037">Website Boosting 2.0 : Suchmaschinen-Optimierung, Usability, Online-Marketing.</a>
+2., aktualisierte und erw. Au.
+Heidelberg : mitp, 2009.
+ISBN 978-3-8266-1703-4
+[8]
+
+Koch, Daniel:
+<a href="http://www.amazon.de/gp/product/3827324696?ie=UTF8&tag=magentwebguyd-21&linkCode=as2&camp=1638&creative=19454&creativeASIN=3827324696">Suchmaschinen-Optimierung</a>
+1. Auflage.
+Münnchen : Addison-Wesley Verlan, 2007
+[1, 3, 4, 7, 8, 10]
+
+S. Brin, L. P.:
+<a href="http://www.google.com/url?sa=t&source=web&cd=1&ved=0CBkQFjAA&url=http%3A%2F%2Finfolab.stanford.edu%2F~backrub%2Fgoogle.html&ei=nK1eTMirAYSIOIuclKsP&usg=AFQjCNFSjmSTXRx1yIulY4iuq31Knqf2dg&sig2=lBfq4bwaKrVGjdypegzokg">The Anatomy of a Large-Scale Hypertextual Web Search Engine.</a>
+1998
+[2, 3, 4]
+
+<strong>Online-Publikationen</strong>
+
+Abakus-Team:
+SEO-Grundlagen: Webseitenstruktur I/II
+<a href="http://www.abakus-internet-marketing.de/Suchmaschinenoptimierung/struktur.htm">http://www.abakus-internet-marketing.de/Suchmaschinenoptimierung/struktur.htm </a>
+
+Derene, Glenn:
+20 (Rare) Questions for Google Search Guru Udi Manber.
+<a href="http://www.popularmechanics.com/technology/gadgets/news/">http://www.popularmechanics.com/technology/gadgets/news/</a>
+
+Eisy:
+Latent Semantic Indexing (LSI).
+<a href="http://www.eisy.eu/latent-semantic-indexing/">http://www.eisy.eu/latent-semantic-indexing/</a>
+
+Johnny:
+Off-Page Optimierung.
+<a href="http://mindfoodmedia.com/suchmaschinenoptimierung/off-page-suchmaschinenoptimierung/">http://mindfoodmedia.com/suchmaschinenoptimierung/off-page-suchmaschinenoptimierung/</a>
+
+SEO-united:
+Google - Bisherige PageRank Updates.
+<a href="http://www.seo-united.de/blog/google/google-bisherige-pagerank-updates.htm">http://www.seo-united.de/blog/google/google-bisherige-pagerank-updates.htm. </a>
+
+Wall, Aaron:
+Day 13: Is PageRank Important?
+<a href="http://www.seobook.com/learn-seo/is-pagerank-important.php">http://www.seobook.com/learn-seo/is-pagerank-important.php</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 452

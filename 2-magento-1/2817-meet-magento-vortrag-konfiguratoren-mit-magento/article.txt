@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento Vortrag: Konfiguratoren mit Magento 
+
+----
+
+Date: 2012-05-22
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro:
+
+----
+
+Text: Auch zur diesjährigen Meet Magento durfte ich einen Vortrag zum Thema Konfiguratoren mit Magento beisteuern. Wie versprochen findet ihr hier meinem (file: Konfiguratoren-mit-Magento.pdf text: Vortrag als PDF)</a> und eine kleine (file: Modul-Demo.zip text:vereinfachte Beispiel-Extension). Viel Spaß und Erfolg damit!
+
+ <p style="text-align: center;">(image: Konfiguratoren-mit-Magento-650x487.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2817

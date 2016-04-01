@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Telefon kein Pflicht in Magento
+
+----
+
+Date: 2013-05-05
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Lang lang nichts mehr gepostet. Dennoch gibt es heute nur einen kleinen Hinweis darauf das ich gerade bei <a href="https://github.com/tobi-pb/TelefonKeinPflichtfeld">Github ein Mini-Modul</a> hochgeladen habe welches Telefon als Pflichtfeld in Magento entfernt. Mehr gibt es unter <a href="https://github.com/tobi-pb/TelefonKeinPflichtfeld">https://github.com/tobi-pb/TelefonKeinPflichtfeld</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3408

@@ -1,0 +1,62 @@
+Article-meta: 
+
+----
+
+Title: Magento Stammtisch Bielefeld #5
+
+----
+
+Date: 2011-06-24
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es ist zwar schon recht lange her dennoch möchte ich es mir nicht nehmen lassen einen kleinen Rückblick zum Magento-Stammtisch #5 in Bielefeld zu geben.
+
+----
+
+Text: Heute vor 4 Wochen trafen sich wieder ca. 10-15 Magento Interessierte in der Tangente in Bielefeld. Da der Termin direkt nach der letzten Meet-Magento stattfand war dies natürlich das Hauptthema. Zudem diskutierten wir die Sinnhaftigkeit einer Trennung von Logistik und Shop-System. Unserer Meinung ist die Halbwertszeit eines Shops deutlich geringer als die einer Lagerverwaltungs-, Logistik, oder ERP-Software. Ein Shop braucht nur einige wenige Jahre bis die Konkurrenz in technisch abgehängt hat - bei einer ERP-Software können das schon Jahrzehnte sein. (Man denke an die Versicherungsbranche die häufiger mal dringend Cobol-Entwicker sucht)
+
+Zudem gab es noch einen sehr spannenden Vortrag von <a href="https://www.xing.com/profile/KlausD_Meier">Klaus-D. Meier</a> zum Thema <a href="http://kettle.pentaho.com/">Kettle</a>. Ein Tool welches sehr beeindruckende Wege mittels GUI beim Zusammenfassen und Verarbeiten von Daten geht. Er demonstrierte uns wie man mittels Kettle unzählige Datenquellen zusammenfassen und am Ende in das Magento-Import Format portieren kann. Spannend dazu ist auch der <a href="http://it-republik.de/jaxenter/artikel/Kettle-und-die-Entwicklung-eines-eigenen-Plug-ins-1302.html">Artikel der IT-Republik</a>.
+
+Das nächste mal Treffen wir uns am <strong>Dienstag, den 19 Juli, um 19 Uhr</strong>. Natürlich auch wieder in der Tagente (Mühlenstraße 2, 33607 Bielefeld).
+<h3>Kettle im Einsatz</h3>
+(image: 2011-05-24-21.04.31-650x390.jpg)
+<h3>Klaus-D. Meier beim Vortrag</h3>
+(image: 2011-05-24-20.49.46-650x390.jpg)
+<h3>Aufmerksame Zuhörer</h3>
+(image: 2011-05-24-20.50.05-650x390.jpg)
+<div id="_mcePaste" class="mcePaste" style="position: absolute; left: -10000px; top: 0px; width: 1px; height: 1px; overflow: hidden;">
+<h1 class="fn n"><span class="given-name">Klaus-D.</span> <span class="family-name">Meier</span></h1>
+</div>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1687

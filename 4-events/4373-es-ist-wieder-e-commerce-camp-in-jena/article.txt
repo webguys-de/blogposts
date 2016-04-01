@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Es ist wieder E-Commerce Camp in Jena
+
+----
+
+Date: 2016-01-31
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wie jedes Jahr findet vom 17.03 bis 19.03 wieder das <a href="http://www.ecommerce-camp.de/">E-Commerce-Camp in Jena</a> statt. Ich empfehle die Veranstaltung immer gern aber warum eigentlich?
+
+
+
+----
+
+Text: (image: banner_fb-650x223.png)
+
+<ul><li><strong>Tellerrand</strong>: Auf dem E-Commerce-Camp sind viele Shop-Systeme vertreten und das sogar mit vielen Entwicklern. Was für Probleme haben die anderen, wo kann man etwas abschauen? Wo ist man schon gut aufgestellt? Alles Dinge bei denen man in Jena weiter kommt :)</li>
+    <li><strong>BarCamp</strong>: Keine festen Slots, alles wird vor Ort durch die anwesenden bestunnt, Was für Themen sind gerade spannend? Wer hat welche im Gepäck?</li>
+    <li><strong>Vorträge</strong>: Hohe Qualität ohne Verkaufsschnick-schnack.</li>
+    <li><strong>Jena</strong>: Eine schicke kleine Studentenstadt. Schön dort zu sein.</li>
+    <li><strong>Das Orga-Team</strong>: Denkt an alles, hat für jede Sorge ein offenes Ohr.</li>
+</ul>
+
+Am Ende also keine Überraschung dass es jedes Jahr wieder eine tolle Veranstaltung wird :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4373

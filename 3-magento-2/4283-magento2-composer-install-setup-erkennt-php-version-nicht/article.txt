@@ -1,0 +1,84 @@
+Article-meta: 
+
+----
+
+Title: Magento2: composer install + Setup erkennt PHP Version nicht
+
+----
+
+Date: 2015-06-08
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wenn das Setup in Magento2 die PHP Version und nur ein "Your PHP version is . The required PHP version is ." meldet liegt es vermutlich daran dass ihr Magento kein <em>composer update</em> gegönnt habt.
+
+
+----
+
+Text: (image: Bildschirmfoto-2015-06-07-um-17.59.31-650x241.png)
+
+Magento2 ließt nämlich in setup/src/Magento/Setup/Controller/Environment.php die PHP-Version, mit der Magento installiert wurde, einfach aus der composer.lock aus:
+
+(code lang: php)
+        $composerInfo = $this->getComposerInfo();
+        if (!empty($composerInfo['platform']['php'])) {
+            return $composerInfo['platform']['php'];
+        } else {
+            throw new \Exception('Missing key \'platform=>php\' in \'composer.lock\' file');
+        }
+(/code)
+
+Das ganze wird übrigens im Setup per Ajax über die URL <em>setup/index.php/environment/php-version</em> nachgeladen.
+
+Bei mir waren die Werte <em>platform</em> in der <em>composer.lock</em> übrigens, auch nach einem composer.update, noch leer sodass ich manuell folgendes ergäntzt habe:
+
+(code lang: php)
+    "platform": {
+        "php": "~5.5.0|~5.6.0"
+    },
+    "platform-dev": {
+        "lib-libxml": "*",
+        "ext-ctype": "*",
+        "ext-gd": "*",
+        "ext-spl": "*",
+        "ext-dom": "*",
+        "ext-simplexml": "*",
+        "ext-mcrypt": "*",
+        "ext-hash": "*",
+        "ext-curl": "*",
+        "ext-iconv": "*",
+        "ext-intl": "*"
+    }
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4283

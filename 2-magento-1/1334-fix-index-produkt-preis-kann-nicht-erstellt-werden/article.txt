@@ -1,0 +1,72 @@
+Article-meta: 
+
+----
+
+Title: Fix: Index Produkt Preis kann nicht erstellt werden
+
+----
+
+Date: 2011-01-14
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Nach einem Update auf Version 1.3 auf Version 1.4.1.1 konnte die Indexierung wird gewohnt über <em>System > Index Management</em> gestartet werden, jedoch konnte der Index für die Produktpreise nicht neu erstellt werden - die restlichen dagegen schon. Ein "<strong>There was a problem with reindexing process.</strong>" auf roten Hintergrund springt sofort ins Auge.
+
+
+----
+
+Text: Ein Blick in die Logs förderte folgendes zu Tage:
+(code lang: xml)
+2011-01-12T12:33:43+00:00 DEBUG (7): Exception message: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`catalog_product_index_tier_price`, CONSTRAINT `FK_CATALOG_PRODUCT_INDEX_TIER_PRICE_ENTITY` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON)
+Trace: #0 /www/der_kunde/lib/Zend/Db/Statement.php(300): Zend_Db_Statement_Pdo->_execute(Array)
+#1 /www/der_kunde/lib/Zend/Db/Adapter/Abstract.php(468): Zend_Db_Statement->execute(Array)
+#2 /www/der_kunde/lib/Zend/Db/Adapter/Pdo/Abstract.php(238): Zend_Db_Adapter_Abstract->query('INSERT INTO `ca...', Array)
+#3 /www/der_kunde/lib/Varien/Db/Adapter/Pdo/Mysql.php(333): Zend_Db_Adapter_Pdo_Abstract->query('INSERT INTO `ca...', Array)
+#4 /www/der_kunde/app/code/core/Mage/Catalog/Model/Resource/Eav/Mysql4/Product/Indexer/Price.php(429): Varien_Db_Adapter_Pdo_Mysql->query('INSERT INTO `ca...')
+#5 /www/der_kunde/app/code/core/Mage/Catalog/Model/Resource/Eav/Mysql4/Product/Indexer/Price.php(370): Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Indexer_Price->_prepareTierPriceIndex()
+#6 /www/der_kunde/app/code/core/Mage/Index/Model/Indexer/Abstract.php(125): Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Indexer_Price->reindexAll()
+#7 /www/der_kunde/app/code/core/Mage/Index/Model/Process.php(139): Mage_Index_Model_Indexer_Abstract->reindexAll()
+#8 /www/der_kunde/app/code/core/Mage/Index/Model/Process.php(167): Mage_Index_Model_Process->reindexAll()
+#9 /www/der_kunde/app/code/core/Mage/Index/controllers/Adminhtml/ProcessController.php(124): Mage_Index_Model_Process->reindexEverything()
+#10 /www/der_kunde/app/code/core/Mage/Core/Controller/Varien/Action.php(418): Mage_Index_Adminhtml_ProcessController->reindexProcessAction()
+#11 /www/der_kunde/app/code/core/Mage/Core/Controller/Varien/Router/Standard.php(254): Mage_Core_Controller_Varien_Action->dispatch('reindexProcess')
+#12 /www/der_kunde/app/code/core/Mage/Core/Controller/Varien/Front.php(177): Mage_Core_Controller_Varien_Router_Standard->match(Object(Mage_Core_Controller_Request_Http))
+#13 /www/der_kunde/app/code/core/Mage/Core/Model/App.php(304): Mage_Core_Controller_Varien_Front->dispatch()
+#14 /www/der_kunde/app/Mage.php(596): Mage_Core_Model_App->run(Array)
+#15 /www/der_kunde/index.php(78): Mage::run('', 'store')
+#16 {main}
+(/code)
+
+Die Tabelle <strong>catalog_product_index_tier_price</strong> wurde nach dem Löschen aller Produkte über das Backend nicht gelöscht. Ein manuelles leeren der Tabelle und ein neuer Import ermöglicht ein problemfreies Reindexieren der Produktpreise. Wie jedoch bei allen Operationen auf Datenbankebene: Immer ein Backup machen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1334

@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Fremdschlüssel-Prüfung in MySQL deaktivieren
+
+----
+
+Date: 2012-07-02
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Da ich immer arge Probleme habe mir diese Code-Zeile zu merken: In MySQL kann man mit (code lang: sql)SET FOREIGN_KEY_CHECKS=0;(/code)
+
+die Fremdschlüssel-Prüfung von InnoDB deaktivieren. Das sollte man natürlich nur tun wenn man weiß was man tut :)
+
+So lassen sich z.B. Datensätze in falscher Reihenfolge oder etwas schneller löschen. Bitte aber mit Vorsicht genießen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2878

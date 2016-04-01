@@ -1,0 +1,75 @@
+Article-meta: 
+
+----
+
+Title: Das Problem mit den Payment Anbietern
+
+----
+
+Date: 2015-09-03
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wie gefällt Euch eigentlich die Zusammenarbeit mit den Payment Anbietern? Meine Erfahrungen sind leider gerade teils negativ geprägt und das möchte ich mir nun von der Seele schreiben.
+
+
+
+----
+
+Text: <h2>Das streuen von Fehlinformationen</h2>
+
+Gerne gesehene - gerade im Vertrieb: Fehlinformationen. Da wird locker flockig verkauft was alles geht und was möglich ist. Der Kunde ist glücklich, beauftragt den Payment-Anbieter und dann plötzlich kommt diese doofe Implementierungsphase. Auf einmal sind die Informationen vom Anfang nichts wert, alles muss doch irgendwie anders gelöst werden. Spätestens nachdem man von Techniker zu Techniker gesprochen hat. Mh, nein. Also das kann unsere Erweiterung gar nicht? Na toll. Zeitplan für die Katz.
+
+<h2>Ich habe da ein Problem: Nein, haben Sie nicht!</h2>
+
+Sehr spannend auch der Fall das augenscheinlich alle Entwickler Teams Fehler machen können - außer die der Payment-Anbieter. Die sind generell perfekt. Selbst die Googles und Apples der Welt besitzen irgendwelche Bug-Bounty Programme und geben zu: Ja, wird sicht nicht perfekt. Sie haben ein Problem? Klar, erklären Sie uns nach folgenden Vorgaben wie wir es nachstellen können und wir geben es in das Entwicker Team. Das Gegenteile Modell fahren da oft  die Payment Anbieter.
+
+Dev: Wir haben hier in dem und dem Fall folgendes Problem.
+Payment: Cache geleert?
+Dev: Ja, natürlich.
+Payment: Plugin mal neu installiert?
+Dev: Ich verstehe zwar nicht was das ändern soll aber gut. Gerne noch mal. Ich melde mich dann in 10 Minuten mit dem selben Fehler.
+
+Nachdem der Standard-Fragen-Katalog abgearbeitet ist sitze ich dann da und höre mir an dass das ganze gar nicht funktionieren kann weil ich ja das Layout geändert habe, der Checkout andere Schritte hat oder überhaupt andere Module im Shop installiert sind. Na toll.
+
+Versteht mich nicht falsch. Wir sind auch mal Schuld. Und ja, es kommt vor das unsere Erweiterungen mit der Payment-Anbieter Erweiterung kollidiert. Und ja, manche vergessen den Cache zu leeren.
+
+Aber: Wie zum Teufel bekomme ich es denn hin, das, wenn ich einen Fehler melde, dieser auch ernsthaft mal untersucht wird? Und nicht erst wenn ich selbst den Patch dazu sende?
+
+<h2>Was ich mir Wünsche?</h2>
+
+Das ist ganz einfach: Eine Fehler-Kultur. Ich will gar nicht auf Teufel komm raus dass mir jemand die 6 Stunden Fehlersuche bezahlt. Hey, das ist auch mal Service. Aber ich will mich dabei unterstützt wissen. Und zwar als Entwickler. Gerne auch von einem technischen Ansprechpartner der zumindest weiß was eine Exception ist und mir nicht schon wieder erzählt dass ich doch den verdammten Cache nicht geleert hätte. Das wäre toll.
+
+Danke.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4320

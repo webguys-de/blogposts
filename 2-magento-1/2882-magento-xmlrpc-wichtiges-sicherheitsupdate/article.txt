@@ -1,0 +1,74 @@
+Article-meta: 
+
+----
+
+Title: Magento XMLRPC - Wichtiges Sicherheitsupdate
+
+----
+
+Date: 2012-07-06
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Für die Magento-Versionen 1.4 bis 1.7 ist gestern, am 05. Juli, ein wichtiges Sicherheitsupdate erschienen. Dieses <strong>muss</strong> bedingungslos in jeden Webshop eingespielt werden. 
+
+----
+
+Text: Das Problem liegt nicht direkt an Magento sondern im eingesetzten Zend Framework. Durch eine Lücke der Zend_RPC XML Verarbeitung können beliebige Dateien auf dem Webserver ausgelesen werden. Dazu gehört auch die <strong>local.xml</strong> mit allen enthaltenen Zugangsdaten zur Datenbank.
+
+Magento bietet für die jeweiligen Versionen bereits Patches an:
+<ul><li><a title="Community Edition 1.4.0.0 through 1.4.1.1" href="http://www.magentocommerce.com/downloads/assets/1.7.0.2/CE_1.4.0.0-1.4.1.1.patch">Community Edition 1.4.0.0 through 1.4.1.1</a></li>
+	<li><a title="Community Edition 1.4.2.0" href="http://www.magentocommerce.com/downloads/assets/1.7.0.2/CE_1.4.2.0.patch">Community Edition 1.4.2.0</a></li>
+	<li><a title="Community Edition 1.5.0.0 through 1.7.0.1" href="http://www.magentocommerce.com/downloads/assets/1.7.0.2/CE_1.5.0.0-1.7.0.1.patch">Community Edition 1.5.0.0 through 1.7.0.1</a></li>
+</ul>
+Der Patch lässt sich mit einer Zeile über die Shell (hier Version 1.5 - 1.7) anwenden:
+
+(code lang: bash)wget http://tinyurl.com/MAGE1702  && patch -p0 -i MAGE1702 && rm MAGE1702(/code)
+
+Meiner Meinung nach kann der Fehler auch durch ein komplettes deaktivieren der RPC-Api mit .htaccess umgangen werden.
+
+(code)
+RedirectMatch 404 /api/xmlrpc.*
+(/code)
+
+Da wir jedoch zur Zeit noch an einer Exploit Demo arbeiten konnte ich diesen Workaround noch nicht testen.
+
+<strong>Im Anschluss</strong> sollten entweder alle Passwörter geändert werden oder alternativ, mittels Apache-Log, überprüft werden ob die Sicherheitslücke bereits benutzt wurde. Wenn ja natürlich wieder Passwörter ändern. (Hinweis kam von millejano)
+
+Wir haben parallel ein <a href="http://webguys.de/magento-exploit-test/">kleines Script bereitgestellt</a> welches <a href="http://webguys.de/magento-exploit-test/">den Exploit auf eurer Magento-Installation überprüft</a>.
+
+<strong>Update #1</strong>: Vinai Kopp postete in <a title="#magento-de auf chat.freenode.net" href="http://www.webguys.de/magento/magento-de-auf-chat-freenode-net/">#magento-de</a> gerade einen Link um <a href="https://gist.github.com/3059575">alle Magento Installationen eines Webservers automatisch zu patchen</a>.
+
+<strong>Update #2:</strong> Die Patches funktionieren erst ab PHP 5.2.11, bei anderen Versionen wird der Fehler <em>Call to undefined function libxml_disable_entity_loader()</em> geworfen. (via <a href="https://twitter.com/mzeis/status/221193457346162688">Matthias Zeis auf Twitter</a>)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2882

@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: OpenText Web Solutions 10 erschienen
+
+----
+
+Date: 2009-08-19
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,smalltalk-reddot,reddot,cms
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Mit der neuen Version des CMS wurde der Wechsel von RedDot zu <a href="http://www.opentext.de">OpenText</a> visuell und technisch überarbeitet. Der größte Teil dieser Neuerungen steckt unter der GUI, denn der ganze PageBuilder wurde von asp umgestellt auf .NET. Nichtsdestotrotz sind die Änderungen im SmartTree sowie SmartEdit nicht zu übersehen.
+
+----
+
+Text: Und das vor allem im SmartEdit, denn ab <a href="http://websolutions.opentext.com/Web_Solutions_10_Whats_New.htm">Version 10</a> ist es möglich, neben dem IE auch den FireFox als bevorzugten Browser einzusetzen, nur der Servermanager und der SmartTree erfordern den IE. Dies wird vor allem die Redakteure freuen, vor allem, wenn sie am MAC arbeiten. Für Redakteure gibt es viele Gründe sich auf die Arbeit mit dem CMS zu freuen, zu nennen wäre an dieser Stelle:
+<ul><li>Rechtsklick statt Aktionsmenu</li>
+	<li>Ajax Funktionalität erhöht die Usability und Performance</li>
+	<li>Individuelle Homepage</li>
+	<li>Neue Suchmaske</li>
+	<li>Erweitere Funktionalität per Drag-n-Drop</li>
+	<li>Verbesserte Ablage</li>
+	<li>Verbessertes Aufgaben-Menu</li>
+	<li>Integration des Navigationmanagers in den SmartEdit</li>
+	<li>Jede Content-Klasse kann ein Vorschaubild angefügt werden</li>
+</ul>
+Während der Arbeit fallen bestimmt noch mehr Features auf, die ich nicht genannt habe - einige habe ich bewußt übersprungen, da die Relevanz fehlt. Falls ihr die Liste erweitern könnt - gerne; dafür sind die Kommentare da.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 48

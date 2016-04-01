@@ -1,0 +1,119 @@
+Article-meta: 
+
+----
+
+Title: Türchen 09: Layered Navigation 2.0: Starke Landing Pages zum Nulltarif
+
+----
+
+Date: 2012-12-09
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: michael-tuerk
+
+----
+
+Article-content: 
+
+----
+
+Intro: Die Layered Navigation von Magento ist seit jeher eines der hervorragenden Features von Magento: Eine Kategorie lässt sich hiermit nicht nur mittels weitere Kategorien durchsuchen, sondern erlaubt die Einschränkung der Produktmenge auf Basis der Eigenschaften eines jeden Produktes. So lassen sich im Demo-Shop neben Kategorien und Preisen auch Hersteller, Farben, Marken oder Kontrastverhältnis einschränken.
+
+
+----
+
+Text: Das wird von vielen Magento-Kunden sehr gern genutzt, unser Online-Marketing bemängelte jedoch regelmäßig, dass diese Informationen nur ungenügend für Werbezwecke und Suchmaschinenoptimierung genutzt werden können. Wir haben hierfür zwei Module konzipiert, die richtig eingesetzt aus Seiten der Layered Navigation starke Landing Pages generieren können:
+<ul><li>Sprechende FilterUrls</li>
+	<li>und der Glossar.</li>
+</ul>
+Im weiteren Verlauf dieses Artikels wird auf die beiden Module und deren Wirkungsweise näher eingegangen. Es sei darauf hingewiesen, dass zum Zeitpunkt des Artikels leider nur die FilterUrls-Extension zum Einsatz bereit steht. Der Glossar ist zwar bereits produktiv im Einsatz, muss jedoch im Sinne der Flexibilität und Unabhängigkeit stark verändert werden. Vielleicht wäre ja auch das ein Thema für den Hackathon im Januar.
+<h2>FilterUrls: Sprechende URLs für die Layered Navigation</h2>
+<h3>Ausgangssituation</h3>
+Die Layered Navigation ist ein starkes Feature von Magento, welches sowohl in der Community als auch der Enterprise Edition verfügbar ist. In sogenannten Anchor-Kategorien werden neben den Unterkategorien weitere Möglichkeiten zur Filterung der Produkte angeboten. Anchor-Kategorien beinhalten alle Produkte der Unterkategorien und mittels entsprechender Index-Tabellen bestimmt Magento die filterbaren Attribute eben dieser Produkte. Mit einem Klick auf eine Attribut-Option wird die Produktliste auf die Produkte mit dieser Ausprägung eingeschränkt.
+
+So weit, so gut. Aber wie schauen die Links aus, welche die Layered Navigation hierbei generiert?
+
+<em>http://demo.magento.url/electronics/computers.html?manufacturer=117</em>
+
+Bei einem einfachen Klick auf den Hersteller „AMD“ in den Demodaten ergibt sich folgender Link: An die Kategorie-URL (/electronics/computers.html) wird einfach der GET-Parameter <em>manufacturer=117</em> angehängt. Hierbei meint <em>manufacturer</em> den Attribute-Code des Filter-Attributes und <em>117</em> ist die Options-Id des gewählten Wertes. Magento und sein Layer-Model weiß damit, dass auf die Produkt Collection ein Filter angewendet werden muss. Was passiert, wenn wir mehrere Filter gleichzeitig aktivieren?
+
+<em>http://demo.magento.url/electronics/computers.html?color=24&manufacturer=117</em>
+
+Alle gewählten Attributfilter werden demnach einfach aneinandergereiht. Die Reihenfolge ist an sich nicht interessant: für den eigentlichen Filtervorgang ist die Reihenfolge nur von untergeordneter Bedeutung und für Suchmaschinen-Optimierungszwecke werden die Standard-URLs dank robots.txt selten sinnvoll verwendet: Sie sind nicht sprechend und auch nicht lokalisiert.
+<h3>Es geht auch anders</h3>
+An sich sind die Voraussetzungen sowohl für die sprechenden URLs und auch für die Lokalisierungen bereits gegeben: Man pflegt sie im Backend im Rahmen der Optionspflege der Attribute. Hier wird für jede Option eines Attributes eine Eingabe pro Store-View angeboten, welche für Übersetzungen genutzt werden sollten. Diese Übersetzungen werden auch für die Labels der Links innerhalb der Layered Navigation verwendet und sollten damit automatisch in allen Sprachen vorliegen. (Vorsicht: für die Demodaten müssen diese Informationen zunächst nachgepflegt werden!)
+
+(image: Magento_Optionsverwaltung_Attribute-650x383.png)
+
+Das Modul verändert nun die URLs folgendermaßen: Ausgangslage ist die Kategorie-URL ohne HTML-Suffix – bleiben wir beim obigen Beispiel: <em>http://demo.magento.url/electronics/computers</em>. Dieser Teil der URL wird logischerweise verwendet, um die aktuelle Kategorie zu identifizieren. Nun wird jedoch ein weiterer Slash eingeführt gefolgt vom „Rewrite“ der gewählten Option, beispielweise also amd und schließlich das HTML-Suffix. Das Ergebnis sieht wie folgt aus:
+
+<em>http://demo.magento.url/electronics/computers/amd.html.</em>
+
+Natürlich müssen wir auch hier den Fall der Mehrfachauswahl bedenken. Was passiert also, wenn ich nun neben der Marke AMD auch noch die Farbe braun auswähle?
+
+<em>http://demo.magento.url/electronics/computers/amd-brown.html</em> bzw. <em>http://demo.magento.url/elektronik/computer/amd-braun.html</em> in der deutschen Version (unter der Voraussetzung, dass die Kategorien eben auch übersetzt wurden!).
+
+Die verschiedenen Attribut-Optionen werden demnach einfach mit einem „-“ getrennt aneinander gereiht. Wichtig hierbei ist die Pflege der Position der Attribute im Backend, weil diese als „Priorität“ interpretiert werden, so dass wichtige Attribute zuerst und unwichtige zuletzt in die URL eingegliedert werden. Außerdem kann nur so eine Stabilität der URLs gewährleistet werden.
+
+Das Ergebnis ist nun eine sprechende URL, die sich neben der Kategorie aus den Werten der gewählten Filter zusammensetzt. Damit es nicht zu Kollisionen kommen kann, werden verschiedene Zeichen wie „-“, „&“ usw. durch „_“ ersetzt.
+<h3>Wie funktioniert das?</h3>
+Unser Ziel war immer das ganze sehr einfach zu halten. Das Modul besteht im Grunde aus zwei Dingen:
+<ul><li>Ein veränderter Link-Generierungsmechanismus. Zur Generierung der korrekten Links musste das Model Mage_Catalog_Model_Layer_Filter_Item geändert werden. Hierbei wird zunächst geprüft, ob bereits ein Rewrite für die aktuelle Kombination von Attribute, Option und Store generiert wurde. Liegt dieses bereits in der entsprechenden Datenbank-Tabelle vor, kann es wiederverwendet werden. Wird kein Rewrite gefunden, erstellt das Modul automatisch ein neues Rewrite.</li>
+	<li>Ein Router versucht wiederum die gegebene URL in die ursprünglichen Parameter zurück zu übersetzen. Hierfür werden die mit „-“ getrennten Elemente der URL wieder extrahiert und mit der Datenbank abgeglichen. Die eigentliche Layered Navigation funktioniert unverändert weiter.</li>
+</ul><h3>Und sonst? Wie geht es weiter?</h3>
+Bis dahin ist die Geschichte wirklich einfach. Woher weiß die Suchmaschine von den URLs? Neben der internen Verlinkung selbst natürlich von Sitemaps. Aber wo bekommen wir die Sitemaps her? Okay, wir schauen uns die Sache an.
+
+Problematisch ist vor allem eins: Das Modul kennt bisher nur Rewrites, d.h. Übersetzungen einzelner Attribut-Optionen, nicht ganze URLs. Welche Kombinationen sollen nun also in eine Sitemap mit aufgenommen werden? Der Theorie nach nur die, die es wirklich gibt, weil die Menge von potentiellen Kategorie-Attribute-Optionen-Permutationen gegen unendlich gehen kann.
+
+Deshalb haben wir nachträglich noch ein Model eingeführt, welches die generierten URLs aufzeichnet und schließlich in eine Sitemap.xml integrieren kann. Diese URLs haben in Zukunft noch weitere Funktionen:
+<ul><li>Es soll nachvollzogen werden, welche 301-Weiterleitungen im System eingeführt werden müssen, wenn eine Attributoptions-Übersetzung verändert wird. Wenn nun also beispielweise „Gelb“ in „Gold“ übersetzt werden sollte, müssten nach Möglichkeit nicht nur das Rewrite, sondern auch alle entsprechenden URLs ersetzt werden. Alte URLs würden dann automatisch auf neue weiterleiten.</li>
+	<li>In einer zukünftigen Version wäre es auch sinnvoll, derartige URLs per Cronjob wieder aus der Sitemap zu nehmen, für die keine Ergebnisse mehr erzielt werden. Das haben wir bisher leider zeitlich nicht realisieren können.</li>
+</ul>
+Weiterhin sinnvoll wäre mittelfristig wohl ein Backend, mit dessen Hilfe Rewrites angezeigt oder u.U. auch bewusst angelegt, verändert oder gelöscht werden können. Momentan müssen URLs manuell per Datenbank gelöscht oder verändert werden, was für den Normalverbraucher wohl etwas zu aufwändig ist.
+
+Wichtig ist auch, was wir nicht ändern wollen:
+<ul><li>Sowohl Preis- als auch Kategorie-Filter sind von dieser Verarbeitung nicht betroffen. Ursache hierfür sind unterschiedliche Dinge: Kategorie-Filter müssen sich von normalen Kategorie-Links unterschieden, weil sonst zufälligerweise direkt in eine „Nicht-Anchor“-Kategorie (bieten keine Filter an!) verlinkt werden könnte. Das Ergebnis wäre unverständlich und schwer nachvollziehbar. Preis-Links werden sehr oft shopspezifisch angepasst, beispielweise um Preisspannen flexibler zu gestalten. Deshalb ist eine Bearbeitung dieser Funktionalität gefährlich, weil Inkompatibilitäten drohen. Abgesehen davon hat der Preis kaum Relevanz für eine suchmaschinenoptimierte URL.</li>
+	<li>Es ist nicht geplant, Kollisionen mit anderen URLs abzufangen. Wird beispielsweise eine Unterkategorie wie ein Hersteller benannt, wird man bei Auswahl des entsprechenden Filters in der Unterkategorie landen statt den entsprechenden Filter zu setzen, weil der Kategorie-Router vorgeht. Eine Überprüfung wäre sehr aufwändig, eine Bevorzugung unseres Routers gefährlich. Gute Namen für Kategorien und für Attributoptionen helfen, dies zu verhindern.</li>
+</ul>
+Das Modul Flagbit_FilterUrls ist unter der GPL Version 3 veröffentlicht worden und kann als solches von jedermann genutzt, erweitert und nach Belieben verändert werden. Die Weiterentwicklung findet unter Github statt; der aktuelle Stand kann unter <a href="https://github.com/Flagbit/Magento-FilterUrls">https://github.com/Flagbit/Magento-FilterUrls</a> abgerufen werden. Dank Karls Composer-Packager-Skript konnte mittlerweile auch ein Paket für Connect erstellt werden. Das Modul liegt momentan bei Magento zur Prüfung vor. Sobald hier ein Link vorliegt, reichen wir diesen nach.
+<h2>Der Glossar: Dynamische Inhalte für die Layered Navigation</h2>
+Die URLs sind an sich schon eine feine Sache, aber sie werden nur dann wirklich mächtig, wenn man sie mit einem zweiten Element garniert: Unique Content. Dummerweise befinden wir uns jedoch auch nach einem aktivierten Filter noch immer auf derselben Kategorie-Seite, welche abgesehen von potentiell unterschiedlichen Produkten dieselben Inhalte bereitstellen.
+
+An dieser Stelle kommt unser Glossar zum Einsatz. Ursprünglich war er als stupides Lexikon gedacht, um mehr oder minder plumpe Inhalte mit einem einfachen Menü anzubieten. Doch im Rahmen des einen oder anderen Projekts kamen weitere Funktionalitäten dazu, so dass der Glossar heute zumindest auf dem Papier eine sehr mächtige Content-Plattform bereitstellt.
+
+Was steckt dahinter? Neben den eigentlichen Inhalten werden Glossar-Einträge mit Attribute-Werten bzw. Kombinationen derer verknüpft oder mit Tags angereichert. Wählt der Benutzer nun einen Attribut-Filter aus, wird oberhalb der Produktliste dynamisch passender Inhalt aus der Glossar-Datenbank angezeigt. Die Auswahl des oder der besten Beiträge wird anhand eben der Attribute- und Tags-Informationen durchgeführt. Optimalerweise sucht ein Shop-Betreiber nach den meistgenutzten Filter-Variationen und stattet diese mit einzigartigen Inhalten aus.
+
+Die Möglichkeiten des Glossars sind damit noch nicht ausgereizt. So lassen sich auch weiterführende Informationen mit dem Glossar automatisch generieren, beispielsweise eigene Informationsseiten zu bestimmten Herstellern inklusive aller systemweit geführten Produkte. Von diesen aus könnte dann wieder auf die entsprechende Informationsseite zurückverlinkt werden. Über die besagten Attribute-Verlinkungen lassen sich wiederum automatische Inhaltsverzeichnisse generieren. Die Möglichkeiten einer internen Verlinkung sind also großartig.
+
+[caption id="attachment_3175" align="aligncenter" width="650"](image: glossar_verknuepfung_mit_filter-650x573.png) Glossar: Neue Inhalte je Attribut-Auswahl[/caption]
+
+Theorie? Ja, die Theorie. Wie sieht das in der Praxis aus? Das Prinzip des Glossars ist genau wie beschrieben bereits im Einsatz. Wieso können wir das so nicht einfach veröffentlichen? Weil es ein Produkt verschiedener Kundenanforderungen war und jetzt einem ausführlichen Refactoring unterzogen werden sollte, um einem generischen Anspruch genügen zu können. Wir gehen davon aus, dass das im Laufe des ersten Quartals 2013 soweit sein dürfte. Wer daran interessiert ist, das tatkräftig zu unterstützen, darf uns gern kontaktieren.
+<h2>Das Ergebnis? Ein Traum!</h2>
+Das Resultat wäre eine optimierte Landing Page mit passenden Inhalten, passenden Produkten sowie sprechenden optimierten URLs. Somit kommt die Layered Navigation zu einer noch besseren Geltung gegenüber dem eh schon guten Original.
+
+Für das Online-Marketing eines Online-Shops wäre dies eine traumhafte Voraussetzung. Zum jetzigen Zeitpunkt befindet sich jedoch das FilterUrls-Modul noch in einem Beta-Zustand, während der Glossar erst in naher Zukunft in den Beta-Zustand übergehen können wird. Aber wer weiß? Vielleicht wird dieser Traum schon bald süße Wirklichkeit.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3173

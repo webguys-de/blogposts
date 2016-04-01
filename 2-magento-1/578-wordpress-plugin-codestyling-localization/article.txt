@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: WordPress Plugin: Codestyling Localization
+
+----
+
+Date: 2009-05-16
+
+----
+
+Description: 
+
+----
+
+Tags: html-css-javascript-seo
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Plugins für Wordpress sind schnell erstellt, um jedoch den Kreis der Benutzer signifikant zu erhöhen, macht es durchaus Sinn, das Plugin zu lokalisieren. Wenn man es per Hand machen möchte, greift zu "Poedit" oder ähnlichem und erstellt die .po und .mo Datei selbst. Es geht jedoch auch anders. <a rel="me" href="http://technorati.com/claim/5kqzabub55">Technorati</a> 
+
+----
+
+Text: Die Alternative ist ein browserbasiertes Plugin mit dem Namen <a href="http://www.code-styling.de/deutsch/entwicklungen/wordpress-plugin-codestyling-localization">Codestyling Localization</a>.  Über die Oberfläche können Übersetzungen verwaltet sowie erstellt werden, neue Lokalisierungen hinzugefügt werden und dies Blog-übergreifend. Da dies alles online und im Browser gemacht wird, entfällt der lästige Datei-Upload mit allem Drum-und-Dran. Eine detaillierte Installationsanleitung (sofern benötigt) für die
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 578

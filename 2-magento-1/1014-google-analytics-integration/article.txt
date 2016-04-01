@@ -1,0 +1,86 @@
+Article-meta: 
+
+----
+
+Title: Google Analytics Integration
+
+----
+
+Date: 2010-11-12
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Der Onepagecheckout von Magento stört nicht nur Entwickler. Auch die SEM-Abteilung ist nicht gerade davon angetan, kann von Haus aus kein Trichter über den Checkout-Prozess abgebildet werden. Es gibt jedoch Hoffnung am Horizont.
+
+
+----
+
+Text: Mein anfänglicher Versuch die optcheckout.js in der Funktion 'gotoSection' zu erweitern verflief nicht ganz zufriedenstellend. Zwar wurden die Seiten des OPC getrackt, jedoch war die Url ziemlich kryptisch - der Versuch in der SEM-Abteilung für die Url um Verständnis zu werben schlug fehl.
+
+Nach ein wenig Recherche habe ich folgenden Weg eingeschlagen, der in drei Schritten gegliedert ist.
+Wenn der Test positiv verläuft, werde ich es als Modul zur Verfügung stellen.
+
+<strong>1. Magento</strong>
+Dazu habe ich das Template <em>/app/design/frontend/default/YOURTEMPLATENAME/template/checkout/onepage.phtml</em> geöffnet und um diesen code erweitert:
+
+(code language: javascript)
+<script type=”text/javascript”>
+Checkout.prototype.gotoSection = function(section) {
+try {
+pageTracker._trackPageview(’<?php echo $this->getUrl(’checkout/onepage’) ?>’ + section + ‘/’);
+} catch(err) { }
+section = $(’opc-’+section);
+section.addClassName(’allow’);
+this.accordion.openSection(section);
+};
+</script>
+(/code)
+
+<strong>2. Google Analytics</strong>
+Das Template ist nun mit dem Code versehen, dass die einzelnen Seiten des OPC getrackt werden, nun muss nur noch der Zieltrichter in Google Analytics eingerichtet werden. Dazu sind folgende Einstellungen wichtig:
+Ziel Typ: URL-Ziel
+Keyword-Option: Übereinstimmung mit Head
+Ziel URL: /checkout/onepage/success/
+
+Nun noch die Schritte im Trichter definieren:
+Schritt 1: /checkout/onepage/
+Schritt 2: /checkout/onepage/billing/
+Schritt 3: /checkout/onepage/shipping/
+Schritt 4: /checkout/onepage/shipping_method/
+Schritt 5: /checkout/onepage/payment/
+Schritt 6: /checkout/onepage/review/
+
+
+<strong>3. Die Schulterklopfer der SEM Abteilung genießen </strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1014

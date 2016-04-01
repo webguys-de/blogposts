@@ -1,0 +1,84 @@
+Article-meta: 
+
+----
+
+Title: Fehlermeldung: Invalid model for shipping method
+
+----
+
+Date: 2011-02-25
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Um einen besseren Überblick über die gekauften Waren zu erlangen, also die Anzahl der Artikel, Gesamtbetrag bietet Google Analytics Dienste an, die bereits in Magento implementiert sind und auch gut funktionieren. Den Dienst erreicht man bequem im Adminbereich unter <em>System &gt; Konfiguration &gt; Google API</em>. Sollte nach einem Klick, diese Fehlermeldung erscheinen (<em>Invalid model for shipping method: module</em>) nicht verzweifeln - es gibt Abhilfe.
+
+
+----
+
+Text: Diese Fehlermeldung erscheint nahezu immer dann, wenn eine Extension nicht ordnungsgemäß deinstalliert wurde.
+Sollte dies nicht geschehen sein, hilft nur noch ein händisches Löschen in der Datenbank. Um dies zu verfizieren, suchen wir in der Datenbank nach dem entsprechenden Eintrag in der Tabelle.
+
+(code lang: sql)
+SELECT * FROM `core_config_data` WHERE `path` LIKE '%carriers/module%'
+(/code)
+
+Sollten jetzt Ergebnisse gefunden werden - prima - das Problem ist schnell gelöst.
+Bevor wir die entsprechenden Einträge löschen, erstellen wir auf jeden ein Backup der Tabelle.
+Danach müssen die Einträge nur noch gelöscht werden:
+
+(code lang: sql)
+DELETE FROM `core_config_data` WHERE `path` LIKE '%carriers/module%'
+(/code)
+
+Im Anschluss daran noch den Cache von Magento leeren, danach sollte das Problem behoben sein.
+
+<strong>An einem expliziten Beispiel:</strong>
+Beim erstellen einer Rechnung erscheint diese Fehlermeldung:<br><i>Invalid model for shipping method: multipletablerates</i>
+
+Wahrscheinlich wurde diese Extension nicht sauber entfernt, oder nur deaktiviert. Um den Fehler zu beheben:
+<strong>1. Backup erstellen</strong>
+
+<strong>2. Datensätze finden</strong>
+In z.B. phpMyAdmin die entsprechenden Datensätzen suchen:
+(code lang: sql)
+SELECT *  FROM `core_config_data` WHERE `path` LIKE '%carriers/multipletablerates%'
+(/code)
+
+<strong>3. Datensätze löschen</strong>
+(code lang: sql)
+DELETE  FROM `core_config_data` WHERE `path` LIKE '%carriers/multipletablerates%'
+(/code)
+
+<strong>4. Cache leeren</strong>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1466

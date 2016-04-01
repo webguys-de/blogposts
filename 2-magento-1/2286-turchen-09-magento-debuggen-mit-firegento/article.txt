@@ -1,0 +1,100 @@
+Article-meta: 
+
+----
+
+Title: Türchen 09: Magento debuggen mit FIREGENTO
+
+----
+
+Date: 2011-12-09
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: rouven-rieker
+
+----
+
+Article-content: 
+
+----
+
+Intro: Als Tobi mich gefragt hat, ob ich denn Lust hätte für den Adventskalender einen kleinen Beitrag zu schreiben, konnte ich natürlich schlecht „nein“ sagen, da ich es klasse finde, dass die Webguys dieses Jahr wieder den Adventskalender ins Leben gerufen haben. Danke Jungs! In mein “Türchen” stelle ich zum einen das Modul FIREGENTO selbst vor, was einem Entwickler beim Debuggen von Magento praktisch helfen kann, ein paar weitere nützliche Module, sowie die Idee hinter FIREGENTO an sich.
+
+----
+
+Text: Die Idee für das Modul FIREGENTO entstand auf dem Magento Developers Paradise auf Mallorca durch verschiedene Gespräche mit Magento Entwicklern aus aller Welt. An einem Abend auf Mallorca setzten sich dann <a href="http://www.flagbit.de">Jörg Weller (Flagbit)</a> und ich mich hin und entwickelten die erste Grundfunktionalität. Ziel war ee, Rewrite Conflicts bei den installierten Modulen schneller zu erkennen, da das einer der Hauptgründe ist, warum manche Module einfach nicht out-of-the-box funktionieren bzw. funktioniert haben und manchen Entwicklern unnötig viel Support-Aufwand beschert hat.
+<h3>Was sind überhaupt Rewrite Conflicts?</h3>
+Nehmen wir einmal an, es gibt das Modul Barcamp_Email, welche die Klasse <em>Mage_Core_Model_Email_Template</em> überschreibt, weil es irgendeine supertolle Aktion ausführen möchte. Allein installiert würde das Modul reibungslos funktionieren. Nun gibt es aber noch das Modul <em>Foocamp_Email</em>, welches ebenfalls die Klasse <em>Mage_Core_Model_Email_Template</em> überschreibt, um seinerseits noch eine supertolle Aktion auszuführen. Da Magento aber keine Vererbungsketten erlaubt, wird das Modul Foocamp_Email bevorzugt behandelt, da es den „höheren“ Namespace besitzt. Somit wird die supertolle Aktion vom Modul Barcamp_Email niemals ausgeführt werden. Mit FIREGENTO kann man nun solche Konflikte schneller erkennen und entsprechend beheben.
+<h3>Die Funktionen von FIREGENTO</h3>
+Kommen wir nun zu den bisher implementierten Funktionen von FIREGENTO, welche alle in einem eigenen Reiter im Backend gruppiert sind und so schnell erreicht werden können.
+
+Durch meine Tätigkeit als Magento Entwickler saß ich schon vor den unterschiedlichsten Magento Shop mit den verrücktesten installierten Modulen. Meistens rief ein Kunde an und sagte: „Das Modul funktioniert nicht.“ Nun interessiert mich als Entwickler natürlich als allererstes: „Welche Module sind überhaupt installiert?“ - denn so kann man mit etwas Erfahrung eine mögliche Fehlerquelle manchmal schon relativ schnell eingrenzen. Dazu gibt es eine eigene Ansicht namens „Überprüfe Module“:
+
+(image: screenshot_01-650x301.png)
+
+Dort sieht man zum einen, welche Module installiert sind, in welchem CodePool sie liegen und ob sie aktiviert/deaktiviert sind. Weitere Prüfungen sind ob der Modul-Pfad existiert, ob eine config.xml existiert und ob von welchen Modulen das installierte Modul abhängig ist.
+Als nächstes interessieren mich die Frage, ob ein anderes installiertes Modul meine eigene Klasse überschreibt. Dabei kommen wir also zu den angesprochenen „Rewrite Conflicts“, welche sich im Menü „Überprüfe Rewrites“ befinden. Zu Demo-Zwecken sieht man die oben angesprochenen Rewrites:
+
+(image: screenshot_02-650x302.png)
+
+Die Liste ist natürlich im Idealfall leer, kann aber auch schon einmal locker 100 Einträge fassen, wenn man diverse Module installiert hat. Zusätzlich liegt im Github-Repository noch eine Datei „firegento.php“, welche auch bequem in das Root-Verzeichnis einer Magento-Installation kopiert werden kann. Die Datei ermöglicht einen schnellen Rewrite-Check ohne dass man das ganze Modul installieren muss.
+Weitere Möglichkeiten mit FIREGENTO zu debuggen, ist die Auflistung aller überwachten Events in Magento, die Auflistung und der Check von allgemeinen Informationen wie Flat Catalogs, Caches, Indizes, Systemeinstellungen, etc., sowie einer einsehbaren phpinfo().
+Das Thema „Logs“ ist auch immer ein ganz spannendes Thema, da dort oftmals auch mögliche Fehlerursachen zu finden sind. Dabei kann es mitunter Shop-Betreiber geben, die einem keine FTP/SSH-Zugangsdaten zusenden möchten. Dazu gibt es in FIREGENTO das Menü „Logs“, wo man „console-like“ sich eine Log-Datei ansehen kann:
+
+(image: screenshot_03-650x318.png)
+
+Als Entwickler kommt es mehr oder weniger regelmäßig vor, dass man eine Erweiterung im Frontend testen muss und dabei bestimmte Debug-Ausgaben braucht, beispielsweise <em>$product->debug()</em>. Dabei kann es auf Dauer natürlich schon etwas ineffizient vom Prozess her sein, wenn man dabei immer die entsprechenden Log-Dateien öffnen muss oder immer in die Konsole springen muss um das Ergebnis zu sehen. Um dies etwas effizienter zu gestalten, unterstützt FIREGENTO von Haus aus die Firebug-Addons FirePHP (<a href="https://addons.mozilla.org/en-US/firefox/addon/firephp/">https://addons.mozilla.org/en-US/firefox/addon/firephp/</a>) und FireLogger (<a href="http://firelogger.binaryage.com/#php">http://firelogger.binaryage.com/#php</a>) mit denen man sich PHP-Ausgaben direkt in der Firebug-Console ausgeben lassen kann.
+
+(image: screenshot_04-650x350.png)
+
+(image: screenshot_05-650x261.png)
+
+Sobald entsprechende Addons auch für andere Browser veröffentlicht worden sind, werden wir diese natürlich ebenfalls implementieren.
+Im Großen und Ganzen war das die bisher implementierte Funktionen - weitere Funktionen sind bereits in der Entwicklung oder stehen auf der Roadmap. Von dem her ist das Modul natürlich noch sehr ausbaufähig, jedoch für die tägliche Arbeit . Falls jemand von euch deshalb weitere Feature-Wünsche hat oder (was mich persönlich sehr freuen würde) gerne mitarbeiten möchte, darf er/sie sich gerne mit mir in Verbindung setzen.
+
+Das Modul könnt ihr bis jetzt ausschließlich auf Github finden: <a href="https://github.com/firegento/firegento">https://github.com/firegento/firegento</a> Demnächst dann vermutlich auch ganz bequem über MagentoConnect.
+<h2>Weitere Module für das Debugging von Magento</h2>
+Nun ist FIREGENTO natürlich nicht das einzige Modul, welches sich mit dem Thema „Magento Debugging“ beschäftigt. Deshalb hier noch eine kleine, unvollständige Liste:
+<ul><li>Mgt Developer Toolbar (<a href="http://www.mgt-commerce.com/magento-developer-toolbar.html">http://www.mgt-commerce.com/magento-developer-toolbar.html</a>)</li>
+	<li>Magneto Debug (<a href="http://www.magentocommerce.com/magento-connect/sstoiana/extension/6714/magnetodebug">http://www.magentocommerce.com/magento-connect/sstoiana/extension/6714/magnetodebug</a>)</li>
+	<li>Commerce Bug (<a href="http://store.pulsestorm.net/products/commerce-bug">http://store.pulsestorm.net/products/commerce-bug</a>)</li>
+	<li>MageTool (<a href="https://github.com/alistairstead/MageTool">https://github.com/alistairstead/MageTool</a>)</li>
+	<li>PHPUnit Testing Integration (<a href="http://www.magentocommerce.com/magento-connect/phpunit-testing-integration.html">http://www.magentocommerce.com/magento-connect/phpunit-testing-integration.html</a>)</li>
+	<li>Mage-Devtool (<a href="https://github.com/netresearch/Mage-Devtool">https://github.com/netresearch/Mage-Devtool</a>)</li>
+	<li>Aoe_Templatehints (<a href="https://github.com/fbrnc/Aoe_TemplateHints">https://github.com/fbrnc/Aoe_TemplateHints</a>)</li>
+</ul>
+Falls ihr noch weitere Module kennt, die ihr bei eurer täglichen Arbeit zum Debugging von Magento einsetzt, würden wir uns über Kommentare und Anregungen sehr freuen.
+<h2>FIREGENTO - Die Idee dahinter</h2>
+Jörg und ich haben uns eines Tages einmal darüber unterhalten, dass es doch eigentlich ganz geschickt wäre, wenn man Module auch ohne bestimmten Bezug zu einer Firma veröffentlichen könnte, um einen Beitrag zur tollen Magento-Community leisten zu können, ohne dass das ganze einen kommerziellen Touch bekommt.
+
+Basierend auf unserer Zusammenarbeit an FIREGENTO ist dann die Idee entstanden, dass wir den Namespace „Firegento“ etc. auch für andere Module von anderen Entwicklern zur Verfügung stellen möchten, die ihre Module als open-source veröffentlichen möchten. Gerade beim Foocamp/Fodcamp von Damian sind dabei einige tolle Module entstanden, wie man hier bei den Webguys in dem ein oder anderen Blogbeitrag lesen kann.
+
+Falls sich jemand von euch angesprochen fühlt oder sich mal intensiver darüber unterhalten möchte, dürft ihr euch gerne mit mir in Verbindung setzen. Wir würden uns sehr freuen, wenn ihr gemeinsam mit uns einen Beitrag zur Magento-Community leistet :-)
+<h2>Fazit</h2>
+Die vorgestellten Module helfen natürlich auch nur bis zu einer bestimmten Grenze. Gegen Core-Hacks, schlecht überladene Klassen, etc. ist man natürlich als Entwickler mehr oder weniger machtlos, da dies manchmal nur sehr schwer herauszufinden ist.
+Ziel sollte es deshalb primär immer sein, seine eigene Code-Qualität zu steigern, so wenig Rewrites, etc. wie möglich zu verwenden um die Kompatibilität des eigenen Moduls zu anderen Modulen zu gewährleisten. Gerade das Event-Observer-Pattern in Magento ist sehr mächtig und für viele Änderungen vollkommen ausreichend.
+In diesem Sinne, Happy Debugging :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2286

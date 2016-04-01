@@ -1,0 +1,133 @@
+Article-meta: 
+
+----
+
+Title: Unbenutzte Produktbilder löschen
+
+----
+
+Date: 2010-04-07
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,import,produkte
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Manchmal entstehen gerade beim Batch-Import von Produkten ein paar Bildleichen. Diese habe ich entfernen können in dem geprüft habe ob zu jeder Datei im Dateisystem ein Eintrag in der Datenbank besteht.
+
+
+
+----
+
+Text: Das Script sollte in einem beliebigen Unterordner liegen. Im Standardaufruf wird nur geprüft ob es Bildleichen gibt - gelöscht wird nicht. Will man die unbenutzten Bilder auch löschen kann dies durch Anhängen ?remove=YES passieren.
+
+(code lang: php)
+<?php
+require_once dirname(__FILE__).'/../app/Mage.php';
+Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+
+class cleanDir {
+
+	protected $initDir;
+
+	protected $freeSize = 0;
+
+	function __construct($dir) {
+		$this->initDir = $dir;
+		$this->clean ( $dir );
+
+		var_dump( $this->freeSize );
+	}
+
+	function clean( $dir ) {
+
+		foreach(glob("$dir/*") AS $cur ) {
+
+			if ( basename($cur) == '.' || basename($cur) == '..' ) {
+				continue;
+			}
+
+			if ( is_dir($cur) ) {
+				$this->clean( $cur );
+			}
+
+			if ( is_file($cur) ) {
+
+				if( $this->isUsed( $cur ) ) {
+					echo "<p style='color: green'>$cur wird behalten";
+				} else {
+
+					$this->freeSize += filesize( $cur );
+
+					if ( $_GET['remove'] == 'YES' ) {
+						echo "<p style='color: gred'>$cur WURDE gelöscht";
+						unlink( $cur );
+					} else {
+						echo "<p style='color: gred'>$cur ist unnötig";
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	function isUsed( $image ) {
+
+		$image = str_replace( $this->initDir, '', $image );
+		if ( $image[0] != '/' ) {
+			$image = '/'.$image;
+		}
+
+		$db = Mage::getSingleton('core/resource')->getConnection('core_read');
+
+		$stmt = $db->query( "SELECT COUNT(*) AS anz
+              		FROM `catalog_product_entity_media_gallery`
+              		WHERE `value` LIKE ?", array( $image ) );
+
+ 		if ( $res = $stmt->fetch() ) {
+ 			if ( $res['anz'] > 0 ) {
+ 				return true;
+ 			}
+ 		}
+
+		return false;
+	}
+
+}
+
+$cd = new cleandir( Mage::getBaseDir('media').DS.'catalog'.DS.'product'.DS );
+(/code)
+
+Benutzung natürlich auf eine Gefahr :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 76

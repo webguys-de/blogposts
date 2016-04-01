@@ -1,0 +1,85 @@
+Article-meta: 
+
+----
+
+Title: Magento 1.5.0.0 Sicherheitswarnung
+
+----
+
+Date: 2011-02-10
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Pünktlich zur Magento Imagine ist Magento 1.5 erschienen - da war wohl einiges an Druck hinter. So zumindest kann ich mir erklären das die Version mit einer größeren Sicherheitslücke veröffentlicht wurde. So ist es möglich, über die <em>get.php</em> die komplette Verzeichnisstruktur mit allen Dateien abzugrasen. Das erlaubt es z.B. die local.xml, in der alle Datenbank-Zugriffe vorhanden sind, anzusehen. 
+
+----
+
+Text: Im Blog <a href="http://ajzele.net">Ajzele</a> heißt es im <a href="http://ajzele.net/magento-1-5-security-flaw-edition">Artikel Imagine this, Magento 1.5.0.0 Security Flaw Edition</a>
+<blockquote>Shockingly there is a file called <strong>get.php</strong> in a root of Magento. OK, that fact alone is not that shocking. Try running something like http://{{unsecure_base_url}}/<strong>get.php/app/etc/local.xml</strong> where <em>{{unsecure_base_url}}</em> is your test host/domain. It will nicely return entire content of the config.xml file.</blockquote>
+Magento 1.5 sollte somit in Verbindung mit der get.php im Live-Betrieb erst einmal nicht eingesetzt werden. Zudem würde ich ohnehin allen Shop-Betreibern raten mit dem Update auf die 1.5 so lange zu warten bis die Dienstleister ein wenig mit Upgrades von Version 1.4 auf 1.5 geübt haben und Erfahrungen gesammelt sind.
+
+Magento hat auf das Sicherheitsproblem im übrigen schon reagiert und die <em>get.php</em> in Version 1.5.0.1 entfernt. Ob das das Problem nun wirklich löst möchte ich bezweifeln - die Datei wird ja nicht völlig ohne Sinn in Magento vorhanden gewesen sein.
+
+Die <em>get.php</em> diente, wirft man einen Blick in den Source, übrigens dem Auslesen von Daten aus einem Datenbank-Storage:
+
+(code lang: php)
+$databaseFileSotrage = Mage::getModel('core/file_storage_database');
+$databaseFileSotrage->loadByFilename($filename);
+
+if ($databaseFileSotrage->getId()) {
+    $directory = dirname($filePath);
+    if (!is_dir($directory)) {
+        mkdir($directory, 0777, true);
+    }
+
+    $fp = fopen($filePath, 'w');
+    if (flock($fp, LOCK_EX | LOCK_NB)) {
+        ftruncate($fp, 0);
+        fwrite($fp, $databaseFileSotrage->getContent());
+    }/* else {
+        while (!flock($fp, LOCK_EX | LOCK_NB)) {
+            usleep(1000);
+        }
+    }*/
+    flock($fp, LOCK_UN);
+    fclose($fp);
+}
+
+if (file_exists($filePath) || is_readable($filePath)) {
+    $transfer = new Varien_File_Transfer_Adapter_Http();
+    $transfer->send($filePath);
+    exit;
+}
+(/code)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1385

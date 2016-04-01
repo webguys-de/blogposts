@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: Türchen 07: Über Herausforderungen im Betreuen von Open- Source-Projekten
+
+----
+
+Date: 2014-12-07
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: daniel-fahlke
+
+----
+
+Article-content: 
+
+----
+
+Intro: Open Source ist ein essentieller Part für jeden Magento Entwickler, allein schon weil Magento selbst Open Source ist. Aber auch weil viele der heute wichtigen Tools (magerun, Composer, PHPUnit) als Open Source gestartet wurden. Die Entwicklung von Open Source Modulen war sogar der Grundstein für den heute gut bekannten <a href="http://www.firegento.com">Firegento e.V</a>.
+
+
+
+----
+
+Text: Nun gibt es verschiedene Arten ein Open Source Projekt zu betreuen und der am weitesten verbreitete ist “gar nicht”. Module werden online gestellt und fertig. Wenn jemand etwas beitragen möchte, schön. Wenn jemand ein Problem hat, Pech gehabt. Vielleicht löst es ja jemand anderes. Manche könnten kätzerisch behaupten “jemand anderes kümmert sich” ist das Motto von Open Source.
+
+Im besten Fall hat der Eigentümer ab und zu langeweile und löst ein paar Probleme. Während diese Methode immer gleich (schlecht) funktioniert, sind andere Ansätze abhänig von Komplexität und Größe der Userbasis und deren Beiträge. Aber hier wird sich weniger mit den Lösungen und mehr mit den zu lösenden Problemen beschäftigt.
+
+Da wäre zunächst das Ermuntern von Leuten zu dem Projekt beizutragen. Die meisten denken dabei an Fixes und Pull Requests, übersehen dabei aber wie wichtig auch anderes Feedback ist. Nicht nur Bugreports, sondern auch einfache Fragen können viel verraten. Und nicht jeder macht sich die Mühe ein Issue zu erstellen, würde aber via Chat, Forum, Messenger, Twitter, E-Mail Feedback geben. Und viele sind auch nicht in der Lage voll ausgearbeitete Pull Requests zu liefern, sei es aus Können, Zeit, Unsicherheit oder Motivation.
+
+Das nächste Problem dem sich Projekte früher oder später stellen müssen ist das Eier-legende-Wollmilchsau-Syndrom. Oder in einfachen Worten, Projekte die alles können wollen. An sich ist das erstmal kein Problem, jedoch hat ein größer werdender Umfang einige negative Auswirkungen, die sich schon dadurch bemerkbar machen, dass ein einzelner Entwickler nicht alles wissen oder kennen kann, man mit steigendem Umfang also ein größeres Team bräuchte um Qualitativ stabil zu bleiben.
+
+Kommerzielle Open Source Projekte haben den Vortei, ein stabiles und umfassendes Team zu unterhalten. Auf Freiwilligen basierende Projekte haben hingegen mit Fluktuationen im Team zu rechnen, die mit zunehmender größe des Teams sogar noch ansteigen. Üblicherweise führt das dann irgendwann zu offenen Bugreports, die nur noch mangelhaft oder gar nicht bearbeitet werden.
+
+Als Nutzer eines Open Source Projekts sollte man bedenken, wenn man die Entscheidungen eines Maintainers das nächste mal in Frage stellt, welche Gründe es haben könnte, dass er eine andere Sichtweise zu Features, Beiträgen oder Vorschlägen hat.
+
+Als Nutzer, habt vorher ein Auge darauf wie viele Nutzer und Beitragende die Bibliothek oder das Modul hat, wie viele offene Bugreports es gibt, wie deren Inhalt aussieht, wie alt der letzte Commit ist, wie gleichmäßig die Beiträge sind und ob die Ziele des Projektes mit dem geplanten Einsatszweck zusammen passen.
+
+Als Projekt-Manager, erspart den Nutzern Mühe und Zeit und macht deutlich wer eure Zielgruppe ist, wo ihr die Grenzen für den Anwendungsbereich setzt und wie Ihr die Qualität eures Projektes einschätzt und sicher stellt.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4041

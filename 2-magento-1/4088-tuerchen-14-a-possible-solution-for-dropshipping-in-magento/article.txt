@@ -1,0 +1,89 @@
+Article-meta: 
+
+----
+
+Title: Türchen 14: A possible solution for Dropshipping in Magento
+
+----
+
+Date: 2014-12-14
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: christoph-massmann
+
+----
+
+Article-content: 
+
+----
+
+Intro: Many Magento online shops face the challenge of sending thousands of physical goods to clients worldwide. Especially the number of suppliers and packages and the wide range of shipping partners increase the complexity of the delivery process. Merchants have several possibilities to solve this challenge: build up a new warehouse and connect external fulfillment service providers, which of course can be very cost intense and complex. As an alternative the outsourcing of logistics became more and more interesting for smaller companies.
+
+
+
+----
+
+Text: <h2>What is Dropshipping?</h2>
+
+Merchants outsource their complete logistics and a Dropshipping partner manages the warehouse, the consignment of products inclusive the reordering of goods, the communication with shipping partners and the reshipment process.
+
+(image: The-Dropship-Model-650x337.png)
+
+After the customer places an order in the shop system, the Dropshipping partner receives a sending request with the customer address, the selected shipping partner and the products the customer has ordered. The Dropshipper picks the goods, prints the packaging slip, packages the products and sends the package to the customer address. He also notifies the shop owner about the shipment including the tracking number for updating the order status and notifying the customer about the shipment.
+
+For small merchants the advantages of lower investment costs, the simple management of a full service solution and the short time to market usually outbalance the smaller margins per order and the higher CPO.
+
+<h2>The challenge for developers</h2>
+
+After the decision for a Dropshipping partner, developers face the challenge of a fast and clean integration into the Magento order stack. For managing and tracking the partner an additional workflow with its own <a href="http://www.webguys.de/magento/tuerchen-05-magento-und-seine-bestellstatus-ein-ueberblick/">status handling</a> is required. This sub-process has to be integrated between a successful payment and the creation of a shipment entity.
+
+<h2>Additional workflow steps on partner side</h2>
+
+The following image shows the simplified partner management workflow. The Dropshipping partner handles the physical shipment and communicates with a shop API:
+
+(image: dropshipping_statuses-650x377.png)
+
+<h2>A new entity: Purchase Orders</h2>
+
+Magento offers one or more shipment entities related to an order out of the box.
+But with this entity type it is not possible to manage an external partner who should be completely responsible for logistics. So, what’s a possible and simple solution for the order based partner management?
+
+With the new entity type „Purchase Order“, which is created by Magento after the
+successful payment, Magento gets the ability to manage the new partner workflow. The Purchase Order contains all informationen needed by the Dropshipper to fulfill the shipment. With its own status handling (e.g. Purchase Order received, Purchase Order in progress, Picking done, Package created, tracking number created etc.) the Dropshipper workflow can be completely tracked and the shop customer is always up-to-date with the actual status of the order.
+
+<h2>The reality</h2>
+
+Most Dropshippers don’t offer standardized APIs. Some have their internal ERP systems with customized RESTful APIs, but according to our experience most of them just offer “interfaces” via CSV exports and imports. This results in an error-prone API handling with time delays for status updates and conflicts if a Purchase Order gets exported more than once. But in reality it is not possible to change or improve these Dropshipper interfaces without a huge implementation effort. It’s sink or swim.
+
+<h2>A possible solution via a ready-to-use Magento extension</h2>
+
+To avoid costly individual implementations and non-scalable solutions – if you want to connect to more than one Dropshipper – our product of choice is the <a href="https://secure.unirgy.com/products/udropship/" target="_blank">uDropship extension by Unirgy</a>. In combination with the AdvancedPO, MultiVendor and Batch add-ons you get a fully featured Purchase Order workflow solution. You’re able to create multiple vendors, configure CSV exports and imports via FTP and SFTP connections to your vendors, get a per vendor stock management and many more. Additionally with vendor based grids you can monitor Purchase Orders and the export and import files.
+
+<h2>Conclusion</h2>
+
+Dropshipping is a really interesting concept for shops to scale their businesses without high investments. You don’t have to build up new workflows internally and just have to connect to a partner API managed by your IT department. This can be simplified with an extension like uDropship in Magento and used by merchants of any size.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4088

@@ -1,0 +1,58 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW32
+
+----
+
+Date: 2010-08-13
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ein paar Lesetipps dürfen ab nun auch in unseren Blog nicht fehlen
+
+----
+
+Text: <ul><li><a href="http://romanzenner.com/blog/magento-oxid-impressions/">Roman Zenner vergleicht Oxid und Magento in seinem Blog</a>
+Spannender Beitrag - nach dem Lesen muss ich sagen das die Entscheidung Magento anstatt Oxid zu nutzen sich doch rentiert.</li>
+	<li><a href="http://www.eliasinteractive.com/blog/a-high-level-business-use-perspective-on-svn">Magento SVN: Best Practice</a> oder wie kann man ein ganzes Magento in SVN einchecken?
+Sehr sehr sinnvoll um z.B. halbautomatisch aktuelle Stände im Staging-System zu testen und danach auf den Live-Server zu stellen</li>
+	<li><a href="http://milkstyle.de/blog/2010/08/06/neue-magento-extensions-die-magento-sinnvoll-erganzen/">Eine Liste mit sinnvollen Magento Erweiterungen</a> von milkstyle
+von Forum bis zur DHL-Sendungsverfolgung</li>
+	<li><a href="http://feedproxy.google.com/~r/Inchoo/~3/gTCNtRXoZYo/">Wie man die Magento Api erweitert</a></li>
+	<li><a href="http://feedproxy.google.com/~r/PhpHatesMe-DerPhpBlog/~3/gcURQvZMvlw/">PHP hat Tricks oder Debug-Meldungen mit Boardmitteln</a>
+.. ein xDebug mit Standardmitteln von PHP erstellen?</li>
+</ul>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 539

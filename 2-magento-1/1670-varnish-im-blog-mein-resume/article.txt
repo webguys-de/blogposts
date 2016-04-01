@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Varnish im Blog: Mein Resume
+
+----
+
+Date: 2011-06-09
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,html-css-javascript-seo,development-wordpress
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Im meinem Artikel zum <a title="Varnish “joins” Webguys" href="http://www.webguys.de/wordpress/varnish-joins-webguys/">Einführung von Varnish im Blog</a> blieb natürlich noch die Frage offen was das ganze denn nun eigentlich bringt? Lohnt sich der Umbau? Schauen wir uns einmal einpaar Grafiken dazu an.
+
+----
+
+Text: <h3>Cache-Hits</h3>
+Cache-Hits geben an wie oft Varnish die Seite aus dem Cache liefern konnte. Cache-Misses dagegen zeigen wie oft die Seite mittels Apache, PHP und Wordpress neu generiert werden musste.
+
+(image: cache-hits.png)
+
+Man erkennt deutlich das ein Großteil der Cache Hits sind. Im Wochendurchschnitt sind das zwar nur 50% aber, für einen Blog mit viel Content ohne viel Traffic, schon ganz gut. Zu beachten ist das dabei diverse Traffic (Demo-Instanzen, Wordpress-Admin, andere Wordpress-Instanzen auf dem Server, usw.) direkt am Cache vorbei "geschummelt" wird. Bei diesen Seiten hat Varnish die Anweisung nicht zu cachen. Dennoch könnte ich die Zahlen noch einmal deutlich steigern indem ich die Cache-Lifetime verlängere und vorsichtiger mit dem Purge bin.
+<h3>Was Google sagt</h3>
+Wirklich spannend ist aber die eigentliche Aussage von Google zur Seitenperformanz. Vorher behaupten die <a href="https://www.google.com/webmasters/tools/home">Google-Webmaster-Tools</a> das ca. 60% der Webseiten im Internet schneller sind als meine. Heute sieht das schon ganz anders aus:
+
+(image: nacher_Webmaster-Tools-Website-Leistung_1307648663846-650x206.png)
+
+Man beachte das der Blog nun <strong style="font-size: 1.5em;">76% schneller</strong> ist als alle anderen :) Dennoch ist das Graph ein wenig komisch: Warum war die Seite denn angeblich zwischen November/ Dezember vergleichbar schnell? Mal schauen wie es sich entwickelt...
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1670

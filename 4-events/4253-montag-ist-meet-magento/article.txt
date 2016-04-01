@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Montag ist Meet Magento
+
+----
+
+Date: 2015-05-09
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Am Montag ist eine besondere Meet Magento. Endlich wurde unser Entwickler-Wunsch erhört und wir bekommen denn großen Konferenz Raum. Also Sitzplätze für alle - tolle Sache! Ich bin wirklich gespannt wie die Dev Kollegen sich auf der "großen Bühne" machen. Ein wenig neidisch bin ich allerdings schon: <a href="http://de.meet-magento.com/presentation/warenkorbpreisregeln/">Mein Vortrag zum Thema Warenkorbpreisregeln</a> hat es in den kleinen Konferenz-Raum geschafft. Aktuell bin ich mir etwas unschlüssig ob das am Ende klappt oder ob dann das falsche Publikum anwesend ist. Das ist nämlich ein reiner Dev Vortrag: <strong>Mit Source und so</strong> :)
+
+Eventuell erlaubt es der Rico mir meinen Vortrag aber auch im Barcamp zu halten. Schauen wir mal was uns diese Meet Magento so bringt :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4253

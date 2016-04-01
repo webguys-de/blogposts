@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: WordPress Themes
+
+----
+
+Date: 2009-03-19
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress,themes,wordpress,themes
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: sind Designvorlagen für Wordpress. Bei <a href="http://webworkblog.net/18-1-eigenes-wordpress-theme-template-erstellen-tutorial-howto/">webworkblog.net</a> kann man sich die Basics dazu anschauen und selber kreativ werden. Wer dies nicht möchte, die Zeit nicht hat oder nicht über die nötigen Kenntnisse im Bereich HTML/CSS/Php verfügt seien die folgenden Worte ans Herz gelegt: Es geht auch anders. Es gibt unzählige freie Vorlagen im Netz sowie die Premium Vorlagen, die im Normalfall etwas kosten. 
+
+----
+
+Text: Die folgenden Links bieten eine gute Auswahl an Themes.
+
+<strong>smashingmagazine.com</strong><a href="http://www.smashingmagazine.com/2008/01/08/100-excellent-free-high-quality-wordpress-themes/">
+100 free high-quality WordPress themes</a>
+
+<strong>WordPress Deutschland
+</strong><a href="http://themes.wordpress-deutschland.org">Themepool</a>
+
+<strong>wordpressthemesbase.com</strong>
+<a href="http://wordpressthemesbase.com/">Themepool</a>
+
+<strong>topwpthemes.com
+</strong><a href="http://topwpthemes.com/">Themepool</a>
+
+<strong>pixey.de</strong>
+<a href="http://www.pixey.de/50-free-wordpress-themes/">50 free wordpress themes</a>
+
+<strong>rock-kitty.net</strong>
+<a href="http://themes.rock-kitty.net">Themepool</a>
+
+Bei der Auswahl sollte man die Wordpress Versionkompabilität berücksichtigen. Einige Themes unterstützen (noch) nicht Version 2.7.x.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 571

@@ -1,0 +1,115 @@
+Article-meta: 
+
+----
+
+Title: Türchen 03: Magento Template Filter
+
+----
+
+Date: 2011-12-03
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: bastian-ike
+
+----
+
+Article-content: 
+
+----
+
+Intro: Jeder, der sich schonmal Magento angeguckt hat, kennt diese Konstrukte mit {{ und }} in CMS-Seiten, -Blöcken, E-Mails. Ich bin einfach so frei zu behaupten das sich die meisten schon ziemlich damit rumgeschlagen haben, ohne genau die Funktionalität, und vor allem die Erweiterbarkeit, dieser Filter zu kennen.
+
+Nach dem tollen Einstieg in den Adventskalender möchte ich in diesem Türchen also die Funktion und das Erweitern des Template-Filters in Magento erklären. Anfangs die Funktionsweise, danach das Erweitern und am Ende einen Überblick was uns Magento schon im Standard zur Verfügung stellt.
+
+
+----
+
+Text: Zu aller erst einen kurzen Blick auf den Template-Filter: Wir können in E-Mails, CMS-Seiten und weiteren Stellen Platzhalter einbauen die z.B. durch bestimmte Blöcke, URLs oder (in E-Mails) Kundendaten ersetzt werden. Der Syntax dafür ist super einfach: <em>{{platzhalter argumente...}}</em>.
+
+Als Beispiel nehmen wir einfach mal <em>{{var customer.email}}</em> oder <em>{{store url=”checkout/cart”}}</em>. Das erste würde zum Beispiel in E-Mail-Templates durch die E-Mail-Adresse des Kunden ersetzt. Das zweite könnte einen Link auf <em>/checkout/cart/</em> erzeugen.
+<h2>Funktionsweise</h2>
+Das Herzstück der ganzen Angelegenheit ist die Klasse <em>Varien_Filter_Template</em> die <em>Zend_Filter_Interface</em> Die damit  die Funktion <em>filter($value))</em> implementieren muss. <em>Varien_Filter_Template::filter($value)</em> verarbeitet zuerst {{if...}} und {{depend...}} Anweisungen (bzw. Direktiven), und danach alles, was auf {{([a-z]{0,10})(.*?)}} passt. Dabei wird so vorgegangen das mit is_callable geprüft wird ob $1 (die ersten 0-10 Zeichen) mit dem Zusatz “<em>Directive</em>” aufgerufen werden kann. Sollte dies der Fall sein wird die Funktion mit dem Argument <em>$2</em> aufgerufen, und der Rückgabewert in der Ausgabe eingefügt.
+<h2>Nutzung in E-Mails und CMS-Seiten</h2>
+E-Mails nutzen <em>Mage_Core_Model_Email_Template_Filter</em> welcher von <em>Varien_Filter_Template</em> erbt und einige weitere Funktionen (Magento-Spezifisch) zur Verfügung stellt. CMS-Seiten und Blöcke nutzen Mage_Widget_Model_Template_Filter welches wiederum von Mage_Cms_Model_Template_Filter und dieser vom E-Mail-Filter erbt, allerdings von der Funktionalität nichts weiter bietet, außer das noch die <em>widgetDirective</em>() hinzugefügt wurde. Welcher Filter genau für CMS-Elemente genutzt wird ist übrigens in der Konfiguration in <em>global/cms/page/tempate_filter</em> und <em>global/cms/block/tempate_filter</em> definiert.
+Achtung: <strong><em>tempate</em></strong> ist kein Schreibfehler von mir, sondern von Magento ;-)
+
+An dieser Stelle könnten wir jetzt ansetzen und uns ein eigenes Model bauen: <em>Test_Filter_Model_Template_Filter</em> soll von <em>Mage_Widget_Model_Template_Filter</em> erben und per <em>config.xml</em> den Wert von <em>global/cms/page/tempate_filter</em> auf <em>filter/template_filter</em> setzen.
+Danach können wir z.B. eine Methode mit dem Namen <em>testDirective($construction)</em> definieren die dann durch <em>{{test}}</em> aufgerufen wird.
+
+(code lang: php)
+public function testDirective($construction) {
+	return 'Es ist ' . date('H:i:s') . ' ' . print_r($construction, 1);
+}
+(/code)
+
+Einfach mal einbauen und <em>{{test foo bar}}</em> in eine CMS-Seite schreiben.
+
+Wenn wir jetzt z.B. in Produktbeschreibungen auch diese Filter nutzen möchten reicht es im entsprechenden Template folgendes zu platzieren:
+
+(code lang: php)
+// aus
+echo $_product->getDescription();
+// wird ein
+echo Mage::helper(‘cms’)->getPageTemplateProcessor()->filter($_product->getDescription());
+
+// bei Bedarf natürlich eleganter, aber das Prinzip dürfte klar sein
+(/code)
+
+So können wir bei Bedarf auch Widgets in Produktbeschreibungen unterbringen oder vernünftige URLs oder oder oder .. der Fantasie sind keine grenzen Gesetz :)
+<h2>Verschiedene Direktiven</h2>
+Wir wissen jetzt wie die Filter im groben funktionieren, wie wir eigene Direktiven einbinden und diese auch woanders nutzen können.Doch was gibt es überhaupt out-of-the-box von Magento? Die wichtigsten will ich hier einmal erläutern:
+<h3>varDirective</h3>
+Die varDirective dient dem Zugriff auf Variablen. Diese können z.B. über <em>setVariables(array $variables)</em> dem Template-Filter übergeben werden. Für E-Mails gibt es als Beispiel die <em>Mage_Sales_Model_Order::sendNewOrderEmail(...)</em> Funktion:
+
+(code lang: php)$mailer-&gt;setTemplateParams(array(
+    'order'        => $this,
+    'billing'      => $this->getBillingAddress(),
+    'payment_html' => $paymentBlockHtml
+));(/code)
+
+Im E-Mail-Template könnte man jetzt z.B: mit <em>{{var order...}}</em> auf das aktuelle <em>Mage_Sales_Model_Order</em>-Objekt zugreifen. Beispielsweise {{var order.getCustomer().getAddress().format(‘html’)}} oder alternativ <em>{{var order.customer.address.format(‘html’)}}</em>. So kommt man an alle wichtigen Informationen die man irgendwo einbauen möchte.
+<h3>widgetDirective</h3>
+wird genutzt um Widgets einzubinden. Die Benutzung lernt man am einfachsten über den Assistenten im WYSIWYG-Editor.
+<h3>blockDirective</h3>
+Schonmal den Wunsch gehabt einfach einen Block in einer CMS-Seite einzubinden? Hier ist die Lösung:
+<em>{{block type=”catalog/product_list” id=”cms_product_list” output=”toHtml” category_id=”3”}}</em>
+Die Parameter type, id und output werden für die Erstellung und das anzeigen des Blocks genutzt, alle andere Parameter werden mit setDataUsingMethod($paramter, $value) auf den Block gesetzt.
+<h3 dir="ltr">configDirective</h3>
+Unter Umständen möchte man Werte aus der Konfiguration anzeigen, zum Beispiel die Store-Owner-Daten. <em>{{config path=”path/to/xml/node”}}</em> gibt dafür den entsprechenden Wert zurück.
+<h3>htmlescapeDirective</h3>
+Zum Schutz vor XSS kann man mit <em>{{htmlescape var=”gefährlich<h1>”}}</em> Strings maskieren. Nützlich z.B. auch für E-Mail-Adressen u.ä.
+<h3>mediaDirective / skinDirective</h3>
+Im Prinzip dieselben Funktionen zum ermitteln der entsprechenden URLs für das skin und media Verzeichnis.
+Als Parameter wird jeweils url genutzt: <em>{{media url=”somepicture.png”}}</em>
+<h3>storeDirective</h3>
+Eigentlich sollte storeDirective urlDirective heißen, denn genau das macht sie: eine URL zurückgeben:
+<em> {{store url=”somewhere”}}</em> Wer sich immer schon bei Sachen wie <em>{{store url=”somewhere.html”}}</em> über das / am Ende geärgert hat sollte übrigens mal <em>{{store direct_url=”somewhere.html”}}</em> ausprobieren statt das (leider) oft genutzte <em>{{store url=””}}somewhere.html</em>.
+<h2>Fazit</h2>
+Ich persönlich finde die Filter ziemlich mächtig. Das einfache hinzufügen eigener Funktionen macht das ganze nur noch schöner. Auf jeden Fall lohnt sich auch nochmal ein Blick in die entsprechenden Klassen um selber ein Bild davon zu bekommen wie der Code aussieht. Trotzdem hoffe ich hiermit eine gute Einführung gegeben zu haben. In dem Sinne: schonmal einen schönen 2. Advent und bis zum nächsten Türchen :-)
+
+P.S.: Noch ein Tipp aus <strong>Sicht der Sicherheit</strong>: Lasst niemals Daten von dritten durch den Template-Filter (z.B. durch Erweiterungen für Kundenkommentare, Schlagwörter, o.ä.). Der einfachste Weg so etwas auszunutzen wäre das Auslesen von Datenbankkonfiguration u.ä. per <em>configDirective</em>, ein etwas erfahrener Angreifer könnte u.U. auch eigenen Code ausführen!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2133

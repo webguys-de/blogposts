@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: 6 wichtige Plugins für RedDot
+
+----
+
+Date: 2009-04-17
+
+----
+
+Description: 
+
+----
+
+Tags: reddot,plugins,reddot,plugin
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Es gibt viele Kniffe, die die Arbeit mit dem CMS aus Oldenburg leichter machen, einige können über built-in Funktionen wie Rendertags eingesetzt werden, andere Kniffe werden durch Plugins realisiert.
+
+----
+
+Text: <strong>1. <a href="http://www.sfebusiness.com/reddot-cms-plugin-mehrere-instanzen-auf-einmal/">Add multiple instances</a>
+</strong>Dieses Plugin von <a href="http://www.sfebusiness.com">stoll & fischbach eBusiness</a> erweitert den Funktionsumfang von RedDot CMS um die Möglichkeit, mit nur einem Klick mehrere Instanzen einer Content-Klasse auf einmal zu erstellen. Damit lassen sich Slideshows, Tabellen oder Pressemeldungen etc. effizient einpflegen.
+
+<strong>2. <a href="http://www.reddotcmsblog.com/plug-in-double-pack-clipboarddeleter-and-rss-who-logged-in">ClipboardDeleter</a></strong>
+ClipboardDeleter ist die Weiterenwicklung des Plugins <a href="http://www.reddotcmsblog.com/clipboard-publisher">ClipboardPublisher</a> von Frederic Hemberger. Es erlaubt dem Benutzer im SmartTree alle markierten Seiten aus Ablage zu löschen.
+
+<strong>3. <a href="http://www.reddotcmsblog.com/reddot-ui-check-filename">RedDot UI: Check Filename</a>
+</strong>Dieses Plugin überprüft, ob bei einer Publizierung Dateien wie Bilder, Pdf etc. innerhalb eines Ordners überschrieben werden. Gerade bei umfangreichen Projekten kann dies nahezu unbemerkt vorkommen.
+
+<strong>4. <a href="http://www.reddotcmsblog.com/plugin-view-template-for-shared-content-classes">View Template</a>
+</strong>Bei Projekten mit RedDot ab 7.5.1.31 und vererbten Content-Klassen fällt auf, das RedDot die Funktionalität "Template anzeigen" entfernt hat. Aus genau diesem Grund wurde das Plugin entwickelt.
+
+<strong>5. <a href="http://www.reddotcmsblog.com/plugin-update-connected-projects-from-content-class-menu">Update Connected Projects
+</a></strong>In Projekten mit verebten Content-Klassen werden Änderungen nicht automatisch übernommen. Um sich die schier endlose Klickerei zu sparen gibt es dieses Plugin - denn hiermit benötigt man nur noch einen Klick auf den entsprechenden Ordner.
+
+<strong>6. <a href="http://www.reddotcmsblog.com/plugin-checkbox-assign-keywords">Checkbox Assign Keywords</a>
+</strong>Mit Optionslisten kann zwar schon einiges machen, jedoch ist der usability schnell ein Ende gesetzt. Abhilfe schafft hier das Plugin Checkbox Assign Keywords. Die auswählbaren Werte werden an das Formular übergeben, der Wert in dem Standardfeld gespeichert. Dadurch erhöht sich in größeren und multilingualen Projekten die usability für den Redakteur und den Entwickler gleichermaßen.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 51

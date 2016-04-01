@@ -1,0 +1,92 @@
+Article-meta: 
+
+----
+
+Title: Türchen 14: Zwei hilfreiche Erweiterungen
+
+----
+
+Date: 2012-12-14
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender,attribute,attributset,attributset-andern,download,attachment,erweiterung
+
+----
+
+Author: dominic-lautner
+
+----
+
+Article-content: 
+
+----
+
+Intro: Häufig erleichtern einfache Magento Erweiterungen den Alltag eines Webworkers - nur kenne muss man sie. Im Türchen 14 stelle ich kurzer Hand zwei einfache Erweiterungen vor die mir, in meinen letzten Projekten, gut helfen konnten.
+
+
+----
+
+Text: <h2>Attributsetwechsel leicht gemacht</h2>
+Bei Magento ist jedem Produkt ein festes Attributset zugeordnet. Das ist so lange gut, bis im Projektverlauf das Attributset gewechselt werden muss.
+
+So ein wechsel kann dann sinnvoll sein wenn die Produkte etwas voreilig angelegt wurden, und alle dem Default Attributset zugewiesen sind, dann aber später doch etwas differenzierter definiert werden sollen.
+
+Selbst bei einer geringen Anzahl von Produkten wird ein erneutes anlegen der Produkte von Hand einiges an Zeit beanspruchen.
+
+Einfacher geht das mit der Erweiterung „Flagbit Change Attribute Set“
+
+Nach dem man die Erweiterung installiert, und sich kurz aus und einloggt hat, kann man wie in folgender Beschreibung einfach ein neues Attributset für ein oder mehrere Produkte einstellen.
+<h3>Schritt 1: Produkt(e) markieren</h3>
+(image: cas_00.jpg)<h3></h3>
+<h3>Schritt 2: unter Aktion "Change attribute set" auswählen</h3>
+(image: cas_01.jpg)<h3>Schritt 3:  In dem nun erscheinenden Dropdown das gewünschte Attribut auswählen und mit Absenden bestätigen</h3>
+(image: cas_02.jpg)
+
+Wenn nun alles gut gegangen ist, dann haben die Produkte nun ein andere Attributset.
+
+<a title="Flagbit Change Attribute Set  " href="http://www.magentocommerce.com/magento-connect/flagbit-change-attribute-set.html" target="_blank">Und hier gibts die Erweiterung: Flagbit Change Attribut Set</a>
+
+Funktioniert auch gut mit Magento 1.7
+
+Und weil das Türchen bisher so kurz ist gibts noch eine Erweiterung für Dateianhänge hinterher.
+<h2>Dateianhänge im Produkt</h2>
+Ab und zu wird es vom Kunden gewünscht, dass Downloads wie zum Beispiel Montageanleitungen oder technische Datenblätter zu den Produkten verfügbar gemacht werden sollen.
+
+Dafür nutze ich "Lanot Attachments". Nach der erfolgreichen Installation findet man unter <em>System</em> > <em>Konfiguration</em> links den Menüpunkt <em>LANOT EXTENSIONS</em> > <em>Attachments</em>. In diesem kann man die Einstellungen für die Erweiterung vornehmen.
+
+(image: att_00.jpg)
+
+Wie man sieht, sind die Einstellungsmöglichkeiten recht übersichtlich gehalten. Der Titel kann je nach StoreView unterschiedlich benannt oder übersetzt werden.
+
+Im Produkt selbst findet man die Optionen wie folgt: <em>Katalog</em> > <em>Artikel verwalten</em> > [<em>ein Artikel deiner Wahl öffnen</em>] > <em>Attachments</em>
+<h3>Folgen möglichkeiten hast Du nun:</h3>
+<ul><li>Dem Download einen Titel zuweisen.</li>
+	<li>Eine Datei hochladen oder auf eine beliebige URL verweisen.</li>
+	<li>Die Reihenfolge bestimmen, falls man mehrere Downloads im Artikel angelegt hat</li>
+</ul>
+Und wenn man das ganze gespeichert hat, dann findet man den Download auf der Artikeldetailseite wieder.
+
+Auch hier ist alles mit wenigen Handgriffen gemacht.
+
+<a title="Lanot Attachments" href="http://www.magentocommerce.com/magento-connect/catalog/product/view/id/14415/s/lanot-attachments-9533/" target="_blank">Zur Erweiterung: Lanot Attachments</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3227

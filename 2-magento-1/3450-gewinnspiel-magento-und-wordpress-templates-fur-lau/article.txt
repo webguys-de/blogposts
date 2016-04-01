@@ -1,0 +1,60 @@
+Article-meta: 
+
+----
+
+Title: Gewinnspiel: Magento und WordPress Templates für lau
+
+----
+
+Date: 2013-08-13
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wir freuen uns, zusammen mit <a href="http://www.TemplateMonster.com/de">TemplateMonster.com/de</a> eine tolle Aktion anbieten zu können. Ab heute hast Du die Chance, <strong>eines von drei Premium WordPress- oder Magento Templates zu gewinnen</strong>. Dank dieses Gewinnspiels kannst Du ein Template, das ca. $50 - $136 kostet, GRATIS bekommen!
+
+
+----
+
+Text: <h2>So nimmst Du teil:</h2>
+Schreibe einen Kommentar zu diesem Beitrag und verrate uns, <strong>welches TemplateMonster WordPress- oder Magento Theme Du gern gewinnen würdest und warum.</strong>
+<ul><li>Die Magento Templates findest Du hier: <a href="http://www.templatemonster.com/de/type/magento-vorlagen">www.templatemonster.com/de/type/magento-vorlagen</a></li>
+<li>Die WordPress Themes sind hier: <a href="http://www.templatemonster.com/de/type/wordpress-themen">www.templatemonster.com/de/type/wordpress-themen</a></li>
+</ul>
+Finde mit Hilfe des Filters das gewünschte Template und vergiss nicht, seine ID-Nummer im Kommentar anzugeben. Dein Kommentar sollte in etwa so aussehen: „Ich würde mich über die Magento Vorlage # 45397 sehr freuen, weil diese am besten zu meiner Online- Boutique passt“
+<h3>Achte bitte darauf:</h3>
+Das Gewinnspiel läuft bis zum 18.August 2013 um 23:59 Uhr. Danach wählen wir per Zufallsprinzip drei Gewinner aus und benachrichtigen diese per E-Mail. Gib bitte eine gültige Emailadresse an, damit du im Gewinnfall kontaktiert werden kannst.
+
+Viel Glück und Spaß!
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3450

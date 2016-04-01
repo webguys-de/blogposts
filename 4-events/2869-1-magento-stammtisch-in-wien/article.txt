@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: 1. Magento Stammtisch in Wien
+
+----
+
+Date: 2012-06-23
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Matthias Zeis bat mich darum auf den ersten Magento Stammtisch in Wien noch einmal hinzuweisen. Am 05. September treffen sich im Plutzer Bräu dort zum ersten mal Wiener Magento-Entwickler, Shop-Betreiber und interessierte. Weitere Details gibt es bei <a href="https://www.xing.com/events/1-magento-stammtisch-wien-1106254?creation=1&sc_o=ef_3-sa">Xing</a>. Ich hoffe ihr kommt alle zahlreich :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2869

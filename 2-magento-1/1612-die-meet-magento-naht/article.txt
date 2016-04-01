@@ -1,0 +1,58 @@
+Article-meta: 
+
+----
+
+Title: Die Meet-Magento naht
+
+----
+
+Date: 2011-05-05
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Heute sind es nur noch ein paar Tage bis zur nächsten <a href="http://www.meet-magento.de/">Meet-Magento</a>. Also wer bis jetzt noch kein <a href="http://www.meet-magento.de/tickets.html">Ticket</a> hat solle sich nun noch <a href="http://www.meet-magento.de/tickets.html">schnell eines sichern</a>. Aber warum?
+<ul>
+	<li><a href="http://www.meet-magento.de/programm.html">Spannende Vorträge</a> zum Thema Magento und auch mal über den Tellerrand</li>
+	<li>"Netzwerken" quasi garantiert möglich: Ob zwischen den Vorträgen oder bei der Aftershow-Party. Themen gibt es immer</li>
+	<li>Kontakte knüpfen und Erfahrungen austauschen: Ein Muss für das nächste erfolgreiche Magento-Projekt</li>
+	<li>Eigene Ideen und Probleme im Barcamp ansprechen können</li>
+</ul>
+
+
+----
+
+Text: .. und natürlich auch mein Vortrag zum Thema "<a href="http://www.meet-magento.de/programm/tobias-vogt-programm-meet-magento-511.html">Den Magento-Checkout verstehen und optimieren</a>". Dazu auch ein kleines Making-Of-Bild:
+
+(image: 2011-05-05-18.01.06-650x463.jpg)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1612

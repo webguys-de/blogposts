@@ -1,0 +1,67 @@
+Article-meta: 
+
+----
+
+Title: Magento Innovate Conference 2011 / x.commerce
+
+----
+
+Date: 2011-10-13
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Stellt euch vor Magento ruft zur Messe und keiner geht hin. Schwer vorstellen oder? Ich für meinen Teil ärgere mich gerade etwas das ich in den USA nicht dabei bin. Die Reaktionen auf Twitter sind vielfach sehr sehr begeistert.
+
+
+----
+
+Text: <h3>Dazu ein paar Links:</h3>
+<ul><li><a href="http://www.webshopnews.net/2011/10/xcommerce-die-wichtigsten-infos-zur.html">WebshopNews</a> erklärt das nun genau hinter dem neuen x.commerce steckt:</li>
+	<li>Matthias Zeis bloggt direkt zu den Vorträgen: <a href="http://blog.limesoda.at/themen/e-commerce/">Live-Blogging</a></li>
+	<li>Ein Rückblick von <a href="http://www.openstream.ch/blog/magento-als-teil-der-ebay-x-commerce-platform/">Nick Weisser</a> zum ersten Tag</li>
+	<li>Magento announcements at #innovate2011 von <a href="http://www.gxjansen.com/magento-announcements-at-innovate2011/">Guido Jansen </a>(en)</li>
+	<li>Einige Fotos von <a href="http://www.techdivision.com/blog/innovate-conference-2011-vorstellung-von-x-commerce/">TechDivision </a></li>
+</ul><h3>und ein paar Meinungen aus Twitter</h3>
+<ul><li>Roy rubin co founder of magento says "extensions are more powerful than aps"</li>
+	<li>Größter Applaus bisher: Roy Rubin on stage!</li>
+	<li>Presenting the new Magento Connect!</li>
+	<li>Und erstaunlich hoher ♀Frauenanteil... für eine Entwicklerkonferenz</li>
+	<li>Die X.commerce-Bestandteile sollen sicher, problemlos austauschbar und entwicklerfreundlich sein.</li>
+</ul>
+Ich werde den Beitrag stückchenweise um neue Infos erweitern.
+<h3>Update 1</h3>
+Externe Links zu MagentoConnect funktionieren mit dem Update auf das neue MagentoConnect nicht mehr. Magento ist dran das zu lösen.
+<h3>Update 2</h3>
+Dank Daniel Sasse bin ich gerade auf die <a href="http://www.magentocommerce.com/services/on-demand">Magento U Trainings</a> gestoßen. Sie kosten im Moment anstelle von $3850,- gar nichts.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1958

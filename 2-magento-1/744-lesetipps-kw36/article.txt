@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW36
+
+----
+
+Date: 2010-09-12
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Unsere Magento-Lesetipps gehen in eine neue Woche. Aus der Praxis ein Beitrag zu <a href="http://www.rohde-christian.de/magento-rundungsfehler/">Rundungsfehlern in Magento und wie man das Problem löst</a>. Zusätzlich verlost die <a href="http://www.ecommerce-lounge.de/meet-magento-4-10-2734/">E-Commerce-Lounge ein paar Tickets zur diesjährigen Meet-Magento 4.10</a>. Als Alternative zu <a href="http://www.netresearch.de/blog/2010/09/03/magebid-%E2%80%93-das-ultimative-ebay-modul-fur-magento/">Magebid/ Magebay</a>, dem Modul um Ebay und Magento zu verschmelzen, tritt <a href="http://m2epro.ess-ua.com/">M2E auf den Plan</a>. Es kostet $199.00 und ist schon einige Zeit auf dem Markt - sollte also Stabil laufen. <a href="http://magebase.com/magento-tutorials/customising-magentos-error-messages/">Magebase</a> erklärt wie man <a href="http://magebase.com/magento-tutorials/customising-magentos-error-messages/">Fehlermeldungen in Magento optisch</a> anpasst.
+
+Zusätzlich gab es einigen Lesestoff zu Magento-Mobile: <a href="http://www.webshopnews.net/2010/09/magento-mobile-features-und-preise.html">Magento Mobile –Features und Preise</a>, <a href="http://www.magentocommerce.com/blog/comments/magento-mobile-launches-today/">Magento Mobile Launches Today!</a> und letztlich Michael Karl mit <a href="http://milkstyle.de/blog/2010/09/09/was-ist-eigentlich-magento-mobile/">Was ist eigentlich Magento Mobile?</a>
+
+Zum Schluss ein Artikel um <a href="http://www.phphatesme.com/blog/tools/eclipse-php-framework-integration/">PHP mit Eclipse</a> richtig zu verwenden.Das war es für diese Woche aber falls Ihr einen spannend Beitrag habt  sind wir für Anregungen offen: <a href="mailto:tobi@webguys.de">tobi@webguys.de</a> oder die Kommentarfunktion nutzen :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 744

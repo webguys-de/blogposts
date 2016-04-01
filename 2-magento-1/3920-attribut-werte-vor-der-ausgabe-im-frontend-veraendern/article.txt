@@ -1,0 +1,129 @@
+Article-meta: 
+
+----
+
+Title: Attribut-Werte vor der Ausgabe im Frontend verändern
+
+----
+
+Date: 2014-05-07
+
+----
+
+Description: 
+
+----
+
+Tags: 
+
+----
+
+Author: matthias
+
+----
+
+Article-content: 
+
+----
+
+Intro: Für alle, die sich schon immer gefragt haben, wofür eigentlich der Catalog-Output-Helper ist, möchte ich in diesem Beitrag einmal ein wenig Licht ins Dunkel bringen. Um genau zu sein, geht es um folgende Zeilen
+
+
+
+----
+
+Text: (code lang: php)
+$_helper = $this->helper('catalog/output');
+echo $_helper->productAttribute($_product, $_product->getDeliveryTime() , 'delivery_time');
+// oder
+echo $_helper->categoryAttribute($_category, $_category->getName(), 'name');
+(/code)
+
+Warum sollte man also die Ausgabe eines Produktattributes noch einmal durch einen Helper schieben müssen? Man will doch einfach nur einen bestimmten Wert haben und sonst nichts, oder?
+
+Der Grund ist ganz einfach: Durch verschiedene Handler ist es möglich, die Ausgabe eines jeden Attributes zu manipulieren. Die entsprechenden Handler müssen einfach nur im Output-Helper registriert werden, und schon kann man durchstarten.
+
+Zum Start schauen wir uns einmal das Event <em>catalog_helper_output_construct</em> an. Dieses wird aufgerufen, wenn der Output-Helper instanziiert wird. Wir wir wissen, handelt es sich bei einem Helper immer um ein Singleton - so wird das Event also auch nur ein einziges Mal geworfen.
+
+(code lang: xml)
+<frontend>
+    <events>
+        <catalog_helper_output_construct>
+            <observers>
+                <my_module>
+                    <class>my_module/observer</class>
+                    <type>singleton</type>
+                    <method>catalogHelperOutputConstruct</method>
+                </my_module>
+            </observers>
+        </catalog_helper_output_construct>
+    </events>
+</frontend>
+(/code)
+
+Nun, wo wir über die Existenz des Helpers bescheid wissen, können wir unsere Handler registrieren. Da es sich um einen Catalog-Helper handelt, gibt es folgende zwei Möglichkeiten für Handler:
+<ul><li>catalogAttribute</li>
+	<li>productAttribute</li>
+</ul>
+Aber wie registrieren wir nun so einen Handler? Das ist relativ einfach, hier mal ein Beispiel aus dem Observer:
+
+(code lang: php)
+class My_Module_Model_Observer
+{
+    public function catalogHelperOutputConstruct($observer)
+    {
+        /** @var $outputHelper Mage_Catalog_Helper_Output */
+        $outputHelper = $observer->getHelper();
+
+        $helper = Mage::helper('my_module');
+        $outputHelper->addHandler('productAttribute', $helper);
+    }
+}
+(/code)
+
+Wie man sieht, braucht man als erstes ein Objekt, welches das Handle-Event verarbeitet. Hier bietet sich ein Helper aus dem eigenen Modul an. Der einzige Anspruch an das übergebene Objekt ist eine Methode mit dem entsprechenden Handler-Typ (also catalogAttribute oder productAttribute). Diese wird nun für jedes Attribut aufgerufen - daher muss man selbst innerhalb der Methode prüfen, wie und ob man welches Attribut manipulieren möchte:
+
+(code lang: php)
+class My_Module_Helper_Data extends Mage_Core_Helper_Abstract
+{
+    public function productAttribute(Mage_Catalog_Helper_Output $outputHelper, $outputHtml, $params)
+    {
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = $params['product'];
+
+        if ($params['attribute'] == 'name' && ($attributeValue = $product->getData($params['attribute']))) {
+            $outputHtml = sprintf('<a href="%s" title="%s">%s</a>', $product->getProductUrl(), $product->getName(), $outputHtml);
+        }
+
+        return $outputHtml;
+    }
+}
+(/code)
+
+Über den ersten Parameter $outputHelper bekommt man die Instanz des Helpers noch einmal in die Methode hereingereicht, $outputHtml ist die Ausgabe an das Frontend - dieser stellt sicherlich in den meisten Fällen eine Grundlage für eine manipulierte Ausgabe dar. Über den dritten Parameter bekommt man weitere Informationen zum Attribut, wie zum Beispiel das betroffene Produkt oder eben die entsprechende Kategorie.
+
+Die Anwendungsmöglichkeiten sind vielfältig. So könnte man
+<ul><li>ein Attribut anders ausgeben, wenn sich ein Produkt in einer bestimmten Kategorie befindet,</li>
+	<li>aus einer übergebenen SKU einen Link erstellen</li>
+	<li>den Wert an das entsprechende Länderformat anpassen</li>
+	<li>und vieles mehr</li>
+</ul>
+Durch die vielfältigen Möglichkeiten sollte man darauf achten, dass man nicht versucht jedes Problem über diesen Weg zu erschlagen. Man sollte sich immer vor Augen halten, dass jede Ausgabe eines Attributs durch dieses Stück Code laufen wird. Fängt man hier nun an, noch großartig Logik zu hinterlegen oder gar Objekte aus der Datenbank zu laden, kann man hier schnell ein paar Performance-Killer schreiben.
+
+Natürlich kann man beliebige weitere Typen von Handlern hinzufügen, diese müssen dann aber manuell über die Process-Methode verarbeitet werden. Spontan fällt mir aber kein Beispiel ein, wo das Sinn machen würde.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3920

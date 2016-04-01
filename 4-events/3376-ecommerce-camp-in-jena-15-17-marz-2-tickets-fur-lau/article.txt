@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: eCommerce-Camp in Jena (15. - 17. März) + 2 Tickets für lau
+
+----
+
+Date: 2013-02-03
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Meet-Magento, Magento Hackathon und unsere Magento-Stammtische haben eines gemeinsam: Sie beschäftigen sich ausschließlich mit dem Thema Magento. In erster Linie natürlich eine ziemlich tolle Sache aber leider kommt der alt bekannte Tellerrand hier eventuell etwas zu kurz. Genau in diese Lücke sticht das <a href="http://www.ecommerce-camp.de">eCommerce-Camp in Jena</a>. Es bietet uns Entwicklern die Möglichkeit unseren Horizont zu erweitern und auch mal zu schauen welche Probleme Oxid und Shopware im alltäglichen Leben haben und was Magento besser oder schlechter macht.
+
+
+
+----
+
+Text: <h2>Wie läuft das E-Commerce-Camp ab?</h2>
+Das Camp beginnt am Freitag Abend mit einem gemütlichen kennenlernen - ein oder zwei Bier dürfen wir dabei sicher auch trinken.  Danach geht es am Samstag und Sonntag mit Themen aus dem Barcamp weiter. Zudem gibt es einige bekannte Redner mit festen Vorträgen. Persönlich freue ich mich auf Roman Zenner mit seinem Shop-Vergleich: Das wird sicher für Zündstoff sorgen und eine spannende Diskussion mitbringen :-)
+
+Genauso kann ich Beiträge von Thomas Fleck auch immer empfehlen: Was er uns genau zum Thema Shop und App sagen will? Ich bin jetzt schon gespannt.
+<h2>Zwei Tickets geschenkt!</h2>
+Ich werde das E-Commerce-Camp in Jena besuchen und würde mich total freuen euch dort zu sehen. Deswegen dürfen wir, mit Unterstützung von Björn Jakob, hier und jetzt  2 Tickets verschenken. Also du hast Lust ..
+<ul><li>.. das E-Commerce-Camp in Jena zu besuchen?</li>
+	<li>.. mit uns ein Wochenende unseren Tellerrand zu erweitern?</li>
+	<li>.. auf spannende Diskussionen?</li>
+	<li>.. dafür zu sorgen dass wir Magento-Entwickler in einer repräsentiven Stärke antreten? (Im Moment gibt es nur sehr wenige Magento Teilnehmer)</li>
+	<li>.. das <a href="http://www.ecommerce-camp.de">Ticket</a> geschenkt zu bekommen?</li>
+</ul>
+Dann kommentiere hier oder schreibe bis zum 10. Februar eine E-Mail an tobi@webguys.de - für den Fall das es mehr Teilnehmer als Tickets gibt entscheidet das Los :-)
+
+Ich freu mich schon jetzt!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3376

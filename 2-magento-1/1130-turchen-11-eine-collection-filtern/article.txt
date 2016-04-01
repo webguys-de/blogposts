@@ -1,0 +1,170 @@
+Article-meta: 
+
+----
+
+Title: Türchen 11: Eine Collection filtern
+
+----
+
+Date: 2010-12-11
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung,adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Türchen 11 zeigt wie in Magento eine Sammlung von Models eines Typ geladen werden kann: Die Collection. Natürlich geht das Türchen noch einen Schritt weiter und erläutert die einzelnen Möglichkeiten zur Filterung.
+
+
+
+----
+
+Text: Will man einfach mal eben so alle Produkte seines Webshops auslesen, kann man das über die Methode getCollection des Product-Models tun.
+
+(code lang: php)
+$productCollection = Mage::getModel('catalog/product')->getCollection();
+(/code)
+
+Eine solche Product-Collection ist quasi eine Datenbank-Abfrage. Welches SQL nachher an den Datenbankserver abgesetzt wird kann man einfach mittels der Methode getSelect überprüfen.
+
+(code lang: php)
+echo ( $productCollection->getSelect() );
+(/code)
+
+In diesem Fall ergibt das folgendes SQL
+
+(code lang: sql)
+SELECT `e`.* FROM `catalog_product_entity` AS `e`
+(/code)
+
+Nun wäre es ziemlich ziemlich langsam erst alle Produkte abzurufen um nur z.B. das Produkt mit dem Namen "Webguys" zuhalten. So ist es in Magento möglich einen Filter auf die Collection anzuwenden. Ein solcher Filter macht letztlich nichts anderes als das aus der Collection erzeugte SQL um eine WHERE-Anweisung zu erweitern.
+
+(code lang: php)
+$productCollection->addFieldToFilter('name', 'Webguys');
+echo ( $productCollection->getSelect() );
+(/code)
+
+Die Methode addFieldToFilter leistet hier gute arbeitet. Das erzeugte SQL sieht nun wie folgt aus:
+
+(code lang: sql)
+SELECT `e`.*, `_table_name`.`value` AS `name`
+FROM `catalog_product_entity` AS `e`
+INNER JOIN `catalog_product_entity_varchar` AS `_table_name`
+ON (_table_name.entity_id = e.entity_id)
+AND (_table_name.attribute_id='60') AND (_table_name.store_id=0)
+WHERE (_table_name.value = 'Webguys')
+(/code)
+
+Wie zu erkennen ist hat Magento hier, durch das wir das Attribute 'name' benötigen, sich automatisch darum gekümmert die benötigten Tabellen zu joinen.
+
+Nachdem wir so die Auswahl der Produkte eingegrenzt haben können wir z.B. mittels Foreach auf die einzelnen Produkte zugreifen.
+
+(code lang: php)
+foreach( $productCollection AS $product ) {
+    echo $product->getName();
+}
+(/code)
+
+Genauso einfach lässt sich zählen wie viele Produkte von unserer Eingrenzung betroffen sind:
+
+(code lang: php)
+var_dump( count( $productCollection ) );
+(/code)
+<h2>Aber <em>addFieldToFilter</em> kann noch mehr..</h2>
+Nun können wir genau den Wert eines Zelle vergleichen aber uns fehlen noch eine Reihe von Möglichkeiten z.B. nach kleiner-gleich filtern zu können.
+
+(code lang: php)
+$productCollection->addFieldToFilter('entity_id', array( 'lteq' => 25) );
+echo ( $productCollection->getSelect() );
+(/code)
+
+Wieder nutzen wir die bekannte addFieldtoFilter Funktion von Magento, nur das wir anstelle eines genauen Wertes ein Array mit weiteren Optionen übergeben. Die Optionen sind in der Methode <a href="http://docs.magentocommerce.com/Varien/Varien_Data/Varien_Data_Collection_Db.html#_getConditionSql">_getConditionSql </a>näher spezifiziert. Hier einige Beispiele:
+<h3>Optionen von addFieldToFilter</h3>
+<ul><li><strong>array("from"=>$fromValue, "to"=>$toValue)</strong>
+Spalte >= $fromValue AND spalte <= $toValue</li>
+	<li><strong>array("like"=>$likeValue)</strong>
+Spalte LIKE '$likeValue'</li>
+	<li><strong>array("neq"=>$notEqualValue)</strong>
+Spalte != $notEqualValue</li>
+	<li><strong>array("in"=>array($inValues))</strong>
+Spalte IN ( $inValues )</li>
+	<li><strong>array("nin"=>array($notInValues))</strong>
+Spalte NOT IN ( $notInValues )</li>
+</ul><h3>Übersicht einiger Optionen</h3>
+<table style="margin-bottom: 10px;"><tbody><tr><th>Magento-Option</th>
+<th>SQL</th>
+</tr><tr><td>eq</td>
+<td>=</td>
+</tr><tr><td>neq</td>
+<td>!=</td>
+</tr><tr><td>like</td>
+<td>LIKE</td>
+</tr><tr><td>nlike</td>
+<td>NOT LIKE</td>
+</tr><tr><td height="17">in</td>
+<td>IN</td>
+</tr><tr><td>nin</td>
+<td>NOT IN</td>
+</tr><tr><td>is</td>
+<td>IS</td>
+</tr><tr><td>notnull</td>
+<td>IS NOT NULL</td>
+</tr><tr><td height="17">null</td>
+<td>IS NULL</td>
+</tr><tr><td>moreq</td>
+<td>>=</td>
+</tr><tr><td>gt</td>
+<td>></td>
+</tr><tr><td>lt</td>
+<td><</td>
+</tr><tr><td>gteq</td>
+<td>>=</td>
+</tr><tr><td>lteq</td>
+<td><=</td>
+</tr></tbody></table><h3>Oder-Verknüpfungen</h3>
+Die Optionen lassen sich mitunter auch per Oder-Verknüpfen:
+
+(code lang: php)
+$productCollection->addFieldToFilter('entity_id', array( array( 'eq' => 22 ), array( 'gteq' => 25) ) );
+echo ( $productCollection->getSelect() );
+(/code)
+
+Was zu folgendem SQL führt:
+
+(code lang: sql)
+SELECT `e`.* FROM `catalog_product_entity` AS `e`
+WHERE (((e.entity_id = 22) or (e.entity_id >= 25)))
+(/code)
+
+Viel Spaß damit :)
+
+<strong>Update: </strong>Im englischen Magento-Wiki gibt es ebenfalls einen Beitrag dazu: <a href="http://www.magentocommerce.com/wiki/5_-_modules_and_development/catalog/using_collections_in_magento">Using Collections in Magento</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1130

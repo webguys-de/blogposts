@@ -1,0 +1,51 @@
+Article-meta: 
+
+----
+
+Title: Magento Entwicklung - Themes, Widgets und eigene Entitäten
+
+----
+
+Date: 2012-05-09
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Im Kindle-Store von Amazon lassen sich nun <a href="http://www.amazon.de/mn/search/?_encoding=UTF8&amp;site-redirect=de&amp;x=0&amp;tag=magentwebguyd-21&amp;linkCode=ur2&amp;y=0&amp;camp=1638&amp;creative=19454&amp;field-keywords=entwickler.press&amp;url=search-alias%3Ddigital-text" target="_blank">ältere Beiträge aus dem PHP-Magazin</a><img style="border: none !important; margin: 0px !important;" src="https://www.assoc-amazon.de/e/ir?t=magentwebguyd-21&amp;l=ur2&amp;o=3" alt="" width="1" height="1" border="0" /> für 0,99 € kaufen. Dazu gehören auch die Beiträge von Vinai Kopp und mir zum Thema <a href="http://www.amazon.de/gp/product/B007IUJLB4/ref=as_li_ss_il?ie=UTF8&amp;amp;tag=magentwebguyd-21&amp;amp;linkCode=as2&amp;amp;camp=1638&amp;amp;creative=19454&amp;amp;creativeASIN=B007IUJLB4">Themes, Widgets und eigene Entitäten in Magento</a>. Viel Spaß beim (noch mal) lesen :)
+
+
+
+----
+
+Text: (image: magento-entwicklung-kindle.png)<img style="border: none !important; margin: 0px !important;" src="http://www.assoc-amazon.de/e/ir?t=magentwebguyd-21&l=as2&o=3&a=B007IUJLB4" alt="" width="1" height="1" border="0">
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2807

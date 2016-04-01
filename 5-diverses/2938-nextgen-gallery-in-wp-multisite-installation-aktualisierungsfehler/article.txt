@@ -1,0 +1,65 @@
+Article-meta: 
+
+----
+
+Title: NextGen-Gallery in WP-Multisite-Installation: Aktualisierungsfehler
+
+----
+
+Date: 2012-10-25
+
+----
+
+Description: 
+
+----
+
+Tags: wordpress
+
+----
+
+Author: guido
+
+----
+
+Article-content: 
+
+----
+
+Intro: Setzt man WordPress als MultiSite ein und verwendet darin das Plugin NextGen-Gallery erscheint unter Umständen folgende Meldung:
+
+"<strong style="font-style: italic;">Bitte aktualisiere die Datenbank von NextGEN Gallery. Hier klicken um fortzufahren.</strong>
+
+----
+
+Text: <em>Dann kommt Folgendes:</em>
+<em><strong>NextGEN-Gallery aktualisieren</strong></em>
+<em>Es wurde eine ältere NextGEN-Datenbank erkannt. Deine Datenbanktabellen für NextGEN-Gallery sind nicht auf dem aktuellen Stand, sie müssen jetzt aktualisiert werden. Wenn Du wieder auf eine ältere Version zurückgehen möchtest, solltest Du vorher die Datenbank sichern.</em>
+<em>Der Upgrade-Prozess kann etwas dauern, bitte sei geduldig...</em>
+<em><strong><span style="text-decoration: underline;">Aktualisierung starten...</span></strong></em>"
+
+Klickt man nun auf "Aktualisierung starten..." erscheint eine Meldung, dass das nicht geklappt hat. Ich habe mir dann mal die Datenbank angsehen. Dort waren die Tabellen vom NextGen-Gallery Plugin allerdings gar nicht vorhanden!
+
+(image: wordpress-netzwerkverwaltung.png)
+
+Die Lösung ist aber sehr einfach und man muss die NextGen-Tabellen nicht händisch anlegen: Wenn ihr in Eurer WordPress-Multisite angemeldet seid, navigiert ihr über das Menü "Meine Seiten" in die Netzwerkverwaltung.
+
+Dann seht ihr auf der linken Seite den Menüpunkt "Galerie". Hier öffnet ihr die Option "Rücksetzen" und klickt anschließend auf "Einstellungen zurücksetzen".
+
+(image: wordpress-nggallery-reset.png)<span style="color: #ff0000;"><strong>Ganz wichtig:</strong></span> man muss das Plugin auf Netzwerkebene deaktivieren und in jeder MultiSite unter "Plugins" aktivieren, dann sollte alles funktionieren.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2938

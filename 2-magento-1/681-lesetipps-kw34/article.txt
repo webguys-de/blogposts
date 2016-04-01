@@ -1,0 +1,57 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW34
+
+----
+
+Date: 2010-08-27
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Schon wieder ist eine Woche herum und auch diese Woche gibt es wieder einige Lesetipps.
+
+So beschäftigt sich <a title="View all posts by Josh Pratt" href="http://prattski.com/author/admin/">Josh Pratt</a> in seinem englischsprachigen Artikel mit dem Titel "<a href="http://prattski.com/2010/08/19/magento-learn-by-magentos-own-examples/">Magento: Learn By Magento’s Own Examples</a>" damit wie man aus Magento als Quelle von Beispiel-Code lernt: "So, as of Magento 1.4.1.1, you have <strong>57</strong> different  modules to look at as examples.  For most things that you want to be  able to do, there is probably a great example somewhere in the core  modules"
+
+Deine Produktivität lässt sich mit dem Artikel von <a href="http://magelog.de">Mage::log</a> ein wenig steigern. Dort wird erklärt wie man seine <a href="http://magelog.de/2010/08/17/autocomplete-auf-die-sprunge-helfen/">Entwicklungsumgebung</a> richtig einstellt damit auch Autovervollständigung korrekt funktioniert.
+
+Auf MagentoCommerce sind im übrigen einige neue <a href="http://www.magentocommerce.com/media/webinars">Webinars</a> veröffentlicht wurden. Für Einsteiger wird in den nächsten Tagen der Mitschnitt vom <a href="http://www.magentocommerce.com/media/webinars">Webinar</a> zum Thema <a href="http://www.magentocommerce.com/blog/comments/developing-for-magento-tomorow-in-our-summer-webinar-series/">Developing for Magento</a> veröffentlicht.
+
+Letztlich bleibt noch ein Artikel von Roman Zenner mit dem Titel "<a href="http://romanzenner.com/blog/magento-mobile-rock-app-store/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+rzenner+%28Roman+Zenner+%7C+eCommerce+blogger+-+web+explorer%29&utm_content=Google+Reader">Will Magento mobile rock the App store?</a>"
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 681

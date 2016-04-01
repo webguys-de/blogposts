@@ -1,0 +1,255 @@
+Article-meta: 
+
+----
+
+Title: Türchen 01: Table Name Configuration
+
+----
+
+Date: 2014-12-01
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: vinai-kopp
+
+----
+
+Article-content: 
+
+----
+
+Intro: Table name configuration and resolution in Magento seems like a small thing, but since it's actually a pretty fundamental thing I think it deserves it's own blog post.
+
+
+
+----
+
+Text: As a Magento developer, there are many situations when I might require a table name.
+
+<ul class="task-list">
+    <li>To create a new table</li>
+    <li>To modify an existing table</li>
+    <li>To update the contents of a table</li>
+</ul>
+
+At least two of these 3 things usually happen in setup scripts.
+
+Magento being what it is, table names are not hard coded. Instead they are configured in the configuration XML.
+Then, whenever a table name is required, a lookup process is used to get the actual table name to use.
+
+This blog post discusses this process and hopes to show some tricks that might be helpful during development.
+
+The common method to fetch a table name in setup scripts is the setup classes method `getTable()`.
+
+(code lang: php)
+$tableName = $installer->getTable('example_module/comment');
+(/code)
+
+The `getTable()` method in turn delegates to Magentos main table name lookup method:
+
+(code lang: php)
+Mage::getSingleton('core/resource')->getTableName($tableName)
+(/code)
+
+The `$tableName` argument can be specified in three different ways:
+
+- In the form of an table alias, for example `catalog/product` (this is the most common way and conforms to best practice).
+- As a plain table name, for example `catalog_product_entity`.</li>
+- The argument can also take the form of an array with two elements, the first being the table alias or table name (as in the 2 bullet points above), the second being a table name suffix, that will be appended to the table name after the table name resolution.
+- This may be used to look up the table names of EAV attribute value tables, as in `getTableName(array('catalog/category', 'int'));`
+
+In the first case, the table entity alias will be resolved via the configuration XML. Then, if it was specified during installation, the table name prefix is prepended. In the second case, only the table name prefix is prepended. The third case is only a variation of the first two, so we don't have to discuss it in more detail.
+
+The first two cases are distinguished from each other by checking if there is a `/` within the table name.
+If the argument contains a `/`, it is treated as a table alias. If it does not contain a `/`, it is treated as a plain table name.
+We will see the details of below.
+
+Lets have a closer look method `Mage_Core_Model_Resource::getTableName()` so we can determine the config XML that is required for declaring a table alias.
+
+(code lang: php)
+public function getTableName($modelEntity)
+    {
+(/code)
+
+The name of the parameter variable `$modelEntity` is not chosen very wisely in my (not so humble) opinion.
+Instead, something like `$tableAlias` or `$tableReference` would have been better names, since the table does not necessarily have to correspond to a Magento entity.
+
+For example, it could refer to an attribute value table, or a <em>n:n</em> mapping table or an index table, all of which can not be considered entities.
+Having a misleading name makes code harder to read. Lets make the best of it and simply create a mental mapping in our minds.
+
+(code lang: php)
+        $tableSuffix = null;
+        if (is_array($modelEntity)) {
+            list($modelEntity, $tableSuffix) = $modelEntity;
+        }
+(/code)
+
+The first section in the `getTableName()` method takes care of setting the table suffix if the `$modelEntity` is an array (the third variation in the list further up).
+
+(code lang: php)
+        $parts = explode('/', $modelEntity);
+        if (isset($parts[1])) {
+            list($model, $entity) = $parts;
+(/code)
+
+The `if` statement serves to distinguish if the parameter is a table alias or a plain table name. If it is an alias it is split into a class group (stored in the variable `$model`) and a table specifier (stored in the variable `$entity`. Once again, naming is less then optimal here. The name of the variable `$model` should have been `$modelClassGroup`. The second part should have been stored in a variable `$tableReference`.
+
+The next part of the lookup process is very similar to <a href="https://gist.github.com/Vinai/5466424#resource-model-instantiation-steps" rel="noreferrer">resource model class group resolution</a>.
+
+(code lang: php)
+$entityConfig = false;
+if (!empty(Mage::getConfig()->getNode()
+        ->global->models->{$model}->resourceModel))
+{
+    $resourceModel = (string)Mage::getConfig()->getNode()
+        ->global->models->{$model}->resourceModel;
+    $entityConfig  = $this->getEntity($resourceModel, $entity);
+}
+(/code)
+
+The class group stored in `$model` is used to look up the matching resource model class group. Then the result is used to fetch the <em>entity config</em> for the specified table reference in the variable `$entity`.
+
+The main purpose of `getEntity()` is to retrieve the table configuration:
+
+(code lang: php)
+Mage::getConfig()->getNode()->global->models->$resourceModel->entities->{$entity};
+(/code)
+
+For example, if the table alias argument that is passed to `getTableName()` where `catalog/category` it would lead to the XML lookup path. The next section of the method then fetches the actual table name from the table child node.
+
+(code lang: php)
+if ($entityConfig && !empty($entityConfig->table)) {
+    $tableName = (string)$entityConfig->table;
+} else {
+    Mage::throwException(Mage::helper('core')->__(
+        'Can\'t retrieve entity config: %s', $modelEntity
+    ));
+}
+(/code)
+
+This leads us to the table name configuration for table alias resolution. Given the code above, for a table alias `catalog/category` the XML used for the lookup would be
+
+(code lang: php)
+    <global>
+        <models>
+            <catalog>
+                <resourceModel>catalog_resource</resourceModel>
+            </catalog>
+            <catalog_resource>
+                <entities>
+                    <category>
+                        <table>catalog_category_entity</table>
+                    </category>
+                </entities>
+            </catalog_resource>
+        </models>
+    </global>
+(/code)
+
+To summarize the table alias lookup process as discussed, there are two steps:
+
+- First the resource model class group for the specified class group (that is, the-part-in-front-of-the-slash) is looked up. For the example class group `catalog` that would be `catalog_resource`.
+- Then the `table` node within the resource `<entity>` configuration for the specified table reference (that is, the-part-after-the-slash) is looked up and assigned to a variable `$tableName`. For the example table reference `category` that would be `catalog_category_entity`.
+
+So what happens if the parameter does not contain a slash?
+
+(code lang: php)
+} else {
+    $tableName = $modelEntity;
+}
+(/code)
+
+It is simply used as is, without any configuration lookup taking place.
+
+A question that might occur now is why should using the table alias be <em>better</em> then using a plain table name?
+The reason is that the two values that are fetched from the configuration during the lookup process might have been changed via the config XML merge process:
+
+<ol class="task-list"><li>The resource class group</li>
+    <li>The real table name</li>
+</ol>
+
+In practice that is very rare, but since it is possible to do so, using table aliases instead of the real table name ensures those changes work with our custom code.
+
+Before the method completes, a event is dispatched:
+
+(code lang: php)
+Mage::dispatchEvent('resource_get_tablename', array(
+    'resource'      => $this,
+    'model_entity'  => $modelEntity,
+    'table_name'    => $tableName,
+    'table_suffix'  => $tableSuffix
+));
+(/code)
+
+This seems like another way to change the table name lookup result on the fly using an event observer. And this assumption is correct, however, simply changing the `table_name` parameter on the event observer argument container won't work. If we look at the next bit of code we can see that any changes to the observer argument will not persist. Instead, the `core/resource` class provides a mechanism to map table names to a different name:
+
+(code lang: php)
+$mappedTableName = $this->getMappedTableName($tableName);
+if ($mappedTableName) {
+    $tableName = $mappedTableName;
+} else {
+(/code)
+
+And this facility can be used to change the result of a table name lookup process in the event observer. For example, to add a custom prefix to the lookup result could be done as follows:
+
+(code lang: php)
+$origName = $observer->getTableName();
+$observer->getResource()->setMappedTableName($origName, 'new_name_' . $orig_name);
+(/code)
+
+I have seen this approach being used to introduce table sharding for some entities successfully, to reduce the overall table size.
+
+If no table mapping is configured, the table prefix is taken from the config and prepended to the table name.
+
+(code lang: php)
+} else {
+    $tablePrefix = (string)Mage::getConfig()->getTablePrefix();
+    $tableName = $tablePrefix . $tableName;
+}
+(/code)
+
+As stated above, the table name prefix can be configured during the installation of Magento. If it is specified, it is written to the <em>app/etc/local.xml</em> file as the value of the `global/resources/db/table_prefix` node. However, I've (thankfully) never seen two Magento instances share a single database in production anywhere.
+
+Finally before the `getTableName()` method completes, the table suffix is appended if it was specified in the argument to the method.
+
+(code lang: php)
+if (!is_null($tableSuffix)) {
+    $tableName .= '_' . $tableSuffix;
+}
+(/code)
+
+The last step during table name lookup is to ensure that the table name meets the requirements of the RDBMS in use.
+
+(code lang: php)
+    return $this->getConnection(self::DEFAULT_READ_RESOURCE)
+        ->getTableName($tableName);
+}
+(/code)
+
+This step makes sense, since different RDBMS instances have different constraints in length and allowed characters.
+
+The concrete implementation depends on the database adapter class. For MySQL it is implemented in `Varien_Db_Adapter_Pdo_Mysql::getTableName()`, but only changes the table name if it is longer the 64 characters.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3965

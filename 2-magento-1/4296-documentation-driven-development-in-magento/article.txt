@@ -1,0 +1,71 @@
+Article-meta: 
+
+----
+
+Title: Documentation Driven Development in Magento?
+
+----
+
+Date: 2015-07-03
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Ich gebe zu, der Titel ist ein bisschen reißerisch. Generell haben wir öfter das Problem dass wir gemeinsam am Projekt arbeiten, alles fleißig notieren und konzipieren und es dann umsetzen. Viel zu oft verschwinden die Konzepte dann im Papierkorb bzw. laufen immer weiter zum Entwicklungsstand auseinander. Will man wissen wie etwas noch mal ging tut man was? Genau, man ließt den Source. Da sich das ganze irgendwie umständlich anfühlt haben wir ein recht simples Magento Modul mit dem Namen <a href="https://github.com/code-x/Docview">Docview</a> entwickelt. Eventuell löst es unser Problem?
+
+
+
+----
+
+Text: Mit DocView wird Dokumentation der Module an einer zentralen Stelle gesammelt und in Magento angezeigt. Damit ein Modul Doku bereitstellt muss eine index.md angelegt sein. Diese liegt z.B. im Ordner <em>app/code/local/code/Codex/MeinModul/doc/index.md</em>.
+
+(image: menu.png)
+
+Beim Aufruf der Doku geht Docview nun her und sammelt alle index.md aller Magento Module ein, verwandelt sie in HTML und stellt sie untereinander da. Eine Index.md sollte also immer ein paar kurze Erklärungen und weiterführende Links, wiederrum auf weitere Markdown-Dokumente, enthalten. So findet man im Idealfall was man sucht ohne direkt erschlagen zu werden.
+
+Generell unterscheidet Docview übrigens in Kunden-Doku (wie stoße ich noch mal Prozess xyz an?) und Entwickler-Doku (Woher bekommt der Import seine Daten und wie oft?). Kunden-Doku liegt als index.md im doc/-Ordner, Doku für Entwickler unter doc/dev/index.md. Alles ganz simpel als Markdown-Datei.
+
+(image: docview-650x444.png)
+
+<h2>Entwicklungsprozess</h2>
+
+Da nun das Konzept, die Anleitung zur Bedienung usw. zu dem Modul direkt im Git-Repo liegt und ein einfaches Markdown Dokument ist kann jeder es beim programmieren direkt erweitern. Man muss nicht erst in ein anderes Portal springen, das Modul-Suchen, die Version und dort etwas ändern. Das war nämlich vom Prozess einfach so komplex dass es am Ende niemand tat und die Doku schnell "outdated" war.  Gleichzeitig passt die Doku direkt zum Versionsstand der dort eingesetzt ist. Geht ein neues Feature live bzw. wird "gemerded" ändert sich auch die aktuelle Doku mit Master-Branch direkt mit.
+
+Ich für meinen Teil überführe die Konzepte - die wir zumindest grob vor der Programmierung ohne haben - nun vorher in ein Markdown-Dokument bzw. erstellte sie direkt dort. Danach programmiere ich dann auf die üblichen Wege mein Modul - aber diesmal weiß ich wo ich in 8 Wochen finde was es tut. Nämlich im Magento Admin - für alle direkt sichtbar und transparent.
+
+(image: entwickler.png)
+
+ 
+
+Natürlich ist der <a href="https://github.com/code-x/Docview">aktuelle Entwicklungsstand auf Github</a> zu finden :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4296

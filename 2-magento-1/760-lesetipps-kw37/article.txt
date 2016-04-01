@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Lesetipps KW37
+
+----
+
+Date: 2010-09-20
+
+----
+
+Description: 
+
+----
+
+Tags: lesetipps
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Nun, wenn auch etwas verspätet, zu den Lesetipps aus KW37: Der <a href="http://www.Magento-Stammtisch.de">Magento-Stammtisch</a> bat darum noch einmal in den Lesetipps aufzutauchen. Ohne Leute vor Ort ist ein solcher Stammtisch ja auch schnell langweilig. <a href="http://dev.mysql.com/tech-resources/articles/introduction-to-mysql-55.html">MySQL setzt in der Version 5.5 als Standard auf InnoDB</a> und soll deutlich an Performance gewonnen haben. Zudem sollen die Datenbanken deutlich besser skalierbar sein - man darf gespannt sein welche Auswirkungen das in ferner Zukunft auf das Magento-Hosting haben wird.
+
+Ein eigener Sache haben wir soeben unser <a href="http://www.magentocommerce.com/magento-connect/ingohill/extension/4565/webguys_customernavigation">drittes freies Magento-Modul veröffentlicht</a>. Mit der Extension ist es möglich die Navigation im Kundenbereich genau an die eigenen Bedürfnisse anzupassen.
+
+Wirklich spannend ist auch der Beitrag zum <a href="http://www.inmedias.de/P/Magento/Hosting.html">Test von einigen Magento-Hosting-Providern</a>. [<a href="http://www.inmedias.de/export/sites/default/download/Magento-Hosting-Vergleich.pdf">Direktlink zum PDF</a>]
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 760

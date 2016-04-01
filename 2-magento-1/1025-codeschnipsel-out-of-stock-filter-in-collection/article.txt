@@ -1,0 +1,61 @@
+Article-meta: 
+
+----
+
+Title: Codeschnipsel: Out-Of-Stock Filter in Collection
+
+----
+
+Date: 2010-11-19
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Collection kapseln in Magento die Zugriffe auf Daten. Mit ihnen ist es möglich Spalten zu einer Anfrage hinzuzufügen - das benötige SQL wird dann automatisch erzeugt. Mittels ein paar Helfern kann man so z.B. sich alle Produkte anzeigen lassen die z.Z. auf Lager sind.
+
+----
+
+Text: (code lang: php)
+$productCollection = Mage::getModel('catalog/product')->getCollection();
+Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($productCollection);
+
+foreach( $productCollection AS $product ) {
+    echo $product->getSku() . " ist auf Lager\n";
+}
+(/code)
+
+
+Mit der Magento 1.4 hat sich das übrigens geändert. Die Funktion <em>Mage::getSingleton('catalog/product_status')->addSaleableFilterToCollection($collection)</em> ist deprecated und sollte nicht mehr verwendet werden. (Sie besitzt im übrigen aber auch gar keine Implementierung mehr)
+
+Die Methode <em>addInStockFilterToCollection</em> kann exemplarisch z.B. auf die Upselling-Produkte angewendet werden so dass dort nur Produkte angeboten werden die auch wirklich lieferbar sind. Dazu kann z.B. einfach der zuständige Block verändert werden.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1025

@@ -1,0 +1,121 @@
+Article-meta: 
+
+----
+
+Title: Türchen 12: HTTP for Magento-Developer
+
+----
+
+Date: 2014-12-12
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: fabian-blechschmidt
+
+----
+
+Article-content: 
+
+----
+
+Intro: <blockquote>The Hypertext Transfer Protocol (HTTP) is an application-level protocol for distributed, collaborative, hypermedia information systems.</blockquote>
+
+Hypertext Transfer Protocol -- HTTP/1.1 IETF. RFC 2616
+
+
+
+----
+
+Text: <h1>Why this blog post?</h1>
+
+I gave a talk on Meet Magento Poland. It felt like the worst talk I gave for a long time. I stand on the stage and I didn't know what I want to transport to my audience. My knowledge about HTTP is not bad, but it felt so boring and I had problems to find the gems which are important AND interessting.
+
+I thought a lot about this the last weeks, but I didn't find a solution. I think it is the lack of cool HTTP stories I know. Without anecdotes and motivation why someone should know something telling a story is quite hard. But still, this knowledge is important, so I hope you read on.
+
+<h1>History</h1>
+
+The first idea about HTTP goes back to the 30's. Vannevar Bush's had the vision of the microfilm-based information retrieval and management <strong>memex</strong>. He wrote an article about this 15 years later: <a href="http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/">As We May Think (1945)</a>
+
+<a href="http://xanadu.com/">Ted Nelson in 1965 in the Xanadu Project</a>
+
+The <a href="http://www.w3.org/Protocols/HTTP/AsImplemented.html">first version: came 1991 HTTP 0.9</a>. And since then we had a lot of improvements. The current version is HTTP 1.1 and the RFC for 2.0 is already in draft 13.
+
+<h1>Basics</h1>
+
+HTTP is ...
+
+<ul><li>stateless. This means when you make two requests to an HTTP server (theoretically), it doesn't know that is from the same client. In reality this isn't often the case for a bunch of reasons. Nonetheless, states are implemented through additions to HTTP</li>
+    <li>plaintext (readable). If you are looking into the HTTP request, you can read what happens at the moment. This has a lot of upsides, because debugging is a lot easier this way. But debugging is not the main interest for most of the people using HTTP (especially business) and therefore this will change with the next version 2.0.</li>
+    <li>request/response pattern. If you want to have something from the server you send a request. You get back a response. Every HTTP communication (up to 1.1) has this schema.</li>
+</ul><h1>Request</h1>
+
+Lets have a look into the request and response. The following is a sample request made up from the wikipedia:
+
+(code)
+GET /my-cool-path/filename HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
+Referer: http://en.wikipedia.org/wiki/Main_Page
+Range: bytes=500-999
+Accept-Encoding:gzip,deflate,sdch
+Accept-Language:de-DE,de;q=0.8,en-US;q=0.6,en;q=0.4
+Cache-Control:max-age=0
+Cookie: $Version=1; Skin=new;
+Connection: keep-alive
+If-Modified-Since:Tue, 25 Nov 2014 03:08:54 GMT
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,<em>/</em>;q=0.8
+(/code)
+
+The most important part is the first line: (code)GET /my-cool-path/filename HTTP/1.1(/code). What method is used `GET`, what file or directory is requested (code)/my-cool-path/filename(/code) and what version is used (code)HTTP/1.1(/code). Beside of this a lot of other informations are transported:
+
+- `Host`: From which domain is the document requested. With 1.0 we had the assumption, that every domain has its own IP address, so you know exactly which document is meant. But quickly it was evident, that this is not practical and with 1.1 `Host` was a required header.
+- `User-Agent`: What http client is used.
+- `Referer`: The page the client comes from.
+- `Range`: What byte range of the document is requested
+- What encoding is accepted and which language, cookies, caching, etc.
+
+<h1>Response</h1>
+
+The response has a header too. It transports the information what type the document is, when it was created, etc. The header and the footer is seperated by two line breaks (code)\n\n(/code)
+
+(code)HTTP/1.1 200 OK
+Date: Mon, 23 May 2005 22:38:34 GMT
+Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)
+Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+ETag: "3f80f-1b6-3e1cb03b"
+Content-Type: text/html; charset=UTF-8
+Content-Length: 131
+Accept-Ranges: bytes
+Connection: close(/code)
+
+<html>
+<head>
+<title>An Example Page</title>
+</head>
+<body>
+Hello World, this is a very simple HTML document.
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4108

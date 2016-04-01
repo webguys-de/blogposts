@@ -1,0 +1,67 @@
+Article-meta: 
+
+----
+
+Title: Invalider Index deaktiviert Flat-Tables
+
+----
+
+Date: 2012-08-28
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Achtung: Wenn mann seine Produkt-Indizes (Flat-Tables) nicht im Griff hat kann es passieren das Magento wieder auf EAV-Tabellenabfragen zurückfällt. Deswegen immer ordentlich darauf achten das der Index 'catalog_product_flat' aktuell und nicht invalide ist.
+
+
+
+----
+
+Text: Zuständig dafür ist die Methode <em>isEnabledFlat in der Klasse Mage_Catalog_Model_Resource_Product_Collection</em>
+
+(code lang: php)
+    public function isEnabledFlat()
+    {
+        if (Mage::app()->getStore()->isAdmin()) {
+            return false;
+        }
+        if (!isset($this->_flatEnabled[$this->getStoreId()])) {
+            $this->_flatEnabled[$this->getStoreId()] = $this->getFlatHelper()
+                ->isEnabled($this->getStoreId());
+        }
+        return $this->_flatEnabled[$this->getStoreId()];
+    }
+(/code)
+
+Diese deaktiviert ganz frech die Flat-Tables sobald in Index nicht aktuell ist. In einem aktuellen Projekt haben wir uns Testweise, durch Einbau von <em>return true</em>, dazu entschieden im Zweifel auch veraltete Flat-Tables zu verwenden. Ẃir erhoffen uns dadurch mehr Performance und etwas mehr Ruhe im System. Parallel kontrolliert ein Job dass die Flat-Tables niemals zu alt werden :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 2931

@@ -1,0 +1,207 @@
+Article-meta: 
+
+----
+
+Title: Türchen 13: Magento Template Facade Technique
+
+----
+
+Date: 2012-12-13
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: timbezhashvyly
+
+----
+
+Article-content: 
+
+----
+
+Intro: I’m working with Magento for about 3 years. What I really like about it is that you always learn something new about it. Recently I was surprised to find another hidden gem in the place that I pass along almost daily. Amazing that I was not noticing it is for all that time. I made a small presentation out of it and performed it in November in front of quite experienced Magento developers at 5th Magento Stammtisch in Zurich. You can imagine how surprised was I to find out that none of them were sure about the subject. So give a warm welcome to Magento Facades.
+
+
+----
+
+Text: I guess every Magento developer worked with <em>template/catalog/product/view.phtml</em>
+template. I guess most of them stumbled upon those two blocks:
+
+(code lang: php)
+<?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+(/code)
+
+and
+
+(code lang: php)
+<?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+(/code)
+
+The following article will reveal where do they come from and how they work.
+Our research have to start from Magento blocks hierarchy. After the quick look into
+catalog.xml one can spot those two block declarations:
+
+(code lang: php)
+<block type="core/template_facade" name="product.info.container1" as="container1">
+	<action method="setDataByKey">
+		<key>alias_in_layout</key>
+		<value>container1</value>
+	</action>
+	<action method="setDataByKeyFromRegistry">
+		<key>options_container</key>
+		<key_in_registry>product</key_in_registry>
+	</action>
+	<action method="append">
+		<block>product.info.options.wrapper</block>
+	</action>
+	<action method="append">
+		<block>product.info.options.wrapper.bottom</block>
+	</action>
+</block>
+(/code)
+
+and
+
+(code lang: php)
+<block type="core/template_facade" name="product.info.container2" as="container2">
+	<action method="setDataByKey">
+		<key>alias_in_layout</key>
+		<value>container2</value>
+	</action>
+	<action method="setDataByKeyFromRegistry">
+		<key>options_container</key>
+		<key_in_registry>product</key_in_registry>
+	</action>
+	<action method="append">
+		<block>product.info.options.wrapper</block>
+	</action>
+	<action method="append">
+		<block>product.info.options.wrapper.bottom</block>
+	</action>
+</block>
+(/code)
+
+They are absolutely identical except their names. Let’s take a closer look at their structure.
+The first thing that falls into a glance is their type which is <em>core/template_facade</em>. That
+means the class of both blocks is <em>Mage_Core_Block_Template_Facade</em>. This is a very
+simple class with only three methods. It extends <em>Mage_Core_Block_Template</em> class so
+besides of those methods any block with core/template_facade type will act absolutely
+same as a block of <em>core/template</em> type. Let’s take a look at those three methods which make
+<em>core/template_facade</em> blocks so special.
+
+The first one is <em>setDataByKey</em>:
+
+(code lang: php)
+public function setDataByKey($key, $value)
+{
+	$this->_data[$key] = $value;
+}
+(/code)
+
+It just sets the a property with specified <em>$key</em> to a specified <em>$value</em> on a block. Easy as that.
+So in our case alias_in_layout property is set to <em>container1</em> and <em>container2</em> for each
+of two block correspondingly.
+The second function is <em>setDataByKeyFromRegistry</em>:
+
+(code lang: php)
+public function setDataByKeyFromRegistry($key, $registryKey)
+{
+	$registryItem = Mage::registry($registryKey);
+	if (empty($registryItem)) {
+		return;
+	}
+	$value = $registryItem->getData($key);
+	$this->setDataByKey($key, $value);
+}
+(/code)
+
+It gets an object from a registry by <em>$registryKey</em>, gets its property named <em>$key</em> and then sets
+it as a property on a block object with same <em>setDataByKey</em> method. So in our case it sets the
+options_container property to value which is stored in <em>Mage::registry(‘product’)</em>
+<em> ->getData(‘options_container’)</em>. This value is defined in admin interface for each
+product at the Design tab:
+
+(image: Screen-shot-2012-12-02-at-8.20.42-PM-650x390.png)
+
+So after those instructions in catalog.xml are applied we have two blocks with two properties
+set on each. Further in same XML one can find two interesting actions:
+
+(code lang: php)
+<action method="unsetCallChild">
+	<child>container1</child>
+	<call>ifEquals</call>
+	<if>0</if>
+	<key>alias_in_layout</key>
+	<key>options_container</key>
+</action>
+<action method="unsetCallChild">
+	<child>container2</child>
+	<call>ifEquals</call>
+	<if>0</if>
+	<key>alias_in_layout</key>
+	<key>options_container</key>
+</action>
+(/code)
+
+The only difference is again only the name of a child node. What this action does is it kill
+the block that was just created if <em>ifEquals</em> method returns false. And as you may already
+guessed this is the third method of <em>Mage_Core_Block_Template_Facade</em> class.
+
+(code lang: php)
+public function ifEquals($conditionKeys)
+{
+	if (!is_array($conditionKeys)) {
+		$conditionKeys = func_get_args();
+	}
+	// evaluate conditions (equality)
+	if (!empty($conditionKeys)) {
+		foreach ($conditionKeys as $key) {
+			if (!isset($this->_data[$key])) {
+				return false;
+			}
+		}
+		$lastValue = $this->_data[$key];
+		foreach ($conditionKeys as $key) {
+			if ($this->_data[$key] !== $lastValue)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+(/code)
+
+What it does, it takes passed conditions and compares them. Number of conditions can be
+variable which is served by <em>func_get_args</em> function. In our case <em>alias_in_layout</em> is
+compared to options_container.
+So what happens is two (or more) blocks are added and then some of them are removed
+depending on result of equation. Sounds a little be weird but as long as this functionality is
+already there you can use it in cases you want some blocks to be displayed or not depending on
+per-product based settings.
+<h2>Spoiler</h2>
+Unfortunately this technology has no future. Magento core team possibly evaluated that it is
+currently used only in one case which is described in this article and deprecated it in Magento 2.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3216

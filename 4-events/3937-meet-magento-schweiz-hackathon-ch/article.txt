@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Meet Magento Schweiz + Hackathon CH
+
+----
+
+Date: 2014-10-04
+
+----
+
+Description: 
+
+----
+
+Tags: allgemein
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: 
+
+----
+
+Text: Am 24.10 findet die <a href="http://www.meet-magento.ch">Meet Magento in der Schweiz</a> statt und ich freue schon dabei zu sein. Für den anschließenden <a href="https://www.mage-hackathon.de/upcoming/zurich-25-26-10-2014.html">Hackathon</a> gibt es ebenfalls noch Tickets. Wäre toll einige von Euch dort zu sehen :-)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3937

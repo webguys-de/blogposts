@@ -1,0 +1,105 @@
+Article-meta: 
+
+----
+
+Title: Mit PreDispatch Controller-Actions ändern
+
+----
+
+Date: 2011-08-09
+
+----
+
+Description: 
+
+----
+
+Tags: entwicklung
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Einen <a href="http://www.webguys.de/magento/controller-uberschreiben-und-warum-eigentlich/">Core-Controller umzuleiten</a> fühlt sich irgendwie nicht so richtig schick an. Alleine deswegen weil eine merkwürdige require-Anweisung im Kopf des Controllers stehen muss. Aber wie geht es besser? <em>Predispatch</em> ist die Antwort auf die Frage.
+
+
+
+----
+
+Text: Bei jedem Controller wird vor dem Aufruf der Action ein <em>PreDispatch</em> und ein <em>PostDispatch</em> aufgerufen. Zwischen den beiden findet die eigentliche Aktion, also die Implementierung statt. Will man nun die weiteren Schritte im Checkout nur erlauben falls eine bestimmte Mindestmenge oder ein Mindestumsatz erfüllt ist reicht es nicht aus nur den "zur Kasse"-Button zu entfernen. Wichtig ist ebenfalls das der Checkout nicht über den Direktlink aufgerufen werden kann.
+
+Wir hängen uns also als den <em>PreDispatch</em> Event des Controllers. Dazu ergänzen wir die<em> config.xml</em> wie folgt:
+
+(code lang: xml)
+<global>
+	[..]
+	<events>
+
+		<controller_action_predispatch_checkout>
+		    <observers>
+		        <mindestumsatz_controller_action_predispatch_checkout>
+		            <class>mindestumsatz/observer</class>
+		            <method>controller_action_predispatch_checkout</method>
+		        </mindestumsatz_controller_action_predispatch_checkout>
+		    </observers>
+		</controller_action_predispatch_checkout>
+
+	</events>
+	[..]
+</global>
+(/code)
+
+Bevor nun die Action des Controllers aufgerufen wird unsere Methode <em>controller_action_predispatch_checkout</em> im Observer-Model aufgerufen:
+
+(code lang: php)
+<?php
+
+class Codex_Mindestumsatz_Model_Observer {
+
+    public function controller_action_predispatch_checkout( $event ) {
+
+        $controller = $event->getControllerAction();
+        /* @var $controller Mage_Checkout_CartController */
+
+        if( $controller->getRequest()->getControllerName() == 'onepage' && !Mage::helper('mindestumsatz')->getIsMindestumsatz() ) {
+            /*
+             * Wenn der Mindestumsatz nicht erfüllt wurde aber der Checkout onepage aufgerufen wird
+             * auf den Cart-Index umleiten
+             */
+
+            $controller->getResponse()->setRedirect( Mage::getUrl('*/cart') );
+            $controller->getResponse()->sendResponse();
+
+            $controller->getRequest()->setDispatched( true );
+        }
+
+    }
+
+}
+(/code)
+
+Da wir uns komplett am Modul <em>checkout</em> angedockt haben müssen wir nun noch abfragen ob der Controller den Namen "onepage" hat. Falls zutreffend wollen wir direkt auf den Warenkorb umleiten. Dazu holen wir uns vom Controller den <em>Response</em>, starten einen <em>Redirect</em> und sorgen, mittels <em>setDispatched</em> dafür das alles andere nicht weiterverarbeitet wird. Fertig, und alles ohne einen Controller Rewrite!
+
+Update: Eine weitere (ähnliche) Möglichkeit stellt <a href="http://magelog.de/2011/07/27/controller-action-mit-events-uberschreiben/">Karl Spies in seinem Blog-Beitrag</a> vor.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 1751

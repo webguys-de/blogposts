@@ -1,0 +1,102 @@
+Article-meta: 
+
+----
+
+Title: Türchen 12: Magento Performance
+
+----
+
+Date: 2013-12-12
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: mathis-klooss
+
+----
+
+Article-content: 
+
+----
+
+Intro: Wichtig bei großen Projekten die eine hohe Besucherzahl erwarten und einen großen Artikelstamm besitzen ist, dass die zuständigen Entwickler das Model komplett kennen.
+Das bedeutet auch das man sich mit dem Block-Cache-Model [<a href="http://www.webguys.de/?p=3700#quelle1">1</a>] beschäftigen sollte. Als Beispiel kann man die Artikel auf der Startseite nennen, diese sind oft die gleichen und können daher aus dem Cache geladen werden.
+
+
+----
+
+Text: Als Beispiel kann man die Artikel auf der Startseite nennen, diese sind oft die gleichen und können daher aus dem Cache geladen werden.
+Ebenfalls sollten FlatTables aktiviert werden und die Rewrite-URLs erstellen lassen ohne Kategorie Pfad.
+
+<h2>Key-Facts</h2>
+<ol><li>1. Magento 1.8.0.0, vorher 1.7.0.2</li>
+<li>2. 1.5 Mio Artikel insgesamt</li>
+<li>3. 50.000 Artikel Änderungen pro Tag</li>
+</ol>
+
+<h3>Nun zum eigentlichen Problem</h3>
+Wir standen vor der Aufgabe einen Shop auf Basis von Magento zu erstellen mit einem Artikelstamm von 1.5 Mio. Artikeln, hinzukommen aber ca. 50.000 Artikel Updates pro Tag.
+
+Als Import-Basis hatte sich meine Kollege Volker Thiel dazu entschieden das Modul AvS_FastSimpleImport zu verwendet, welches auf Mage_ImportExport aufbaut.
+Das Parsen der Daten (XML) des ERP vom Kunden dauert im Schnitt 30 Minuten, der Import ohne Indexing dauert ca. 10 Minuten.
+
+Wie die meisten schon vermuten, lag das Hauptproblem beim Indexer. Dieser lief jeden Tag
+mehr als 6 Stunden und hat dazu geführt, dass Kunden im Shop nicht kaufen konnten („Lock wait timeout exceeded; try restarting transaction“).
+
+Die Lösung dazu wurde im Issue-Tracker diskutiert und direkt über das Indexer Module gelöst. [<a href="#quelle2">3</a>]
+Durch diese Änderung läuft der Indexer nun maximal 1 Stunde (ab 3 Uhr), da der Shop auf den deutschen Markt ausgelegt ist, stellt dieses kein Problem da.
+
+Nachdem die Probleme mit dem Indexer behoben wurden standen wir vor dem Problem, dass die Seiten beim ersten Aufruf ca. 10 Minuten gebraucht hat. Schnell ließ sich hier durch die Datenbank herausfinden, dass das Problem an der Navigation von Magento lag („MySQL: SHOW PROCESSLIST“). In einem Query für die Kategorien wird ein JOIN auf die REWRITE Tabelle gemacht (die core_url_rewrite-Tabelle enthält ca. 1.4 Mio Zeilen). Dadurch, dass in der Nacht immer Änderungen vorgenommen werden, musste der Index neu aufgebaut werden. Allerdings ist ein wichtiger Index ab Magento Version 1.5 nicht mehr enthalten ('category_id', 'is_system', 'product_id', 'store_id', 'id_path' ). Dieser Index brachte zwar eine deutliche Verbesserung, aber immer noch in einem inakzeptablen-Bereich ~3 Minuten.
+
+Meine Lösung ist hierfür realtiv simple, es werden die Einträge der Kategorie URL-Rewrites in eine andere Tabelle kopiert und im JOIN statt auf die core_url_rewrite Tabelle auf meine neue Tabelle zugegriffen (Referenz: Mage_Catalog_Helper_Category_Url_Rewrite). Die Aufrufe liegen jetzt in einem so kleinen Bereich auf diese Tabelle, abfrage, dass selbst wenn die Daten nicht auf dem Cache kommen direkt geliefert werden.
+Hier zu habe ich ein Modul geschrieben welches ebenfalls, die Kategorie Pfade für Artikel nicht mit Indexiert [<a href="#quelle3">3</a>]. 
+
+Zum Caching, anfangs hatten wir auch auf Redis [<a href="#quelle4">4</a>] gesetzt, später und nach einigen Tests sind wir umgestiegen auf MongoDB [<a href="#quelle5">5</a>] als Cache. Hier stißen wir auch auf ein kleines Problem, dass die veralteten Cache Daten nicht direkt gelöscht wurden. Dafür haben ich ein kleines Script geschrieben, welches dieses übernimmt.[<a href="#quelle6">6</a>]
+
+<h3>Zum Server</h3>
+Es handelt sich um einen Dedicated Server mit Debian Wheezy amd64.
+Als Webserver verwenden wir nginx und php-fpm.
+PHP in der Version 5.3.27.
+Als Opcache nutzen wir statt APC, Zend Opcache (ehemals ZendOptimizer+) [<a href="#quelle7">7</a>].
+Dieser war in unserem Test deutlich schneller als APC, wenn man trotzdem APC UserCache benötigt kann man sich APCu [<a href="#quelle8">8</a>] anschauen.
+Das MemoryLimit liegt default bei 128 M, im Checkout auf 512 M und im Backend bei 756 M.
+Dieses sind jeweils eigene Prozessbereiche über PHP-FPM.
+Als MySQL Server wurde MariaDB 5.5 verwendet.
+
+<strong>Dedicated Server Hardware:</strong>
+
+<ol>
+<li>Hexacore mit Hyper-Threading – 3,2 GHz</li>
+<li>2x 2 Terabyte SW-RAID1</li>
+<li>64 GB ECC-RAM</li>
+</ol><a name="quelle1"></a>[1] <a href="http://www.webguys.de/magento/turchen-22-magento-block-caching/">http://www.webguys.de/magento/turchen-22-magento-block-caching/</a> 
+<a name="quelle2"></a>[2] <a href="https://github.com/avstudnitz/AvS_FastSimpleImport/pull/63">https://github.com/avstudnitz/AvS_FastSimpleImport/pull/63</a>
+<a name="quelle3"></a>[3] <a href="https://github.com/mklooss/Loewenstark_UrlIndexer">https://github.com/mklooss/Loewenstark_UrlIndexer</a>
+<a name="quelle4"></a>[4] <a href="https://github.com/colinmollenhour/Cm_Cache_Backend_Redis">https://github.com/colinmollenhour/Cm_Cache_Backend_Redis</a>
+<a name="quelle5"></a>[5] <a href="https://github.com/colinmollenhour/Cm_Cache_Backend_Mongo">https://github.com/colinmollenhour/Cm_Cache_Backend_Mongo</a> 
+<a name="quelle6"></a>[6] <a href="https://gist.github.com/mklooss/7626105">https://gist.github.com/mklooss/7626105</a> 
+<a name="quelle7"></a>[7] <a href="https://github.com/zendtech/ZendOptimizerPlus">https://github.com/zendtech/ZendOptimizerPlus</a> 
+<a name="quelle8"></a>[8] <a href="https://github.com/krakjoe/apcu">https://github.com/krakjoe/apcu</a>
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 3700

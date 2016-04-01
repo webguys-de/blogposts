@@ -1,0 +1,173 @@
+Article-meta: 
+
+----
+
+Title: Composer: Vertraue keinen externen Abhängigkeiten
+
+----
+
+Date: 2015-06-07
+
+----
+
+Description: 
+
+----
+
+Tags: magento-2
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: In meinem <a href="http://www.webguys.de/magento/magento-2/magento2-wie-verwalte-ich-meine-module/">letzten Blog-Post</a> hatte ich bereits darüber berichtet dass ich eine Möglichkeit Suche die externen Abhängigkeiten selbst zu verwalten und nicht etwa darauf zu vertrauen dass Magento.com immer erreichbar ist, Github nicht einem DDOS ausgeliefert ist usw. Dank Satis ist das jedoch einfacher als gedacht.
+
+
+
+----
+
+Text: Aber beginnen wir am Anfang. Magento setzt zur Modulinstallation nun auf Composer. Daher können nun alle Module, auch das Framework selbst, per composer installiert werden. Dazu muss man natürlich ein eigenes Repository welches die Magento Module enthält hinzufügen. Dieses stellt Magento unter <a href="http://packages.magento.com">packages.magento.com</a> bereit.
+
+Die dazu passende Composer.json, welche auch direkt ein ganzes Magento installiert, sieht dann wie folgt aus:
+
+(code lang: php)
+{
+    "name": "magento/project-community-edition",
+    "description": "eCommerce Platform for Growth (Community Edition)",
+    "type": "project",
+    "version": "0.74.0-beta12",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "magento/product-community-edition": "0.74.0-beta12"
+    }
+    "config": {
+        "use-include-path": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\": "lib/internal/Magento/Framework/",
+            "Magento\\Setup\\": "setup/src/Magento/Setup/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
+            "Magento\\Tools\\": "dev/tools/Magento/Tools/",
+            "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
+            "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
+            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
+        }
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.magento.com/"
+        }
+    ]
+}
+(/code)
+
+Schnell noch ein <em>composer install</em> aufgerufen und Zack hat man ein ganzes Magento mit allen seinen Abhängigkeiten. Natürlich lassen sich auch eigene Module zu den Abhängigkeiten etc hinzufügen. Darum soll es aber dies mal nicht gehen. Generell ist das Thema aber auch schon sehr schön unter <a href="http://magenticians.com/installing-magento-2-composer">http://magenticians.com/installing-magento-2-composer</a> im Kapitel "2.2 Completely via Composer" beschrieben.
+
+Problematisch ist dass, wie gesagt, diese Abhängigkeiten von extern geladen werden. Das ist gut solange alles verfügbar ist, doof wenn mal jemand Probleme hat.
+
+<h2>Mirror packages.magento.com</h2>
+
+Meine Lösung besteht darin ein Mirror von packages.magento.com anzufertigen. Das ist, dank Satis, relativ leicht.
+
+Zuerst installieren wir das Composer Repository Tool Satis mittels composer:
+(code)
+composer.phar create-project composer/satis --stability=dev --keep-vcs
+(/code)
+
+Danach legen wir eine magento2.json an:
+
+(code lang: php)
+{
+   "name": "packages.magento.com Mirror"
+   "require-all": true
+   "archive": {
+        "directory": "dist",
+	"skip-dev": true
+    },
+   "repositories": [
+      { "type": "composer", "url": "https://packages.magento.com" }
+   ]
+}
+(/code)
+
+Der Trick besteht in der Option "archive" inkl. der Option "require-all". Erste sorgt dafür das Satis nicht ein GIT-Repo zurückgibt sondern alles in einem ZIP archiviert, zweite läd alle Module welche im Repository aufgelistet wurden.
+
+Nun muss das Mirror nur noch erstellt werden:
+(code)
+./satis/bin/satis build magento2.json ../htdocs/packages/magento2
+(/code)
+
+Per HTTP lässt sich das Repo nun unter www.deine-domain.de/packages/magento2 aufrufen. 4 GB später hast du ein komplettes Mirror :)
+
+<h2>Eigenes Repo?</h2>
+
+Zusätzlich haben wir noch ein eigenes Repo unter deine-domain.de/packages. Dieses enthält nun alle unsere internen Pakete und zusätzlich ein Mirror von packages.magento.com. Dazu haben wir wie oben gezeigt erst mal ein komplett Mirror von packages.magento.com unter meine-domain.de/packages/magento angefertigt. Danach haben wir ein zweites Satis Composer Repo unter meine-domain.de/packages mit folgendes composer.json erstellt:
+
+(code lang: php)
+{
+   "name": "code-x - Magento Module",
+   "description": "informaton.",
+   "repositories": [
+     { "type": "composer", "url": "http://meine-domain/packages/magento2" },
+     { "type": "cvs", "url": "git@unser-gitlab/modul1" },
+     { "type": "cvs", "url": "git@unser-gitlab/modul2" }
+   ]
+(/code)
+
+Hierbei haben wir auf eine Archivierung verzichtet da wir unser eigenes Gitlab ja selbst betreuen und wir maximal viel über einen Ausfall wissen :-)Damit haben wir nun eine zentrale Stelle für unser Composer Magento Module inkl. dem Magento2 Core als Mirror.
+
+In der Magento composer.json des jeweiligen Projektes muss nun nur noch der Repository Teil von packages.magento.com auf meine-domain.de/packages geändert werden:
+
+(code lang: php)
+   "repositories": [
+        {
+            "type": "composer",
+            "url": "http://meine-domain.de/packages/"
+        }
+    ],
+(/code)
+
+<h2>Making of</h2>
+
+Beim Erstellen dieses Blog Posts sind folgende Issues auf Github angelegt worden:
+
+<ul><li>Magento2: <a class="issue-title-link js-navigation-open" href="https://github.com/magento/magento2/issues/1345"> Fix recursive dependencies? </a></li>
+    <li>Magento2: <a class="issue-title-link js-navigation-open" href="https://github.com/magento/magento2/issues/1343"> magento-composer-installer : Cleanup code? </a></li>
+    <li>Magento 2: <a class="issue-title-link js-navigation-open" href="https://github.com/magento/magento2/issues/1342"> Composer Integration and project specific moduls? </a></li>
+    <li>Satis: <a class="issue-title-link js-navigation-open" href="https://github.com/composer/satis/issues/226"> Prioritize Repository? </a></li>
+</ul>
+
+Es fehlen im Mirror also, Aufgrund von <a class="issue-title-link js-navigation-open" href="https://github.com/magento/magento2/issues/1345">Fix recursive dependencies?</a>, noch die Abhängigkeiten welche direkt von packagist.org geladen werden. Sobald ich da weiter bin erweitere berichte ich im Blog darüber :)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4266

@@ -1,0 +1,385 @@
+Article-meta: 
+
+----
+
+Title: Türchen 08: Magento Integrations
+
+----
+
+Date: 2014-12-08
+
+----
+
+Description: 
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: fabrizio-branca
+
+----
+
+Article-content: 
+
+----
+
+Intro: It's almost an exception if a Magento store doesn't come with any integration to a third-party system. After all the products need to get into Magento (and unless you have only very few products, the Magento admin isn't the most efficient and convenient way to create products). But besides that there are many other entities that might have to make their way into or out of Magento.
+
+----
+
+Text: Again, unless you're dealing with a couple of orders per day only, you'll most likely have your orders processed in an ERP and inventory synchronized automatically. Shipments and payments need to be processed and you might want to import you initial customer base from your previous platform or synchronize it with an external CRM system. The number of possible integrations is endless.
+
+There are tons of solutions out there focusing on specific scenarios. The most popular scenario is probably product imports. Some of the solutions are generic, others or specific to the system they're integrating with, others again implement a very specific protocol with a third-party product.
+
+In any cases there are many things to be considered while planning any kind of integration, incoming or outgoing.
+
+While this post will not focus on implementation details of a specific solution I rather want to outline important things to consider while planning any kind of integrations and implementing them.
+
+I find myself discussing these things in almost every project and while some of the points are obvious to begin with, others are being neglected in the first place. Later during the implementation questions come up like "Is it us pulling the data from somewhere? Or will they push the data to Magento?" or "Are they always transferring the full product catalog or only daily increments? How will they let us know if a product is deleted?"
+
+Also, in many cases these discussion involve three or more parties: You, the merchant (aka the PO) and the provider of the third-party system. Not to forget that your project manager, the merchant's in-house IT and the third-parties' salesman might also have some opinions on how the integration should work. If things aren't being well-specified soon the finger-pointing will start if things go wrong and deadlines can't be met.
+
+With this post I want to help uncovering some hidden complexities in the discovery phase of a Magento project. Instead of suggesting a technical solution I'm trying to come up with a checklist, a common vocabulary and a simple way to visualize everything in a diagram.
+
+<h2 id="entities-to-consider">Entities to consider</h2>
+
+Integrating Magento into one or more third-party systems is all about data. Exporting it, importing it, transferring and transforming it. But what's the data we're talking about? Besides the obvious like products and orders this is a (still incomplete) list of entities form a e-commerce domain model that might help you to design your integrations.
+
+<ul><li>products</li>
+    <li>attributes</li>
+    <li>attribute sets</li>
+    <li>attribute groups</li>
+    <li>attribute values</li>
+    <li>categories</li>
+    <li>customers</li>
+    <li>customer addresses</li>
+    <li>customer groups</li>
+    <li>customer login information (username, password)</li>
+    <li>tax configuration</li>
+    <li>pricing (incl. a ton of fancy variants from tier pricing to group pricing)</li>
+    <li>promotion rules</li>
+    <li>coupon codes</li>
+    <li>order</li>
+    <li>order status updates</li>
+    <li>order history (might also includes order from a different shop system)</li>
+    <li>shipments</li>
+    <li>shipping status updates</li>
+    <li>invoices</li>
+    <li>tracking code</li>
+    <li>customer service messages</li>
+    <li>customer support request</li>
+    <li>returns</li>
+    <li>content pages</li>
+</ul>
+
+Also add all custom entities that you're planning on building for that merchant. Talk about every single item, since this might uncover topics that haven't been discussed yet (at that point the merchant might not even be aware of this being something that needs clarification)
+
+<h2 id="make-or-buy-">Make or Buy?</h2>
+
+Luckily there's a third option: "use existing". Some of the solution come with Magento or are available for free.
+
+<h3 id="ready-to-go-solutions">Ready-to-go solutions</h3>
+
+There are a couple of different solutions that can be used without any customization. They might not offer everything you need, but it might be at least a very good start to look at them and to consider extending them instead of building something from scratch:
+
+<h4 id="magento-s-standard-interfaces">Magento's standard interfaces</h4>
+
+<ul><li><strong>Magento Web Service API</strong> (REST, SOAP)
+Magento's Web Service API comes in 2 different versions. Both are extensible (although V1 is a lot easier to extend). The API offers basic methods to interact with some of Magento's entity. Check out the documentation for more information: <a href="http://www.magentocommerce.com/api/rest/introduction.html">REST</a> / <a href="http://www.magentocommerce.com/api/soap/introduction.html">SOAP</a></li>
+    <li>Magento also has another web service API called "<strong>XML Connect</strong>".
+There's no real documentation, but reading the code should give you some insight. XML Connect is designed to interact with mobile application. In fact it was created for Magento's mobile app, but nothing stops you from reusing the code for your own purposes.</li>
+    <li><strong>Magento Import/Export</strong>
+This allows you to import and export Magento entities using a csv format. It's not super flexible, but in case your integration is simple this might be everything you need.</li>
+</ul><h4 id="third-party-magento-modules">Third-party Magento modules</h4>
+
+There are many modules out there that have solved the basic problem of importing products (and other entities) into Magento for you. While this is not everything you might have to to do integrate your Magento project into third-party system, it is probably a good subset of what needs to be done.
+
+Checkout <a href="https://twitter.com/avstudnitz">Andreas von Studnitz</a>'s slidedeck on "<a href="http://www.slideshare.net/Dutchento/andreas-von-studnitz-mm14nl">Importing Products into Magento</a>" where he shows some of the most popular modules.
+
+<h3 id="make">Make</h3>
+
+In case none of the solutions mentioned above fits your requirements you'll have to start implementing your own APIs/importer. There are a couple of different options to consider on how to get data in and out.
+
+<ul><li>domain model</li>
+    <li>resource model</li>
+    <li>webservice api classes</li>
+    <li>writing directly to the database (this is the fastest, but it's not recommended unless you know exactly what you're doing and if you're willing to test and possibly adjust the code for every Magento version).</li>
+</ul><h2 id="characteristics-checklist">Characteristics Checklist</h2>
+
+<h3 id="entity">Entity</h3>
+
+Let's start with the obvious one: <strong>Which entity</strong> are we transferring? While this sounds trivial, it's probably not. In many cases you have to come up with a common vocabulary:
+
+<ul><li>What is the role and function of that entity in every system?</li>
+    <li>Where does the data originate from?</li>
+    <li>Does the entity already exist on both systems? Does it have the exact same meaning?</li>
+    <li>Is the entity isolated in both system? Or is it part of another entity (e.g. customer, customer address, custom login information or: product, stock, prices)? Can it be easily separated?</li>
+</ul>
+
+Have a closer look at Magento's domain model and compare it to the domain models implemented in the systems you're trying to integrate to. That's when you and the people managing/implementing the third-party software stand in front of a big whiteboard and start drawing pictures...
+
+<h4 id="entity-attributes">Entity attributes</h4>
+
+<ul><li>What's the entity's unique identifier?</li>
+    <li>What other attributes does this entity have?</li>
+    <li>Can all attributes be mapped to each other? Are there attributes in Magento that don't have a correspondence in the third-party system? Or vice versa? If so, do we need to create these attribute in the other system? What is it going to do with that data?</li>
+</ul>
+
+<h4 id="attribute-values">Attribute values</h4>
+
+<ul><li>Do common attributes also share the same attribute values?</li>
+    <li>How do you define boolean values? 0/1, true/false or even 1/2 (that's a tricky one, but check <a href="https://github.com/OpenMage/magento-mirror/blob/053e0b286cbd6d52ac69ca9fd53a3b72c78aca1d/app/code/core/Mage/Catalog/Model/Product/Status.php#L46-47">Mage_Catalog_Model_Product_Status</a>!)</li>
+    <li>If there are predefined values (options), can/will they by extended on the fly if a value is missing?</li>
+    <li>Will the attribute value contain the value or only an id that stands for the value? What options are allowed?</li>
+    <li>What exact data type does every single attribute have?</li>
+    <li>Define the cardinality: Is the value optional? Is it required? Are multiple selection possible? What's the maximum number of selections? What's the minimum?</li>
+</ul><h4 id="scope-of-the-data">Scope of the data</h4>
+
+<ul><li>Are you using multiple stores in Magento? Or websites?</li>
+    <li>Is there a corresponding concept in the third-party system?</li>
+    <li>How do you map incoming/outgoing data from Magento stores to the other concept?</li>
+    <li>Is there an implicit fallback mechanism for any data? Is there a default value?</li>
+    <li>What are the different stores used for? Addressing different markets? Different languages? Different currencies?</li>
+    <li>Is it possible that entities are present in one context, but missing in another? If so, it is good enough, if the entity is present, but disabled in a context where it shouldn't be?</li>
+    <li>Which attributes a scope specific? Which aren't? Is the unique identifier the same one across scopes?</li>
+</ul><h4 id="master-system">Master system</h4>
+
+<ul><li>Which system is the master system?</li>
+    <li>Can data be created in a non-master system? Or are there two master systems?</li>
+    <li>If so, how will data be merged back?</li>
+    <li>How will conflicts be handled?</li>
+    <li>What happens if inconsistent data is detected?</li>
+</ul><h3 id="transfer">Transfer</h3>
+
+<h4 id="direction">Direction</h4>
+
+<ul><li>In which direction is the data flowing? From Magento to the third-party system? Or vice versa?</li>
+    <li>Is the system where the data originates from also the master system for the whole entity?</li>
+</ul><h4 id="active-party-push-pull-">Active party (push/pull?)</h4>
+
+<ul><li>Which system is the active party?
+Note, that this is not necessarily related to the data flow direction. Magento could push data to the third-party system or the third-party system could pull the data from Magento. Both scenarios would result in data flowing from Magento to the third-party system.</li>
+</ul><h4 id="protocol-storage">Protocol/Storage</h4>
+
+<ul><li>What protocol is being used to transfer the data? (FTP, HTTP, email,...?)</li>
+    <li>Is there a storage medium in between that acts like a hand-off place? (e.g. one system drops the files on an FTP server and the other one picks them up from there...)</li>
+    <li>If that's the case, how will the receiving system keep track of what file has already been processed? (Will it archive the file after processing? What happens if the process dies half-way?)</li>
+</ul><h4 id="responses">Responses</h4>
+
+<ul><li>How will the receiving party let the sending party know that the data was processed correctly (or if not, then what was wrong?).</li>
+    <li>Will a simple HTTP status do the trick? What if the data is not processed in the same request it is received? Or if it is not received via HTTP?</li>
+    <li>Does there need to be another communication channel and/or data format to communicate the successful or erroneous outcome of a data transfer?</li>
+</ul><h4 id="security">Security</h4>
+
+<ul><li>Is sensitive data transferred (that's probably true for every single communication channel)?</li>
+    <li>How does the receiving party verify the authenticy of the sender and the data?</li>
+    <li>Is encryption only required on the protocol level (HTTPS, SSH,...) or does the data also need to be encrypted separately?</li>
+</ul><h4 id="authentication">Authentication</h4>
+
+<ul><li>How is authentication being handled?</li>
+    <li>Is there a separate login call that returns a token that needs to be passed to any subsequent request?</li>
+    <li>Or are credentials being passed via HTTP headers?</li>
+    <li>Is authentication being handled within HTTP or within the application?</li>
+    <li>Or is it a simply IP restriction only?</li>
+    <li>Which party manages the credentials?</li>
+</ul><h4 id="volume">Volume</h4>
+
+<ul><li>What's the number of expected records per import? Hundreds? Thousands? Millions?</li>
+    <li>Will your importer be able to load the entire file into memory to process it? Or do you need to traverse the file without loading it (e.g. using <a href="http://php.net/manual/en/book.xmlreader.php">XML Reader</a>?)</li>
+    <li>Will you have to start processing data in parallel (multiple threads) to save time?</li>
+    <li>Will your current importer be able to handle the volume in an acceptable amount of time?</li>
+</ul><h4 id="api-workflow">API Workflow</h4>
+
+<ul><li>Is every API call isolated or are there multiple calls that are connected?</li>
+    <li>Do I need to get a login token first?</li>
+    <li>Is the data paginated?</li>
+</ul><h4 id="timing">Timing</h4>
+
+<ul><li>Is the data transferred <strong>synchronously</strong> or <strong>asynchronously</strong>?
+A synchronous data transfer would be required if you need the result of the operation within the request workflow. Synchronous integrations (and integrations that are exposed to the client - even if that's only through AJAX but still part of the frontend workflow, e.g. checkout) should be avoided if possible.</li>
+    <li>Is there any expectation for (near) real-time data transfer?</li>
+    <li>Is a delay acceptable? What's the maximum accepted delay for each entity? (e.g. less then 5 minutes before order confirmation email gets send)</li>
+    <li>Or is the delay even something you want to have in place (e.g. holding orders back for an hour before they're transferred to the ERP)</li>
+    <li>Is the data processed right away after it's being sent to the receiving system or is it being queued and processed at a later point in time? What delays are expected?</li>
+    <li>Is all data equal or is there data that has higher priority and needs to be processed first? (e.g. processing new order vs. newsletter subscriptions)</li>
+</ul><h4 id="trigger">Trigger</h4>
+
+What is triggering new data transers?
+
+<ul><li>Is there a <strong>fixed schedule</strong>? How often does data need to be transferred? Once per day? Every hour? Every 5 minutes?</li>
+    <li>Is the data transfer only <strong>triggered manually</strong>? Where can this be done? Who should be allowed to do this?</li>
+    <li>Is the data transfer <strong>event based</strong>? (e.g. after an order is being placed, a new customer signed up, or during indexing?)</li>
+    <li>Is every event being processed individually or are they being grouped and processed in bulk? Maybe after a certain number of events were collected? Or based on a schedule?</li>
+    <li>Can automated transfers (scheduled or triggered by event) be triggered manually in case an transfer failed and needs to be retried?</li>
+</ul><h4 id="error-handling-success-confirmation">Error handling / success confirmation</h4>
+
+<ul><li>What happens if an error occurs? Will the current import stop? Or will the the current item only be skipped?</li>
+    <li>Are there any relations to future data in the same import that might implicitly fail because an item has been skipped (e.g. parent product - child products?)</li>
+    <li>How will we let the other system know? How will our system find out if something went wrong with our data?</li>
+    <li>What happens then? Will the system retry automatically? Or only if a given class of errors (e.g. temporary communication errors) has been detected?</li>
+    <li>Will there be any notification? Who needs to be notified? How often? Via email? Text?</li>
+    <li>Do we also need to confirm successful data transfers and imports? What's the protocol here?</li>
+</ul><h4 id="transactions-">Transactions?</h4>
+
+<ul><li>Do imports need to be handled inside a transaction? Is it important that everything gets processed successfully (or nothing?)</li>
+    <li>Can this be solved on the database layer? Or do we need to handle this on the application layer? How do we rollback half-way transactions?</li>
+    <li>Does imported data have an immediate effect on the system? Or is it only prepared and needs to be committed later? (e.g. <a href="http://lucidworks.com/blog/understanding-transaction-logs-softcommit-and-commit-in-sorlcloud/">SOLR</a>)</li>
+</ul><h4 id="integrity">Integrity</h4>
+
+<ul><li>Do write operation need to be atomic?</li>
+    <li>Will there be situations where two or more processes try to update the same data in parallel?</li>
+</ul><h3 id="data">Data</h3>
+
+<ul><li>Who designs the protocol? Us or them?</li>
+    <li>How is the protocol specified?</li>
+    <li>Is it possible to define a validation schema? (e.g. XSD?)</li>
+    <li>Can syntax and semantics be tested automatically?</li>
+    <li>Is any preprocessing required (e.g. normalizing usernames, address verification, special characters on shipping labels)</li>
+</ul><h4 id="character-set">Character set</h4>
+
+<ul><li>What character set does the systems require? (Inbound and outbound)</li>
+    <li>What line ending are expected?</li>
+</ul><h4 id="format">Format</h4>
+
+<ul><li>What's the data format? (e.g. XML, JSON, CSV, fixed width,...)</li>
+    <li>Has this been used before or is this something we're creating for this project?
+Data format (xml, csv, fixed width,...). (Ideally including xml schemas)</li>
+    <li>For CSV files: define line separators, column separators, how to quote, how to escape and how to deal with multi-line values.</li>
+    <li>Does the data need to be human readable? Do we need to format it nicely (e.g indentation for XML files,...)</li>
+</ul><h4 id="compression-bundling">Compression / Bundling</h4>
+
+<ul><li>Are we transferring plain files or is the data compressed? (e.g gzip, zip)</li>
+    <li>Are the files transferred individually or in a bundle (e.g. tar)</li>
+</ul><h4 id="completeness">Completeness</h4>
+
+<ul><li>Does the data transfer always contain all available data for that entity? Or is it only a delta export? Or are individual records of group of records transferred?</li>
+    <li>In case of delta transfers, will there be regular syncs with the full data to make sure that nothing got lost in between?</li>
+    <li>For full data transfers, are records that are not part of the new data implicitly to be deleted? How will you handle this? Will you have to flush the whole dataset and then import the new data (resulting in a time-span where no or incomplete data is present in the system)? Or will you try to "remember" the data you touched and after the import delete everything you didn't touch? (This works fine but requires you to update data even is the record's content didn't change, which will slow down the import process.)</li>
+    <li>Will a record replace an existing one on import or will the new data be merged on top of the existing one?</li>
+    <li>Are there optional fields in the data? How do we handle the absence of an optional value in case the record we're about to overwrite already has data in that field?</li>
+    <li>Will there be fields that can not be overwritten by an incoming record?</li>
+</ul><h4 id="deleting-records">Deleting records</h4>
+
+<ul><li>Does the format specify a way how to <em>delete</em> individual records?</li>
+    <li>If a record is deleted, should it actually be totally removed from the database? Or should it only marked as deleted allowing to re-enable it if it will come back in a future data import?</li>
+</ul><h4 id="staging">Staging</h4>
+
+<ul><li>Are new imported entities (or updated ones) active by default right after importing or is activating them a separate process? (E.g. triggered manually after reviewing the data)</li>
+    <li>Does the content get enhanced after import? (e.g. CMS content, marketing information,...)</li>
+</ul><h4 id="exporting-data">Exporting data</h4>
+
+<ul><li>For entities that flow out of Magento: Is the receiving system mapping all the data or does the exporter prepare the data in the right format?</li>
+    <li>Is data provided in a raw format or does there need to be any pre-processing (e.g. formatting prices, rendering templates?)</li>
+    <li>Is the data needed in the third-party structured the same way as in Magento or does Magento need to compose the information after retrieving records from different sources</li>
+    <li>Will any data be aggregated for export?</li>
+</ul><h3 id="system">System</h3>
+
+<ul><li>Which exact component of the system is doing or receiving the request? (E.g. REST Api, cli, ...)</li>
+    <li>Which component of the system is delivering the data?</li>
+    <li>Is there another middleware that does any preprocessing or dispatching?</li>
+</ul><h3 id="sharding">Sharding</h3>
+
+<ul><li>Is data for the same entity split into different third-party systems? For example one Magento instance comes with different websites for US and Europe. Orders and inventory are handled by different systems in the two regions. Is there a single endpoint that dispatches the requests based on the store (e.g. website id)? Or does Magento need to keep track of multiple integrations that might also be different solutions?</li>
+</ul><h3 id="infrastructure">Infrastructure</h3>
+
+Look at all the endpoints in the infrastructure:
+
+<ul><li>Is it a single server or a group of multiple servers?</li>
+    <li>Are the load balanced? What happens if a server goes down? Will another one be able to pick up the session or is the session invalid and that (multi-step) data transfer needs to be restarted from scratch?)</li>
+    <li>Is there a proxy in front of the endpoints?</li>
+    <li>Is there any caching? Are caches being purged correctly?</li>
+</ul><h3 id="availability-and-reliability">Availability and Reliability</h3>
+
+<ul><li>What's the expected requests/sec that every component will be able to handle?</li>
+    <li>Is there a problem with a massive amount of data (even if queuing up is OK, but will every component be able to handle this?)</li>
+    <li>What's the expected response time?</li>
+    <li>What happens if one of the components is down? Is the rest of the infrastructure decoupled, so that (at least) the most critical processes (e.g. placing orders,...) will continue to work?</li>
+    <li>Is there a clear process and responsible person for every component in case something goes wrong?</li>
+    <li>What SLAs have been discussed?</li>
+    <li>Is it OK to include the third-party systems into stress tests?</li>
+</ul><h2 id="optimization-patterns">Optimization patterns</h2>
+
+There are a number of things that can be done to increase the performance of any integration. Here's a pattern that might be useful to detect if an entity needs to be updated or not:
+
+Create a hash (e.g. md5) of the raw incoming data (e.g. the raw xml string) and store this along with the data in an extra field (e.g. a new product attribute). When importing new records first check if the hash of the new data set matches the data that's already in the database. This should be a fast operation. And in case this entity is updated outside of the import process the hash field needs to be reset.
+
+<h2 id="testing">Testing</h2>
+
+Testing is a crucial (and often neglected) part of any development process. This also - and especially - includes implementing interfaces for other systems to consume and writing code that interacts with other interfaces.
+Make sure you have a strong set of integration tests in place that constantly check
+
+<ul><li>if your interfaces behave like expected/specified</li>
+    <li>if the third-party systems behave like expected/specified</li>
+    <li>if incoming data meets the specification (validate data with xsd, do integrity tests for every data point if possible...)</li>
+    <li>if generated outgoing data meets the specification.</li>
+</ul>
+
+We've seen fulfillment providers "optimizing" their internal workflows on (<em>yes, "on" - not "before"</em>) Black Friday resulting in a file format change for incoming data (e.g. shipping notifications).
+
+<h2 id="visualization">Visualization</h2>
+
+One of the most important things in designing integrations is visualization. There doesn't seem to be any standard on how to visualize this and it's certainly not up to me to define one, but here's what has worked for me. And maybe you'll find this useful and will adopt this to visualize your architecture while discussing it with the team and the client:
+
+<h3 id="boxes-and-lines">Boxes and lines</h3>
+
+Drawing boxes and lines between them is basically what everybody does to visualize that two parties are connected. But I think this needs to be refined a little more:
+
+A line should
+
+<ul><li>show the direction of the data flow (this is where the arrow points to)</li>
+    <li>and should show if the sending or the receiving party is the active party here (push/pull)</li>
+</ul>(image: Picture1.png)
+
+<h3 id="more-detail">More Detail</h3>
+
+Besides that the visualization should/could contain even more information:
+
+<ul><li>Instead of showing the systems also show the interfaces being used. These could be native ones, extended ones or new ones</li>
+    <li>The color of the lines could stand for different file formats (json, xml, csv,...)</li>
+    <li>Add information on what's triggering the data transfer to every arrows (event, manual, schedule)</li>
+    <li>Use different color schemes to show the responsible team for every system and/or interface (e.g. your team, merchant's inhouse team, third-party vendor,...)</li>
+</ul>(image: Picture2-610x500.png)
+
+<h3 id="tabular-boilerplate">Tabular Boilerplate</h3>
+
+The visualization alone doesn't carry all information for a clear specification. Instead add a number to every arrow and specify every connection in detail. Go back to the points mentioned earlier in this blog post to identify what's important for this connection. Define a tabular boilerplate/template and use this to specify every connection in detail.
+
+Example boilerplate:
+
+<ul><li>System A: Magento</li>
+    <li>Interface A: Custom module: ...</li>
+    <li>System B: CRM</li>
+    <li>Interface B: Native Webservice API, method: ...</li>
+    <li>Active Party: Magento</li>
+    <li>Trigger: a new customer signs up (event)</li>
+    <li>Frequency: ~100/day</li>
+    <li>Content: Individual custom records/</li>
+    <li>Format: XML (provide more information with exact field mappings, XSD, character set,... and an example file)</li>
+    <li>On Success: CRM response has a status code 200</li>
+    <li>On Failure: CRM response has a status code 4xx or 5xx and</li>
+    <li>Action on failure: Retry up to 3 times after 10 minutes each. If it still fails a notification email will be sent to ...</li>
+    <li>...</li>
+</ul><h3 id="high-level-architecture">High Level Architecture</h3>
+
+In case of an architecture that consists of many different components that interact with each other and that are developed and maintained it's probably useful to come up with a bird's view diagram of every component:
+
+(image: Picture3-650x271.png)
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4045
