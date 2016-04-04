@@ -1,0 +1,49 @@
+Article-meta: 
+
+----
+
+Title: Änderungen am Design in Magento2 nicht sichtbar?
+
+----
+
+Date: 2016-04-04
+
+----
+
+Description: 
+
+----
+
+Tags: 
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Was tun wenn die CSS Änderungen in Magento 2 beim Test-Rechner oder beim Kollegen nicht sichtbar sind?
+
+----
+
+Text: Manchmal ist die Welt doch viel einfacher als man denkt. Generell besitzt Magento2 im Entwickler-Modus zwei Möglichkeiten zum compilieren von LESS. Entweder mittels Javascript oder, wie mir lieber ist, auf dem Server.
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 
