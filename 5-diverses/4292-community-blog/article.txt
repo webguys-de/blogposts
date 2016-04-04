@@ -26,14 +26,14 @@ Article-content:
 
 ----
 
-Intro: Ab sofort bezieht Webguys alle Blog-Beitäge von Github. Das eröffnet z.B. die Möglichkeit kleine Fehler in Beiträgen direkt mit einen "Fork" zu korrigieren.
+Intro: Ab sofort bezieht Webguys alle Blog-Beitäge von GitHub. Das eröffnet z.B. die Möglichkeit kleine Fehler in Beiträgen direkt mit einem Fork zu korrigieren.
 
 
 ----
 
-Text: Mit Magento 2 kommt eine große Menge an neuen Informationen auf uns zu. Bereits jetzt habe ich das Problem dass ich im Web auf viele Blog-Beiträge stoße welche kleiner Fehler haben und mich somit nicht zum eigentlich Ziel führen - auch wenn manchmal nur 1% falsch ist.
+Text: Mit Magento 2 kommt eine große Menge an neuen Informationen auf uns zu. Bereits jetzt habe ich das Problem, dass ich im Web auf viele Blog-Beiträge stoße, welche kleine Fehler haben und mich somit nicht zum eigentlich Ziel führen - auch wenn manchmal nur 1 % falsch ist.
 
-Ab und zu versuche ich dann eine Notiz zu hinterlassen aber ganz ehrlich: Leicht macht es dann nicht. Und so ein Magento-Blog ist ja auch kein Magazin sondern mir ein Know-How-Pool. Also warum nicht die Leser zu Autoren machen und die Autoren zu Lesern?
+Ab und zu versuche ich dann eine Notiz zu hinterlassen, aber ganz ehrlich: Leicht macht es das nicht. Und so ein Magento-Blog ist ja auch kein Magazin, sondern mir ein Know-How-Pool. Also warum nicht die Leser zu Autoren machen und die Autoren zu Lesern?
 
 ## Nun mit Github Integration
 
