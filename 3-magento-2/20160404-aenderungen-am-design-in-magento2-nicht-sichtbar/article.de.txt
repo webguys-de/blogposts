@@ -30,7 +30,21 @@ Intro: Was tun wenn die CSS Änderungen in Magento 2 beim Test-Rechner oder beim
 
 ----
 
-Text: Manchmal ist die Welt doch viel einfacher als man denkt. Generell besitzt Magento2 im Entwickler-Modus zwei Möglichkeiten zum compilieren von LESS. Entweder mittels Javascript oder, wie mir lieber ist, auf dem Server.
+Text: 
+
+Manchmal ist die Welt doch viel einfacher als man denkt. Generell besitzt Magento2 im Entwickler-Modus zwei Möglichkeiten zum compilieren von LESS. Entweder mittels Javascript oder, wie mir lieber ist, auf dem Server.
+
+Cache leeren? Ja, stimmt.  Aber ein `rm -Rf var/cache` half mir nicht. Aber warum eigentlich nicht?
+
+Magento prüft beim Laden ob eine neue Compilierung der Less-Dateien erforderlich ist. Möchte man das System dazu zwingend die Less-Dateien unbedingt neu zu compilieren "einfach" alles davon Abhängige entfernen:
+
+```
+rm -Rf pub/static/frontend/*/* var/cache var/view_preprocessed
+ ```
+
+Schon sieht das Layout auf dem Test-System genauso aus wie auf dem eigenen Rechner auf dem das compilieren mittels Grunt angestoßen wurde :-)
+
+P.S. Dazu gibt es auch ein Kapitel in der Doku: http://devdocs.magento.com/guides/v2.0/frontend-dev-guide/css-topics/css_debug.html
 
 ----
 
