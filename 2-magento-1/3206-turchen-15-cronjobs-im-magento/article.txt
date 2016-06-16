@@ -44,9 +44,13 @@ Ein Hinweis vorab: dieses Türchen bezieht sich auf Linux-Systeme, da die allerm
 Im ersten Schritt wird cron.sh für jenen Linux-User <strong>ausführbar</strong> gemacht, der die Cronjobs aufruft. Je nach Server-Setup müssen die Rechte für den Besitzer, die Gruppe oder für alle freigegeben werden. Generell gilt: je restriktiver die Rechte gesetzt werden können, desto besser.
 
 Im zweiten Schritt trägt man den Job in <strong>crontab</strong> ein, also die Datei, welche die Aufgaben für <a href="http://en.wikipedia.org/wiki/Cron">cron</a> auflistet. Das geht üblicherweise so:
+
 (code) crontab -e(code) 
+
 Mit dem Befehl wird crontab geöffnet. Nun kann man den <strong>neuen Job</strong> eintragen:
+
 (code) */5 * * * * /var/www/pfad/zu/magento/cron.sh(code) 
+
 Diese Zeile bewirkt, dass Magentos Cron-Script <strong>alle 5 Minuten</strong> aufgerufen wird. Die genaue Syntax könnt ihr dem obigen Wikipedia-Link entnehmen. Achtet darauf, dass ihr crontab mit einer leeren Zeile abschließt, sonst wird der letzte Job in der Regel nicht ausgeführt.
 
 Zudem ist wichtig, dass der User, der die Cronjobs ausführt, die benötigten Rechte hat!
