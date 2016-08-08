@@ -36,7 +36,7 @@ Magento verwendet aus Gründen der Flexibilität und Erweiterbarkeit des Systems
 
 Text: In diesem Beitrag soll es nur um diese Config-Files gehen, nicht um die Layout-Files. Bei diesen handelt es sich zwar ebenfalls um XML-Files, aber nicht um Konfigurationsdateien im eigentlichen Sinn. Layout-XMLs werden also bei dem nun folgenden Einsammelprozess nicht berücksichtigt.
 <h2>Mage::run()</h2>
-Magento beginnt sehr früh damit, XML einzusammeln, bzw. sich auf's Einsammeln vorzubereiten. Es beginnt der "index.php". Dort wird nach dem Laden der "app/Mage.php" "Mage::run()" aufgerufen.
+Magento beginnt sehr früh damit, XML einzusammeln, bzw. sich auf's Einsammeln vorzubereiten. Es beginnt in der "index.php". Dort wird nach dem Laden der "app/Mage.php" "Mage::run()" aufgerufen.
 
 (code lang: php)
 # /app/Mage.php
