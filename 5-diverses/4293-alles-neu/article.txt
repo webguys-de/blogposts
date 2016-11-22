@@ -1,0 +1,69 @@
+Article-meta: 
+
+----
+
+Title: Verstärkung gesucht!
+
+----
+
+Date: 2016-11-22
+
+----
+
+Description:
+
+----
+
+Tags: allgemein
+
+----
+
+Author: ingo
+
+----
+
+Article-content: 
+
+----
+
+Intro: Das Team von connect-io und Gründer der Webguys sucht leidenschaftliche Web-Entwickler.
+
+
+----
+
+Text: Aufmerksamen Leserinnen und Lesern wird es eventuell schon aufgefallen sein: seit dem 1.7. hat sich bei den Webguys einiges geändert. Tobias Vogt und Ingo Hillebrand haben die code-x GmbH verlassen und zusammen mit der Plan Concept Dr. Lichtenberg GmbH die neue e-Commerce Agentur **[connect-io GmbH](http://www.connect-io.de/)** gegründet.
+
+Als Tochter der PlanConcept Dr. Lichtenberg Gmbh - einem 1993 gegründetem Full-Service-Logistik und Merchandise-Unternehmen, welches aktuell stark im B2B- Markt aufgestellt ist und kontinuierlich im B2C-Markt wächst, verbringen wir 50% unserer Zeit mit internen Shop-Projekten, E-Commerce Prozess-Verbesserungen und kurzfristigen Innovationen. Die anderen 50% arbeiten wir in üblichen Agentur-Projekten. So können wir langfristig eigene Projekte skalieren aber auch kurzfristig in kleineren Projekten neue Techniken und Ideen umsetzen. Zu unseren Kunden zählen namhafte Unternehmen wie zum Beispiel FloraPrima, E.ON und Bayer.
+
+Die Standortwahl haben wir uns nicht leicht gemacht. Am Ende hat uns das idyllische Salzkotten kurz vor Paderborn überzeugt. Es liegt verkehrstechnisch sehr gut, auch ist alles für den täglchen Bedarf in der Nähe zu finden; ein angrenzendes Naherholungsgebiet sorgt für einen hohen Wohlfühlfaktor.
+
+Als Verstärkung unseres Team erwartet Dich ein moderner Arbeitsplatz, ein neues MacBook Pro, natürlich ein hochauflösender 27"-Monitor, die Möglichkeit regelmäßig im Homeoffice arbeiten zu können und ein (noch) kleines Team mit großer Lust auf neue Web-Technologien. Deine Arbeitszeiten sind flexibel gestaltbar.
+
+####Lern' uns kennen!
+
+Wir sind auf der Suche nach:
+
+###[Web-Entwickler](http://www.connect-io.de/jobs/#contactus)
+Wenn SCSS, HTML und Javascript deine Welt ist, du Grundkenntnisse der objektorientierten PHP-Entwicklung besitzt, an Technologien wie Laravel und Symfony interessiert bist oder auch eventuell schon Erfahrungen mit Magento sammeln konntest - Dann freuen wir uns darauf, Dich kennenzulernen!
+
+
+###[Junior Web-Entwickler](http://www.connect-io.de/jobs/#contactus)
+Wenn SCSS, HTML und Javascript deine Welt werden soll, du Grundkenntnisse der objektorientierten Programmierung besitzt und ausbauen möchtest und an modernen Web- und eCommerce-Technologien interessiert bist - Dann freuen wir uns darauf, Dich kennenzulernen!
+
+Wir konnten dein Interesse wecken? Lerne uns doch unverbindlich kennen! Dafür brauchen wir auch noch keinen Lebenslauf oder ein Anschreiben von Dir. [Hinterlasse uns deine Kontaktdaten](http://www.connect-io.de/jobs/#contactus), ein paar Informationen wann und wie wir Dich erreichen dürfen und für welche Stelle du dich interessierst. Wir melden uns dann bei dir!
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4291
