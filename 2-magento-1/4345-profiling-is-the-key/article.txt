@@ -185,9 +185,9 @@ NewRelic is really limited on this topic.
 
 After writing this blog article, I have to admit that all those solutions are good and even complementary. You can use Xdebug as debugger, replace its profiling tool with Blackfire.io for development and test purpose and monitor your application with NewRelic and get live profile information on tideways.
 
-If you need to improve the performance, blackfire.io will help you a lot. If you wish to limit the cost, go for xdebug profiler and use the free plan of NewRelic to have an idea of the performance. In case of high traffic or need analyze on production server, go for an paid plan for NewRelic or Tideways.
+If you need to improve the performance, blackfire.io will help you a lot. If you wish to limit the cost, go for xdebug profiler and use the free plan of NewRelic to have an idea of the performance. In case of high traffic or need analyze on production server, go for a paid plan for NewRelic or Tideways.
 
-We didn't discuss in detail about how to resolve the bottlenecks. You just need to find which methods consums too much time to be executed thanks to the tool mentionned before and find a solution by using caching or prevent loading model via `getModel` methods or use `getCollection()->getFirstItem()` in Magento 1.x, replace it by calling the database directly and save the result in cache. The idea behind is to shortcut dispatch event which may slow down a lot the process.
+We didn't discuss in detail about how to resolve the bottlenecks. You just need to find which methods consums too much time to be executed thanks to the tool mentionned before and find a solution by using caching or prevent loading model via `getModel` methods or use `getCollection()->getFirstItem()` in Magento 1.x, replace it by calling the database directly and save the result in cache or you may use more efficient PHP core methods. The idea behind to not load data from model in Magento, is to shortcut dispatch events which may slow down a lot the process.
 
-Enjoy to try yourself the tools which fulfill your expectations and have a nice christmas time.
+Enjoy to try yourself the tools which fulfill your expectations. I wish you a nice christmas time and see you at the next event.
 
