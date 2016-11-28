@@ -49,7 +49,6 @@ This gives us a good base to work on.
 First we define our [servers](https://deployer.org/docs/servers)
 
 (code lang: php)`
-````
 server('prod_1', 'domain.com')
     ->user('user')
     ->password('pass')
@@ -66,8 +65,7 @@ prod:
   identity_file: ~
   stage: production
   deploy_path: /home/www/`
-  ````
- (/code)
+(/code)
  
  After that we build our first recipe:
  Most of our desired tasks are covered by [common.php](https://github.com/deployphp/deployer/blob/master/recipe/common.php) and [magento.php](https://github.com/deployphp/deployer/blob/master/recipe/magento.php) recipe. 
@@ -75,7 +73,6 @@ prod:
  Therefore we extend the existing Magento-Recipe:
  
  (code lang: php)
- ````
  <?php
  
  require 'recipes/magento.php';
@@ -108,7 +105,6 @@ task('deploy-store', [
     'set-shop-repository',
     'deploy'
 ]);
-````
  (/code)
  
  Running it with `dep deploy-store` should result in somethin like this:
@@ -118,7 +114,6 @@ task('deploy-store', [
  Deployer will create following folder structure:
  
  (code)
- ```
 /your/deployment/path
 - releases/
 - - 20161101120000
@@ -128,7 +123,6 @@ task('deploy-store', [
 - - var/
 - - app/etc/local.xml
 - current/ => symlink to current release
-```
  (/code)
  
  You could set the number of kept releases. 
