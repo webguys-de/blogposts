@@ -1,4 +1,4 @@
-Title: Türchen xx : Profiling is the key
+Title: TMP 01: Profiling is the key
 
 ----
 
@@ -6,11 +6,7 @@ Date: 2016-12-01
 
 ----
 
-Author: Sylvain Rayé
-
-----
-
-Author-Text: Sylvain Rayé is a Computer Engineer having around 16 years experience in the eCommerce Development and 8 years with Magento. He founded Diglin GmbH (http://www.diglin.com) in Zurich (Switzerland), a company providing development for eBusiness projects. He is a Magento Pusher and participates actively to the community by organizing the Meet Magento Conference in Switzerland.
+Author: sylvain
 
 ----
 
@@ -85,12 +81,12 @@ To analyze the content of the generated cachegrind profile files, you'll need to
 * [Wincachegrind](https://sourceforge.net/projects/wincachegrind/) for Windows
 * or your favorite IDE like PHPStorm. Graph is unfortunately not available.
 
-![Webgrind](xdebug-webgrind.png "Webgrind View")
+(image: xdebug-webgrind.png)
 
 
 All those tools provide a detailed list of calls and times of your application methods or functions. You may also have a call graph helping you to see easily the different steps of the calls and where may be the bottleneck.
 
-![PHPStorm Xdebug Analyze](xdebug-phpstorm-analyze.png "Available via menu Tools > Analyze XDebu Profiler Snapshot")
+(image: xdebug-phpstorm-analyze.png)
 
 Main avantage of Xdebug Profiler is that you probably have it already installed on your machine as you may debug your code with it. As supported per default in PHPStorm, you don't need that much to install extra tools if you already use this IDE, however the graph is not available compare to other tools. XDebug is may be less convenient as commercial solutions and profiling SQL request needs other solutions.
 
@@ -130,8 +126,8 @@ $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_magento");
 
 More documentation about [XHProf](http://php.net/xhprof) on PHP.net Website.
 
-<img src="xhprof-analyze.png" width="640px" />
-<img src="xhprof-callgraph.png" width="640px" />
+(image: xhprof-analyze.png)
+(image: xhprof-callgraph.png)
 
 ### Blackfire.io
 
@@ -139,7 +135,7 @@ More documentation about [XHProf](http://php.net/xhprof) on PHP.net Website.
 
 It analyzes your pages, detect where are the bottlenecks and provide you for some cases, some usefull tips. The callgraph is glued together with the call tree, when you click on a method of your application, the callgraph shows you where this method is located into the graph and highlight it. It facilitates to detect caller and callees and number of times the method is called.
 
-<img src="blackfire.io-callgraph.png" width="640px" />
+(image: blackfire.io-callgraph.png)
 
 Compared to NewRelic or Tideways, Blackfire.io profiles your web pages only on demand. It is for me a little bit annoying as I didn't find a way to profile a POST request from a form page. When you profile a page, you have to visit the page and with the Chrome extension, trigger the profiling. You can also do it per command line. So you could simulate a POST request per command line. There is easier tool for that!!! Or may be I'm an idiot and didn't find the correct way. On the other hand, the on-demand analyze makes sense to prevent server overhead on production server.
 
@@ -156,7 +152,7 @@ All instructions can be found on [blackfire.io Website](https://blackfire.io/doc
 
 Once you installed it, you can, for example, profile a page thanks to the Google Chrome Extension, named as Companion by clicking on its icon, once the popup is open, you can create a reference for further use (comparison between the profiles) and click on `Profile` to launch the profiling. The page won't be reloaded, you don't need it, you will see however a progress bar and soon it is finished, you can watch the profile on blackfire.io.
 
-<img src="blackfire.io-companion.png" width="320px" />
+(image: blackfire.io-companion.png)
 
 ### Newrelic & Tideways
 
@@ -172,13 +168,13 @@ NewRelic is really limited on this topic.
 
 #### Tideways PHP Profile and Callgraph
 
-<img src="tideways-profile.png" width="640px" />
-<img src="tideways-callgraph.png" width="640px" />
+(image: tideways-profile.png)
+(image: tideways-callgraph.png)
 
 #### NewRelic Profile
 
-<img src="newrelic-profile.png" width="640px" />
-<img src="newrelic-transaction-trace.png" width="640px" />
+(image: newrelic-profile.png)
+(image: newrelic-transaction-trace.png)
 
 
 ### Conclusion
