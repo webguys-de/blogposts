@@ -1,4 +1,4 @@
-Title: Türchen xx : Profiling is the key
+Title: Türchen 01 : Profiling is the key
 
 ----
 
@@ -14,7 +14,7 @@ Author-Text: Sylvain Rayé is a Computer Engineer having around 16 years experie
 
 ----
 
-Intro: When you have to handle bottleneck performance, the first thing about is to check if your code make the application slow. Let’s find some tools to detect where are the bottleneck.
+Intro: When you have to handle bottleneck performance, the first thing to think about, is to check if your code make the application slow. Let’s find some tools to detect where are the bottlenecks.
 
 ----
 
