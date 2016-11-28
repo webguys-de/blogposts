@@ -20,15 +20,15 @@ Intro: Putting every change to webservers can be an annoying job. To ensure same
 
 Text: Bringing new version of your code base may be an annoying job for you and your team if you don't have a specialist DevOps in your team. To ensure you process your deployment every time with same procedure, you could use a specific tool for that job. Especially after some Magento-Core updates it is a good way to deploy your code with one of these tools.
 
-## why using a deployment tool?
+### why using a deployment tool?
 
 There are a lot of deployment tools in the wild. Some automate more or less than others, most use different programming languages, some need a root-server to deploy to other machines. Big **benefit** of these tools are **speed**, **consistency**, **rollbacks** and sometime **parallel deployments**. If you are working as team on a projects, you can guarantee that **everyone deploys code the same way**.
 
-# why deployer.org?
+### why deployer.org?
 
 I decided to use [deployer](https://deployer.org/) as this tool come in our native programming language **PHP**. It is simple to install, learn and to use. It also brings some out-of-the-box recipes with it. You could also create your own recipes and share them with your team on VCS.
 
-# typical deployment tasks:
+### typical deployment tasks:
 
 Let's think about tasks, that you have/had to do on every deployment:
 
@@ -40,15 +40,16 @@ Let's think about tasks, that you have/had to do on every deployment:
 - create symlinks for folder and files
 - clear caches folder, flush database cache, invalid cache files
 
-# create your magento deployer recipe
+### create your magento deployer recipe
 
-As mentioned earlier, deployer.org brings some recipes with it. One of these recipes if for default Magento1 Shop: [View recipe on Github](https://github.com/deployphp/deployer/blob/master/recipe/magento.php)
+As mentioned earlier, deployer.org brings some recipes with it. One of these recipes is for default Magento1 Shop: [View recipe on Github](https://github.com/deployphp/deployer/blob/master/recipe/magento.php)
 
 This gives us a good base to work on.
 
 First we define our [servers](https://deployer.org/docs/servers)
 
-(code lang: php)
+(code lang: php)`
+````
 server('prod_1', 'domain.com')
     ->user('user')
     ->password('pass')
@@ -64,13 +65,17 @@ prod:
   user: www
   identity_file: ~
   stage: production
-  deploy_path: /home/www/
- (code)
+  deploy_path: /home/www/`
+  ````
+ (/code)
  
  After that we build our first recipe:
- Most of our desired tasks are covered by [common.php](https://github.com/deployphp/deployer/blob/master/recipe/common.php) recipe and [magento.php](https://github.com/deployphp/deployer/blob/master/recipe/magento.php) recipe. Therefore we extend the existing Magento-Recipe:
+ Most of our desired tasks are covered by [common.php](https://github.com/deployphp/deployer/blob/master/recipe/common.php) and [magento.php](https://github.com/deployphp/deployer/blob/master/recipe/magento.php) recipe. 
+ 
+ Therefore we extend the existing Magento-Recipe:
  
  (code lang: php)
+ ````
  <?php
  
  require 'recipes/magento.php';
@@ -99,21 +104,55 @@ task('set-shop-repository', function () {
     set('repository', 'https://github.com/firegento/magento.git');
 });
 
-task('deploy-flexstores', [
+task('deploy-store', [
     'set-shop-repository',
     'deploy'
 ]);
+````
+ (/code)
+ 
+ Running it with `dep deploy-store` should result in somethin like this:
+ 
+ (image: screenshot-deployer.png)
+ 
+ Deployer will create following folder structure:
+ 
  (code)
+ ```
+/your/deployment/path
+- releases/
+- - 20161101120000
+- - 20161203090000
+- shared/
+- - media/
+- - var/
+- - app/etc/local.xml
+- current/ => symlink to current release
+```
+ (/code)
+ 
+ You could set the number of kept releases. 
+ With `dep rollback` you can rollback one release within seconds.
  
  
+### just beginning
+
+With that simple deployment recipe you can automate your process to build new releases and rollback. 
+That's just a simple beginning. With deployer you could also run shell commands. So you could use [modman](https://github.com/colinmollenhour/modman), [composer](https://getcomposer.org/) or [magerun](http://magerun.net/).
+
+One thing, our script doesn't cover: your database! Keep caution about changes in tables that are hard to revert.
  
 
-# limitations of deployer.org
 
-# alternatives to deployer.org
+### alternatives
+
+You don't want to use deployer.org?? No problem: 
+
+Try one of these other solutions:
+
+* [Ansible](https://www.ansible.com/application-deployment)
+* [Salt](https://saltstack.com/community/)
+* [Capistrano](http://capistranorb.com/#)
+* [Fabric](http://www.fabfile.org/)
 
 
-
-You can use (code language: javascript|php|html|xml)YOUR CODE(/code) to highlight your source.
-
-To add some images just put it your new blog-post-directory and include it using (image: banner_fb-650x223.png)
