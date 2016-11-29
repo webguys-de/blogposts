@@ -1,4 +1,4 @@
-Title: Türchen 3 : Automated Deployment with deployer.org
+Title: Türchen 03: Automated Deployment with deployer.org
 
 ----
 
@@ -6,11 +6,7 @@ Date: 2016-12-03
 
 ----
 
-Author: Kevin Krieger
-
-----
-
-Author-Text:  Kevin Krieger is a computer scientist, freelancer and volunteer. He is working as Magento freelancer since 2015, previously as web developer frontend/backend in various projects. His first experience with magento was in 2008. He likes to attend and organize barcamps like [SaarCamp](https://saarcamp.org/") and [CoderDojo Saar](http://coderdojo-saar.de/). Find out more about him on his [blog](https://kkrieger.de/), [GitHub page](https://github.com/kkrieger85), [Xing Profile](https://www.xing.com/profile/Kevin_Krieger) or [Twitter](https://twitter.com/kkrieger)
+Author: kevinkrieger
 
 ----
 
@@ -48,13 +44,13 @@ This gives us a good base to work on.
 
 First we define our [servers](https://deployer.org/docs/servers)
 
-(code lang: php)`
+(code lang: php)
 server('prod_1', 'domain.com')
     ->user('user')
     ->password('pass')
     ->set('deploy_path', '/home/www')
     ->stage('production');
-(code)
+(/code)
 
 or in an external file with YAML:
 
