@@ -1,0 +1,148 @@
+Title: Türchen 03: Solving the hardest problems
+
+----
+
+Date: 2016-12-03
+
+----
+
+Author: fabianblechschmidt
+
+----
+
+Intro: Introduction to Lizards & Pumpkins techniques we are using and why
+
+----
+
+Text:# Solving the hardest problem of computer science
+
+##Introduction to [Lizards & Pumpkins (🐉&🎃)](http://lizardsandpumpkins.com/), technologies we use and why
+
+####Problem: Your shop is too slow
+
+### Even worse: Scaling is hard and expensive!
+
+Our default solution for this is caching.
+
+[But as Phil Karlton said](http://martinfowler.com/bliki/TwoHardThings.html http://skeptics.stackexchange.com/q/19836):
+
+> There are only two hard things in computer science: cache invalidation and naming things.
+
+We think solving performance problems by using a cache is not an ideal solution, even though it often works. But you can't solve scaling problems with caching.
+
+### Broken by design
+
+Caches introduces new problems, a short list of the worst ones:
+
+######Cache miss
+The first visitor has a *cache miss*, which means they have to wait until the page is generated. If this takes a couple of seconds and you have more customers requesting the page, it is even worse. All of them wait and the server has to generate the page multiple times before it get cached.
+
+###### Invalidation is hard
+Knowing which pages to flush, when a product, category or cms block was updated is hard. You renew the product detail page when a product is updated, but did you remember to flush _ALL_ category pages, especially the paged ones, after a product was deactivated? If the product is missing in the product list, all other products in later pages move one position forward, so all paged category pages need to be renewed.
+
+###### Flush can lead to downtime
+It happens every day in one or the other shop. You are waiting for your tv advertisement and want to be sure that all your caches are up to date, so you flush them all. When the tv ad starts your shop goes down, because _EVERY_ visitor triggering a cache miss. Horrible for visitors, your sales and for your advertisement budget which was just burned uselessly.
+
+###### Inconsistencies are hard to avoid
+If invalidation is not implemented correctly (and unfortunately it is never), you get different results for different cached pages for the same product. Which is most of the time not that bad, if old images or descriptions are cached, but prices and availability should never be wrong.
+
+### Solution: Pregeneration with 🐉&🎃
+
+Render new content immediately and serve it to visitors until it is updated.
+
+![inline 90%](Introduction/magento_changes.png)
+
+The idea is, to divide the page into different parts: For example, one can split the category page like this: We have an HTML snippet for the category name and the bread crumb menu and a snippet for each product. The rest of the page is one huge snippet, including header, menu, footer, etc.
+
+To help you with this, we implemented [Lizards and Pumpkins](https://github.com/lizards-and-pumpkins).
+
+### Import from Magento (or any other System)
+
+Our Magento connector exports an XML file with product, category and some CMS data. Lizards & Pumpkins imports this file, creates a command for each product/category and pushes them to a queue, consumes these commands, creates different events and pushes them into a queue again, consumes these events and finally passes the data to observers which update the view accordingly. Which means in most cases, resizes images and generating the different snippets, like category name/breadcrumb or a bunch of snippets for the product for category, product detail page, compare products, search, etc.
+
+The snippets also can be JSON to be consumed by frontend applications. Lizards & Pumpkins doesn't care about the content type.
+
+(image: import-overview.png)
+
+The images are saved on disk, the snippets are saved in a key value storage, which is the next big advantage of 🐉&🎃.
+
+Most of the frontend work is already done after import. Images are resized to the sizes they are needed. And the HTML/JSON/XML is already rendered, so in a form which can just be sent to the browser.
+
+Having a key-value-storage is a technology chosen with care. The keys can contain arbitrary information. We need at least some "hard coded" part to know what snippet it is. But can add locale, website, product id, category id, customer group, customer id,  geolocation, some kind of time frame and/or artificial keys like A/B/C.
+
+Features like the following can be built on top of this:
+- A/B testing
+- prices per country/customer (group)
+- availability per customer group (VIP customers)
+- description in differente locale or culture based on geoip
+- prices from 12pm to 2pm are different (for your restaurant)
+
+### Content Delivery to the customer
+
+(image: request-overview.png)
+
+All the work is done, so we only need to know whether a request can be served by Lizards & Pumpkins then get all the snippets we want in the page, throw them together and push them to the customer.
+
+We recommend to get all snippets from the key value storage. There are few things faster than just getting a bunch of strings from redis or memcached.
+
+But if you want or need information from somewhere else, e.g. a personal recommendation based on mahout or something alike, that information can be injected into the page, too. Depending on the implemented service this might slow down the whole request. So be careful with that.
+
+### IT SCALES!
+
+Importing is super scalable due to the use of queues and workers.
+
+Serving content to the visitors scales too. There is only a thin php script, which gets the product ids maybe from the search engine and all the snippets from key value storage. Then only a `while(str_replace());` follows.
+
+If you have more customers, put a second, third, tenth web node beside it. If key value is the bottle neck, put a second one beside it. Lizards & Pumpkins is intended to be stateless, so no dependency on the last or the next request.
+
+### Up and downsides
+
+- \+ it is a boost for your TTFB (time to first byte)
+
+- \+ IT SCALES easily and cheap, linearly and effectively, so costs can be calculated. 
+
+- +/– Theme needs to be reimplemented (this looks like a downside, but it is the ultimate opportunity to get rid of all the legacy stuff in the templates. Magento templates are full of useless HTML and the CSS is normally a big ball of mud)
+
+- – we have less documentation ([this doesn't meet we have none!](https://github.com/lizards-and-pumpkins/catalog/wiki)) 
+
+- – there is a second software stack to maintain beside Magento (but maintaining a Varnish configuration isn't easy either)
+
+### Magento Connector
+
+We have a magento connector. Our first customer is running on 250.000 products, so exporting them works.
+
+We currently support simple and configurable products and unfortunately no custom options.
+
+### Some facts and numbers
+
+(image: 10733809_1487628138181493_2944714226294759248_o.jpg)
+
+- TTFB by 30ms + network (unfortunately our first customer changed hosting, so it is worse now)
+- we are 100% TDD, even the JS
+- 100% PHP7.0
+- thePHP.cc are our consultants, thanks to you guys!
+
+
+### License
+
+The [BSD 3-clause license](https://opensource.org/licenses/BSD-3-Clause) allows you almost unlimited freedom with the software so long as you include the BSD copyright and license notice in it.
+
+
+![inline](Introduction/license.png)
+
+### How to get started?
+
+[Have a look on our github page](https://github.com/lizards-and-pumpkins) 
+
+[And give our developer vm a try!](https://github.com/lizards-and-pumpkins/dev-vm) 
+
+The dev vm is currently in the process of being improved, so if it doesn't work, please open an issue - but we hope to solve the problems this week.
+
+You have questions about lizards? Please send me an email: fabian@lizardsandpumpkins.com
+
+
+### Where does the name come from?
+
+Funny story.
+
+When we started back in 2014, Tim came up with the nice name Brera, which is a lovely p
