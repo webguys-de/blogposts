@@ -32,16 +32,16 @@ We think solving performance problems by using a cache is not an ideal solution,
 
 ### Broken by design
 
-Caches introduces new problems, a short list of the worst ones:
+Caches introduces new problems, here a short list of the worst ones:
 
 ######Cache miss
-The first visitor has a *cache miss*, which means they have to wait until the page is generated. If this takes a couple of seconds and you have more customers requesting the page, it is even worse. All of them wait and the server has to generate the page multiple times before it get cached.
+The first visitor has a *cache miss*, which means they have to wait until the page is generated. If this takes a couple of seconds and you have more visitors requesting the page, it is even worse. All of them wait and the server has to generate the page multiple times before it get cached.
 
 ###### Invalidation is hard
 Knowing which pages to flush, when a product, category or cms block was updated is hard. You renew the product detail page when a product is updated, but did you remember to flush _ALL_ category pages, especially the paged ones, after a product was deactivated? If the product is missing in the product list, all other products in later pages move one position forward, so all paged category pages need to be renewed.
 
 ###### Flush can lead to downtime
-It happens every day in one or the other shop. You are waiting for your tv advertisement and want to be sure that all your caches are up to date, so you flush them all. When the tv ad starts your shop goes down, because _EVERY_ visitor triggering a cache miss. Horrible for visitors, your sales and for your advertisement budget which was just burned uselessly.
+It happens every day in one or the other shop. You are waiting for your TV advertisement and want to be sure that all your caches are up to date, so you flush them all. When the TV ad starts your shop goes down, because _EVERY_ visitor triggering a cache miss. Horrible for visitors, your sales and for your advertisement budget which was just burned uselessly.
 
 ###### Inconsistencies are hard to avoid
 If invalidation is not implemented correctly (and unfortunately it is never), you get different results for different cached pages for the same product. Which is most of the time not that bad, if old images or descriptions are cached, but prices and availability should never be wrong.
@@ -52,7 +52,7 @@ Render new content immediately and serve it to visitors until it is updated.
 
 ![inline 90%](Introduction/magento_changes.png)
 
-The idea is, to divide the page into different parts: For example, one can split the category page like this: We have an HTML snippet for the category name and the bread crumb menu and a snippet for each product. The rest of the page is one huge snippet, including header, menu, footer, etc.
+The idea is, to divide the page into different parts. For example, one can split the category page as follows. One HTML snippet for the category name, one for the bread crumb menu and one snippet for each product. The rest of the page is one huge snippet, including header, menu, footer, etc.
 
 To help you with this, we implemented [Lizards and Pumpkins](https://github.com/lizards-and-pumpkins).
 
@@ -68,20 +68,20 @@ The images are saved on disk, the snippets are saved in a key value storage, whi
 
 Most of the frontend work is already done after import. Images are resized to the sizes they are needed. And the HTML/JSON/XML is already rendered, so in a form which can just be sent to the browser.
 
-Having a key-value-storage is a technology chosen with care. The keys can contain arbitrary information. We need at least some "hard coded" part to know what snippet it is. But can add locale, website, product id, category id, customer group, customer id,  geolocation, some kind of time frame and/or artificial keys like A/B/C.
+Using a key-value-storage as the snippet storage technology was chosen with care. The keys can contain arbitrary information. We need at least some "hard coded" part to know what snippet it is. But can add locale, website, product id, category id, visitor group, visitor id,  geolocation, some kind of time frame and/or artificial keys like A/B/C.
 
 Features like the following can be built on top of this:
 - A/B testing
-- prices per country/customer (group)
-- availability per customer group (VIP customers)
+- prices per country/visitor (group)
+- availability per visitor group (VIP visitors)
 - description in differente locale or culture based on geoip
-- prices from 12pm to 2pm are different (for your restaurant)
+- prices from 12:00 to 14:00 are different (for your restaurant)
 
-### Content Delivery to the customer
+### Content Delivery to the visitor
 
 (image: request-overview.png)
 
-All the work is done, so we only need to know whether a request can be served by Lizards & Pumpkins then get all the snippets we want in the page, throw them together and push them to the customer.
+All the work is done, so we only need to know whether a request can be served by Lizards & Pumpkins then get all the snippets we want in the page, throw them together and push them to the visitor.
 
 We recommend to get all snippets from the key value storage. There are few things faster than just getting a bunch of strings from redis or memcached.
 
@@ -93,7 +93,7 @@ Importing is super scalable due to the use of queues and workers.
 
 Serving content to the visitors scales too. There is only a thin php script, which gets the product ids maybe from the search engine and all the snippets from key value storage. Then only a `while(str_replace());` follows.
 
-If you have more customers, put a second, third, tenth web node beside it. If key value is the bottle neck, put a second one beside it. Lizards & Pumpkins is intended to be stateless, so no dependency on the last or the next request.
+If you have more visitors, put a second, third, tenth web node beside it. If key value is the bottle neck, put a second one beside it. Lizards & Pumpkins is intended to be stateless, so no dependency on the last or the next request.
 
 ### Up and downsides
 
@@ -109,15 +109,13 @@ If you have more customers, put a second, third, tenth web node beside it. If ke
 
 ### Magento Connector
 
-We have a magento connector. Our first customer is running on 250.000 products, so exporting them works.
-
 We currently support simple and configurable products and unfortunately no custom options.
 
 ### Some facts and numbers
 
 (image: 10733809_1487628138181493_2944714226294759248_o.jpg)
 
-- TTFB by 30ms + network (unfortunately our first customer changed hosting, so it is worse now)
+- TTFB by 30ms + network (unfortunately our first visitor changed hosting, so it is worse now)
 - we are 100% TDD, even the JS
 - 100% PHP7.0
 - thePHP.cc are our consultants, thanks to you guys!
@@ -143,6 +141,6 @@ You have questions about lizards? Please send me an email: fabian@lizardsandpump
 
 ### Where does the name come from?
 
-Funny story.
+Funny story!
 
-When we started back in 2014, Tim came up with the nice name Brera, which is a lovely p
+When we started back in 2014, Tim came up with the nice name Brera, which is a lovely province in Italy. When we started to think about a company to back the project, we made a trade mark search and unfortunatly Brera was already registered. So we need a new name. Thankfully one evening Tim watched Cinderella and the next day he came up with the idea: Lizards & Pumpkins.
