@@ -1,4 +1,4 @@
-Title: Türchen 4 : PDF Generierung in Magento 2
+Title: Türchen 04: PDF Generierung in Magento 2
 
 ----
 
@@ -6,11 +6,7 @@ Date: 2016-12-04
 
 ----
 
-Author: Fabian Schmengler
-
-----
-
-Author-Text: Fabian Schmengler is Magento developer at integer_net, based in Aachen, Germany. His focus lies in backend development, conceptual design and test automation. Since 2011 Fabian is a Magento Certified Developer and since 2014 a Magento Certified Solution Specialist. He also blogs at [https://www.schmengler-se.de/blog/](https://www.schmengler-se.de/blog/) (English and German), is active on [StackExchange](http://magento.stackexchange.com/users/243/fschmengler), [Twitter](https://twitter.com/fschmengler) and [Github](https://github.com/schmengler).
+Author: fabian-schmengler
 
 ----
 
