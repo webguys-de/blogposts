@@ -27,7 +27,6 @@ In diesem Beitrag stelle ich unsere Lösung vor, die `wkhtmltopdf` mit dem Magen
 So einfach kann die Benutzung des Moduls sein, wenn man ein Layout als PDF statt als HTML ausliefern möchte:
 
 (code language: php)
-```
 use Staempfli\Pdf\Model\View\PdfResult;
 
 class Example extends \Magento\Framework\App\Action\Action
@@ -38,7 +37,6 @@ class Example extends \Magento\Framework\App\Action\Action
         return $result;
     }
 }
-```
 (/code)
 
 Es wird also der gleiche Mechanismus genutzt wie im Standard, nur mit einem neuen "Result" Typ (PDF anstelle von "Page" oder "Layout").
@@ -99,7 +97,7 @@ Die eigentliche Domainlogik ist sehr übersichtlich, sie besteht aus einer handv
 
 ### Beispiel:
 
-```
+(code language: php)
 $pdf->addOptions(
     new PdfOptions(
         [
@@ -109,12 +107,11 @@ $pdf->addOptions(
         ]
     )
 );
-```
+(/code)
 
 Da jedes an wkhtmltopdf übergebene HTML-Dokument eigene Optionen bekommen kann, benötigen wir als Quelle jeweils einen HTML String und ein `PdfOptions` Objekt. Wir stellen dafür ein Interface `SourceDocument` zur Verfügung, das in der Magento-Integration bereits in zwei Varianten implementiert wurde (siehe nächster Abschnitt):
 
 (code language: php)
-```
 namespace Staempfli\Pdf\Api;
 interface SourceDocument
 {
@@ -134,7 +131,6 @@ interface Medium
      */
     public function printHtml($html, Options $options);
 }
-```
 (/code)
 
 Warum nicht `getHtml()` und `getOptions()`? Ich versuche, getter und setter zu vermeiden, um Objekte nicht als reine Datencontainer zu behandeln. Die obige API ist inspiriert von [Printers instead of Getters](http://www.yegor256.com/2016/04/05/printers-instead-of-getters.html) und das dort beschriebene "Printer" Pattern funktioniert in diesem Fall ziemlich gut. Die `Medium` Implementierungen `PdfCover` und `PdfAppendContent` kapseln die PDF Engine.
@@ -166,7 +162,6 @@ Wenn mehr als nur das aktuelle Layout gerendert werden soll, oder das PDF nicht 
 So ist zum Beispiel folgendes möglich:
 
 (code language: php)
-```
 # zusätzlich ein Inhaltsverzeichnis generieren:
 
 $this->pdf->appendTableOfContents(
@@ -187,7 +182,6 @@ $this->pdf->appendContent($source);
 # PDF generieren
 
 $pdfFileContents = $this->pdf->file()->toString();
-```
 (/code)
 
 `$this->pdf` sollte von `Staempfli\Pdf\Model\PdfFactory` erstellt worden sein. Diese Factory kümmert sich um einige globale Einstellungen, die im Magento Backend konfiguriert werden können, z.B. den Pfad zu `wkhtmltopdf`.
@@ -197,7 +191,6 @@ $pdfFileContents = $this->pdf->file()->toString();
 Wenn nur einzelne Blöcke gerendert werden sollen, ohne das ganze Standard-Layout (also insbesondere ohne den HTML Head von Magento), kann stattdessen `Staempfli\Pdf\Block\PdfTemplate` genutzt werden. Das ist ein Magento-Block, der das `SourceDocument` Interface implementiert, also von unserem Modul in PDF konvertiert werden kann. Standardmäßig nutzt er das Container-Template, rendert also alle Blöcke, die mit `addChild()` als Kinder hinzugefügt wurden (diese können beliebige Magento-Blöcke sein). Das kann dann so aussehen:
 
 (code language: php)
-```
 /** @var PdfTemplate $pdfBlock */
 $pdfBlock = $this->_view->getLayout()->createBlock(PdfTemplate::class);
 $pdfBlock->addChild('test-full-html', Template::class, ['template' => 'Bdk_PdfTest::test-full-html.phtml']);
@@ -209,7 +202,6 @@ $this->pdf->addOptions(
     )
 );
 $this->pdf->appendContent($pdfBlock);
-```
 (/code)
 
 ## Das Modul
