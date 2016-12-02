@@ -1,8 +1,8 @@
-Title: Türchen 03: Automated Deployment with deployer.org
+Title: Türchen 02: Automated Deployment with deployer.org
 
 ----
 
-Date: 2016-12-03
+Date: 2016-12-02
 
 ----
 
