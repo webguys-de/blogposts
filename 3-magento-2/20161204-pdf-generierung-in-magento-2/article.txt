@@ -10,7 +10,7 @@ Author: Fabian Schmengler
 
 ----
 
-Author-Text: Your text about your self. would be printed at the end of your blog-post and and your author page
+Author-Text: Fabian Schmengler is Magento developer at integer_net, based in Aachen, Germany. His focus lies in backend development, conceptual design and test automation. Since 2011 Fabian is a Magento Certified Developer and since 2014 a Magento Certified Solution Specialist. He also blogs at [https://www.schmengler-se.de/blog/](https://www.schmengler-se.de/blog/) (English and German), is active on [StackExchange](http://magento.stackexchange.com/users/243/fschmengler), [Twitter](https://twitter.com/fschmengler) and [Github](https://github.com/schmengler).
 
 ----
 
@@ -18,9 +18,7 @@ Intro: Die Core Methoden zum Generieren von PDF Dateien sind auch in Magento 2 e
 
 ----
 
-Text: Die Core Methoden zum Generieren von PDF Dateien sind auch in Magento 2 eher unflexibel. Eine Alternative sind Tools zum Konvertieren von HTML zu PDF.
-
-In unserem aktuellen Magento 2 Projekt, das wir ([integer_net](https://www.integer-net.de/)) gemeinsam mit der [Staempfli AG](http://www.staempfli.com/leistungen/online-shops/) entwickeln, gibt es die Anforderung, aus ausgewählten Produkten dynamisch einen PDF Katalog zu erstellen, der im Prinzip das gleiche Layout hat wie die Produktlisten im Shop. Die PDF aufgrund von HTML zu generieren lag also nahe.
+Text: In unserem aktuellen Magento 2 Projekt, das wir ([integer_net](https://www.integer-net.de/)) gemeinsam mit der [Stämpfli AG](http://www.staempfli.com/leistungen/online-shops/) entwickeln, gibt es die Anforderung, aus ausgewählten Produkten dynamisch einen PDF Katalog zu erstellen, der im Prinzip das gleiche Layout hat wie die Produktlisten im Shop. Die PDF aufgrund von HTML zu generieren lag also nahe.
 
 In diesem Beitrag stelle ich unsere Lösung vor, die `wkhtmltopdf` mit dem Magento Layout integriert. Am Ende gibt es auch einen Link zum Basismodul auf Github.
 
@@ -113,7 +111,7 @@ $pdf->addOptions(
 );
 ```
 
-Da jedes an wkhtmltopdf übergebene HTML-Dokument eigene Optionen bekommen kann, benötigen wir als Quelle jeweils einen HTML String und ein `PdfOptions` Dokument. Wir stellen dafür ein Interface `SourceDocument` zur Verfügung, das in der Magento-Integration bereits in zwei Varianten implementiert wurde (siehe nächster Abschnitt):
+Da jedes an wkhtmltopdf übergebene HTML-Dokument eigene Optionen bekommen kann, benötigen wir als Quelle jeweils einen HTML String und ein `PdfOptions` Objekt. Wir stellen dafür ein Interface `SourceDocument` zur Verfügung, das in der Magento-Integration bereits in zwei Varianten implementiert wurde (siehe nächster Abschnitt):
 
 (code language: php)
 ```
@@ -149,7 +147,7 @@ Hier wird es interessant. In Magento 2 sollten Controller Actions in ihrer `exec
 Im Core gibt es zum Beispiel folgende Result-Typen:
 
 - **Layout:** rendert ein Layout
-- **Page:**: spezifische Implementierung von "Layout", rendert das zum Controller zugehörige Layout mit allen Handles und dem HTML Head.
+- **Page:** spezifische Implementierung von "Layout", rendert das zum Controller zugehörige Layout mit allen Handles und dem HTML Head.
 - **Redirect:** rendert eine HTTP-Weiterleitung
 - **Json:** rendert JSON, für XHR Requests ("AJAX")
 - **Raw:** rendert beliebigen Inhalt, z.B. für Datei-Downloads
@@ -193,6 +191,26 @@ $pdfFileContents = $this->pdf->file()->toString();
 (/code)
 
 `$this->pdf` sollte von `Staempfli\Pdf\Model\PdfFactory` erstellt worden sein. Diese Factory kümmert sich um einige globale Einstellungen, die im Magento Backend konfiguriert werden können, z.B. den Pfad zu `wkhtmltopdf`.
+
+### Alternative ohne Layout
+
+Wenn nur einzelne Blöcke gerendert werden sollen, ohne das ganze Standard-Layout (also insbesondere ohne den HTML Head von Magento), kann stattdessen `Staempfli\Pdf\Block\PdfTemplate` genutzt werden. Das ist ein Magento-Block, der das `SourceDocument` Interface implementiert, also von unserem Modul in PDF konvertiert werden kann. Standardmäßig nutzt er das Container-Template, rendert also alle Blöcke, die mit `addChild()` als Kinder hinzugefügt wurden (diese können beliebige Magento-Blöcke sein). Das kann dann so aussehen:
+
+(code language: php)
+```
+/** @var PdfTemplate $pdfBlock */
+$pdfBlock = $this->_view->getLayout()->createBlock(PdfTemplate::class);
+$pdfBlock->addChild('test-full-html', Template::class, ['template' => 'Bdk_PdfTest::test-full-html.phtml']);
+$this->pdf->addOptions(
+    new PdfOptions(
+        [
+            PdfOptions::KEY_PAGE_ENCODING => PdfOptions::ENCODING_UTF_8,
+        ]
+    )
+);
+$this->pdf->appendContent($pdfBlock);
+```
+(/code)
 
 ## Das Modul
 
