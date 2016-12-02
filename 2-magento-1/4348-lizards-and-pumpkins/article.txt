@@ -10,21 +10,18 @@ Author: fabian-blechschmidt
 
 ----
 
-Intro: Introduction to Lizards & Pumpkins techniques we are using and why
+Intro: Introduction to (link: http://lizardsandpumpkins.com/ text:Lizards & Pumpkins (🐉&🎃)) techniques we are using and why
 
 ----
+Text:
 
-Text:# Solving the hardest problem of computer science
-
-##Introduction to [Lizards & Pumpkins (🐉&🎃)](http://lizardsandpumpkins.com/), technologies we use and why
-
-####Problem: Your shop is too slow
+###Problem: Your shop is too slow
 
 ### Even worse: Scaling is hard and expensive!
 
 Our default solution for this is caching.
 
-[But as Phil Karlton said](http://martinfowler.com/bliki/TwoHardThings.html http://skeptics.stackexchange.com/q/19836):
+(link: http://martinfowler.com/bliki/TwoHardThings.html text: But as Phil Karlton said):
 
 > There are only two hard things in computer science: cache invalidation and naming things.
 
@@ -34,23 +31,23 @@ We think solving performance problems by using a cache is not an ideal solution,
 
 Caches introduces new problems, here a short list of the worst ones:
 
-######Cache miss
+####Cache miss
 The first visitor has a *cache miss*, which means they have to wait until the page is generated. If this takes a couple of seconds and you have more visitors requesting the page, it is even worse. All of them wait and the server has to generate the page multiple times before it get cached.
 
-###### Invalidation is hard
+#### Invalidation is hard
 Knowing which pages to flush, when a product, category or cms block was updated is hard. You renew the product detail page when a product is updated, but did you remember to flush _ALL_ category pages, especially the paged ones, after a product was deactivated? If the product is missing in the product list, all other products in later pages move one position forward, so all paged category pages need to be renewed.
 
-###### Flush can lead to downtime
+#### Flush can lead to downtime
 It happens every day in one or the other shop. You are waiting for your TV advertisement and want to be sure that all your caches are up to date, so you flush them all. When the TV ad starts your shop goes down, because _EVERY_ visitor triggering a cache miss. Horrible for visitors, your sales and for your advertisement budget which was just burned uselessly.
 
-###### Inconsistencies are hard to avoid
+#### Inconsistencies are hard to avoid
 If invalidation is not implemented correctly (and unfortunately it is never), you get different results for different cached pages for the same product. Which is most of the time not that bad, if old images or descriptions are cached, but prices and availability should never be wrong.
 
 ### Solution: Pregeneration with 🐉&🎃
 
 Render new content immediately and serve it to visitors until it is updated.
 
-![inline 90%](Introduction/magento_changes.png)
+(image: magento_changes.png)
 
 The idea is, to divide the page into different parts. For example, one can split the category page as follows. One HTML snippet for the category name, one for the bread crumb menu and one snippet for each product. The rest of the page is one huge snippet, including header, menu, footer, etc.
 
@@ -125,8 +122,7 @@ We currently support simple and configurable products and unfortunately no custo
 
 The [BSD 3-clause license](https://opensource.org/licenses/BSD-3-Clause) allows you almost unlimited freedom with the software so long as you include the BSD copyright and license notice in it.
 
-
-![inline](Introduction/license.png)
+(image: license.png)
 
 ### How to get started?
 
