@@ -1,0 +1,92 @@
+Title: Türchen 11: Building an IT team
+
+----
+
+Date: 2016-12-1
+
+----
+
+Author: Sander Mangel
+
+----
+
+Author-Text: Passionate about e-commerce, Magento and coffee. Developer & consultant, scifi fan, allround nerd | co-organizor of @MageStackDay, MUG Rdam, Meet Magento NL
+
+----
+
+Intro: One thing in the past year which was very dear to me was the team we built and the steps we made at FitForMe, where I'm working as the Technical Lead. And I would like to share the lessons learned on building an IT team from the ground up.
+
+----
+
+Text: Building an IT team
+One thing in the past year which was very dear to me was the team we built and the steps we made at FitForMe, where I'm working as the Technical Lead. And I would like to share the lessons learned on building an IT team from the ground up.
+
+I joined the FitForMe team in August 2015. After 8 years on an inhouse-built CMS / Webshop late 2014 they decided to move to another system. After a long process of taking on board a consultant, deciding on a system (Magento), writing up an RFP with all the specs and hiring an agency work started. After that they also started the search for a Magento developer as they like to keep it everything in house. That search ended with them hiring me. (we all make mistakes)
+
+So where did we start? The old system, still in use, was running on a dedicated server at a hosting discounter maintained via FTP by the developer that joined the company 7 years earlier. He was IT, he did shop maintenance, printers, voip setup and everything else that had a power plug or related to software. Quite a daunting job all by yourself and it left little room for improving the systems. The agency still working on the Magento shop set up GIT and a staging server working on local for development but FitForMe didn't have the knowledge of servers or GIT to take that over. Meanwhile I was developing several new features on the shop that was being built and trying to steer IT in the right direction while talking to stakeholders about what is needed to go live. Next to that the requirements for the webshop commissioned didn't match the business requirements outlined in 2014 so steps had to be taken.
+
+**Putting the right people in the right place**
+First thing we needed was extra development power to churn out all features required to replace a system that was tailor made over 8 years time. The list of features was quite long; some could go, some had to be augmented and some had to be adapted to fit in the Magento way of doing e-commerce. Hiring Magento resources in the Netherlands was next to impossible so we turned to Romania where we hired a dedicated developer from a company I worked projects times with.
+
+Next I needed someone that could talk with stakeholders, knew what e-commerce was (selling products online doesn't mean you know how ecommerce works) and could take on the role of product owner.
+The last thing is important. It's perhaps the most important thing there is in an internal product team.
+An old colleague of mine looking for a new challenge knew Magento after working with it for 6 years or so, had the seniority to stand between the business and IT and knew how to manage a team resource wise. This gave me room to take on a lead developer role (coaching, development, system architecture, etc) and had him 40 hours per week on the product and where it needed to go to fulfill the business needs.
+
+Next to Magento we run a Typo3 setup for the corporate website and several Laravel (Lumen) systems for microservices doing anything from [shipping](http://www.slideshare.net/SanderMangel/scaling-an-ecommerce-environment) to finance tasks. For this I once again was lucky enough to find someone I already knew to take on the job of Senior Developer on these systems. The benefit of working with people I know is huge though I would like to add a side note that it's important to hire people with different backgrounds to have fresh insights. A team needs balance, but if you need to get it up running in a short time you need people you know you can build on and, more important, know how to communicate with.
+
+And the first developer already at FitForMe I mentioned? We believe people should do what they're passionate about. He has, next to still maintaining the old CMS till all systems are migrated, shifted his focus to supporting our team of 80 or so employees with the systems they use and more important in this project; is using his vast knowledge of the data in the old system to migrate transactional and customer data to Magento. Growing a team means older team members get the opportunity to reevaluate their position and evolve into a position much better suited to their needs and skills. With every step taken and hire made it's worth while evaluating this. 
+
+**Building an infrastructure for the IT team**
+Any IT team is more than the sum of it's developers, or the lines of code written. It depends on the infrastructure behind it, on the systems in place to support the team.
+Whether you're one developer or ten, some things are vital to working in a structured way.
+
+**_Project Management software_**
+When I joined FitForMe project progress were managed in an Excel Gantt chart and issues tracked via an email box. Simply put, project management was a black box and it didn't scale much beyond 2 or 3 persons. We tried out Trello but in the end settled on Jira, pretty much because it is unmatched in it's features to track issues, plot out sprints and track progress.
+
+**_Hosting_**
+I know… it's expensive and of course if we don't use a budget hoster we should go for some really sexy AWS Lambda S3 elastic thingy setup which I can surely maintain in my free time.
+Since we don't have in house sysadmin resources and we're dealing with sensitive (medical) data we needed a company that could really support us in our ever evolving needs. Netherlands based hosting company Cyso has customers ranging from other hosting companies to web agencies and financial institutions and offered next to dedicated servers with an enterprise level SLA also their own [cloud solution](https://fuga.io) based on openstack a bit like Digital Ocean or AWS. (You should try it out, it's awesome).
+This enabled us to host any kind of system under one roof.
+
+**_DTAP & version control_**
+No matter how small the project or the number of devs working on it, set up version control and environments for, at least, the master (production) and staging branches. 
+Development should be done locally and staging should mirror production in setup. I can't stress this enough. Not using these systems and procedures will cost you dearly when you need them the most.
+
+**_Pull Requests and testing procedures_**
+Anything we build is done so on it's own branch off of development. Any line of code going into the development branch passes code reviews with, ideally, 2 reviewers. It doesn't matter what their seniority is. An intern can still do a valid code review by having to be able to understand your code. Sure it takes time but this ensures a developer having an off day making sloppy mistakes doesn't ruin performance or a whole milestone worth of code.
+Next to that make sure someone tests features. Preferably someone that doesn't know how to code, someone that has nothing else than the initial ticket with the requirements as put out by business or the issue reporter. Invest in this, it'll save your team working weekends fixing the release before the deadline.
+
+**_Tools and hardware_**
+When your team works 40 hours or more, because who can stop when you're in the zone, developers need the right tools. A PHP programmer needs PHPStorm as an IDE and a Macbook, or in my case a Dell laptop with Ubuntu, they need proper software for the database like MySQL workbench or Datagrip and so on.
+This means investments need to be made, in our case not only on our 'own' developers but also our colleague in Romania who is as much part of the team as anyone else. Don't hold back on this because an unhappy developer will cost a lot more.
+
+**_Monitoring and alerting_**
+Last but not least; monitoring. Your ecosystem grows exponentially, especially with microservices and "users will email when the shop is down" doesn't cut it. We rely on a combination of
+
+- **Pingdom** to check uptime of HTTP paths like APIs and shops and certain paths on the stores like adding a product to cart
+- **Nagios** for basic server operations like CPU and memory usage and disk space
+- **New Relic** because it's the best way to detect issues in trends
+- **Loggly** for all logs on application and server level. Nobody likes to dig through endless text files, Loggly offers a powerful interface to find issues fast
+
+Make a clear distinction between monitoring and alerting. I don't need to know everything. My first priority is to be alerted via email or sms about issues. Monitoring Loggly and New Relic from time to time helps me spot disturbing trends. Monitoring everything means you get an information overload which will stop you from acting in a productive way.
+
+**Kudos for making it this far**
+Quite a lot of text right. But we're nearly there.
+
+**Learn to say goodbye**
+One of the moments I didn't want to leave out of this article is the first big call (actually in his third week) the product owner made after talking to just about everyone in the company and taking the time together with me to evaluate the Magento system built so far in detail is to start over.
+Not throwing everything built away but taking the building blocks and putting them on a stronger, more stable foundation. We moved from a monolithic architecture to a leaner microservice based setup to handle evolving business requirements more agile. It was without a doubt one of the bravest steps FitForMe as a company and team made and set us back months from our initial planning.
+It was one of the steps that made me believe this company has what it takes to grow at the rapid pace it set out in recent months.
+
+**Inspire each other**
+The final learning i'd like to instill on you, my faithful reader, is the one of mentality.
+Nothing is more damaging to a team than negativity or neglect. 
+No matter how crappy your morning was, how much beers you had the night before, how hard the talk was you just had with your manager or stakeholder; always strive to be positive towards your colleagues, always strive to inspire. And this goes for anyone from a manager to an intern.
+I've seen what negativity can do to a team and also what positive attention can do.
+I have the opportunity to sit down with the developers I work with daily to talk about the progress they're making on issues, features and personally including our remote dev. We take the time, talk through the day and try to offer help where I can. For me it's one of the best things of the day and in general our team is happy. In return the product owner who also manages the team sits down with me at least twice per week to go through anything that happens. Next to that we have a daily standup, a sprint planning meeting and short meetings with stakeholders when email threads get too long or features too vague. Meetings aren't bad as long as you make them meaningful.
+Take time to help each other and talk to each other. 
+
+And so we reach the end. I hope you were able to take something away from it. At the same time I would love to hear more about your experiences. Talk to me on [Twitter](https://twitter.com/sandermangel) or Slack
+
+Sander
+
