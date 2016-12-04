@@ -1,8 +1,8 @@
-Title: Türchen 03: Automated Deployment with deployer.org
+Title: Türchen 02: Automated Deployment with deployer.org
 
 ----
 
-Date: 2016-12-03
+Date: 2016-12-02
 
 ----
 
@@ -16,15 +16,15 @@ Intro: Putting every change to webservers can be an annoying job. To ensure same
 
 Text: Bringing new version of your code base may be an annoying job for you and your team if you don't have a specialist DevOps in your team. To ensure you process your deployment every time with same procedure, you could use a specific tool for that job. Especially after some Magento-Core updates it is a good way to deploy your code with one of these tools.
 
-### why using a deployment tool?
+### Why using a deployment tool?
 
 There are a lot of deployment tools in the wild. Some automate more or less than others, most use different programming languages, some need a root-server to deploy to other machines. Big **benefit** of these tools are **speed**, **consistency**, **rollbacks** and sometime **parallel deployments**. If you are working as team on a projects, you can guarantee that **everyone deploys code the same way**.
 
-### why deployer.org?
+### Why deployer.org?
 
 I decided to use [deployer](https://deployer.org/) as this tool come in our native programming language **PHP**. It is simple to install, learn and to use. It also brings some out-of-the-box recipes with it. You could also create your own recipes and share them with your team on VCS.
 
-### typical deployment tasks:
+### Typical deployment tasks:
 
 Let's think about tasks, that you have/had to do on every deployment:
 
@@ -36,7 +36,7 @@ Let's think about tasks, that you have/had to do on every deployment:
 - create symlinks for folder and files
 - clear caches folder, flush database cache, invalid cache files
 
-### create your magento deployer recipe
+### Create your magento deployer recipe
 
 As mentioned earlier, deployer.org brings some recipes with it. One of these recipes is for default Magento1 Shop: [View recipe on Github](https://github.com/deployphp/deployer/blob/master/recipe/magento.php)
 
@@ -76,7 +76,7 @@ prod:
  #import serverlist
  serverList('config/servers.yaml');
 
-# deployer tasks run as root. We'd like to fix rights:
+# Deployer tasks run as root. We'd like to fix rights:
 task('fix-rights', function () {
     $httpUser = get('http_user');
 
@@ -103,7 +103,7 @@ task('deploy-store', [
 ]);
  (/code)
  
- Running it with `dep deploy-store` should result in somethin like this:
+ Running it with `dep deploy-store` should result in something like this:
  
  (image: screenshot-deployer.png)
  
@@ -125,7 +125,7 @@ task('deploy-store', [
  With `dep rollback` you can rollback one release within seconds.
  
  
-### just beginning
+### Just beginning
 
 With that simple deployment recipe you can automate your process to build new releases and rollback. 
 That's just a simple beginning. With deployer you could also run shell commands. So you could use [modman](https://github.com/colinmollenhour/modman), [composer](https://getcomposer.org/) or [magerun](http://magerun.net/).
@@ -134,7 +134,7 @@ One thing, our script doesn't cover: your database! Keep caution about changes i
  
 
 
-### alternatives
+### Alternatives
 
 You don't want to use deployer.org?? No problem: 
 
@@ -144,5 +144,3 @@ Try one of these other solutions:
 * [Salt](https://saltstack.com/community/)
 * [Capistrano](http://capistranorb.com/#)
 * [Fabric](http://www.fabfile.org/)
-
-
