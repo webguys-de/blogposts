@@ -1,34 +1,20 @@
-Article-meta:
+Title: Türchen 05: ImportExport-Schnittstelle unter Magento2
 
 ----
 
-Title: Türchen 5: ImportExport-Schnittstelle unter Magento2
+Date: 2016-12-05
 
 ----
 
-**Date: 2016-11-27
+Author: elias
 
 ----
 
-Description:
+Intro: In diesem Beitrag geht es um den aktuellen Stand der Import/Export-Schnittstelle bei Magento2.
 
 ----
 
-Tags: adventskalender
-
-----
-
-Author: Elias Kotlyar
-
-----
-
-Article-content:
-
-----
-
-Intro: In diesem Beitrag geht es um den aktuellen Stand der Import/Export-Schnittstelle bei Magento 2. 
-
-----
+Text:
 
 Das <strong>ImportExport</strong>-Modul unter Magento 2 ist im Wesentlichen eine Weiterentwicklung des bekannten Import/Export Moduls von Magento1. Der Aufbau der CSV wurde allerdings grundlegend geändert, das Prinzip ist aber gleich geblieben. Das Modul ermöglicht den Import sowie den Export von Produkt- und Kundendaten im CSV-Format.
 
@@ -70,21 +56,3 @@ Wer ausgefallenere Imports fahren möchte, dem empfehle ich die Lektüre der Fol
 Durch die vielen bereits Erweiterungen, sind die grundlegenden Funktionen abgedeckt. Spannend bleibt es dagegen bei den zukünftigen Magento Versionen. Es könnte durchaus sein, das die eine oder andere Funktion bei den neueren Magento Versionen nicht mehr funktioniert. Des Weiteren wurden während der Entwicklung einige Core-Bugs gefunden, welche an Magento gemeldet wurden. Eine Übersicht der offenen Bugs findet sich [hier](https://github.com/magento/magento2/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20importexport). Es bleibt offen wann diese geschlossen werden.
 
 
-
-
-
-----
-
-Article-options:
-
-----
-
-Cover:
-
-----
-
-Main: 0
-
-----
-
-Wpid: 2490
