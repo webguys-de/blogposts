@@ -1,0 +1,205 @@
+Title: Türchen 04: PDF Generierung in Magento 2
+
+----
+
+Date: 2016-12-04
+
+----
+
+Author: fabian-schmengler
+
+----
+
+Intro: Die Core Methoden zum Generieren von PDF Dateien sind auch in Magento 2 eher unflexibel. Eine Alternative sind Tools zum Konvertieren von HTML zu PDF.
+
+----
+
+Text: In unserem aktuellen Magento 2 Projekt, das wir ([integer_net](https://www.integer-net.de/)) gemeinsam mit der [Stämpfli AG](http://www.staempfli.com/leistungen/online-shops/) entwickeln, gibt es die Anforderung, aus ausgewählten Produkten dynamisch einen PDF Katalog zu erstellen, der im Prinzip das gleiche Layout hat wie die Produktlisten im Shop. Die PDF aufgrund von HTML zu generieren lag also nahe.
+
+In diesem Beitrag stelle ich unsere Lösung vor, die `wkhtmltopdf` mit dem Magento Layout integriert. Am Ende gibt es auch einen Link zum Basismodul auf Github.
+
+## Minimales Beispiel
+
+So einfach kann die Benutzung des Moduls sein, wenn man ein Layout als PDF statt als HTML ausliefern möchte:
+
+(code language: php)
+use Staempfli\Pdf\Model\View\PdfResult;
+
+class Example extends \Magento\Framework\App\Action\Action
+{
+    public function execute()
+    {
+        $result = $this->resultFactory->create(PdfResult::TYPE);
+        return $result;
+    }
+}
+(/code)
+
+Es wird also der gleiche Mechanismus genutzt wie im Standard, nur mit einem neuen "Result" Typ (PDF anstelle von "Page" oder "Layout").
+
+Das ist aber nur das minimale Beispiel. Das PDF kann vielfältig angepasst werden (mit `$result->addPageOptions()` und `$result->addGlobalOptions()`). Und auch andere Aktionen sind möglich, das PDF also z.B. per Mail zu versenden oder zu speichern. Es muss noch nicht einmal im Controller sein.
+
+## Aufbau des Moduls
+
+Schauen wir uns die Technik dahinter einmal an:
+
+```
+    wkhtmltopdf                 Dateibasiertes Kommandozeilen-Werkzeug
+        ^
+        |
+    PHP WkHtmlToPdf             Schlanker PHP Wrapper (externe Bibliothek)
+        ^
+        |
++-------|-------------------+
+|       |                   |
+|   PDF Engine Adapter      |
+|       |                   |
+|       v                   |
+|   Independent Service     |   Staempfli_Pdf Magento 2 Modul
+|       ^                   |
+|       |                   |
+|   Magento Integration     |
+|       |                   |
++-------|-------------------+
+        |
+        v
+    Magento Framework           
+```
+
+    
+## Die PDF Engine: wkhtmltopdf
+
+Das "wk" in wkhtmltopdf steht für Webkit, die HTML-Rendering Engine aus Safari und ehemals Chrome. Genaugenommen wird [Qt WebKit](https://wiki.qt.io/Qt_WebKit) genutzt.
+Das heißt, anstatt eine eigene HTML Rendering Engine zu erfinden, wie es z.B. Dompdf macht, wird eine echte Browser-Engine genutzt und das Ergebnis als PDF "gedruckt". Ob dabei die "print" oder "screen" Style Sheets genutzt werden sollen, kann frei gewählt werden.
+
+Es ist ein Kommandozeilen-Werkzeug, das eine oder mehrere HTML-Dateien oder URLs als Eingabe erhält und eine PDF Datei schreibt.
+
+Je nach Installation wird ein virtuelles Display benötigt (laufender Xvfb Server oder installierter xvfb-run Wrapper) oder nicht. Gut beschrieben ist das in der Dokumentation von phpwkhtmltopdf: [Installation of wkhtmltopdf](https://github.com/mikehaertl/phpwkhtmltopdf#installation-of-wkhtmltopdf)
+
+
+## PHP WkHtmlToPdf
+
+Diese praktische Bibliothek gibt uns ein PHP Interface für wkhtmltopdf und kümmert sich auch um die Erstellung von temporären Dateien, wo notwendig. Zusätzliche Kommandozeilen-Optionen können als Array übergeben werden, damit ist die Bibliothek vorwärtskompatibel in Bezug auf neue Optionen.
+
+
+## Adapter
+
+Für ein besseres objektorientiertes Interface habe ich einen Adapter geschrieben. Der Hauptgrund dafür war Testbarkeit: Die Engine sollte für Unit Tests gegen eine Fake-Implementierung ausgetauscht werden können.
+
+
+## Service
+
+Die eigentliche Domainlogik ist sehr übersichtlich, sie besteht aus einer handvoll Klassen mit wenigen kurzen Methoden. Eine zentrale Klasse ist `PdfOptions`. Das Options-Objekt repräsentiert Optionen für wkhtmltopdf sowie den PHP Wrapper und ist im Wesentlichen ein [SPL `ArrayObject`](http://php.net/arrayobject). Alle derzeit dokumentierten Optionen sind als Konstanten angelegt. So lässt sich ohne ständigen Blick in die wkhtmltopdf Dokumentation arbeiten, unterstützt von der IDE.
+
+### Beispiel:
+
+(code language: php)
+$pdf->addOptions(
+    new PdfOptions(
+        [
+            PdfOptions::KEY_GLOBAL_TITLE => 'Layout Example',
+            PdfOptions::KEY_PAGE_ENCODING => PdfOptions::ENCODING_UTF_8,
+            PdfOptions::KEY_GLOBAL_ORIENTATION => PdfOptions::ORIENTATION_LANDSCAPE,
+        ]
+    )
+);
+(/code)
+
+Da jedes an wkhtmltopdf übergebene HTML-Dokument eigene Optionen bekommen kann, benötigen wir als Quelle jeweils einen HTML String und ein `PdfOptions` Objekt. Wir stellen dafür ein Interface `SourceDocument` zur Verfügung, das in der Magento-Integration bereits in zwei Varianten implementiert wurde (siehe nächster Abschnitt):
+
+(code language: php)
+namespace Staempfli\Pdf\Api;
+interface SourceDocument
+{
+    /**
+     * @param Medium $medium
+     * @return void
+     */
+    public function printTo(Medium $medium);
+}
+interface Medium
+{
+    /**
+     * Takes HTML and prints it
+     *
+     * @param Options $options
+     * @return Medium
+     */
+    public function printHtml($html, Options $options);
+}
+(/code)
+
+Warum nicht `getHtml()` und `getOptions()`? Ich versuche, getter und setter zu vermeiden, um Objekte nicht als reine Datencontainer zu behandeln. Die obige API ist inspiriert von [Printers instead of Getters](http://www.yegor256.com/2016/04/05/printers-instead-of-getters.html) und das dort beschriebene "Printer" Pattern funktioniert in diesem Fall ziemlich gut. Die `Medium` Implementierungen `PdfCover` und `PdfAppendContent` kapseln die PDF Engine.
+
+
+## Magento Integration
+
+Hier wird es interessant. In Magento 2 sollten Controller Actions in ihrer `execute()` Methode ein "Result" Objekt zurückgeben ([`Controller\ResultInterface`](https://github.com/magento/magento2/blob/2.1/lib/internal/Magento/Framework/Controller/ResultInterface.php)). Results wiederum müssen in der Lage sein, ein "Response" Objekt zu befüllen ([`App\ResponseInterface`](https://github.com/magento/magento2/blob/2.1/lib/internal/Magento/Framework/App/ResponseInterface.php)). Das ist üblicherweise die HTTP Response, die nach Ausführung der Action von Magento gesendet wird.
+
+Im Core gibt es zum Beispiel folgende Result-Typen:
+
+- **Layout:** rendert ein Layout
+- **Page:** spezifische Implementierung von "Layout", rendert das zum Controller zugehörige Layout mit allen Handles und dem HTML Head.
+- **Redirect:** rendert eine HTTP-Weiterleitung
+- **Json:** rendert JSON, für XHR Requests ("AJAX")
+- **Raw:** rendert beliebigen Inhalt, z.B. für Datei-Downloads
+- **Forward:** ist ein Sonderfall, rendert selber keine Response sondern triggert einen erneuten Dispatch im Front Controller mit geänderten Parametern (ruft also einen anderen Controller auf)
+
+Nun brauchen wir einen neuen Result-Typ, der das Layout rendert, aber nicht direkt ausgibt sondern zunächst in PDF konvertiert. Mein erster Ansatz dazu war, vom Page Result zu erben und die `render()` Methode zu überschreiben. Das funktionierte, war aber nicht sehr übersichtlich, und die enge Koppelung an die Layout-Implementierung störte mich. Getreu "Favor Composition Over Inheritance" ruft nun stattdessen das PDF Result eine neue Instanz des Page Results auf und lässt es eine "PDF Response" statt einer HTTP Response rendern.
+
+Die PDF Response implementiert nicht nur `ResponseInterface` sondern auch `SourceDocument`, kann also an unseren PDF Konvertierungs-Service übergeben werden (das übernimmt wiederum die `PdfResult` Klasse).
+
+Ganz ohne Erweiterung des Page Results ging das allerdings nicht, da es für dessen `render` Methode Plugins gibt, die davon ausgehen, dass eine HTTP Response gerendert wird. So gibt es nun eine Klasse `PageResultWithoutHttp`, mit der zusätzlichen Methode `renderNonHttpResult()`. Dies erlaubt uns auch noch weitere Anpassungen, wie das Ersetzen von "http://" URLs durch "file://" URLS, um unnötige Requests auf Bilder, CSS und JavaScript zu vermeiden (derzeit noch nicht implementiert)
+
+### Erweiterte Benutzung
+
+Wenn mehr als nur das aktuelle Layout gerendert werden soll, oder das PDF nicht zum Download angeboten sondern z.B. per Mail verschickt werden soll, kann das Result-Objekt trotzdem genutzt werden. Es hat eine `renderSourceDocument()` Methode, die das `PdfResponse` Objekt mit dem gerenderten HTML zurückgibt, ohne eine HTTP Response zu generieren.
+
+So ist zum Beispiel folgendes möglich:
+
+(code language: php)
+# zusätzlich ein Inhaltsverzeichnis generieren:
+
+$this->pdf->appendTableOfContents(
+    new PdfOptions(
+        [
+            PdfOptions::KEY_TOC_HEADER_TEXT => 'Overview',
+        ]
+    )
+);
+
+# Layout mittels PdfResult rendern:
+
+/** @var PdfResult $result */
+$result = $this->resultFactory->create(PdfResult::TYPE);
+$source = $result->renderSourceDocument();
+$this->pdf->appendContent($source);
+
+# PDF generieren
+
+$pdfFileContents = $this->pdf->file()->toString();
+(/code)
+
+`$this->pdf` sollte von `Staempfli\Pdf\Model\PdfFactory` erstellt worden sein. Diese Factory kümmert sich um einige globale Einstellungen, die im Magento Backend konfiguriert werden können, z.B. den Pfad zu `wkhtmltopdf`.
+
+### Alternative ohne Layout
+
+Wenn nur einzelne Blöcke gerendert werden sollen, ohne das ganze Standard-Layout (also insbesondere ohne den HTML Head von Magento), kann stattdessen `Staempfli\Pdf\Block\PdfTemplate` genutzt werden. Das ist ein Magento-Block, der das `SourceDocument` Interface implementiert, also von unserem Modul in PDF konvertiert werden kann. Standardmäßig nutzt er das Container-Template, rendert also alle Blöcke, die mit `addChild()` als Kinder hinzugefügt wurden (diese können beliebige Magento-Blöcke sein). Das kann dann so aussehen:
+
+(code language: php)
+/** @var PdfTemplate $pdfBlock */
+$pdfBlock = $this->_view->getLayout()->createBlock(PdfTemplate::class);
+$pdfBlock->addChild('test-full-html', Template::class, ['template' => 'Bdk_PdfTest::test-full-html.phtml']);
+$this->pdf->addOptions(
+    new PdfOptions(
+        [
+            PdfOptions::KEY_PAGE_ENCODING => PdfOptions::ENCODING_UTF_8,
+        ]
+    )
+);
+$this->pdf->appendContent($pdfBlock);
+(/code)
+
+## Das Modul
+
+Das Modul ist unter [https://github.com/staempfli/magento2-module-pdf](https://github.com/staempfli/magento2-module-pdf) frei verfügbar und funktioniert bereits wie beschrieben. Das erste "stable" Release wird erstellt, sobald wir es erfolgreich in Produktion einsetzen. Detailliertere Dokumentation mit Beispielen kommt dann auch noch, bis dahin ist der Source Code weitestgehend dokumentiert. Lasst mich gerne wissen wenn ihr es einsetzen möchtet und wozu. Wir freuen uns natürlich auch über Kollaboration!
