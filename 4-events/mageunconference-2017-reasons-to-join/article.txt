@@ -1,0 +1,204 @@
+Title: Türchen 06: A riddle, a self-help group and Klebchen at the MageUnconference 2017...
+----
+
+Date: 2016-12-06
+
+----
+
+Author: Carmen Bremen (@neoshops)
+
+----
+
+Author-Text: Carmen Bremen ist [Magento Freelancer] (http://neoshops.de/magento-freelancer/), firmiert unter [Neoshops] (http://neoshops.de) lebt und arbeitet in Köln, ist Initiatorin des Kölner Magento-Stammtischs, trinkt sporadisch Kölsch, spricht Kölsch nur auf Aufforderung und das nicht besonders gut und darf sich 3x certified nennen.
+
+----
+
+Intro: There are many reasons to join - and not to join - the MageUnconference. Let's talk about all the reasons (for reasons), have a look in your boots and solve a riddle (de\_DE && en\_US)
+
+----
+
+Text: 
+
+### ENGLISH VERSION BELOW! 
+
+
+Erstmal muss ich Jipiiee rufen, weil es wieder einen Adventskalender gibt. Und dieses Jahr habe ich das Türchen, das ich schon immer haben wollte, das mit dem Stiefel vor der Tür. Das, wo dieser weißbärtige Herr vorbeikommt, der heute Niklas heißen würde und vor 30 Jahren Klaus, und einem Vergnügliches in den Stiefel steckt, sofern diese sauber sind. Wenn Ihr also annehmt, dass die Wahrscheinlichkeit gering ist, dass Eure Stiefel mit Erfreulichem befüllt sind: "hoho, wartet mal ab...".
+
+Ich hab' auch was mitgebracht (obwohl ich keinen weißen Bart trage). Was, das sag ich - aus Gründen - erst am Ende dieses Beitrags.
+
+Ich konnte mich in diesem Jahr nur schwer entscheiden zwischen dem Thema „Git Goodies - vergessene Git-Befehle aus dem Keller geholt“ und dem Thema MageUnconference. Und habe mich daher so entschieden:
+Ich schreibe ÜBER die MageUnconference und rede AUF der MageUnconference dann über „Git Goodies“. So live wie möglich, falls ich es schaffe  aus dem Kopf fehlerfrei folgendes zu tippen: 
+
+	git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	
+und daraus 
+
+	git lgp
+	
+zu machen, mit demselben Ergebnis....
+
+Falls Ihr schon schöne Git-Goodies in Eurem Keller habt: lasst sie raus via Tweet an [@neoshops] (https://twitter.com/neoshops) __#gitgoodies__ ! Sie tauchen dann im März auf - sofern ich genug Klebchen bekomme...
+
+Womit ich auch beim Thema wäre:
+
+## Klebchen.*
+
+_(*Klebchen. Druckerzeugnis mit einer selbstklebenden und einer bedruckten Oberfläche zum Zwecke der Willensäußerung in einem festgelegten Verfahren)._
+
+Die [MageUnconference] (http://www.mageunconference.org/) unterscheidet sich von Barcamps durch Klebchen. In beiden Veranstaltungen gibt es keine feststehenden Vortragsthemen. Alles zu Hörende, zu Lernende und zu Erfahrende wird vor Ort durch demokratisches Händeheben, bzw. Klebchenkleben entschieden. 
+
+In etwa so:
+
+Die Veranstaltung geht los. Die Orgamenschen sagen "Hallo" und "So funktionierts...", dann reden die Teilnehmer von dem, was sie gerne erzählen oder hören oder bereden wollen. Das wird dann auf Zettel geschrieben. Die werden an die Wand gehangen. Dann scharren sich alle Teilnehmer nochmal lesend und denkend um die Zettel. Und dann kleben alle Teilnehmer Klebchen auf die Zettel, die sie gut finden. Die Schwierigkeit: man hat nur zwei Klebchen! Auch das ist ein Unterschied zum Barcamp, wo man viele Hände hat. Zwei Klebchen klingt erstmal einfach, aber Ihr werdet Euch wundern, wie wenig zwei sein kann... (nächstes Jahr werden sie magenta-farben sein, sagte ich das schon?)
+
+## Wann? Wo? Was?
+
+Die MageUnconference wird im März 2017 zum dritten mal in Deutschland stattfinden. Im schönen Köln, das dann erst ein paar Tage lang Karneval hinter sich gelassen hat, weswegen "der Kölner" (der genau wie "der Italiener" irgendwie solitär auftritt) als solches wahrscheinlich etwas blass, augenringig und in keinem Fall mit nachlassender Partylaune auftritt, wenngleich anfänglich womöglich etwas wortkarg. Wenn Ihr also nach dem Weg fragt und "der Kölner" nach einer etwa viersekündigen Starre mit dem Kopf nur in eine Richtung nickt und dabei nicht betont freundlich lächelt: dann ist der Weg richtig und Ihr habt einen Freund gewonnen. 
+
+Wenn man all die Tweets und Blogs und anderen Posts und Gespräche zusammenfasst, dann ist so eine Unconference wohl vor allen Dingen das: Community.
+
+_„It’s all about the Community“…_
+
+## Gründe, nicht hinzugehen...
+
+Neben all dem „Spaß“ und „Viel gelernt“ gibt’s aber auch ein paar andere Stimmen, die hin und wieder laut werden, aber noch so leise sind, dass sie vielleicht untergehen und dazu führen, dass diese Stimmen nicht zur Unconference kommen. Und diese Stimmen möchte ich jetzt einmal laut machen, denn im Grunde ist eine davon meine....
+
+Ich war dieses Jahr auf einem anderen Camp. Dem WordCamp in Köln. Auch aus Gründen - aber auch aus Neugier, wie es woanders ist, als dort, wo ich schon quasi "zuhause" bin. Und ich habe doch länger und anhaltender gezögert, als ich dachte, dass ich zögern würde, bis ich dann doch hingegangen bin. Die Zögergründe sind sicher nicht auf mich beschränkt. Und daher auch auf andere Shop-CMS-System-Barcamp-Konferenz-Besucher übertragbar:
+
+*  Ich kennen niemanden und stehe vielleicht nur doof rum.
+* Es wird nur über Magento geredet, davon habe ich viel zu wenig Ahnung.
+* Ich muss Entwickler sein - und am besten ein ganz besonders guter.
+* Ich muss Englisch können, am besten fließend. 
+* Ich muss einen Vortrag halten oder mich zumindest mal melden.
+* Ich muss mich aktiv einbringen und irgendwie "drin" sein. 
+* Es wird keinen guten Kaffee geben.
+
+Ich weiß, dass sowas viele denken und deshalb zögern zu kommen. Bitte kommt trotzdem. Ich kann Euch  nur empfehlen, es einfach auszuprobieren. Und ich würde Euch sowas von gerne kennenlernen. 
+
+Beim WordCamp sollte sich jeder vorstellen und für sich einen Hashtag wählen. Ich habe __#NeuHier__ gewählt. Das Nette war, dass einige das aufgegriffen haben. __#WenigerAllein__. Das würde ich nun gerne weiter geben. Wenn Ihr auf der Unconference __#NeuHier__ seid: posaunt es raus. 
+
+Es gibt immer Leute, die gerne vortragen und welche, die lieber zuhören. Die MUC lebt von beiden Teilnehmern, wer also nicht auf die Bühne springen will, ist hier nicht weniger wert oder weniger gern gesehen!
+
+Was den Kaffee angeht, kann ich Euch aber sowas von beruhigen dieses Jahr. Die Maschine ist gut, und ein Café ist auch vor der Tür. 
+
+Und was das Englische angeht: niemand nimmt einem Denglisch übel. Auch nicht, wenn man sich zurecht stottert. Mein Englisch ist alles andere als fließend zu nennen... Und daher würdet Ihr mir einen Gefallen tun, wenn wir ein Denglisch-Stottergrüppchen bilden könnten. __#newhere__ __#notNative__ __#Denglisch__
+
+Und niemand muss Entwickler sein - das, was dieses Format so spannend macht, ist, dass es eben nicht durch Vorgaben geprägt ist. Und so wird über "Burnout" oder das "Imposter-Sysndrom" oder Ausstiegsszenarien aus Magento gesprochen. Jedes Thema ist ein Thema, wenn es ein Thema ist. Was Thema ist, bestimmen die Klebchen. Aber es gibt nur zwei pro Tag, nicht vergessen!
+
+## Ein Stiefel und ein Rätsel
+
+Und wer jetzt echt immer noch zögert und immer noch keine Karte hat, der darf mal in seinen polierten orangefarbenen Magento-Stiefel gucken. Da liegt jetzt ein Gutschein drin, damit all die, die Early Bird verschlafen haben, jetzt nochmal Tickets zum halben Preis kriegen. 
+
+Gutscheincode: "santa-claus". 
+
+Und nur EINMAL wird es einen ganz besonderen und einzigartigen Code geben. Ich möchte daraus ein Rätsel machen. Wer ihn errät erhält ein Ticket ummesöns, wie "der Kölner" sagt. 
+
+Wenn es den Befehl gäbe (den es nicht gibt):
+
+	git config --global user.password '_#~d+P);BFfUzzWE~k?Nq(Q#}DBL8AH3tt*q79f-bnPBL.6whC9x'
+
+und man dafür einen Alias wählen würde (was keinen Sinn macht, ich weiß), welchen Alias würde man wählen, um der den Befehl am besten beschreibt?
+
+
+Dieser Alias-Befehl ist des Rätsels Lösung ist zugleich der Gutschein Code für ein 100%-Rabatt-Ticket:
+
+	git s _ _ _ _ _ _
+
+
+[Dann mal los zu Ticketkauf…](https://www.mage-hackathon.de/upcoming/muc17de.html)
+
+Hoho....
+
+---
+### English version...
+---
+
+# A riddle, a self-help group and Klebchen at the MageUnconference 2017...
+
+Everyone who knows my german blogposts knowns, that it would not be easy to translate them - even if someone spoke better English. So let's try...
+
+First of all I have to call "jipiiee", because the webguys advent calendar is back! And this year I have a door I always wanted: 6! Polished shoes are placed in front of the door, a man with a white beard (today he would called Niklas or Klaus) puts pleasant things in the shoes (in case they are polished). So if you assume that it is not very likely that your boots are filled: hoho... be patient....
+
+I've got something for you (although I do not wear a white beard).  I tell you later what this is - for reasons...
+
+This year it was hard to decide, which topic I should choose. "Git Goodies, forgotten Git-Commands" or "MageUnconference". I have decided as follows: I WRITE about the MageUnconverence and will  TALK about Git Goodies AT the MageUnconference - but only If I am able to type the following command from memory:
+
+	git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	
+and to type 
+
+	git lgp
+	
+with the same result... 
+
+If you have Git Goodies - I would be very happy if you could send it to me: [@neoshops] (https://twitter.com/neoshops) __#gitgoodies__ - I'll take them to the Unconfernce and will use them - if I will get enough stickers. 
+
+Now we are on the subject:
+
+## Stickers.*
+
+_(*Sticker: Printed product with a self-adhesive and a printed surface for the purpose of expressing the will in a fixed procedure)_
+
+The [MageUnconference] (http://www.mageunconference.org/) differs from Barcamps by stickers. There are no fixed topics in both events. Everything to be heard, learned and experienced is decided by democratic hands-on or stickers...
+
+The procedure is nearly as follows:
+
+The event starts. The orga team says: "hello" and "how it works...". After that, the attendees are talking about the things, they later want to talk about. This is written on paper. The papers are hung on the wall. The participants gather in front of the wall. And now, they stick the stickers on the papers with the topic they like best. The difficulty: everyone has only two stickers. This is also a difference to the Barcamp where you have a few hands. Two sickers sounds simple, but you will find out how little that could be... (Next year they will be magenta-colored, did I mentioned that already?)
+
+## Where? When? What?
+
+The MageUnconference will take place for the third time in Germany in March 2017. In beautiful Cologne, three days after carnival. For this reason,  the citizens of Cologne will be pale and tired and perhaps a bit worthless. So maybe they don't smile - but they care about you!
+
+Reading all the tweets and blog posts, remembering all the talks and discussions, I come to the conclusion that the in the first place an Unconference is this: Community. 
+
+_„It’s all about the Community“…_
+
+## Reasons not to join
+
+In addition to all the "fun" and "much learned", there are also a few other voices, which are now and then loud, but still so quiet that they may perish -  and perhaps because of that someone wont join the MageUnconference. And these voices I would like to make now loud, because basically one of them is mine...
+
+This year I  attended another conference. The WordCamp in Cologne - a WordPress barcamp. I know neither the people nor wordpress (not really at least). I have hesitated for a long time to go there. But finally I attended. I wanted to tell you the reasons why I acted in this way, why I was hesitant to stay there. The reasons are freely transferable to other events: 
+
+* I do not know anyone and maybe stand alone.
+* It will only be talked about Magento, of which I have far too little idea.
+* I have to be a developer - and a very good one.
+* I must be able to speak English, best fluent.
+* I have to give a lecture.
+* I must actively participate.
+* There will be no good coffee.
+
+I know that's something that many may think and therefore hesitate to come. Please attend anyway. I can only recommend you to try it out. And I would like to get to know you!
+
+At the WordCamp everybody should introduce themselves and choose a hashtag for themselves. I have chosen _#NeuHier_. It was great, that some participants took it up. _#LessAlone_. I would like to pass this on. If you are new to the MageUnconference: shout it out! Let us know!
+
+There are always people who like to speak and others who prefer to listen. The MUC depends on  both participants. So if you do not want to jump on the stage, you will not be less welcome there!
+
+Regarding the coffee, I can assure you. The machine is good, and outside there is a nice cafe.
+
+The main language is English. That's hard for many german people - including me. So I would like to invite you to the "self-help group" _#poorEnglish_. Stutter with me. Let us search for words together. No good English is no reason not to come.
+
+And no one has to be a developer - what makes this format so exciting is that it is not influenced by specifications. On past events we talked about "Burnout" or the "Imposter-Syndrom" or exit scenarios from Magento. Each topic is a topic when it is a topic. The subject is determined by the stickers. (you remember, the magenta-colored ones...). But there are only two per day, do not forget!
+
+## A boot and a riddle
+
+If someone still hesitates and still has no ticket, please take a look in your polished orange Magento boots. There is now a voucher in it, so that all those who have slept early bird now again get tickets for half price.
+
+Coupon code: "santa-claus".
+
+
+And only once will there be a very special and unique code. I want to make a riddle of it. Who guesses it receives a ticket ummesöns, as "the Cologne" says (means: 100% discount).
+
+If this command would exist (which does not exist):
+
+	git config --global user.password '_#~d+P);BFfUzzWE~k?Nq(Q#}DBL8AH3tt*q79f-bnPBL.6whC9x'
+
+and you would have to find an alias for it (what makes no sence, I know), wich alias would it describe the best?
+
+This alias command is the the solution to the riddle - and the coupon code as well: 
+
+	git s _ _ _ _ _ _
+
+[Click here to get your ticket...] (https://www.mage-hackathon.de/upcoming/muc17de.html)
+
+Hoho...
+
