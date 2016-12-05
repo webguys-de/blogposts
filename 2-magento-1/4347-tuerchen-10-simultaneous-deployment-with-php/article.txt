@@ -1,0 +1,224 @@
+Title: Türchen 10: Simultaneous deployment to multiple nodes with PHP (deployer.php)
+
+----
+
+Date: 2016-12-10
+
+----
+
+Author: nilspreuss
+
+----
+
+Intro: After some time of growing, nearly every project reaches the point where it has to scale horizontally, i.e. adding more web-nodes to the setup. With this action there come some problem if not taken into account during deployment.
+
+----
+
+Text: Mostly the path a project is going is from something small, that is deployed by directly manual handling to something that either checks out directly into the DocRoot or bringing everything up by something like rsync.
+
+### why a deployment tool at all?
+Both of these solutions can lead to some troublesome experiences, like changing files during requests an so on, but with the introduction of tools like capistrano, fabric, deployer, ... most of those problem can be handled.
+The biggest benefits of those tools are **consistency**, **easy usage** and depending on the solution hopefully **rollbacks**.
+
+### Why deployer and not capistrano:
+
+When my first project needed to be deployed on a second web-server it was quickly obvious that we needed to change our solution we used back then: direct git pull in the DocRoot as we encountered all those problems during the first 3-4 deployments like different code-base on different nodes during the process, different code than database-structure (would have been problematic with proper db-migrations also), trying to change files that where locked during web-server access...
+
+So we searched for something that would enable us to deploy onto different machines and not have those problems. Back then (2012 i believe) i only could find one solution for this that was properly maintained and documented. 
+We used it quite a while for magento deployment as it makes the process really easy, beside the config files were somewhat not so intuitive for me. It clones the chosen repository/branch/tag to a separate directory and if all nodes report that this was done correctly it switches a link of the DocRoot to point to this new destination, what is nearly an atomic operation, as is done in parallel on multiple server (never seen more than 1s even on 10+ servers).
+But then capistrano moved from Version 2 to Version 3 and hell broke loose. Nothing worked any more as the configs needed big changes and the plugins we used were not available for several month, neither was the documentation properly updated.
+
+A very promising alternative was fabric but it does not allow parallel tasks so it was out quite fast as was rocketeer, as it was only capable of parallel deployment with pthreads but lacked some other features, like linking everything when everything is done, not only the current node.
+After some more investigation we learned about deployer and we saw that is was nearly a 1:1 replacement for capistrano but for us as PHP-Devs it was way easier to extend with new tasks.
+
+### Configuration of deployer
+
+This is done with so called *recipes*. We based our deployment on the standard [magento recipe](https://github.com/deployphp/deployer/blob/master/recipe/magento.php) that came with deployer.
+
+After defining the servers it became obvious that this needed some tweaks as the deploy.php (your project specific recipe) became somewhat hard to maintain
+
+```php
+server('prod_1', 'domain.com')
+    ->user('user')
+    ->set('deploy_path', '/home/www')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/bin/cachetool.phar')
+    ->identityfile('~/.ssh/prod.pub', 'password');
+    
+server('prod_2', 'domain.com')
+    ->user('user')
+    ->password('pass')
+    ->set('deploy_path', '/home/www')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/bin/cachetool.phar')
+    ->identityfile('~/.ssh/prod.pub', 'password');
+    
+server('prod_3', 'domain.com')
+    ->user('user')
+    ->password('pass')
+    ->set('deploy_path', '/home/www')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/bin/cachetool.phar')
+    ->identityfile('~/.ssh/prod.pub', 'password');
+    
+server('prod_4', 'domain.com')
+    ->user('user')
+    ->password('pass')
+    ->set('deploy_path', '/home/www')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/bin/cachetool.phar')
+    ->identityfile('~/.ssh/prod.pub', 'password');
+    
+server('stage_1', 'domain.com')
+    ->user('user')
+    ->password('pass')
+    ->set('deploy_path', '/home/www/vhosts')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/vhosts/bin/cachetool.phar')
+    ->identityfile('~/.ssh/stage.pub', 'password');
+    
+server('stage_2', 'domain.com')
+    ->user('user')
+    ->password('pass')
+    ->set('deploy_path', '/home/www/vhosts')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/vhosts/bin/cachetool.phar')
+    ->identityfile('~/.ssh/stage.pub', 'password');
+    
+server('stage_3', 'domain.com')
+    ->user('user')
+    ->password('pass')
+    ->set('deploy_path', '/home/www/vhosts')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/vhosts/bin/cachetool.phar')
+    ->identityfile('~/.ssh/stage.pub', 'password');
+    
+server('stage_4', 'domain.com')
+    ->user('user')
+    ->password('pass')
+    ->set('deploy_path', '/home/www/vhosts')
+    ->stage('production')
+    ->set('http_user', 'user')
+    ->set('socket_path', '/var/run/')
+    ->set('cache_tool', '/var/www/vhosts/bin/cachetool.phar')
+    ->identityfile('~/.ssh/stage.pub', 'password');
+    
+```
+
+but there is the option to have server-definitions in a .yml file, so we used yaml for this: 
+
+``` yaml
+webnode.2:
+  host: srv-a-de.c-2
+  user: user
+  http_user: user
+  identity_file: ~
+  stage: live
+  cachetool: /var/www/share/cachetool.phar
+  socket_path: /var/run/
+  deploy_path: /var/www/share/example.net
+```
+
+ now you could already issue a command like 
+```shell
+ dep deploy stage --branch=issue-19283 -p
+ ```
+ and everything got deployed on stage in parallel. as you can assume the `-p` flag is for parallel deployment. 
+ the real deal is, that deployer does every task in parallel but waits until every task is fully finished until it goes to the next one (unlike rocketeer for example).
+ 
+### further improvements
+
+by now we have added a multitude of improvement to our deploy-recipe as we added tasks for modman usage: 
+```php
+env('bin/modman', function () {
+    return run('which modman')->toString();
+});
+task('deploy:modman', function() {
+    run("cd {{release_path}} && {{bin/modman}} deploy-all");
+})->desc('link with modman');
+```
+
+As well as resetting cache and OpCache after a deployment: 
+
+```php
+
+env('sockets', function() {
+    if (input()->hasOption('domain')) {
+        $domain = input()->getOption('domain');
+        $sockets = explode(PHP_EOL, run("ls {{socket_path}}php*-fpm*$domain.soc*")->toString());
+    } else {
+        $sockets = explode(PHP_EOL, run("ls {{socket_path}}php*-fpm*.*.soc*")->toString());
+    }
+    return $sockets;
+});
+/**
+ * CacheTool - Manage cache in the CLI
+ * @see https://github.com/gordalina/cachetool
+ */
+task('deploy:opCache:status', function() {
+    foreach (env('sockets') as $socket) {
+        run("{{cachetool}} opcache:status --fcgi=$socket")->toString();
+    }
+})->desc('Show PHP OpCache Status from servers');
+task('deploy:opCache:reset', function() {
+    foreach (env('sockets') as $socket) {
+        try {
+            run("php {{cachetool}} opcache:reset --fcgi=$socket")->toString();
+        } catch(Exception $e) {
+            writeln("<comment>Warning PHP OpCache from Socket $socket is not reset!</comment>");
+        }
+        sleep(5);
+    }
+})->desc('Reset PHP OpCache on servers');
+```
+
+A really neat thing is, that you can already use everything that comes with php like ``curl``
+An example of what we use it for can be seen here as we use is for accessing external APIs to fire events after a deployment: 
+
+```php
+task('deploy:tideways:event', function() {
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://app.tideways.io/api/events",
+        CURLOPT_POST => 1,
+        CURLOPT_POSTFIELDS => json_encode([
+            "apiKey" => "your-api-key",
+            "name" => "deployed-". env('release_name'),
+            "environment" => "production",
+            "type" =>"release"
+        ])
+    ]);
+    curl_exec($curl);
+    curl_close($curl);
+})->desc('Create event in tideways timeline')
+->onlyOn(['WebNode.2']);
+```
+
+As you can see we also use a feature that it very good in multi-node environments: `->onlyOn()`. If you have something like maintenance tasks that are only to be run on one server (like db-migrations (not the Magento ones), indexation, Solr-stuff) this is the option you are looking for.
+
+It is also strongly recommended that you use deployer to clean up after a deployment. Not only old deployments (we keep about 5 older releases for rollback), but also stuff you do not need on the live-machines like `.git` or maybe your deployer recipes.
+
+### Another step further
+
+If you decide to switch away from git-checkout like deployment you could also use deployer because it supports different deployment strategies. We just started to give it a try to use the rsync strategy to sync the artifacts that our build system creates to the production nodes and to things like unpacking and linking there with deployer.
+
+### After deployer
+
+The scenario described above is only usable with a limited amount of nodes. If you have really huge setups you need to deploy seamless then you have to come up with something different, as in this use case the deploying machine is the bottle neck. But i am sure that companies deploying to thousands of nodes already have a usable solution in place.
+
+
+
