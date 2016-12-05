@@ -5,11 +5,7 @@ Date: 2016-12-06
 
 ----
 
-Author: Carmen Bremen (@neoshops)
-
-----
-
-Author-Text: Carmen Bremen ist [Magento Freelancer] (http://neoshops.de/magento-freelancer/), firmiert unter [Neoshops] (http://neoshops.de) lebt und arbeitet in Köln, ist Initiatorin des Kölner Magento-Stammtischs, trinkt sporadisch Kölsch, spricht Kölsch nur auf Aufforderung und das nicht besonders gut und darf sich 3x certified nennen.
+Author: carmen-bremen
 
 ----
 
@@ -37,7 +33,7 @@ und daraus
 	
 zu machen, mit demselben Ergebnis....
 
-Falls Ihr schon schöne Git-Goodies in Eurem Keller habt: lasst sie raus via Tweet an [@neoshops] (https://twitter.com/neoshops) __#gitgoodies__ ! Sie tauchen dann im März auf - sofern ich genug Klebchen bekomme...
+Falls Ihr schon schöne Git-Goodies in Eurem Keller habt: lasst sie raus via Tweet an (link: https://twitter.com/neoshops text:neoshops) __#gitgoodies__ ! Sie tauchen dann im März auf - sofern ich genug Klebchen bekomme...
 
 Womit ich auch beim Thema wäre:
 
@@ -45,7 +41,7 @@ Womit ich auch beim Thema wäre:
 
 _(*Klebchen. Druckerzeugnis mit einer selbstklebenden und einer bedruckten Oberfläche zum Zwecke der Willensäußerung in einem festgelegten Verfahren)._
 
-Die [MageUnconference] (http://www.mageunconference.org/) unterscheidet sich von Barcamps durch Klebchen. In beiden Veranstaltungen gibt es keine feststehenden Vortragsthemen. Alles zu Hörende, zu Lernende und zu Erfahrende wird vor Ort durch demokratisches Händeheben, bzw. Klebchenkleben entschieden. 
+Die (link: http://www.mageunconference.org/ text:MageUnconference) unterscheidet sich von Barcamps durch Klebchen. In beiden Veranstaltungen gibt es keine feststehenden Vortragsthemen. Alles zu Hörende, zu Lernende und zu Erfahrende wird vor Ort durch demokratisches Händeheben, bzw. Klebchenkleben entschieden.
 
 In etwa so:
 
@@ -105,7 +101,7 @@ Dieser Alias-Befehl ist des Rätsels Lösung ist zugleich der Gutschein Code fü
 	git s _ _ _ _ _ _
 
 
-[Dann mal los zu Ticketkauf…](https://www.mage-hackathon.de/upcoming/muc17de.html)
+(link: https://www.mage-hackathon.de/upcoming/muc17de.html text:Dann mal los zu Ticketkauf…)
 
 Hoho....
 
@@ -131,7 +127,7 @@ and to type
 	
 with the same result... 
 
-If you have Git Goodies - I would be very happy if you could send it to me: [@neoshops] (https://twitter.com/neoshops) __#gitgoodies__ - I'll take them to the Unconfernce and will use them - if I will get enough stickers. 
+If you have Git Goodies - I would be very happy if you could send it to me: (link: https://twitter.com/neoshops text: @neoshops) __#gitgoodies__ - I'll take them to the Unconfernce and will use them - if I will get enough stickers.
 
 Now we are on the subject:
 
@@ -139,7 +135,7 @@ Now we are on the subject:
 
 _(*Sticker: Printed product with a self-adhesive and a printed surface for the purpose of expressing the will in a fixed procedure)_
 
-The [MageUnconference] (http://www.mageunconference.org/) differs from Barcamps by stickers. There are no fixed topics in both events. Everything to be heard, learned and experienced is decided by democratic hands-on or stickers...
+The (link: http://www.mageunconference.org/ text: MageUnconference) differs from Barcamps by stickers. There are no fixed topics in both events. Everything to be heard, learned and experienced is decided by democratic hands-on or stickers...
 
 The procedure is nearly as follows:
 
@@ -198,7 +194,7 @@ This alias command is the the solution to the riddle - and the coupon code as we
 
 	git s _ _ _ _ _ _
 
-[Click here to get your ticket...] (https://www.mage-hackathon.de/upcoming/muc17de.html)
+(link: https://www.mage-hackathon.de/upcoming/muc17de.html text:Click here to get your ticket...)
 
 Hoho...
 
