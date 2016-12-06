@@ -1,16 +1,11 @@
-Articles-meta: 
+Title: Türchen 07: Magento 2 API - where to start and what has changed
+----
+
+Date: 2016-12-07
 
 ----
 
-Title: Magento 2 : where to start and what has changed
-
-----
-
-Description: 
-
-----
-
-Articles-content: 
+Author: andra-lungu
 
 ----
 
