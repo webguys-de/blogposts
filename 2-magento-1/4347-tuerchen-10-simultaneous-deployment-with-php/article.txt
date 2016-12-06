@@ -10,6 +10,10 @@ Author: nilspreuss
 
 ----
 
+AuthorText: **Nils Preuß** is a Magento backend developer since 2009 and working for different merchants since some years. Right now he is doing his job at Polo Motorrad in Jüchen. He enjoys the active and friendly community and attends a great variety of different events, either as attendee or speaker.
+
+----
+
 Intro: After some time of growing, nearly every project reaches the point where it has to scale horizontally, i.e. adding more web-nodes to the setup. With this action there come some problem if not taken into account during deployment.
 
 ----
