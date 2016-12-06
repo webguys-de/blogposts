@@ -1,0 +1,130 @@
+Articles-meta: 
+
+----
+
+Title: Magento 2 : where to start and what has changed
+
+----
+
+Description: 
+
+----
+
+Articles-content: 
+
+----
+
+Text:
+
+Before digging into the Magento 2 API, let’s see a bit of API’s history in Magento 1 just to see the improvements. Usually when we need to deal with APIs there are 3 main answers we look for:
+
+- Where is the documentation
+- What kind of authentication is in place
+- Which protocols are being used
+
+Magento 1 at the beginning supported XML-RPC and SOAPv1, later on SOAPv2 starting from 1.3, with WS-I compliance starting from 1.6. REST was added just lately with 1.7 but with reduced functionality than others. It’s safe to say that it wasn’t the best feature in place.
+For those curious the current documentation is available here:
+
+- http://devdocs.magento.com/guides/m1x/api/soap/introduction.html
+- http://devdocs.magento.com/guides/m1x/api/rest-api-index.html
+
+We saw protocols and documentation, the only left topic is authentication. In Magento 1 we created api users with assigned roles that determined which api were available to that specific user, pretty much like we would do for normal backend user. The other option and preferred was using 3-legged OAuth 1.0a but only available for rest api.
+
+How these three aspects changed in Magento 2?
+
+Let’s start with an easy one. The documentation or better said your starting point is http://devdocs.magento.com/guides/v2.0/get-started/bk-get-started-api.html
+
+As we go through, the biggest change we find is that both SOAP and REST protocols expose the same functionality thus you can choose the one that best fits your needs. Later on we will find out how this is possible and what is the fun part.
+
+Regarding the type of authentication we have available the following ones:
+
+- Tokens suggested for mobile applications
+- Session based suggested for javascript based widgets
+- OAuth 1.0a 2-legged suggested for third-party applications
+
+Let’s see how each one works in more details.
+
+As in Magento 1, we have an Access Control List rules system; to get into that I suggest you to read (no, not magento’s documentation) the article http://alanstorm.com/magento_2_understanding_access_control_list_rules/ from the very well known Alan Storm.
+
+Each backend user will have assigned permissions to specific resources. Additionally in Magento 2 an authentication token could be assigned to users to consume the API.
+
+The following curl command will return the authentication token given customer credentials:
+
+```
+curl -X POST "https://magento.host/index.php/rest/V1/integration/customer/token" \ -H "Content-Type:application/json" \ -d '{"username":"customer1@example.com", "password":"customer1pw"}'
+```
+
+In case of admin credentials we should use the following:
+
+```
+curl -X POST "https://magento.host/index.php/rest/V1/integration/admin/token" \ -H "Content-Type:application/json" \ -d '{"username":"admin-user", "password":"adminpassword"}'
+```
+
+We are ready now to authenticate to our API by passing the following HTTP header:
+
+authorization: Bearer [token]
+
+Before talking about the other authentication types, we need to understand how ACL works for APIs.
+
+Each Magento 2 module that exposes API should provide a specific file called *webapi.xml* in the module’s etc/ folder. An example is shown below:
+
+```xml
+<route url="/V1/customers/:email/activate" method="PUT">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="activate"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+
+
+    <route url="/V1/customers/me/password" method="PUT">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="changePasswordById"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+
+
+    <route url="/V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken" method="GET">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="validateResetPasswordLinkToken"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+```
+Each route node in the XML above represents an API entry point. It maps an URL to a service interface method and defines the ACL needed to access this method.
+
+The first node defines an API that can be accessed by users that have a specific ACL role assigned which is Magento_Customer::manage.
+The second shows the use of a session based authentication. Such API is accessible by the current user logged in.
+The third is available to anyone.
+
+
+The OAuth authentication type requires to activate an integration user and to implement on the client side a script to obtain the following:
+- The consumer key
+- The consumer secret
+- The token
+- The token key
+
+For local testing you can refer to http://devdocs.magento.com/guides/v2.0/get-started/authentication/gs-authentication-oauth.html where you’ll find a basic client code needed to obtain them.
+
+We are done with the most boring part of API, let’s see the fun part.
+
+There are two pretty important arguments to have in mind when using the Magento 2 APIs: *PHP annotations* and *backward compatibility*.
+
+To understand PHP annotations more in depth I warmly suggest *Rafael Doms* talk at *Laracon 2014* https://www.youtube.com/watch?v=oDVspbFgDCo
+
+PHP annotations is where the magic happens in Magento 2 and they are also the reason why we have the same APIs for both protocols. Adding a new API is an easy task that can be accomplished following the few rules listed below:
+
+- All the API methods and classes must have the @api annotation
+- Parameters must be defined in the doc block as @param type $paramName
+- Return type must be defined in the doc block as @return type
+- Valid object types are fully qualified class names or fully qualified interface names
+- Any parameters or return values of type array can be annotated by adding an empty set of square brackets [] after the type
+
+The second most important PHP annotation regarding APIs is @deprecated that tells us which are going to be removed at the next major version change. Backward compatibility is assured only for minor version changes for all the classes with the @api annotation.
+If you don’t know what major version means please refer to http://semver.org/
+
+Things get trickier because it is not totally true. Magento uses this versioning for each of its modules and, at the moment, the complexity to maintain such commitment. My advice is that of always checking the release notes where you can find all the API changes.
