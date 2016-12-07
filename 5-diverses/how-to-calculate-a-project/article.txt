@@ -1,0 +1,174 @@
+Article-meta:
+
+----
+
+Title: How to calculate a project
+
+----
+
+Date: 2016-12-18
+
+----
+
+Description:
+
+----
+
+Tags: project,estimate,planning
+
+----
+
+Author: aleron75
+
+----
+
+Article-content:
+
+----
+
+Intro: @todo say what this article is about
+
+
+----
+
+Text:  
+
+## Introduction
+According to its dictionary definition, an estimate is **a guess** of what the size, weight, value, amount, cost, duration of something might be.
+
+It goes without saying that a **prediction** of what will happen **in the future** is something that can't be accurate and fixed by definition.
+
+Nevertheless we are often asked to provide the "right estimate" for a software project in a short period of time (because bids don't wait) and, to make things worse, without a clear understanding of the context. 
+
+@todo say what this article is about
+
+## Why estimates don't work
+Before presenting my approach to calculating a project cost, I'd like to recap the two key factors that undermine estimates accuracy:
+
+* Accidental complication and
+* Unknown unknowns
+
+### Accidental complication
+In his famous video ["7 Minutes, 26 Seconds, and the Fundamental Theorem of Agile Software Development"](https://vimeo.com/79106557), J. B. Rainsberger shows how the total cost of a feature can be expressed as the sum of the cost of **essential complication** with the cost of **accidental complication**. 
+
+Essential complication is due to the fact that **the problem we have to solve is hard**. But since we are good at finding similarities, we are good enough at estimating the cost of essential complication, basically thanks to past experience.
+
+Accidental complication is due to the fact that **we are not so good at our jobs**. It's the errors we make at designing systems; it's the mess we leave in our code because we have no time to clean it up; it's the overhead we introduce when we add people to a project (thinking that *nine women can make a baby in one month*). 
+
+As we can guess, the list is a long one and the following comic strip by [Jason Heeris](http://heeris.id.au/2013/this-is-why-you-shouldnt-interrupt-a-programmer/) is just another hilarious but meaningful example of accidental complication:
+
+image: ProgrammerInterrupted.png
+
+Since the cost of **accidental complication dominates** the one of essential complication, one way to make the total cost more predictable is reducing accidental complication as much as we can. 
+
+### Unknown unknowns
+Another aspect that has a very big impact on estimates accuracy is our attitude to **ignore events** that are outside the model under investigation.
+
+There is a reason for that: we only focus on **known unknowns**, that are things that *we know we don't know*. 
+
+For example, if a requirement is "I want marketing automation" we don't know what exact features the customer needs but, since we know what we we don't know, we can plan to make some analysis on that domain to provide an estimate of the cost.
+
+Here is another not so highly improbable real example of **unknown unknown**: a platform security patch released in the middle of the project development which breaks, say, our brand new integration to the marketing automation system. Sounds familiar, doesn't it?
+
+We couldn't predict such an event because it wasn't under our control. What's more, we can't avoid applying the patch, since it solves a security issue that has just become public and exposes the customer to potential risks.
+
+Sure enough, the patch release has **nothing to do with the domain** we were focused on and every minute spent dealing with it wasn't included in our estimate or Gantt chart.
+
+We could make a long list of highly improbable events that can occur, the so called **black swans** that change the game and send our estimates up in smoke. 
+
+But we couldn't rely on such a list because, like it or not, uncertainty will always find it's way into the project.
+
+@todo https://en.wikipedia.org/wiki/Black_swan_theory
+
+## Calculating a project cost
+As we have seen so far, to calculate a project cost we don't have to take into account only essential complication but also accidental complication and uncertainty.
+
+To estimate the cost of a project development I suggest applying the following rules:
+
+* Reach consensus on essential complication
+* Do our best to reduce accidental complication
+* Prepare for change
+
+### Reach consensus on essential complication
+We know how to estimate essential complication: we can count on our attitude to **find similarities** and weight features based on our past experience.
+
+Write down all the features; we can choose the formalism we prefer but let's consider writing them down as [user stories](https://en.wikipedia.org/wiki/User_story).
+
+Then gather **the team** that will be responsible of bringing those requirements to life. I use the wider term *team* and not *developers* because a feature is not necessarily a matter of pure software development. Ideally even the customer should take part to this activity, mainly to provide more details during discussion.
+
+Ask the team to estimate the **effort** of development of each requirement.
+
+To express the effort we can use man-hours, man-days, story points, bananas, whatever estimate unit we like most.
+
+Whatever the unit, I suggest to use a non-linear sequence like: 1, 2, 3, 5, 8, 13, 20, 40, 100.
+
+@todo riscrivere
+This way a **higher estimate** unleashes **more uncertainty**, meaning that the requirement has to be divided into **smaller pieces** or needs more details that will likely bring to divide into smaller pieces as well.
+
+For each requirement:
+
+* each team member writes down his or her **own estimate** without sharing it with others until the next step;
+* all members' estimates are revealed and compared; differences generate  **discussion** that goes on until the team reaches the **consensus** on a number
+* if consensus isn't reached in a reasonable amount of time (minutes) it likely means that some information is missing; ask @more details@ to the customer, if possible, and estimate again; alternatively take for good the estimate from the ones who already have some @experience@ on that feature.
+
+This technique is called [planning poker](https://en.wikipedia.org/wiki/Planning_poker) and it definitely makes the estimating process a **more fun**. And if estimating is fun, people will be more willing to do it.
+
+I've used this technique a lot (mainly using [this free tool](http://www.planitpoker.com/)) and the real benefit it gives is the @discussion@ and the seek for @details@ that it generates.
+
+### Do our best to reduce accidental complication
+Dealing with the **root causes** that produce accidental complication is a good way to reduce it. For example, performing code **refactoring** is a good way to "clean the kitchen" and wipe out **technical debt**, that is, accidental complication. 
+
+Writing **automated tests** is a proven way to encourage refactoring. 
+
+**Test driven development** (TDD) lets us design better systems, because it avoids premature optimizations and over-engineering.
+
+**Pair programming** is another technique that can help us catching design defects earlier.
+
+Useless to say, learning and using **solid programming principles** and the best available **tools and habits** is gold.
+
+Since there aren't *work-for-all* recipes, my advice is that of trying them and choosing those that give us the benefit of reducing accidental complication.
+
+To accomplish this goal it's important to **measure** our progress: write down the time we spend developing features, use different techniques to develop the same (or equal-weighted ones) and compare the result. Measuring is the key.
+
+Note: before the planning poker session begins we should be clear with the team: the **additional cost** of doing things that reduce accidental complication should be taken into consideration.
+
+### Prepare for change
+We also know that there will be something unexpected (unknown unknowns) that will mess up things, so we have to be prepared for change.
+
+To understand what "be prepared for change" means we can use a metaphor that fits well: the sat nav systems.
+
+@todo use similarities to understand the order of magnitude of the project; model a team and a time frame, make the team work in that time frame with focus with best dev practices to reduce accidental complication; 
+
+@todo Whe don't need an estimate, we need a road map
+
+@todo talk about the approach of trying to estimate the order of magnitude of a project and assign the proper team to it for a proper period of time; give the team the ability of deciding what to do when unpredictable events occurr
+
+## Conclusion
+
+@todo ask for feedback about given suggestions and techniques
+
+## Bibliography
+
+* Duarte, Vasco. No Estimates: How to measure project progress without estimating. OikosofySeries, 2016. Web. [http://noestimatesbook.com/](http://noestimatesbook.com/).
+* Rainsberger, J. B. 7 Minutes, 26 Seconds, and the Fundamental Theorem of Agile Software Development. Web. [https://vimeo.com/79106557](https://vimeo.com/79106557)
+* Brooks, Frederick P. The Mythical Man-month: Essays on Software Engineering. Reading, MA: Addison-Wesley Pub., 1982. Print.
+* Fowler, Martin, and Kent Beck. Refactoring: Improving the Design of Existing Code. Boston: Addison-Wesley, 2000. Print.
+* Taleb, Nassim Nicholas. The Black Swan: The Impact of the Highly Improbable. New York: Random House Trade Paperbacks, 2010. Print.
+* Taleb, Nassim Nicholas. Antifragile: Things That Gain from Disorder. New York: Random House Trade Paperbacks, 2014. Print.
+ 
+
+----
+
+Article-options:
+
+----
+
+Cover:
+
+----
+
+Main: 0
+
+----
+
+Wpid:
