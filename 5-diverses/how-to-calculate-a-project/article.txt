@@ -133,18 +133,14 @@ To accomplish this goal it's important to **measure** our progress: write down t
 Note: before the planning poker session begins we should be clear with the team: the **additional cost** of doing things that reduce accidental complication should be taken into consideration.
 
 ### Prepare for change
-We also know that there will be something unexpected (unknown unknowns) that will mess up things, so we have to be prepared for change.
+If we accept the idea that, sooner or later, uncertainty will mess up things within the project, we need to be prepared for change.
 
-To understand what "be prepared for change" means we can use a metaphor that fits well: the sat nav systems.
-
-@todo use similarities to understand the order of magnitude of the project; model a team and a time frame, make the team work in that time frame with focus with best dev practices to reduce accidental complication; 
+This is not something that... @todo (say that it has nothing to do with estimating)
 
 @todo Whe don't need an estimate, we need a road map
 
-@todo talk about the approach of trying to estimate the order of magnitude of a project and assign the proper team to it for a proper period of time; give the team the ability of deciding what to do when unpredictable events occurr
-
 ## Conclusion
-
+@todo recap about what we talked about
 @todo ask for feedback about given suggestions and techniques
 
 ## Bibliography
