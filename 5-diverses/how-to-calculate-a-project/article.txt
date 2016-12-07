@@ -102,7 +102,6 @@ To express the effort we can use man-hours, man-days, story points, bananas, wha
 
 Whatever the unit, I suggest to use a non-linear sequence like: 1, 2, 3, 5, 8, 13, 20, 40, 100.
 
-@todo riscrivere
 This way a **higher estimate** unleashes **more uncertainty**, meaning that the requirement has to be divided into **smaller pieces** or needs more details that will likely bring to divide into smaller pieces as well.
 
 This way the **higher the estimate** the more people will be obliged to choose between distant numbers, unleashing **uncertainty** and thus discussion; 
