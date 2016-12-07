@@ -100,12 +100,10 @@ Ask the team to estimate the **effort** of development of each requirement.
 
 To express the effort we can use man-hours, man-days, story points, bananas, whatever estimate unit we like most.
 
-Whatever the unit, I suggest to use a non-linear sequence like: 1, 2, 3, 5, 8, 13, 20, 40, 100.
+Whatever the unit, I suggest to **use a non-linear sequence** like: 1, 2, 3, 5, 8, 13, 20, 40, 100.
 
-This way a **higher estimate** unleashes **more uncertainty**, meaning that the requirement has to be divided into **smaller pieces** or needs more details that will likely bring to divide into smaller pieces as well.
-
-This way the **higher the estimate** the more people will be obliged to choose between distant numbers, unleashing **uncertainty** and thus discussion; 
-this, in turn, will likely bring to **more discussion** and to breaking the requirement into **smaller** and more estimable chunks.
+This way the **higher the estimate** the more the people will be obliged to choose between distant numbers, unleashing **uncertainty** and generating **more discussion and details**.
+This, in turn, will likely bring to break the requirement into **smaller** and more estimable chunks.
 
 For each requirement:
 
@@ -135,11 +133,17 @@ To accomplish this goal it's important to **measure** our progress: write down t
 Note: before the planning poker session begins we should be clear with the team: the **additional cost** of doing things that reduce accidental complication should be taken into consideration.
 
 ### Prepare for change
-If we accept the idea that, sooner or later, uncertainty will mess up things within the project, we need to be prepared for change.
+If we accept the idea that, sooner or later, **uncertainty** will mess up things within the project, we need to be prepared for **change**.
 
-This is not something that... @todo (say that it has nothing to do with estimating)
+Being prepared for change is not directly related to estimating the cost of the project but has an impact on delivery dates.
+
+Some of us are familiar with [Gantt charts](https://en.wikipedia.org/wiki/Gantt_chart). The problem with them is that they focus on a long-term plan and give the illusion we can control every aspect of the project. But change happens unpredictably and Gantt charts aren't the best tool to embrace it.
+
+Focusing on better tools to manage change is out of the scope of this article but it's simple to spot a better metphor to embrace change: sat nav systems.
 
 @todo Whe don't need an estimate, we need a road map
+
+When we use a sat nav system to plan a trip from A to B we can count on the most valuable feature: in case something happens during the travel, the system will automatically recalculate the path and provide the new estimated arrival time.
 
 ## Conclusion
 @todo recap about what we talked about
