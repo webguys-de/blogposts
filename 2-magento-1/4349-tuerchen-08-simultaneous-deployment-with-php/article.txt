@@ -1,16 +1,12 @@
-Title: Türchen 10: Simultaneous deployment to multiple nodes with PHP (deployer.php)
+Title: Türchen 08: Simultaneous deployment to multiple nodes with PHP (deployer.php)
 
 ----
 
-Date: 2016-12-10
+Date: 2016-12-08
 
 ----
 
-Author: nilspreuss
-
-----
-
-AuthorText: **Nils Preuß** is a Magento backend developer since 2009 and working for different merchants since some years. Right now he is doing his job at Polo Motorrad in Jüchen. He enjoys the active and friendly community and attends a great variety of different events, either as attendee or speaker.
+Author: nils-preuss
 
 ----
 
