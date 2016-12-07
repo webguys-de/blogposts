@@ -105,6 +105,9 @@ Whatever the unit, I suggest to use a non-linear sequence like: 1, 2, 3, 5, 8, 1
 @todo riscrivere
 This way a **higher estimate** unleashes **more uncertainty**, meaning that the requirement has to be divided into **smaller pieces** or needs more details that will likely bring to divide into smaller pieces as well.
 
+This way the **higher the estimate** the more people will be obliged to choose between distant numbers, unleashing **uncertainty** and thus discussion; 
+this, in turn, will likely bring to **more discussion** and to breaking the requirement into **smaller** and more estimable chunks.
+
 For each requirement:
 
 * each team member writes down his or her **own estimate** without sharing it with others until the next step;
