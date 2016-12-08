@@ -6,11 +6,7 @@ Date: 2016-12-1
 
 ----
 
-Author: Sander Mangel
-
-----
-
-Author-Text: Passionate about e-commerce, Magento and coffee. Developer & consultant, scifi fan, allround nerd | co-organizor of @MageStackDay, MUG Rdam, Meet Magento NL
+Author: sander-mangel
 
 ----
 
