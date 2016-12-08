@@ -1,11 +1,11 @@
-Title: Frontend-Testing mit Codeception für Magento
+Title: Türchen 09: Frontend-Testing mit Codeception für Magento
 ----
 
-Date: 2016-12-07
+Date: 2016-12-09
 
 ----
 
-Author: benny-vieren, oliver-bartosch
+Author: benny-vieren-oliver-bartosch
 
 ----
 
@@ -90,9 +90,9 @@ Pro Testumgebung kann jeweils eine URL festgelegt werden.
 
 ## Testing
 
-Eine wichtige Datei befindet sich sich im Verzeichnis acceptance: __bootstrap.php. Diese Datei wird vor jedem Test aufgerufen. Hier können Variablen deklariert werden die in den jeweiligen Testszenarien verwendet werden können. Diese Variablen bestehen den ganzen Test über und können von den verschiedenen Szenarien gemeinsam benutzt werden.
+Eine wichtige Datei befindet sich sich im Verzeichnis acceptance: `__bootstrap.php`. Diese Datei wird vor jedem Test aufgerufen. Hier können Variablen deklariert werden die in den jeweiligen Testszenarien verwendet werden können. Diese Variablen bestehen den ganzen Test über und können von den verschiedenen Szenarien gemeinsam benutzt werden.
 
-In __bootstrap.php könnte zum Beispiel eine Funktion verwendet werden, die den gerade benutzten Browser erkennt. Darauf können die folgenden Tests entsprechend reagieren und an den erkannten Browser angepasst durchgeführt werden. 
+In `__bootstrap.php` könnte zum Beispiel eine Funktion verwendet werden, die den gerade benutzten Browser erkennt. Darauf können die folgenden Tests entsprechend reagieren und an den erkannten Browser angepasst durchgeführt werden.
 
 Ebenso wäre es möglich, ein mobiles Endgerät zu entdecken. Der folgende Test kann darauf reagieren und statt der normalen Navigation die mobile Navigation testen.
 
