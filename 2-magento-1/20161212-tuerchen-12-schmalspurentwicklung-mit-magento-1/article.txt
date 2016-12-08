@@ -1,0 +1,447 @@
+Title: Türchen 12 : Schmalspurentwicklung von Magento 1 Shops (ohne geiles Deployment und so)
+
+----
+
+Date: 2016-12-12
+
+----
+
+Author: Rico Neitzel
+
+----
+
+Author-Text: Rico Neitzel ist seit 1997 als Mediendesigner aktiv im Netz unterwegs und berät seit vielen Jahren Einzelkämpfer und kleine bis mittelständische Unternehmen in allen Belangen des On- und Offline-Marketings. Als Magento Evangelist und eines der führenden Community Mitglieder betreut er seit der ersten Beta-Version von Magento (2007) die deutsche Community und hat sich als Berater für eCommerce-getriebene Unternehmen insbesondere auf Magento spezialisiert. Außerdem entwickelt er seit 2010 im Büro 71a, das er gemeinsam mit seinem Geschäftspartner Tobias Klose betreibt, Schulungskonzepte und Schulungen für Magento.
+
+----
+
+Intro: Keine Ahnung von Docker, Gulp oder Jenkins und mit Continuous Integration und Dependency Management auch nicht wirklich fit? Es geht auch etwas weniger aufreißerisch und trotzdem halbwegs professionell.
+
+----
+
+Text: Wir haben alle mal klein angefangen. Die wenigsten von uns erst zu einer Zeit, in der Vagrant oder Docker zum üblichen Arbeitsumfang gehört haben. Die letzten 8&nbsp;Jahre, in denen wir nun mit Magento arbeiten konnten, haben sich irre viele Tools entwickelt, die einem das Leben leichter machen können. Dummerweise muss man sich mit all dem neuen Kram erst tagelang beschäftigen, bevor man eine einzige produktive Zeile herausquetschen kann.
+
+Wenn es nun damit getan wäre, könnte man sich natürlich 14 Tage hinsetzen und alles Mögliche einrichten - StackOverflow sei Dank, wird es in 50&nbsp;% der Fälle sicher dann auch laufen. Aber was ist, wenn wir etwas anpassen müssen oder ein Fehler ums Verrecken einfach nicht verschwinden will? Dann stehen wir da - meist mit runtergelassener Hose.
+
+## Herausforderungen bei Magento 1
+
+Bei der Entwicklung von Magento 1 gibt es einige Herausforderungen:
+
+1. Wie speichere ich das ganze Projekt, damit ich es auch auf dem Kundenserver wieder ausspielen kann?
+2. Wie erfasse ich meine Änderungen?
+3. Wie verkürze ich zwingend notwendige, übliche Arbeitsschritte?
+
+Dummerweise gibt es diese Fragen nicht nur bei der reinen PHP Entwicklung. Bei Websites tanzen wir ja auf den verschiedensten Hochzeiten: HTML, CSS, JavaScript, PHP, SQL. Jeder dieser Bereiche hat seine eigenen Herausforderungen und zwingt uns, eigene Tools zu verwenden.
+
+Viele Lonesome Rangers, die sich nicht in großen Agenturen zu Zahnrädchen haben machen lassen, können meist nicht die Zeit und das Geld aufwenden, um all diese Anforderungsbereiche mit Bravour zu meisten. Meine Meinung: Ist auch gar nicht nötig. Nutzt lieber weniger Tools, aber habt euren Workflow fest im Griff. Dann könnt ihr besser mithalten, als diejenigen, die sich in immer wieder neuen, hippen Technologien verlieren. Ja: Diese neuen Technologien helfen - ohne Frage. Aber sie helfen nur denen, die sie auch meistern können und dafür ist leider immer mehr und immer komplexeres KnowHow nötig.
+
+<small>_Eine **einschränkende Vorbemerkung** muss ich leider noch machen: Ich arbeite seit etlichen Jahren nun ausschließlich mit OS X und kann für die Webentwicklung auch ausschließlich Unix basierte Betriebssysteme empfehlen. Es hat sich in meinen vielen Schulungen immer wieder - und mit Magento 2 noch eklatanter - gezeigt, dass Windows zwar super für den Gaming- und Office-Einsatz geeignet, aber solide Webentwicklung einfach scheiße ist._</small>
+
+<small>_**Werbedisclaimer:** Einige der hier genannten Tools kosten Geld. Ich verlinke zwar, verdiene aber nichts am Verkauf der Lizenzen. Ich bin mit den Programmen einfach sehr zufrieden und kann sie daher empfehlen. Unbedingt Geld ausgeben muss man aber nicht - auch wenn es zum Geld **Verdienen** unerlässlich ist, welches auszugeben._</small>
+
+## 08/15 Werkzeug-Gürtel
+
+Was braucht es also, um grundsätzlich **ziemlich** sauber mit Magento 1 entwickeln zu können?
+
+* Eine … naja, DIE ordentliche IDE: PHPStorm (notfalls Derivate wie zum Beispiel Netbeans).
+	* Bei PHPStorm: Magicento
+* Git (mit zusätzlicher GUI: z. B. SourceTree)
+* Lokale Serverumgebung (z. B. MAMP Pro) mit 
+	* Apache 2
+	* PHP 5.6 (Magento 1 ist nur mit Patches auf PHP 7.x lauffähig)
+	* MySQL 5.6 (notfalls auch 5.5)
+* SSH Zugänge zum Server
+
+### PHPStorm
+
+(image: icon-phpstorm.svg class:alignleft img-responsive half)
+
+PHPStorm von Jetbrains hat sich als die State-of-the-Art IDE herausgearbeitet. Mit vielen wirklich nützlichen Features für PHP-Entwickler macht es einem das tägliche Entwicklerleben wirklich einfach. Um nur zwei zu nennen, die einem bei der Magento-Entwicklung helfen: CodeNavigation (mit einem Klick zur Implementation einer Klasse springen) oder CodeCompletion (beim Schreiben direkt mögliche Methoden vorgeschlagen bekommen).
+
+Großer Vorteil für uns Entwickler ist dabei die extrem gute Performance bei diesen Aufgaben. Öffnet man ein Projekt zum ersten Mal, lastet PHPStorm den Rechner inkl. aller Cores aus und indiziert das gesamte Projekt. Dieser Vorgang dauert je nach Rechner und Projektgröße gerne mal 4-5 Minuten, anschließend ist dieser Index im Cache und aktualisiert sich on the fly, sodass das Suchen nach Methoden oder Dateien anschließend verzögerungsfrei passiert. 
+
+Oft wird PHPStorm mit Netbeans verglichen. Vor Jahren hatte auch ich mit Netbeans gearbeitet, aber wer einmal PHPStorm gesehen und vielleicht sogar benutzt hat, will nichts anderes mehr zum Programmieren verwenden, weil es einfach irrsinnig schnell und ungemein unterstützend ist.
+
+Für PHPStorm legt man normalerweise Geld auf den Tisch. Es gibt aber auch das sogenannte [EAP (Early Access Programm)](https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Early+Access+Program) bei dem man sich die aller neueste Beta für (immer wieder) 30 Tage kostenlos installieren kann.
+
+PHPStorm bietet selbst bereits Clients für mySQL und Versionsverwaltungssysteme (in unserem Fall: git) und integriert deren Informationen dann nahtlos in den Editor. Das hat zur Folge, dass geschriebenes SQL direkt mit der Datenbankstruktur verglichen wird und Fehler oder Inkonsistenzen im Code markiert werden können. Die Git Integration zeigt einem bereits im Editor an, welche Zeilen hinzugefügt, geändert oder entfernt wurden und kann auch direkt die History der geöffneten Datei aufschlüsseln.
+
+Ich selbst arbeite aber mit externen Tools, schlicht weil mir die doch sehr entwicklerlastige GUI in PHPStorm nicht wirklich zusagt. Die Tools an sich sind aber mächtig und durchdacht. Wer sich also SequelPRO oder SourceTree nicht antun möchte, kommt mit PHPStorm bequem und funktionsgewaltig durchs normale Entwicklerleben.
+
+Wenn ihr noch kein PHPStorm nutzt, solltet ihr euch mal [in den Dokumentationsvideos von Jetbrains](https://www.jetbrains.com/phpstorm/documentation/) umsehen. Sogar alte Hasen können bei den Features noch das eine oder andere Kleinod entdecken.
+
+#### Magicento
+
+(image: magicento-logo.png class:alignleft img-responsive half)
+
+PHPStorm hat noch einen weiteren Vorteil: Enrique Piatti ist selbst Magentician und entwickelt mit viel Hingabe [Magicento ein PlugIn für PHPStorm](http://magicento.com/), dass die Entwicklung von Magento1 Inhalten (Extensions, Themes, etc.) massiv beschleunigt und die Fehlerquote drastisch senkt.
+
+Magicento kostet mittlerweile pro Jahr 39 USD, die ich persönlich aber wirklich gerne bezahle. Ich gebe zu, ich bin ein Sparfuchs, und wenn es nicht sein **muss**, versuche ich mich auch um solche Beträge zu drücken. Aber für Enriques PlugIn würde ich sogar 50 USD im Jahr bezahlen, alleine deswegen, weil es unheimlich viele Standardarbeiten automatisch erledigen kann und mir somit mehrere Stunden Arbeit im Monat spart:
+
+* Anlegen eines neues Moduls
+    * Wahlweise mit oder ohne: Models, Blocks, Helpers, SetupScripts
+    * AdminGrids inkl. Controller
+* Theme-Arbeiten
+	* Duplizieren einer Quelldatei an die richtige Stelle
+	* Vergleich von Custom vs. Parent Theme
+* Auflösen von Magento Factorynames ('catalog/product') für
+	* CodeCompletion
+	* CodeNavigation
+
+Und hier ist die Liste noch lange nicht zu ende.
+
+### Git
+
+(image: git-logo.png class:alignleft img-responsive half)
+
+An einer Versionsverwaltung (VCS) kommt man beim professionellen Arbeiten nicht mehr vorbei. Alles andere würde auch bei groben Fehlern schnell dazu führen, dass ihr komplett von vorne beginnen müsst.
+
+Selbst wenn ihr also ganz alleine und nur auf eurem eigenen Rechner arbeitet, solltet ihr Git einsetzen, um eure eigene Arbeit nachvollziehbar und reproduzierbar zu speichern.
+
+#### Warum Git?
+
+Im Gegensatz zu anderen VCS ist [Git](https://git-scm.com) dezentral aufgebaut. Das bedeutet, dass es eigentlich keinen zentralen Server gibt. Daher werden Dateien bei Git auch nicht "ausgecheckt" und sind damit für die Bearbeitung durch andere gesperrt.
+
+Git spielt seine Stärke vielmehr in der Zusammenarbeit aus. Jeder Bearbeiter hat eine komplette Kopie des Projekts (das **Repo**sitory) mit der gesamten Projektvergangenheit (Commit History) auf dem eigenen Rechner. 
+
+Arbeiten nun mehrere Leute parallel an einem Projekt, arbeitet erstmal jeder für sich auf seinem eigenen System in seinem eigenen Repo. Ist die eigene Arbeit abgeschlossen, synchronisiert man sein Repo mit den Repos der anderen Kollegen. Das kann natürlich bei 3 Kollegen müßig werden. Immerhin müsste jeder Kollege dann per TCP/IP erreichbar sein.
+
+Hier kommen jetzt Dienste wie Bitbucket oder GitHub ins Spiel. Diese Dienste sind quasi auch nur ein weiterer Bearbeiter, mit dem Unterschied, dass sie keine Änderungen an eurem Projekt vornehmen, sondern lediglich eine Zentrale bieten, mit der sich alle synchronisieren können.
+
+Weil Git dabei aber nur Änderungen (Diffs) der Dateien synchronisiert, ist zum einen die übertragene Datenmenge verhältnismäßig gering und es kommt eher selten zu Konflikten in Dateien, die von mehreren Personen parallel bearbeitet wurden.
+
+Es gibt [ein interaktives Tutorial](https://try.github.io/levels/1/challenges/1), in dem man sich mit Git vertraut machen kann, wenn man noch nie mit Git gearbeitet hat. In 15 Minuten habt ihr, denke ich, ein ganz gutes Verständnis dafür, was Git genau ist und wie es euch bei eurer Arbeit helfen kann.
+
+
+#### Arbeitsablauf mit Git
+
+Damit nicht jeder in Git grad so rumarbeitet, wie es ihm gefällt, hat sich [Vincent Driessen](http://nvie.com/posts/a-successful-git-branching-model/) 2010 Gedanken gemacht, wie die Arbeit in Git sinnvoll und strukturiert ablaufen kann. Herausgekommen ist dabei: **GitFlow.**
+
+GitFlow ist im Grunde kein eigenes Programm oder eine Ergänzung zu Git selbst, sondern viel mehr eine Art Ablaufbeschreibung, wie man in Git arbeiten sollte, wenn man bestimmte Aufgaben zu erfüllen hat.
+
+Natürlich gibt es für die Kommandozeile auch kleine Helferlein, die diese Arbeitsschritte automatisiert ausführen können; technisch zwingend nötig sind sie aber nicht.
+
+Einen guten Einblick in die Vorteile des Arbeitens mit GitFlow bekommt man auf [einer Tutorialseite von Atlassian](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow), die mit SourceTree auch ein kostenloses GUI-basiertes Git-Werkzeug anbieten, das GitFlow direkt unterstützt. Mehr dazu im nächsten Abschnitt.
+
+Welche Aufgaben soll GitFlow denn nun eigentlich strukturieren:
+
+1. Erarbeiten neuer Funktionen (Features)
+2. Sicherstellen des Zustands der Staging-Umgebung (Development)
+3. Sicherstellen des Zustands der Live-Umgebung (Master)
+4. Integration von Notfall-Patches (Hotfixes)
+
+Dabei ist es GitFlows Ziel, dass wir als Entwickler auf unseren Lokalen Maschinen in Feature-Branches entwickeln, die zu einem bestimmten Zeitpunkt aus dem Develop-Branch abgezweigt werden. Ist unsere Arbeit abgeschlossen und hinreichend getestet, mergen wir unseren Feature-Branch wieder in den jetzt vielleicht überarbeiteten Develop-Branch und stellen unsere Arbeit damit unseren Kollegen und im Staging-System zur Verfügung.
+
+Sind alle Tests abgeschlossen und hat der Kunde sein Okay gegeben, erzeugt man aus dem aktuellen Stand des Staging-Systems (also dem Develop-Branch) ein Release und merged alle bis dahin aufgelaufenen Änderungen in den Master-Branch.
+
+Wichtig bei GitFlow ist: Niemand arbeitet im Master-Branch und wenn möglich arbeitet auch niemand im Develop-Branch. Diese Branches werden immer nur durch einen Merge geändert.
+
+Was nun aber, wenn man einfach mal gravierend Scheiße gebaut hat oder ein anderes Problem im Livesystem zutage tritt? Nun, dann macht man einfach einen Hotfix und GitFlow sorgt dafür, dass diese Änderung automatisch im Master- und Develop-Branch landet, ohne dass man diesen zweiten Merge händisch selbst ausführen müsste.
+
+Alles in allem erleichtert einem GitFlow also das strukturierte und kollaborative Arbeiten ungemein und ich empfehle jedem, diesen Workflow auch dann zu nutzen, wenn man mutterseelenallein auf der eigenen Maschine vor sich hinentwickelt.
+
+
+#### GUI für Git
+
+(image: sourcetree-logo.png class:alignleft img-responsive half)
+
+Wie ich im Abschnitt PHPStorm schon erwähnt habe, ist ein eigenes Tool für die Arbeit mit Git im Grunde nicht zwingend nötig. Man kann es wahlweise wie ein Berserker wild auf der Kommandozeile treiben, oder man quält sich durch die hässliche PHPStorm-GUI-Implementation von Git; oder aber, man nutzt eben doch einfach ein weiteres, schickes Tool: [SourceTree von Atlassian](http://sourcetreeapp.com)
+
+Großer Vorteil: SourceTree ist kostenfrei verfügbar. Ich gestehe auch: Es könnte von der GUI _etwas_ stylischer sein. Aber im Vergleich zur etwas schickeren, dafür aber kostenpflichtigen Alternative [Tower](https://www.git-tower.com/mac/) ist es wenigstens performant.
+
+SourceTree bietet euch eine schöne Übersicht über euer aktuelles Projekt mit der gesamten History, einer Liste mit allen Branches, die bei euch auf dem Rechner liegen und den Branches inkl. der History auf den "Remotes" (die Kopien der Repos bei Bitbucket, Github oder euren Kollegen).
+
+Mit funktionalen Buttons in der Toolbar könnt ihr schnell und zuverlässig auf die üblichen Funktionen zugreifen.
+
+#### Git und Magento
+
+Es gibt bei der Arbeit in einem VCS mit Magento zwei unterschiedliche Ansätze:
+
+1. Alles liegt im Git
+2. Es liegen nur die neuen oder geänderten Dateien im Git, nicht aber die komplette Installation
+
+Wir haben im [Büro 71a](http://buro71a.de/) beide Varianten ausprobiert. Unsere Projekte sind häufig "Feuerwehr"-Projekte, die wir von Agenturen übernommen haben, die sich mit Magento übernommen haben. Oftmals gibt es hier CoreHacks, sodass wir Git verwenden, um uns schnell über solche Änderungen zu informieren. 
+
+Dazu ist es aber unerlässlich, dass der gesamte Code des Projektes —&nbsp;inklusive Magento&nbsp;– im Repo gespeichert wird. Ändert sich also "heimlich" eine Core Datei, sehen wir das sofort. Diese Datei zeigt sich dann entweder als "geändert" oder taucht in der History. Für uns kommt daher mittlerweile nur noch Variante 1 in Frage.
+
+Variante 2 hat zudem den Nachteil, dass man eine sehr umfangreiche `.gitignore` Datei pflegen muss. Git selbst meldet sonst nämlich alle Core-Dateien als "neue Datei" und würde diese am liebsten gerne ins Repo übernehmen. Mit `.gitignore` kann man sicherstellen, dass Git diese Dateien und Ordner gar nicht erst sieht. Je länger jedoch diese `.gitignore` Datei wird, umso langsamer wird auch git.
+
+Git unterstützt übrigens zwei unterschiedliche `.gitignore` Dateien. Eine liegt im Repo und wird für gewöhnlich mit allen anderen geteilt. Eine weitere liegt global auf eurem Rechner.
+
+##### Globale .gitignore_global
+
+Ich nutze die globale Datei, um die Standardordner in meinem Projekten, die nichts im Repo zu suchen haben, direkt von vornherein auszuschließen. Diese Ordner sind zum einen systembedingt zum anderen von meiner Arbeitsweise geprägt:
+
+(code)
+*~
+.DS_Store
+.idea
+.modman
+app/code/community/Aoe/TemplateHints
+app/etc/modules/Aoe_TemplateHints.xml
+skin/frontend/base/default/aoe_templatehints
+
+app/code/community/Hackathon/EmailPreview
+app/design/adminhtml/default/default/layout/hackathon_emailpreview.xml
+app/etc/modules/Hackathon_EmailPreview.xml
+app/locale/en_US/Hackathon_EmailPreview
+
+app/code/community/Mgt/DeveloperToolbar
+app/code/local/Mgt/Base
+app/design/adminhtml/default/default/layout/mgt_developertoolbar.xml
+app/design/adminhtml/default/default/template/mgt_developertoolbar
+app/design/frontend/base/default/layout/mgt_developertoolbar.xml
+app/design/frontend/base/default/template/mgt_developertoolbar
+app/etc/modules/Mgt_Base.xml
+app/etc/modules/Mgt_DeveloperToolbar.xml
+js/mgt_developertoolbar
+
+app/etc/modules/AvS_ScopeHint.xml
+app/locale/de_DE/AvS_ScopeHint.csv
+js/scopehint/tooltip.js
+app/code/community/AvS/ScopeHint
+app/design/adminhtml/default/default/layout/scopehint.xml
+
+config.codekit
+.sass-cache/
+.scss-lint.yml
+vendor/
+(/code)
+
+Damit schließe ich von vornherein aus, dass meine üblichen Entwicklertools (ScopeHint, TemplateHints, DevToolbar) überhaupt im Git auftauchen. Zudem gibt es Dateien meiner Programme, die ich ebenfalls nicht angezeigt bekommen möchte (modman, PHPStorm, CodeKit, OSX).
+
+##### Projektspezifische .gitignore
+
+Anschließend gibt es in jedem Projekt eine eigene `.gitignore` Datei für Dateien, die sich zwischen Entwickler-, Test- und Produktivumgebung ändern (Zugangsdaten, etc).
+
+(code)
+/app/etc/local.xml
+robots.txt
+(/code)
+
+Meistens stehen hier natürlich noch weitaus mehr Dateien, aber diese beiden Vertreter sind immer mit dabei.
+
+Für beide gibt es eine Entsprechung im Git selbst: `app/etc/local.xml.dist` und `robots.txt.dist`. Die enthalten den Mustercode, mit dem ich dann auf den jeweiligen Systemen das Original erzeuge (siehe später beim Thema Deployment).
+
+Bitte immer daran denken, dass ihr diese Dateien auf den jeweiligen Maschinen separat sichern müsst. Hier bietet euch Git kein Sicherheitsnetz durch versionierte Kopien! Einmal weg -> für immer weg!
+
+
+### Lokale Serverumgebung mit MAMP
+
+(image:icon-mamppro.png class:img-responsive alignleft half)
+
+Es gibt mittlerweile viele Entwickler, die sich mit Vagrant, Docker und hastenichtgesehen beschäftigen. Wie ich aber am eigenen Leib schon feststellen musste, ist das alles nur dann ganz hipp und witzig, wenn es mit den mitglieferten Tutorials und Skripten aus-der-Kiste-heraus (Anm. d. Autors: out-of-the-box) funktioniert. Geht's aber mal nicht, stehen wir da … ja … und dann? Stackoverflow driven error resolving durch copy'n'paste'n'trail'n'error.
+
+Alles in allem ein echt zeit- und nervenfressender Prozess, der nur in wenigen Fällen zum erwünschten Ergebnis führt.
+
+Einfacher ist es, direkt "bare metal" zu arbeiten. Das hat allerdings auch einige Nachteile, über die man sich im Klaren sein muss. Damit wir lokal überhaupt Magento ausführen können, brauchen wir einen Webserver, einen SQL-Server und PHP. Das alles vereint gibts mit [MAMP (Pro)](https://www.mamp.info/en/downloads/). Die Investition in MAMP Pro (39 €) rentiert sich, wenn man viele Projekte parallel betreibt und sich die Zeit sparen will, die ganzen Domainkonfigurationen (vhosts) händisch zu erzeugen.
+
+Um ehrlich zu sein: MAMP Pro ist jetzt nicht das geilste Teil vor dem Herrn, aber es tut, was es soll. Problematisch sind Upgrades, weil sich bei denen die PHP- und MySQL Konfigrationen in Luft auflösen. Problematisch ist das auch deswegen, weil bei MAMP Pro die Dateien mit dieser Konfiguration in völlig unwegbaren Untiefen des Systems verstecken. Nervig ist es auch, weil manche Konfiguration in plist-Dateien steckt, die sich nur fummelig zusammenführen lassen.
+
+Diese Schmerzchen aber werden durch den Komfort einer lokalen Entwicklungsumgebung und der damit verbundenen Geschwindigkeit meines Erachtens aufgewogen.
+
+#### Nachteil von "Bare Metal" Entwicklung
+
+Normalerweise sind die Projekte unserer Kunden bei unterschiedlichen Hostern untergebracht, die alle unterschiedliche Konfigurationen –&nbsp;ggf. sogar unterschiedliche Betriebssysteme&nbsp;– laufen lassen. Ziel in der Webentwicklung ist es, mit der eigenen Entwicklungsumgebung so nah wie möglich am Live-System zu bleiben. Das ist mit der "Bare Metal" Arbeit quasi unmöglich. Alleine das Betriebssystem bei mir (macOS) dürften wohl bei den wenigsten Hostern so im Einsatz sein. 
+
+Immerhin kann ich in MAMP Pro die verwendete PHP-Version weitestgehend selbst einstellen. Mit dem mySQL Server sieht es da aber schon wieder ganz anders aus.
+
+Wir müssen also darauf vertrauen, dass die Bugs und Performanceschwierigkeiten im Live- wie auch Stagesystem mit dem unseren zumindest tendenziell zusammenlaufen. Die Erfahrung zeigt, dass die PHP-Version wenigstens in der zweiten Stelle übereinstimmen sollte bspw: 5.6.21 auf dem Server, 5.6.25 im MAMP Pro und schon ist im Grunde alles gut. Die meisten Bugs sind meist unabhängig von der Serversoftware und treten so oder so auf.
+
+Ein ganz wichtiges Tool, was man für die Magento Entwicklung in PHP auf jeden Fall auch braucht, ist [Xdebug](https://Xdebug.org). In MAMP Pro gibt es dafür zum Glück ein Häkchen. Bitte daran denken: Ist Xdebug aktiviert ist PHP um längen langsamer. Braucht man also für die Arbeit im Frontend keine Xdebug-Unterstützung rentiert es sich, das kurzerhand abzuschalten.
+
+#### Xdebug
+
+Dieses nette Modul für PHP sorgt dafür, dass euer PHPStorm nach drücken des Telefonhörers (image: phpstorm-xdebug.png) in der Toolbar auf ankommende PHP-Prozesse lauscht. Passieren wird dann erstmal nicht viel. Aber sobald ihr in einer PHP Datei einen Breakpoint setzt, (image: phpstorm-breakpoint.png) wird der PHP-Prozess an dieser Stelle angehalten und ihr habt einen ziemlich präzisen Einblick, was gerade mit eurem Skript passiert:
+
+* alle vorhanden Variablen und Objekte im aktuellen Scope sind sichtbar
+* Stack trace der aktuellen Methode (woher kommt der Aufruf, abgehend von index.php)
+* in Methodenaufrufe hineinspringen
+* einzelne Befehle ablaufen lassen
+* beliebigen PHP-Code im Evaluator im aktuellen Scope ausführen
+
+(image: phpstorm-xdebug-inspector.png)
+
+Gerade bei der Arbeit mit Magento hilft es ungemein, zu sehen, welche Objekte gerade mit welchen Eigenschaften (`_data[]` Array!) verfügbar sind.
+
+Ich habe die Konfiguration von Xdebug etwas angepasst:
+(code)
+xdebug.max_nesting_level = 500
+xdebug.var_display_max_children = 512
+xdebug.var_display_max_data = 1024
+xdebug.var_display_max_depth=5
+xdebug.collect_vars=on
+xdebug.collect_params=4
+xdebug.show_local_vars=on
+xdebug.show_exception_trace=off
+(/code)
+
+Damit werden ein paar zu restriktive Einstellungen von Xdebug etwas gelockert und die angezeigten Informationen erweitert. Die Konfiguration gehört in eure jeweilige php.ini Datei - bei mir steht es ganz am Ende. Nutzt ihr, wie ich, MAMP Pro, dann schreibt euren Kram bitte immer HINTER die Zeile `; DONT REMOVE: MAMP PRO phpx.x.xx.ini template compatibility version: x`
+
+### SSH-Zugänge
+
+Früher hat man nur FTP verwendet. Nachdem aber mittlerweile "Gott und die Welt"™ versucht, Daten abzugreifen, empfiehlt es sich, immer eine gesicherte Verbindung zum Webserver zu nutzen. 
+
+Das geht wahlweise und unbequem langsam per FTP over SSL oder aber ordentlich und halbwegs professionell via SSH. Beim Zugang via SSH solltet ihr darauf achten, euch statt mit Passwort mit einer Schlüsseldatei am Server anzumelden.
+
+Dazu richtet ihr euch lokal ein Schlüsselpaar ein. Auf der Kommandozeile geht das mit 
+
+(code:bash)
+ ~/   cd ~/.ssh
+ ~/.ssh/   ssh-keygen -t rsa -b 2048
+Enter file in which to save the key (/Users/webguys/.ssh/id_rsa): 
+(/code)
+
+SSH-KeyGen möchte von euch nun gerne einen Dateinamen für das Schlüsselpaar haben. Ich nutze für jeden Kunden ein eigenes paar und daher sind das bei mir dann gerne mal die Kundennamen: "webguys" zum Beispiel.
+
+Anschließend könnt ihr ein Passwort für den Schlüssel speichern, das ihr immer dann eingeben müsst, wenn der Schlüssel verwendet werden soll. Wer's mit der Sicherheit nicht so ganz genau nimmt, gibt kein Passwort ein. Nachteil: Ergaunert sich jemand eure private Schlüsseldatei, ist der Zugang zum Server quasi offen.
+
+Habt ihr die Schlüsseldateien erzeugt, gibt es eine webguys und eine webguys.pub Datei im `~/.ssh/` Verzeichnis. Der Inhalt der .pub Datei muss nun auf den Zielserver übertragen werden. Also: SSH mit Passwort zum Zielserver öffnen und dann auf dem Server die Datei `~/.ssh/authorized_keys` öffnen. Dort hängt ihr den Inhalt eurer .pub Datei einfach an die letzte Zeile an.
+
+Wer's bequem mag, kann sich dann auf dem eigenen Rechner unter ~/.ssh/config eine eigene Konfiguration anlegen, die festlegt, wie sich SSH mit euren Zielservern verbinden soll und welche Schlüsselpaare dafür zum Einsatz kommen:
+
+(code:ini)
+host webguys.de
+ HostName webguys.de
+ IdentityFile "~/.ssh/webguys"
+ User riconeitzel
+(/code)
+
+Für jeden Server (respektive jedes Projekt) gibt es also so einen Eintrag.
+
+
+### Wer viel CSS schreibt, freut sich garantiert darüber
+
+Bevor wir zum Finale des Deployments an sich kommen, hier noch ein Hinweis für CSS Fetischisten. Es gibt ja mittlerweile für vieles nette Helferlein. So auch für's CSS schreiben. Dazu muss man noch nicht mal unbedingt das volle Potential dieser Lösungen ausschöpfen.
+
+Die Rede ist von CSS-PreProzessoren. Diese Programme können eine etwas leichter zu schreibende Form von CSS in normales Browser-CSS übersetzen.
+
+Beispiel:
+
+(code:css)
+.body {
+    background-color:red;
+    font:15px/21px 'Open Sans', Helvetica, Arial, sans-serif;
+    #page {
+    	width:980px;
+    	margin:0 auto;
+    }
+}
+(/code)
+
+Ihr seht hier das Verschachteln von CSS. Ein normaler Browser kann damit nichts anfangen. Nachdem Verwursten dieser SCSS-Datei kommt aber schönes CSS dabei heraus:
+
+(code:css)
+.body {
+    background-color:red;
+    font:15px/21px 'Open Sans', Helvetica, Arial, sans-serif;
+}
+
+.body #page {
+	width:980px;
+	margin:0 auto;
+}
+(/code)
+
+Zugegeben, dieses Beispiel ist mehr als dürftig. Mit SCSS könnt ihr weitaus mehr machen:
+
+1. Variablen
+2. Berechnungen
+3. Mixins (Mini-Funktionen)
+4. Imports
+
+Besonders die Variablen solltet ihr euch noch ansehen. Am Kopf eurer SCSS Datei legt ihr eure Standardfarben für's Projekt fest:
+
+(code:css)
+$firmenfarbe: #cc0000;
+$auszeichnung: #12345a;
+(/code)
+
+Später im Code verwendet ihr dann einfach nur noch eure Variablen:
+(code:css)
+h1 {
+	color: $firmenfarbe
+}
+
+p.auszeichnung {
+	background-color: $auszeichnung;
+}
+(/code)
+
+Ändert sich nun die Firmenfarbe, ist das für euch ein leichter Handgriff in Zeile 1 und das war's. Genauso können Abstände, Schriften, Größen und vieles mehr in Variablen ausgelagert werden.
+
+
+### Wer gerne mit Kunden arbeitet
+
+Am Anfang war das Telefon. Und der Entwickler sah, dass es scheiße war. Warum? Weil wir uns nur die Hälfte aufschreiben, und davon die Hälfte auch noch falsch und am Ende geht sowieso der Zettel verloren.
+
+Besser ist es, sich die Änderungswünsche per eMail schicken zu lassen. Dann kann man wenigstens mit dem INBOX-ZERO Prinzip arbeiten. Aber bei einer entsprechenden Anzahl an Kunden und vorrangig kontinuierlicher Shoppflege wird auch das unübersichtlich und man weiß am Ende nicht mehr, wem man welchen Aufwand weitergegeben hat und was welche Priorität hat.
+
+Was hilft, sind Ticketsysteme. Zu Beginn - und das ist sehr empfehlenswert - haben wir unsere Aufgaben in BitBucket Issues organisiert. Man ist nicht wirklich frei in der Konfiguration der Ticketabläufe, aber es hilft einen ungemein, den Überblick zu behalten und mit dem Kunden dokumentiert in Kontakt zu stehen.
+
+Für größere Aufgaben möchte man dann irgendwann auf JIRA wechseln. Früher wollte ich JIRA mit der Kneifzange nicht anfassen, jetzt liebe ich es heiß und innig. Ich kann ohne dieses System eigentlich nicht mehr arbeiten!
+
+Nachdem ich nun gefühlte 24 Seiten nur über die Tools gesprochen habe, bleibt ja nun schlussendlich noch die Frage:
+
+## Wie spiele ich jetzt mein Projekt aus?
+
+Wir sind da recht pragmatisch: Wir nutzen Git auch auf den Servern. Wir sorgen zuerst dafür, dass jede Website des Kunden wenigstens in einem eigenen DocumentRoot liegt: meist sowas `~/html/webguys.de/` und führen dann dort ein `git clone …` aus. Auf dem Staging-System sollte noch ein `git checkout develop` erfolgen, damit hier nicht der Master Branch vom Live System sondern der aktuelle Entwicklungstand angezeigt wird.
+
+Damit wir bei der Arbeit mit git auf dem Server nicht ständig mit Zugangsdaten hantieren müssen, erstellen wir auch auf den Kundenserver immer Schlüsselpaare. Den öffentlichen Schlüssel (.pub) des Servers hinterlegen wir bei Bitbucket als Deployment Key.
+
+Diese Deployment Key Zugänge haben keine Berechtigung, Änderungen zu speichern, sondern können lediglich lesend auf das Repo zugreifen. Daher werden diese Zugänge auch nicht im kostenpflichtigen Plan angerechnet.
+
+Wichtig ist nun, dass das .git Verzeichnis nicht über den Browser aufrufbar sein darf. Das sollte also Teil eurer .htaccess Datei im Magento-Verzeichnis, besser noch Teil der vHost-Config von Apache sein (die man bei den meisten Hostern für gewöhnlich aber nicht ändern kann).
+
+<small>**Haters gonna hate:** Ich weiß, dass man das .git Verzeichnis auch woanders ablegen kann, aber es geht in diesem Artikel explizit um die Schmalspurlösung.</small>
+
+Unsere Standardeinträge für den Anfang der .htaccess sind diese:
+
+(code)
+RedirectMatch 404 ^/\.git.*$
+RedirectMatch 404 ^/Vagrantfile
+RedirectMatch 404 ^/puphpet
+RedirectMatch 404 ^/var/.*$
+RedirectMatch 404 ^/app/.*$
+RedirectMatch 404 ^/dev/.*$
+RedirectMatch 404 ^/downloader/.*$
+RedirectMatch 404 ^/includes/.*$
+RedirectMatch 404 ^/lib/.*$
+RedirectMatch 404 ^/pkginfo/.*$
+RedirectMatch 404 ^/shell/.*$
+(/code)
+
+Ist das Repo erfolgreich ausgecheckt und es gibt auch keine Zugriffsmöglichkeit auf den .git Ordner, müsst ihr eure local.xml einrichten. Dazu in `app/etc/` die am Anfang mal angelegte local.xml.dist nach local.xml kopieren und die Zugangsdaten der Datenbank anpassen.
+
+Anschließend ladet ihr euren SQL-Dump in die Datenbank des Servers. Achtet hierbei auch unbedingt darauf, für die folgenden `path` Einträge in der `core_config_data` Tabelle, die Domain zu korrigieren:
+
+(code)
+web/unsecure/base_url => http://www.webguys.de/
+web/secure/base_url => https://www.webguys.de/
+web/cookie/cookie_domain => .webguys.de
+(/code)
+
+Anschließend Caches löschen, Indizes aufbauen und fertig!
+
+### Nützliche Aliase für die Shell
+
+Die Standardaufgaben wie Reindizieren, Cache löschen und Sessions löschen erledigen bei mir 4 Aliase, die ich in meiner ~/.bash_profile Datei hinterlegt habe:
+
+(code:bash)
+alias cache='rm -fr ./var/cache/* '
+alias magelog='tail -f ./var/log/\*.log'
+alias reindex='php_cli -f ./shell/indexer.php reindexall'
+alias session='rm -fr ./var/session/\*'
+(/code)
+
+Wichtig: cache und session bitte **immer** im Magento Root ausführen!
+
+## Projekt aktualisieren
+
+Wenn ich jetzt fleißig war und auf dem Test- oder Livesystem Änderungen ausspielen will, logge ich mich per SSH auf der Machine ein und rufe lediglich
+
+(code:bash)
+git pull
+cache
+(/code)
+
+auf und habe sofort das Ergebnis im Browser.
