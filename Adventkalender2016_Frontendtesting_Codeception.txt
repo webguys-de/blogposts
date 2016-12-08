@@ -1,0 +1,158 @@
+Title: Frontend-Testing mit Codeception für Magento
+----
+
+Date: 2016-12-07
+
+----
+
+Author: benny-vieren, oliver-bartosch
+
+----
+
+Intro: Codeception (http://codeception.com/) ist ein auf PHP basierendes Framework, mit dem man das Frontend-Testing automatisieren kann. Es stellt verschiedene Arten von Tests zur Verfügung, unter anderem Akzeptanztests und Unit-Tests.
+
+----
+
+Text:
+
+Codeception (http://codeception.com/) ist ein auf PHP basierendes Framework, mit dem man das Frontend-Testing automatisieren kann. Es stellt verschiedene Arten von Tests zur Verfügung, unter anderem Akzeptanztests und Unit-Tests.
+
+Wir beschränken uns hier auf Akzeptanztests: Sie simulieren, wie sich ein Anwender durch eine Webseite klickt. Zunächst werden auf der Basis von realen Testszenarien Abläufe festgelegt, die Codeception am Ende durchgeht, ohne dass der Browser von einer Testperson bedient werden muss.
+
+Damit der Browser der Wahl für den Test verwendet werden kann, wird Selenium benötigt (http://docs.seleniumhq.org/).
+
+Im Folgenden erklären wir
+
+* wie Codeception und Selenium installiert wird
+* wie ein einfacher Test geschrieben und ausgeführt wird
+* wie die Testergebnisse auszuwerten sind
+
+## Installation
+
+### Codeception
+
+#### Mac / Linux
+
+Auf Mac, Linux und Unix-Derivaten kann Codeception über die Kommandozeile installiert werden:
+
+	wget http://codeception.com/codecept.phar && php codeception.phar bootstrap
+
+Der erste Befehl installiert Codeception, der zweite erstellt die Ordnerstruktur.
+
+#### Windows
+
+Für Windows wird das Installationsarchiv hier herunter.geladen. Nach der Installation hat Codeception die benötigte Ordnerstruktur erstellt.
+
+#### Weitere Möglichkeiten
+
+Codeception kann auch über Composer (https://getcomposer.org/) installiert oder mit Git (https://git-scm.com/) ausgecheckt werden. Wir gehen darauf hier nicht weiter ein, für Einzelheiten hilft die Webseite (http://codeception.com/install).
+
+### Selenium-Server
+
+Um das Frontend-Testing mit Google Chrome, Firefox oder anderen Browsern durchzuführen, wird, wie schon oben angefeutet, Selenium benötigt.
+
+Auf Mac und Linux ist die Installation per Kommandozeile möglich.
+
+#### Mac
+
+	brew install selenium-server
+
+#### Linux
+
+	apt-get install selenium-server
+
+#### Windows
+
+Für Windows gibt es den Selenium Server auf http://selenium.org.
+
+## Konfiguration
+
+Nach der Installation von Selenium und Codeception können beide relativ einfach konfiguriert werden.
+
+Im _env-Verzeichnis von Codeception werden in yml-Dateien Testumgebungen angelegt. Codeception durchläuft diese Umgebungen der Reihe nach und arbeitet sie ab.
+
+Hier ist ein Beispiel für eine solche Datei.
+
+	modules:
+		config:
+			WebDriver:
+				window_size: 1920x1080
+				browser: chrome
+				url: https://example.url
+
+Für den Test wird festgelegt:
+
+* Browser: Google Chrome
+* Auflösung: 1920x1080
+* URL
+
+Pro Testumgebung kann jeweils eine URL festgelegt werden.
+
+## Testing
+
+Eine wichtige Datei befindet sich sich im Verzeichnis acceptance: __bootstrap.php. Diese Datei wird vor jedem Test aufgerufen. Hier können Variablen deklariert werden die in den jeweiligen Testszenarien verwendet werden können. Diese Variablen bestehen den ganzen Test über und können von den verschiedenen Szenarien gemeinsam benutzt werden.
+
+In __bootstrap.php könnte zum Beispiel eine Funktion verwendet werden, die den gerade benutzten Browser erkennt. Darauf können die folgenden Tests entsprechend reagieren und an den erkannten Browser angepasst durchgeführt werden. 
+
+Ebenso wäre es möglich, ein mobiles Endgerät zu entdecken. Der folgende Test kann darauf reagieren und statt der normalen Navigation die mobile Navigation testen.
+
+### Tests schreiben
+
+Nun kommen wir zu den eigentlichen Tests.
+
+Für Shopsoftware wie Magento bietet sich eine Reihe von möglichen Tests an. Unter anderem:
+
+* Interaktionen mit Artikeln wie Suche, Auswahl, alternative Bilder
+* Aktionen im Warenkorb wie Artikel in den Warenkorb legen und wieder herausnehmen, die Anzahl ändern, zur Kasse gehen
+* Benutzkontovorgänge wie die Registrierung und Datenänderungen
+* Prüfen vorgeschriebener Angaben wie das Impressum oder eine Datenschutzrichtlinie
+
+Jedes Testszenario sollte sich auf einen einfachen Vorgang beschränken. Unser Beispiel Navigation.php zeigt das exemplarisch. Alle Akzeptanz-Tests müssen sich im Ordner acceptance befinden. Alle dort liegenden Dateien werden für jede in _env gespeicherte Testumgebung aufgerufen – erinnern Sie sich dabei an die besondere Funktion der Datei __bootstrap.php.
+
+Unser Beispiel sieht folgenmaßen aus:
+
+	<?php
+    	$I = new AcceptanceTester($scenario);
+    	$I->amOnPage("/");
+    	$I->wantTo("test elements of the navigation (upper categories)");
+    	$I->click(".menu-button");
+    	$I->click("#nav-wide .level0.nav-1 a span");
+    	$I->moveMouseOver("#nav-wide .level0.nav-1 a span");
+    	$I->click(".level1.nav-1-1  a span");
+	?>
+
+Die Namen des Objekts, das die Tests durchführt, und seiner Funktionen erklären sich von selbst: Das Objekt führt die Akzeptanz-Tests durch. Mit amOnPage() geht es auf die angegebene Seite, mit wantTo() wird angegeben, was getestet werden soll. click() führt einen Mausklick aus – die Funktionen kann den Text eines Elements angeben, seine ID, die CSS-Klasse oder den Tag.
+
+Eine vollständige Übersicht über die zur Verfügung stehenden Funktionen finden Sie hier (http://codeception.com/docs/03-AcceptanceTests).
+
+### Tests durchführen
+
+Bevor die Testszenarien durchlaufen werden können, muss Selenium getstartet werden. Auf Windows geht das mit einem Doppelklick. Auf Mac oder Linux und Unix-Derivaten nutzt man die Konsole:
+
+	selenium-server -p 4444
+
+Der oben angeführte Test unserer Testumgebung kann nun aufgerufen werden:
+
+	php codecept.phar run acceptance –env chrome_1920x1080
+
+Sollen mehrere Testszenarien mit einem Mal ausgeführt werden, so können weitere einfach angehangen werden:
+
+	php codecept.phar run acceptance --env chrome_1920x1080 --env firefox_1920x1080
+
+Selenium wird, wenn lokal gestartet, den Browser des Hostrechners öffnen und die Tests durchführen. Die Maus sollte dann nicht bewegt werden, um Probleme bei Funktionen wie moveMouseOver() zu vermeiden. Codeception legt für jeden Schritt einen Screenshot an, wenn es so konfiguriert ist. Mit dem Befehl wait() wartet Codeception eine gewisse Zeit, bevor weitere Screenshots angelegt werden.
+
+Dieser Test ist für den Anmeldebereich einer Webseite gedacht. Hier wird die Login-Seite angesteuert und das Form-Element mit Daten befüllt. Hier ist die Syntax von Codeception als intuitiv erkennbar. So können Entwickler in kurzer Zeit verständliche und benutzbare Testszenarien schreiben.
+
+### Tests auswerten
+
+Codeception speichert die Testergebnisse im Verzeichnis records. Hier findet man  die Screenshots von jedem einzelnen Schritt unserer Tests und ihrem Ergebnis. Die Datei index.html beinhaltet ein minimalistisches Interface der Ergebnisse. Die fehlgeschlagenen Tests findet man über die Dateinamen für diese Tests – sie enden auf „.fail“. Sie befinden sich direkt im Ordner records.
+
+## Fazit
+
+Codeception vereinfacht das Testen durch
+
+* seine einfache Syntax
+* die leichte Bedienbarkeit
+* seine effiziente Methodik
+
+Es hat noch kleine Schönheitsfehler wie das nicht immer sinnvolle Erstellen eines Screenshots nach dem Ablauf eines wait()-Befehls. Davon sollte sich aber kein Entwickler vom produktiven Einsatz dieses Frameworks abhalten lassen
