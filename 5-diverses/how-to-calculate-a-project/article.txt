@@ -26,7 +26,7 @@ Article-content:
 
 ----
 
-Intro: @todo say what this article is about
+Intro: This article is my take on the approach to estimating software projects based on real projects experience.
 
 
 ----
@@ -40,7 +40,7 @@ It goes without saying that a **prediction** of what will happen **in the future
 
 Nevertheless we are often asked to provide the "right estimate" for a software project in a short period of time (because bids don't wait) and, to make things worse, without a clear understanding of the context. 
 
-@todo say what this article is about
+This article is my take on the approach to estimating software projects based on real projects experience.
 
 ## Why estimates don't work
 Before presenting my approach to calculating a project cost, I'd like to recap the two key factors that undermine estimates accuracy:
@@ -57,28 +57,26 @@ Accidental complication is due to the fact that **we are not so good at our jobs
 
 As we can guess, the list is a long one and the following comic strip by [Jason Heeris](http://heeris.id.au/2013/this-is-why-you-shouldnt-interrupt-a-programmer/) is just another hilarious but meaningful example of accidental complication:
 
-image: ProgrammerInterrupted.png
+(image: ProgrammerInterrupted.png)
 
 Since the cost of **accidental complication dominates** the one of essential complication, one way to make the total cost more predictable is reducing accidental complication as much as we can. 
 
 ### Unknown unknowns
 Another aspect that has a very big impact on estimates accuracy is our attitude to **ignore events** that are outside the model under investigation.
 
-There is a reason for that: we only focus on **known unknowns**, that are things that *we know we don't know*. 
+There is a reason for that: we tend to focus only on **known unknowns**, that are things that *we know we don't know*. 
 
-For example, if a requirement is "I want marketing automation" we don't know what exact features the customer needs but, since we know what we we don't know, we can plan to make some analysis on that domain to provide an estimate of the cost.
+For example, if a requirement is "I want marketing automation" we don't know what exact features the customer needs but, since we know what's unknown, we can make some analysis on that domain to provide a better estimate of the cost.
 
-Here is another not so highly improbable real example of **unknown unknown**: a platform security patch released in the middle of the project development which breaks, say, our brand new integration to the marketing automation system. Sounds familiar, doesn't it?
+Here is another, not so highly improbable, example of **unknown unknown**: a platform security patch released in the middle of the project development which breaks, say, our brand new integration with the marketing automation system. Sounds familiar, doesn't it?
 
 We couldn't predict such an event because it wasn't under our control. What's more, we can't avoid applying the patch, since it solves a security issue that has just become public and exposes the customer to potential risks.
 
-Sure enough, the patch release has **nothing to do with the domain** we were focused on and every minute spent dealing with it wasn't included in our estimate or Gantt chart.
+Sure enough, the patch release has **nothing to do with the domain** we were focused on and every minute spent dealing with it wasn't included in our estimate.
 
 We could make a long list of highly improbable events that can occur, the so called **black swans** that change the game and send our estimates up in smoke. 
 
 But we couldn't rely on such a list because, like it or not, uncertainty will always find it's way into the project.
-
-@todo https://en.wikipedia.org/wiki/Black_swan_theory
 
 ## Calculating a project cost
 As we have seen so far, to calculate a project cost we don't have to take into account only essential complication but also accidental complication and uncertainty.
@@ -92,7 +90,7 @@ To estimate the cost of a project development I suggest applying the following r
 ### Reach consensus on essential complication
 We know how to estimate essential complication: we can count on our attitude to **find similarities** and weight features based on our past experience.
 
-Write down all the features; we can choose the formalism we prefer but let's consider writing them down as [user stories](https://en.wikipedia.org/wiki/User_story).
+Write down all the features; we can choose the formalism we prefer but let's consider writing them down as [user stories](https://en.wikipedia.org/wiki/User_story). The main benefit of user stories, to me, is their focus on **purpose**, that is the reason why a feature is needed.
 
 Then gather **the team** that will be responsible of bringing those requirements to life. I use the wider term *team* and not *developers* because a feature is not necessarily a matter of pure software development. Ideally even the customer should take part to this activity, mainly to provide more details during discussion.
 
@@ -108,12 +106,12 @@ This, in turn, will likely bring to break the requirement into **smaller** and m
 For each requirement:
 
 * each team member writes down his or her **own estimate** without sharing it with others until the next step;
-* all members' estimates are revealed and compared; differences generate  **discussion** that goes on until the team reaches the **consensus** on a number
-* if consensus isn't reached in a reasonable amount of time (minutes) it likely means that some information is missing; ask @more details@ to the customer, if possible, and estimate again; alternatively take for good the estimate from the ones who already have some @experience@ on that feature.
+* all members' estimates are revealed and compared; differences generate  **discussion** that goes on until the team reaches the **consensus** on a number;
+* if consensus isn't reached in a reasonable amount of time (minutes) it likely means that some information is missing; ask **more details** to the customer, if possible, and estimate again; alternatively take for good the estimate from the ones who already have some **experience** on that feature.
 
-This technique is called [planning poker](https://en.wikipedia.org/wiki/Planning_poker) and it definitely makes the estimating process a **more fun**. And if estimating is fun, people will be more willing to do it.
+This technique is called [planning poker](https://en.wikipedia.org/wiki/Planning_poker) and it definitely makes the estimating process **more fun**. And if estimating is fun, people will be willing to do it.
 
-I've used this technique a lot (mainly using [this free tool](http://www.planitpoker.com/)) and the real benefit it gives is the @discussion@ and the seek for @details@ that it generates.
+I've used this technique a lot (both using printed cards or [this free tool](http://www.planitpoker.com/)) and the real benefit it gives is the **discussion** and the seek for **details** that it generates.
 
 ### Do our best to reduce accidental complication
 Dealing with the **root causes** that produce accidental complication is a good way to reduce it. For example, performing code **refactoring** is a good way to "clean the kitchen" and wipe out **technical debt**, that is, accidental complication. 
@@ -133,21 +131,26 @@ To accomplish this goal it's important to **measure** our progress: write down t
 Note: before the planning poker session begins we should be clear with the team: the **additional cost** of doing things that reduce accidental complication should be taken into consideration.
 
 ### Prepare for change
-If we accept the idea that, sooner or later, **uncertainty** will mess up things within the project, we need to be prepared for **change**.
+If we accept the idea that, sooner or later, **uncertainty will mess up things** within the project, we need to be **prepared for change**.
 
-Being prepared for change is not directly related to estimating the cost of the project but has an impact on delivery dates.
+Since unknown unknowns can impact both project costs and delivery dates, embracing change means giving up the illusion we can control every aspect of the project through a long-term plan (usually represented with a [Gantt chart](https://en.wikipedia.org/wiki/Gantt_chart)).
 
-Some of us are familiar with [Gantt charts](https://en.wikipedia.org/wiki/Gantt_chart). The problem with them is that they focus on a long-term plan and give the illusion we can control every aspect of the project. But change happens unpredictably and Gantt charts aren't the best tool to embrace it.
+Just like a sat nav system does when it drives us from A to B, we need to be ready to recalculate our route as soon an unexpected event occurs and changes the plan.
 
-Focusing on better tools to manage change is out of the scope of this article but it's simple to spot a better metphor to embrace change: sat nav systems.
+This likely means that project costs increase or delivery dates move forward, so our customer should be prepared. Obviously nobody is happy if this happens but after all we are not paid to work for a specific amount of time or money, we are hired to reach a goal. If something obstacles us, the best we can do is finding alternatives to reach that goal, not stopping in the middle of nowhere not to exceed a fixed time or budget.
 
-@todo Whe don't need an estimate, we need a road map
+Let's consider that exceeding time or budget is not always mandatory: we can reduce the scope and make our best to respect given constraints. 
 
-When we use a sat nav system to plan a trip from A to B we can count on the most valuable feature: in case something happens during the travel, the system will automatically recalculate the path and provide the new estimated arrival time.
+So, while estimating a project cost, don't forget to **prioritize** tasks and define what can be postponed or dropped out when we will encounter black swans.
 
 ## Conclusion
-@todo recap about what we talked about
-@todo ask for feedback about given suggestions and techniques
+As we have seen, calculating a project cost is not only a matter of guessing **how difficult** it is to develop a set of features.
+
+There are **other factors** that have a huge impact and that have to be taken into consideration in order to give a prediction that is as close as possible to reality.
+
+Nevertheless, we always have to be prepared to **embrace change**, because thinking that everything can be under control is an illusion.
+
+If you have your opinion about some of the tools and techniques I mentioned in this article or have different experiences you like to share, **please leave a comment** and let's discuss about that.
 
 ## Bibliography
 
