@@ -6,7 +6,7 @@ Date: 2016-12-12
 
 ----
 
-Author: Rico Neitzel
+Author: rico-neitzel
 
 ----
 
@@ -372,11 +372,11 @@ p.auszeichnung {
 
 ### Wer gerne mit Kunden arbeitet
 
-Am Anfang war das Telefon. Und der Entwickler sah, dass es scheiße war. Warum? Weil wir uns nur die Hälfte aufschreiben, und davon die Hälfte auch noch falsch und am Ende geht sowieso der Zettel verloren.
+Am Anfang war das Telefon. Und der Entwickler sah, dass es scheiße war. Warum? Zum einen werden wir ständig aus der konzentrierten Arbeit gerissen; Außerdem schreiben wir uns ja doch nur die Hälfte auf, und davon die Hälfte auch noch falsch und am Ende geht sowieso der Zettel verloren.
 
-Besser ist es, sich die Änderungswünsche per eMail schicken zu lassen. Dann kann man wenigstens mit dem INBOX-ZERO Prinzip arbeiten. Aber bei einer entsprechenden Anzahl an Kunden und vorrangig kontinuierlicher Shoppflege wird auch das unübersichtlich und man weiß am Ende nicht mehr, wem man welchen Aufwand weitergegeben hat und was welche Priorität hat.
+Besser ist es dann schon, sich die Änderungswünsche per eMail schicken zu lassen. Dann kann man wenigstens mit dem INBOX-ZERO Prinzip arbeiten. Aber bei einer entsprechenden Anzahl an Kunden und vorrangig kontinuierlicher Shoppflege wird auch **das** unübersichtlich und man weiß am Ende nicht mehr, wem man welchen Aufwand weitergegeben und was welche Priorität hat.
 
-Was hilft, sind Ticketsysteme. Zu Beginn - und das ist sehr empfehlenswert - haben wir unsere Aufgaben in BitBucket Issues organisiert. Man ist nicht wirklich frei in der Konfiguration der Ticketabläufe, aber es hilft einen ungemein, den Überblick zu behalten und mit dem Kunden dokumentiert in Kontakt zu stehen.
+Was hilft, sind Ticketsysteme. Zu Beginn - und das ist sehr empfehlenswert - haben wir unsere Aufgaben in BitBucket Issues organisiert. Man ist nicht wirklich frei in der Konfiguration der Ticketabläufe, aber es hilft einem ungemein, den Überblick zu behalten und mit dem Kunden dokumentiert in Kontakt zu stehen.
 
 Für größere Aufgaben möchte man dann irgendwann auf JIRA wechseln. Früher wollte ich JIRA mit der Kneifzange nicht anfassen, jetzt liebe ich es heiß und innig. Ich kann ohne dieses System eigentlich nicht mehr arbeiten!
 
