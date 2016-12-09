@@ -428,7 +428,7 @@ RedirectMatch 404 ^/pkginfo/.*$
 RedirectMatch 404 ^/shell/.*$
 (/code)
 
-Ist das Repo erfolgreich ausgecheckt und es gibt auch keine Zugriffsmöglichkeit auf den .git Ordner, müsst ihr eure local.xml einrichten. Dazu in `app/etc/` die am Anfang mal angelegte local.xml.dist nach local.xml kopieren und die Zugangsdaten der Datenbank anpassen.
+Ist das Repo erfolgreich ausgecheckt und erlaubt auch keine Zugriffsmöglichkeit auf den .git Ordner, müsst ihr eure `local.xml` einrichten. Dazu in `app/etc/` die am Anfang mal angelegte `local.xml.dist` nach `local.xml` kopieren und die Zugangsdaten der Datenbank anpassen.
 
 Anschließend ladet ihr euren SQL-Dump in die Datenbank des Servers. Achtet hierbei auch unbedingt darauf, für die folgenden `path` Einträge in der `core_config_data` Tabelle, die Domain zu korrigieren:
 
