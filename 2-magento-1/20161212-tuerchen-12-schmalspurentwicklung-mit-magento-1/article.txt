@@ -167,7 +167,7 @@ Variante 2 hat zudem den Nachteil, dass man eine sehr umfangreiche `.gitignore` 
 
 Git unterstützt übrigens zwei unterschiedliche `.gitignore` Dateien. Eine liegt im Repo und wird für gewöhnlich mit allen anderen geteilt. Eine weitere liegt global auf eurem Rechner.
 
-##### Globale .gitignore_global
+##### Globale `.gitignore_global`
 
 Ich nutze die globale Datei, um die Standardordner in meinem Projekten, die nichts im Repo zu suchen haben, direkt von vornherein auszuschließen. Diese Ordner sind zum einen systembedingt zum anderen von meiner Arbeitsweise geprägt:
 
@@ -291,13 +291,13 @@ Dazu richtet ihr euch lokal ein Schlüsselpaar ein. Auf der Kommandozeile geht d
 Enter file in which to save the key (/Users/webguys/.ssh/id_rsa): 
 (/code)
 
-SSH-KeyGen möchte von euch nun gerne einen Dateinamen für das Schlüsselpaar haben. Ich nutze für jeden Kunden ein eigenes paar und daher sind das bei mir dann gerne mal die Kundennamen: "webguys" zum Beispiel.
+SSH-KeyGen möchte von euch nun gerne einen Dateinamen für das Schlüsselpaar haben. Ich nutze für jeden Kunden ein eigenes paar und daher sind das bei mir dann gerne mal die Kundennamen: `webguys` zum Beispiel.
 
 Anschließend könnt ihr ein Passwort für den Schlüssel speichern, das ihr immer dann eingeben müsst, wenn der Schlüssel verwendet werden soll. Wer's mit der Sicherheit nicht so ganz genau nimmt, gibt kein Passwort ein. Nachteil: Ergaunert sich jemand eure private Schlüsseldatei, ist der Zugang zum Server quasi offen.
 
-Habt ihr die Schlüsseldateien erzeugt, gibt es eine webguys und eine webguys.pub Datei im `~/.ssh/` Verzeichnis. Der Inhalt der .pub Datei muss nun auf den Zielserver übertragen werden. Also: SSH mit Passwort zum Zielserver öffnen und dann auf dem Server die Datei `~/.ssh/authorized_keys` öffnen. Dort hängt ihr den Inhalt eurer .pub Datei einfach an die letzte Zeile an.
+Habt ihr die Schlüsseldateien erzeugt, gibt es eine `webguys` und eine `webguys.pub` Datei im `~/.ssh/` Verzeichnis. Der Inhalt der `webguys.pub` Datei muss nun auf den Zielserver übertragen werden. Also: SSH mit Passwort zum Zielserver öffnen und dann auf dem Server die Datei `~/.ssh/authorized_keys` öffnen. Dort hängt ihr den Inhalt eurer `webguys.pub` Datei einfach an die letzte Zeile an.
 
-Wer's bequem mag, kann sich dann auf dem eigenen Rechner unter ~/.ssh/config eine eigene Konfiguration anlegen, die festlegt, wie sich SSH mit euren Zielservern verbinden soll und welche Schlüsselpaare dafür zum Einsatz kommen:
+Wer's bequem mag, kann sich dann auf dem eigenen Rechner unter `~/.ssh/config` eine eigene Konfiguration anlegen, die festlegt, wie sich SSH mit euren Zielservern verbinden soll und welche Schlüsselpaare dafür zum Einsatz kommen:
 
 (code:ini)
 host webguys.de
@@ -310,6 +310,8 @@ Für jeden Server (respektive jedes Projekt) gibt es also so einen Eintrag.
 
 
 ### Wer viel CSS schreibt, freut sich garantiert darüber
+
+(image:sass-logo.svg class:alignleft img-responsive half)
 
 Bevor wir zum Finale des Deployments an sich kommen, hier noch ein Hinweis für CSS Fetischisten. Es gibt ja mittlerweile für vieles nette Helferlein. So auch für's CSS schreiben. Dazu muss man noch nicht mal unbedingt das volle Potential dieser Lösungen ausschöpfen.
 
@@ -328,7 +330,7 @@ Beispiel:
 }
 (/code)
 
-Ihr seht hier das Verschachteln von CSS. Ein normaler Browser kann damit nichts anfangen. Nachdem Verwursten dieser SCSS-Datei kommt aber schönes CSS dabei heraus:
+Ihr seht hier das Verschachteln von CSS. Ein normaler Browser kann damit nichts anfangen. Nachdem Verwursten dieser Sass-Datei kommt aber schönes CSS dabei heraus:
 
 (code:css)
 .body {
@@ -342,14 +344,14 @@ Ihr seht hier das Verschachteln von CSS. Ein normaler Browser kann damit nichts 
 }
 (/code)
 
-Zugegeben, dieses Beispiel ist mehr als dürftig. Mit SCSS könnt ihr weitaus mehr machen:
+Zugegeben, dieses Beispiel ist mehr als dürftig. Mit Sass könnt ihr weitaus mehr machen:
 
 1. Variablen
 2. Berechnungen
 3. Mixins (Mini-Funktionen)
 4. Imports
 
-Besonders die Variablen solltet ihr euch noch ansehen. Am Kopf eurer SCSS Datei legt ihr eure Standardfarben für's Projekt fest:
+Besonders die Variablen solltet ihr euch noch ansehen. Am Kopf eurer Sass Datei legt ihr eure Standardfarben fürs Projekt fest:
 
 (code:css)
 $firmenfarbe: #cc0000;
@@ -369,6 +371,20 @@ p.auszeichnung {
 
 Ändert sich nun die Firmenfarbe, ist das für euch ein leichter Handgriff in Zeile 1 und das war's. Genauso können Abstände, Schriften, Größen und vieles mehr in Variablen ausgelagert werden.
 
+#### Compiling von Geisterhand
+
+(image:codekit-logo.svg class:alignleft img-responsive half)
+
+Damit das ganze dann auch von alleine in echtes CSS umgewandelt wird, braucht's natürlich den PreProcessor. Sass kann man sich wahlweise auf die Kommandozeile packen (gut für die Git-Berserker) oder sich die Sass-Datei mit nützlichen GUI-Tools, wie z. B. [CodeKit](https://codekitapp.com) kompilieren lassen. Dabei kommt CodeKit mit eigenen Compilern zur Tür hereinspaziert und man spart sich die separat manuelle Installation der ganzen Tools. Sozusagen: All-in-One!
+
+(image:codekit-config.png class:alignleft img-responsive half)
+
+CodeKit ist nicht alleine für das Kompilieren von Sass zu CSS zuständig, sondern beherrscht auch alle anderen gängigen Sprachen wie Less, Stylus, CoffeeScript, Markdown, … und sorgt mit einem Watcher dafür, dass eure Zieldateien immer **dann** aktualisiert werden, wenn sich die Quelldateien verändern. Und mit etwas Einstellungen hier und etwas Konfiguration da kann CodeKit sogar euren Browser immer neuladen, sobald sich die Zieldateien geändert haben.
+
+Nützlich finde ich, dass sich je Datei bestimmte Einstellungen speichern lassen - bequem über die GUI eben. Dazugehört der Zielpfad der fertig kompilierten Datei, aber auch die zusätzlichen Optionen der Prozessoren. Außerdem bieten beispielsweise die CSS Prozessoren in CodeKit die Möglichkeit, direkt im Anschluss mit [Autoprefixer](https://github.com/postcss/autoprefixer) und [Bless](http://blesscss.com) die CSS-Dateien zusätzlich anzureichen und bugfest für den IE zu machen.
+
+
+
 
 ### Wer gerne mit Kunden arbeitet
 
@@ -376,9 +392,11 @@ Am Anfang war das Telefon. Und der Entwickler sah, dass es scheiße war. Warum? 
 
 Besser ist es dann schon, sich die Änderungswünsche per eMail schicken zu lassen. Dann kann man wenigstens mit dem INBOX-ZERO Prinzip arbeiten. Aber bei einer entsprechenden Anzahl an Kunden und vorrangig kontinuierlicher Shoppflege wird auch **das** unübersichtlich und man weiß am Ende nicht mehr, wem man welchen Aufwand weitergegeben und was welche Priorität hat.
 
-Was hilft, sind Ticketsysteme. Zu Beginn - und das ist sehr empfehlenswert - haben wir unsere Aufgaben in BitBucket Issues organisiert. Man ist nicht wirklich frei in der Konfiguration der Ticketabläufe, aber es hilft einem ungemein, den Überblick zu behalten und mit dem Kunden dokumentiert in Kontakt zu stehen.
+(image:bitbucket-logo.svg class:alignleft img-responsive half)
 
-Für größere Aufgaben möchte man dann irgendwann auf JIRA wechseln. Früher wollte ich JIRA mit der Kneifzange nicht anfassen, jetzt liebe ich es heiß und innig. Ich kann ohne dieses System eigentlich nicht mehr arbeiten!
+Was hilft, sind Ticketsysteme. Zu Beginn - und das ist sehr empfehlenswert - haben wir unsere Aufgaben in [BitBucket Issues](https://confluence.atlassian.com/bitbucket/use-the-issue-tracker-221449750.html) organisiert. Man ist nicht wirklich frei in der Konfiguration der Ticketabläufe, aber es hilft einem ungemein, den Überblick zu behalten und mit dem Kunden dokumentiert in Kontakt zu stehen.
+
+Für größere Aufgaben möchte man dann irgendwann auf [JIRA](https://www.atlassian.com/software/jira) wechseln. Früher wollte ich JIRA mit der Kneifzange nicht anfassen, weil es völlig überladen und viel zu komplex zu administrieren ist. Jetzt arbeiten wir seit gut einem Jahr mit JIRA und liebe ich es heiß und innig. Ich kann ohne dieses System eigentlich nicht mehr arbeiten! Und auch unsere Kunden kommen ziemlich gut damit zurecht.
 
 Nachdem ich nun gefühlte 24 Seiten nur über die Tools gesprochen habe, bleibt ja nun schlussendlich noch die Frage:
 
