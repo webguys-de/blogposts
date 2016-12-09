@@ -42,7 +42,7 @@ Nevertheless we are often asked to provide the "right estimate" for a software p
 ## Why estimates don't work
 Before presenting my approach to calculating a project cost, I'd like to recap the two key factors that undermine estimates accuracy:
 
-* Accidental complication and
+* Accidental complication
 * Unknown unknowns
 
 ### Accidental complication
@@ -121,7 +121,7 @@ Writing **automated tests** is a proven way to encourage refactoring.
 
 **Test driven development** (TDD) lets us design better systems, because it avoids premature optimizations and over-engineering.
 
-**Pair programming** is another technique that can help us catching design defects earlier.
+**Pair programming** and **code review** are other techniques that can help us catching design defects earlier.
 
 Useless to say, learning and using **solid programming principles** and the best available **tools and habits** is gold.
 
