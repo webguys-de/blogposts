@@ -1,7 +1,3 @@
-Article-meta:
-
-----
-
 Title: How to calculate a project
 
 ----
@@ -10,19 +6,11 @@ Date: 2016-12-18
 
 ----
 
-Description:
-
-----
-
 Tags: project,estimate,planning
 
 ----
 
 Author: aleron75
-
-----
-
-Article-content:
 
 ----
 
@@ -161,20 +149,3 @@ If you have your opinion about some of the tools and techniques I mentioned in t
 * Fowler, Martin, and Kent Beck. Refactoring: Improving the Design of Existing Code. Boston: Addison-Wesley, 2000. Print.
 * Taleb, Nassim Nicholas. The Black Swan: The Impact of the Highly Improbable. New York: Random House Trade Paperbacks, 2010. Print.
 * Taleb, Nassim Nicholas. Antifragile: Things That Gain from Disorder. New York: Random House Trade Paperbacks, 2014. Print.
- 
-
-----
-
-Article-options:
-
-----
-
-Cover:
-
-----
-
-Main: 0
-
-----
-
-Wpid:
