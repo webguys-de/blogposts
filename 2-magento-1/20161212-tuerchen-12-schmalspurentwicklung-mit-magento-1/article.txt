@@ -38,6 +38,19 @@ Viele Lonesome Rangers, die sich nicht in großen Agenturen zu Zahnrädchen habe
 
 <small>_**Werbedisclaimer:** Einige der hier genannten Tools kosten Geld. Ich verlinke zwar, verdiene aber nichts am Verkauf der Lizenzen. Ich bin mit den Programmen einfach sehr zufrieden und kann sie daher empfehlen. Unbedingt Geld ausgeben muss man aber nicht - auch wenn es zum Geld **Verdienen** unerlässlich ist, welches auszugeben._</small>
 
+---
+
+## TL;DR
+
+* Nutzt auf jeden Fall Git und haltet euch an GitFlow!
+* Entwickelt lokal mit MAMP oder XAMP und vergesst Xdebug nicht!
+* Um PHPStorm führt kein Weg herum, vergesst nicht Magicento!
+* Geht mit SSH auf eure Kundenserver und nutzt dort ebenfalls Git!
+
+Und wer's genauer und noch mehr wissen will, steht jetzt auf, holt sich was weihnachtlich Leckeres zu trinken (Kaffee, Kakao, Tee …) und liest weiter! Viel Spaß … es ist viel geworden ;-)
+
+---
+
 ## 08/15 Werkzeug-Gürtel
 
 Was braucht es also, um grundsätzlich **ziemlich** sauber mit Magento 1 entwickeln zu können?
