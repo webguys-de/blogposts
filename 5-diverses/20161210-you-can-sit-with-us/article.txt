@@ -1,0 +1,46 @@
+Title: Türchen 12: You Can Sit With Us.
+
+----
+
+Date: 2016-12-12
+
+----
+
+Author: lydia
+
+----
+
+Intro: During the past few months, a bunch of articles about the community of Magento and Meet Magento buzzed through the spheres of the world wide web (such as [here](https://www.google.com/url?q=https://www.integer-net.com/an-open-approachable-magento-community-are-we-as-open-and-welcoming-as-we-should-be/?utm_source%3Dtwitter%26utm_medium%3Dpost%26utm_term%3Dblog%26utm_content%3Dcommunity%26utm_campaign%3Dapproachable&sa=D&ust=1481394514843000&usg=AFQjCNE-2CE55pIQTM1oOY5NNf79aoRTsA), [here](https://www.google.com/url?q=https://medium.com/@RebeccaLTroth/being-a-magento-extrovert-is-challenging-9fd99ba4a001%23.lv8srcjab&sa=D&ust=1481394514844000&usg=AFQjCNHrSdSQjyzkd_nQAG-jkKFLOfBC_Q) and [here](https://www.google.com/url?q=https://medium.com/@gxjansen/let-the-hard-work-begin-147a02664110%23.olt53hz6o&sa=D&ust=1481394514845000&usg=AFQjCNH5eZw2ubTi-RHWvrYX4R74OBnmxw)).
+
+----
+
+Text: Most of the authors describe their experiences how they connected to the Magento world. It was always about attending a Magento event as well as to get in touch with different people and the challenge of networking. Especially [Sonja’s](https://www.google.com/url?q=https://www.integer-net.com/an-open-approachable-magento-community-are-we-as-open-and-welcoming-as-we-should-be/?utm_source%3Dtwitter%26utm_medium%3Dpost%26utm_term%3Dblog%26utm_content%3Dcommunity%26utm_campaign%3Dapproachable&sa=D&ust=1481394514846000&usg=AFQjCNHxjSyMZbd9Ld4xWjf0tPEGz-gO2g) and [Rebecca’s](https://www.google.com/url?q=https://medium.com/@RebeccaLTroth/being-a-magento-extrovert-is-challenging-9fd99ba4a001%23.lv8srcjab&sa=D&ust=1481394514847000&usg=AFQjCNFqqTMHqypI_uvpA6__WXBVhvmy5g) approaches and feelings about how to become a member of the community are still in my mind. I can still feel that anxiety about coming into a room full of developers, how I didn’t know what to say because I was a absolute greenhorn and - of course - neither a man nor a developer. Thus my first experience is quite similar like Sonja’s or Rebecca’s story. I want to point out one brave hypothesis:
+
+## There is no Magento or Meet Magento community.
+
+Or, at least, there is not THE ONE AND ONLY community of Magento and Meet Magento.
+
+Let’s have a look at what “community” really means:
+
+[community](https://www.google.com/url?q=http://www.dictionary.com/browse/community&sa=D&ust=1481394514851000&usg=AFQjCNELqn2eCzOKz4NtVpFBGIzEUZ6o1g) [kuh-myoo-ni-tee], noun.
+
+“a social (umm, yes), religious (...somehow…), occupational (yep), or other group sharing common characteristics or interests (hmmm don’t know what this could be…) and perceived or perceiving itself as distinct (totally agree!) in some respect from the larger society within which it exists.”
+
+Since I started to work for Meet Magento Association in January, I am involved in Meet Magento and this whole community topic for almost one year. I had to struggle with the same emotions and challenges all the other newbies did, but most of all I noticed one main thing: the community is no community at all, at least not in the common sense. Magento related people spread all over the world, and this is why it is consisted of cultures, languages, people, sexes, professions and characters that can’t be more different. And each culture, each local Meet Magento event and its partners, attendees and sponsors, can be described as another, minor community.
+
+Originally coming from Sociology, I learned that humans can only build personalities and understand themselves as individual, if they have an opposite. We see our counterpart with all his or her characteristics, and we understand our similarities and, much more important, our differences. That’s the way it works - to find out a community’s attributes, we need to point out the differences to the rest of the world.
+
+When we step down in the complexity of this whole community-topic, we’re only exploring more and more diversity than before. And each group, each community-like bunch of people, is setting its boundaries to other groups, cultures, professions and persons to create its own personality. And going deeper in all those different microcosms, the diversity of groups gets bigger and bigger.
+
+But at the end - and this is what makes the community of Magento and Meet Magento so special - there is one thing that connects us all. All people are driven by the same questions, interests, problems and same passion. However, every group just keeps dissociating itself by profiling from all the other communities that aim exactly the same as they do.
+
+Despite all the network tools we use, the most important aspect for people is to meet and talk to each other. Magento events are therefore relevant. In the Magento world are so many events starting from meetups, developer activities, small and huge conferences up to Imaginge. The magic here is that nearly 98% of them are organized by people outside of Magento Inc. We all organize our eco system, not the system vendor. I can feel this heart beat worldwide in my every day work. A company can never drive such a movement. Only people outside can do it. The Magento eco system is a wonderful example for the diversity of human beings. Bringing people together and exchanging knowledge are the ties that connect us all over the world - no matter what sex we are, what professions we learned or what language we speak. It brings people from all kinds together. So let’s just use “community” in its most common sense:
+
+[community](https://www.google.com/url?q=http://www.dictionary.com/browse/community&sa=D&ust=1481394514858000&usg=AFQjCNGEWwSRLK3tyD5VxAyzre2kCx1WjQ) [kuh-myoo-ni-tee], noun.
+
+“joint possession, **enjoyment**, liability.”
+
+The year end time is a good moment to remember that we all live in one world. There may be borders and conflicts, but in the Magento community so many different people are connected and stand together. We all make a difference. For 2017 enrich our community with all your knowledge, your flaws and cranky manners, your enthusiasm, passion and **enjoyment**, and let us sit together.
+
+<iframe src="//giphy.com/embed/l2Je5bJHNCHYwpYeQ" allowfullscreen="allowfullscreen" width="480" height="362" frameborder="0"></iframe>
+[via GIPHY](https://giphy.com/gifs/season-16-the-simpsons-16x7-l2Je5bJHNCHYwpYeQ)
