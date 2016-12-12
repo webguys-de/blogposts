@@ -1,0 +1,116 @@
+Title: Türchen 13: How to mess up talking on stage.
+
+----
+
+Date: 2016-12-13
+
+----
+
+Author: tobias-hartmann
+
+----
+
+Intro: ihr sucht einen Artikel, in dem erzählt wird, wie ihr am besten einen Talk gebt, dann habe ich hier leider nichts für euch. In diesem Artikel geht es wirklich nur darum, wie ihr das ganze so richtig gut vermasseln könnt.
+
+----
+
+Text:
+# How to mess up giving a talk
+*Oder auch: Was passiert eigentlich, wenn’s schief läuft.*
+
+Ihr sucht einen Artikel, in dem erzählt wird, wie ihr am besten einen Talk gebt, dann habe ich hier leider nichts für euch. In diesem Artikel geht es wirklich nur darum, wie ihr das ganze so richtig gut vermasseln könnt.
+
+**Aber warum?**
+Es gibt eine enorme Menge an sehr guten Artikeln und Videos darüber, wie es am Besten gelingt, einen Talk auf einer Konferenz oder einer Usergroup zu geben. Ich möchte mich nicht in diese Reihe eingliedern, sondern vielmehr aufzeigen was passiert, wenn es schief läuft.
+
+**Aber warum?**
+Ganz einfach, ich würde gern sehen, dass sich mehr Leute auf die “Bühne” trauen und sprechen.
+
+Einige Links zu oben genannten, sehr guten Artikeln und Videos, findet ihr übrigens am Ende des Artikels, solltet ihr auf der Suche nach eben diesen sein.
+
+Na dann los, ich teile den Prozess des auf der Bühne Sprechens in **drei Teile** auf, in denen so einiges, in verschiedener Form, schief gehen kann.
+
+> Auf der Bühne stehen und sprechen besteht nämlich in der Tat nicht nur daraus eben dieses zu tun, sondern auch aus einem Davor und einem Danach.
+
+## Teil 1 - Davor:
+*Was kann ich machen, um vorher schon sicher zu stellen, dass mein Talk in die Hose geht?*
+
+**Die richtige Idee für den Talk** ist nicht leicht zu finden, korrekt?
+Eigentlich ist es total einfach. Nehmt das Nächstbeste, über das ihr gerade Schimpft oder etwas, das ihr schon ewig kennt. Achtet dabei allerdings nicht darauf, ob es jemanden interessiert.
+
+**Ein paar Beispiele:**
+- Installation und Deployment von Magento 2 ;)
+- Geschwindigkeit von und Programmierung in Typo3.
+- Die Benutzung von Strg+C, Strg+V.
+- Hello World in JavaScript.
+- Eine ToDo Liste, in welcher Sprache auch immer.
+
+Es gibt hier sicherlich noch viel mehr Themen, allerdings haben wir mit dem Thema alleine noch nichts in den Sand gesetzt. Selbst eine Stunde über STRG+C und V kann durchaus, bei hohem Entertainment-Wert, ein genialer Talk werden. Wir müssen uns also noch etwas mehr anstrengen.
+Wichtig ist, dass ihr das Thema entweder gar nicht kennt oder sowas von auswendig, das ihr keine Ahnung mehr habt wie die einfachsten Dinge funktionieren. Zum Beispiel wäre es geradezu genial, über die neuesten HTML Features zu sprechen, wie das alles ganz smooth über ein super tolles Framework läuft aber dabei keinen blassen Schimmer mehr zu haben, wie eigentlich ein HTML5 Grundgerüst ausschaut.
+
+**Das passende Tool** ist nicht etwa Powerpoint, wie jetzt viele meinen würden. Wir brauchen hier was richtig gutes. Wie wäre es also, wenn wir was selbst programmieren würden, das funktioniert dann auch ganz bestimmt tadellos. Aber auch ein, gerade gestern erst auf dem Markt erschienenes, neue Framework, welches ihr auf eurem Rechner unter XAMPP oder ähnlichem selber hosten müsst, erfüllt seinen Zweck.
+
+Auf jeden fall nicht sowas wie Powerpoint oder gar Google Slides, wir wollen ja schließlich, dass es schief geht oder die Slides gar nicht zur Verfügung stehen.
+
+Ganz wichtig in diesem Zusammenhang ist auch, dass ihr **keinerlei Backup** vorbereitet, also weder ein USB-Stick, mit dem ihr wegen des super fancy slide Framework ohnehin nichts anfangen könnt, noch Ideen, über was wäre wenn. Denkt einfach gar nicht darüber nach, es macht einen nur zusätzlich nervös und es wird mit Sicherheit nichts schief gehen.
+
+Bei dem **Erstellen der Slides** achtet bitte darauf, dass ihr alle und ich meine alle tollen Funktionen des Frameworks ausnutzt, warum erkläre ich dann später im nächsten Teil. Weiterhin achtet darauf, dass alle Slides sehr gut gestaltet sind, dies ist immens wichtig. Zeitloses Design kommt übrigens immer gut an, also gerne mal verschiedene hellgraue Farbtöne auf weiß setzen, damit die Schrift schön und grazil wirkt. Auch ratsam ist, eine tolle Schriftart mit zum Beispiel ganz feinen Buchstaben oder extrem Fetten, vielleicht sogar im Wechsel, zu benutzen. Eine Webfont bietet sich an, welche dann zufällig nicht verfügbar ist, weil es auf der Konferenz nur mittelmäßiges W-LAN gibt. Hierbei ist darauf zu achten, dass die Fallback Schrift nicht auf die Slides passt aber wir machen uns ja ohnehin keine Gedanken über einen Fallback.
+
+Natürlich könnten wir uns jetzt Teil 2 und 3 sparen, wenn wir einfach kurz vor der Konferenz absagen aber dies wäre etwas zu langweilig, außerdem sind wir ja der Meinung extrem gut Vorbereitet zu sein – zumindest sollten wir uns dies oft genug einreden.
+
+Okay, damit sind schon einige Vorbereitungen getroffen, **los geht’s auf die Bühne**.
+
+## Teil 2 Die Bühne:
+*Wie stelle ich es am besten an, ein möglichst schlechtes Bild abzugeben?*
+
+Vorab: die **Nervosität ist unser Freund** und natürlich haben wir direkt vor der Präsentation noch 5 Tassen Kaffee und eine Flasche Wasser getrunken.
+Wir kommen natürlich **zu spät zum Talk**, weil wir zuvor noch schnell auf Toilette waren oder sonst wo, Hauptsache wir kommen zu spät. Denn wir wissen, wer zu spät kommt, hat automatisch einen großen Auftritt. Die Anzahl der Minuten ist hier entscheidend, zu kurz wird verziehen und oft nicht weiter bewertet, zu lang und die Leute sind unruhig, stehen schon auf und gehen. Der beste Zeitpunkt ist also, wenn die Leute anfangen unruhig zu werden, wenn nun der Talk angefangen wird und ihr euch am besten damit entschuldigt noch was wichtiges gemacht zu haben, wissen die Leute woran sie sind.
+
+Nachdem die Realität einen nun vollends erschlägt und uns zeigt, wie schlecht wir vorbereitet sind, beginnt den Talk bitte unbedingt damit zu **erzählen das ihr nicht vorbereitet seid** und dies doch zu entschuldigen sei. Zack, schon hat das Publikum raus wie viel es euch bedeutet, nämlich gar nichts. Allerdings, gibt es immer ein paar Leute die es erst später kapieren, wir müssen uns also doch noch etwas anstrengen.
+
+**Das Publikum** verärgert ihr am besten, wenn ihr es erst gar nicht beachtet, schenkt denen einfach gar keine Aufmerksamkeit. Diese Taktik ist auch recht effektiv für den Abbau der Nervosität. Vielleicht sucht ihr euch einfach einen Punkt auf der Bühne, den ihr die ganze Zeit fokussiert. Dies kann auch die Leinwand sein, der Vorteil bei der Leinwand liegt auf der Hand, das Publikum sieht nur den Hinterkopf und ihr könnt die wildesten Grimassen schneiden, wenn jemand eine, natürlich dumme, Frage stellt. **Fragen werden übrigens grundsätzlich ignoriert** oder aber übergangen, je nachdem wie sicher ihr euch bei der ein oder anderen Technik fühlt.
+
+Weil uns nun bewusst ist, dass wir nicht richtig vorbereitet sind, haben wir in der Nervosität natürlich vergessen, was auf den Slides steht oder über was wir eigentlich sprechen wollten. Kein Problem, wir sind ja ohnehin schon zur Leinwand zugewandt, also lesen wir einfach den Text von den Slides vor. Einige ablesefehler sind immerhin besser als gar nichts zu sagen.
+
+Nun sollten auch die Hartnäckigen begriffen haben, dass ihr euch nicht um sie schert, Gratulation.
+
+Um dies noch etwas abzurunden, achtet doch darauf **Tatsachen** mit Worten wie >wer das nicht weiß, kann eh nichts< oder >das ist ja eine Grundvoraussetzung< zu erklären, hier könnt ihr wertvolle Zeit sparen, anstatt das Publikum vom wissen her abzuholen. Einfach gar nichts zu komplexen Gegebenheiten zu sagen ist ebenfalls sehr effektiv aber eher die softe Variante, welche nervige Fragen hervorrufen könnte.
+
+Natürlich haben wir auch noch unsere **Slides und die ganze Technik** auf der Bühne, hier können wir auch noch einiges draus machen. ihr habt hoffentlich nicht euren Laptop geladen oder etwa doch? - Wir wollten uns doch nicht vorbereiten, Pech, nun kann nur gehofft werden ihr habt genug Slides.
+
+Was wir in jedem Fall haben, ist das super tolle **Slide-Framework**, von dem das Publikum garantiert begeistert sein wird. Durch die Nervosität und dadurch, das wir mit dem Framework so gut wie nicht vertraut sind, springen wir also teils wahllos zwischen und auf den Slides hin und her. Dies machen wir so lange bis wir es geschafft haben uns selbst total zu verwirren.
+
+Natürlich haben wir auch **Programme wie Pushbullet oder Browser-Notifications**, genau wie die Windows Notifications nicht abgeschaltet und den Bildschirm einfach auf den Projektor dupliziert. Das ist besonders hilfreich um den Talk mit **absolut unberechenbaren Informationen** zu bereichern wie >Schatz, hast du eigentlich deine Unterhosen gewaschen?< oder >Hey, hammer Party gestern, warst mal wieder total betrunken.< aber auch Firmeninterna, aus dem noch geöffneten Slack-Channel, können hier die Stimmung steigern. Wir handeln schnell, wechseln von der Präsentation auf den Desktop, wo neben PornHub und wichtiger Firmendokumente der Slack-Channel darauf wartet geschlossen zu werden.
+
+Kurz rot werden, schnell alles schließen und mit dem Ablesen weiterer Slides, das nun wieder aufmerksame Publikum, loswerden. Jetzt ist der Moment gekommen an dem wir, in unserem hellblauen Hemd, T-Shirt oder was auch immer, absolut sichtbar durchgeschwitzt wie ein **Hochleistungssportler**, mit einem hochroten Kopf da stehen und der Talk zu Ende ist.
+
+**Wir haben es geschafft**, bravo.
+
+Aber Moment, warum sitzen da denn im Publikum immer noch Menschen und warum Applaudieren denn manche davon? Haben wir am Ende doch noch irgendwas ausgelassen um alles zu einem Desaster werden zu lassen?
+
+## Teil 3 Danach:
+*Lieber schnell weg hier.*
+
+Total geschockt davon, dass es applaudierende Leute gibt, sehen wir natürlich nun zu, dass wir so schnell wie möglich aus den durchgeschwitzten Klamotten raus kommen und **verlassen sofort die Konferenz**. Ansonsten würden wir ja nur noch mit unseren Erfolgen konfrontiert werden, dies gilt es zu vermeiden.
+
+**Im Hotel oder Daheim** angekommen, denken wir schon ganz anders über den Talk nach. Yeah, wir haben es geschafft und die Leute haben applaudiert, wir fühlen uns toll, schlau, geradezu überragend. Schnell Twitter, auch gerne Facebook öffnen und der Welt erzählen, was für einen grandiosen Talk wir gerade gegeben haben. Wichtig ist hier sich keine Tweets von anderen über den Talk durchzulesen, Selbstreflexion brauchen wir nicht, denn wir wissen ja, dass wir gerockt haben.
+
+**Wir haben gerockt**, Yeah, also am Besten gleich den nächsten CFP ausfüllen.
+
+-------
+Sicherlich habt ihr aufgemerkt, als die Menschen am Ende wegen unserem Talk applaudiert haben, warum ist das so? Vorab, ich hab schon vieles der genannten Sachen gesehen, durch andere erzählt bekommen oder habe sie selbst vermasselt, ein zwei Sachen sind natürlich auch erfunden. Alle haben aber eines gemeinsam, es wurde der **Mut** aufgebracht um vor anderen, auf einer Bühne zu sprechen. Selbst wenn nur abgelesen wurde, durch Nervosität oder mangelnde Vorbereitung etwas schief geht, so ist es doch wahrscheinlich, dass einige Menschen im Publikum die **Idee** verstehen. Es ist sogar wahrscheinlich, dass sie was davon mitnehmen oder gar eine **tolle Zeit** hatten, weil sie genauso empfinden oder es **amüsant** war.
+
+Wurde etwas extrem vermasselt, gibt es natürlich Kritik und vielleicht ist es dann auch nicht das richtige, vor anderen Menschen zu sprechen. Dennoch habt ihr es getan, eure Ideen mitgeteilt und das ist enorm wichtig. Würden wir nämlich alle unsere Ideen zurückhalten, nur weil wir nicht sprechen wollen, Angst davor haben oder besorgt sind, wäre vieles tolles auf dieser Welt nicht möglich.
+
+> **Meine Bitte an euch**, vermasselt es so richtig auf der “Bühne” aber sprecht, teilt eure Ideen und seid vielleicht, sobald die Nervosität sich gelegt hat, offen für Kritik und Diskussionen.
+
+Ich hoffe sehr, euch hat meine kleine Geschichte etwas gefallen, vielleicht habt ihr ja bald das Glück und seid auf einer Konferenz, auf der mein Talk mit selbigem Titel zugelassen wurde. Wenn ja, dürft ihr natürlich gerne auf mich zukommen und mir persönlich Kritik äußern, beziehungsweise mir Feedback geben.
+
+Falls dies nicht passiert, nutzt einfach die Kommentarfunktion oder Twitter [@ToH_82](https://twitter.com/ToH_82).
+Die **Slides für den Talk** könnt ihr übrigens hier finden: [Slides.com: How to mess up talking](http://slides.com/tobiashartmann/how-to-mess-up-talking).
+
+Nun wie versprochen einige **Quellen** die zeigen, wie ein Talk von der Ideenfindung bis hin zur Feedbackrunde, aufgebaut werden kann.
+- [How To Give the Killer Tech Talk — A Pamphlet](http://writing.jan.io/2013/05/10/how-to-give-the-killer-tech-talk-a-pamphlet.html)
+- [How to prepare and write a tech conference talk](http://wunder.schoenaberselten.com/2016/02/16/how-to-prepare-and-write-a-tech-conference-talk/)
+- [‘Thought Leader’ gives talk that will inspire your thoughts](https://www.youtube.com/watch?v=_ZBKX-6Gz6A)
+- [THOUGHTS ON PUBLIC SPEAKING BY ZACH HOLMAN](http://speaking.io/)
