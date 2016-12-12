@@ -34,9 +34,9 @@ Dummerweise gibt es diese Fragen nicht nur bei der reinen PHP Entwicklung. Bei W
 
 Viele Lonesome Rangers, die sich nicht in großen Agenturen zu Zahnrädchen haben machen lassen, können meist nicht die Zeit und das Geld aufwenden, um all diese Anforderungsbereiche mit Bravour zu meisten. Meine Meinung: Ist auch gar nicht nötig. Nutzt lieber weniger Tools, aber habt euren Workflow fest im Griff. Dann könnt ihr besser mithalten, als diejenigen, die sich in immer wieder neuen, hippen Technologien verlieren. Ja: Diese neuen Technologien helfen - ohne Frage. Aber sie helfen nur denen, die sie auch meistern können und dafür ist leider immer mehr und immer komplexeres KnowHow nötig.
 
-<small>_Eine **einschränkende Vorbemerkung** muss ich leider noch machen: Ich arbeite seit etlichen Jahren nun ausschließlich mit OS X und kann für die Webentwicklung auch ausschließlich Unix basierte Betriebssysteme empfehlen. Es hat sich in meinen vielen Schulungen immer wieder - und mit Magento 2 noch eklatanter - gezeigt, dass Windows zwar super für den Gaming- und Office-Einsatz geeignet, aber solide Webentwicklung einfach scheiße ist._</small>
+<small>_Eine **einschränkende Vorbemerkung** muss ich leider noch machen: Ich arbeite seit etlichen Jahren nun ausschließlich mit OS X und kann für die Webentwicklung auch ausschließlich Unix basierte Betriebssysteme empfehlen. Es hat sich in meinen vielen Schulungen immer wieder - und mit Magento 2 noch eklatanter - gezeigt, dass Windows zwar super für den Gaming- und Office-Einsatz geeignet, aber für solide Webentwicklung einfach scheiße ist._</small>
 
-<small>_**Werbedisclaimer:** Einige der hier genannten Tools kosten Geld. Ich verlinke zwar, verdiene aber nichts am Verkauf der Lizenzen. Ich bin mit den Programmen einfach sehr zufrieden und kann sie daher empfehlen. Unbedingt Geld ausgeben muss man aber nicht - auch wenn es zum Geld **Verdienen** unerlässlich ist, welches auszugeben._</small>
+<small>_**Werbedisclaimer:** Einige der hier genannten Tools kosten Geld. Ich verlinke zwar, verdiene aber nichts am Verkauf der Lizenzen. Ich bin mit den Programmen einfach sehr zufrieden und kann sie daher empfehlen. Unbedingt Geld ausgeben muss man aber nicht - auch wenn es zum Geld **Verdienen** meistens unerlässlich ist, auch welches auszugeben._</small>
 
 ---
 
@@ -86,7 +86,7 @@ Wenn ihr noch kein PHPStorm nutzt, solltet ihr euch mal [in den Dokumentationsvi
 
 (image: magicento-logo.png class:alignleft img-responsive half)
 
-PHPStorm hat noch einen weiteren Vorteil: Enrique Piatti ist selbst Magentician und entwickelt mit viel Hingabe [Magicento ein PlugIn für PHPStorm](http://magicento.com/), dass die Entwicklung von Magento1 Inhalten (Extensions, Themes, etc.) massiv beschleunigt und die Fehlerquote drastisch senkt.
+PHPStorm hat noch einen weiteren Vorteil: Enrique Piatti ist selbst Magentician und entwickelt mit viel Hingabe [Magicento, ein PlugIn für PHPStorm](http://magicento.com/), das die Entwicklung von Magento&nbsp;1 Inhalten (Extensions, Themes, etc.) massiv beschleunigt und die Fehlerquote drastisch senkt.
 
 Magicento kostet mittlerweile pro Jahr 39 USD, die ich persönlich aber wirklich gerne bezahle. Ich gebe zu, ich bin ein Sparfuchs, und wenn es nicht sein **muss**, versuche ich mich auch um solche Beträge zu drücken. Aber für Enriques PlugIn würde ich sogar 50 USD im Jahr bezahlen, alleine deswegen, weil es unheimlich viele Standardarbeiten automatisch erledigen kann und mir somit mehrere Stunden Arbeit im Monat spart:
 
@@ -120,7 +120,7 @@ Arbeiten nun mehrere Leute parallel an einem Projekt, arbeitet erstmal jeder fü
 
 Hier kommen jetzt Dienste wie Bitbucket oder GitHub ins Spiel. Diese Dienste sind quasi auch nur ein weiterer Bearbeiter, mit dem Unterschied, dass sie keine Änderungen an eurem Projekt vornehmen, sondern lediglich eine Zentrale bieten, mit der sich alle synchronisieren können.
 
-Weil Git dabei aber nur Änderungen (Diffs) der Dateien synchronisiert, ist zum einen die übertragene Datenmenge verhältnismäßig gering und es kommt eher selten zu Konflikten in Dateien, die von mehreren Personen parallel bearbeitet wurden.
+Weil Git dabei aber nur Änderungen (Diffs) der Dateien synchronisiert, ist zum einen die übertragene Datenmenge verhältnismäßig gering und es kommt zum anderen eher selten zu Konflikten in Dateien, die von mehreren Personen parallel bearbeitet wurden.
 
 Es gibt [ein interaktives Tutorial](https://try.github.io/levels/1/challenges/1), in dem man sich mit Git vertraut machen kann, wenn man noch nie mit Git gearbeitet hat. In 15 Minuten habt ihr, denke ich, ein ganz gutes Verständnis dafür, was Git genau ist und wie es euch bei eurer Arbeit helfen kann.
 
@@ -131,7 +131,7 @@ Damit nicht jeder in Git grad so rumarbeitet, wie es ihm gefällt, hat sich [Vin
 
 GitFlow ist im Grunde kein eigenes Programm oder eine Ergänzung zu Git selbst, sondern viel mehr eine Art Ablaufbeschreibung, wie man in Git arbeiten sollte, wenn man bestimmte Aufgaben zu erfüllen hat.
 
-Natürlich gibt es für die Kommandozeile auch kleine Helferlein, die diese Arbeitsschritte automatisiert ausführen können; technisch zwingend nötig sind sie aber nicht.
+Natürlich gibt es [für die Kommandozeile auch kleine Helferlein](https://github.com/nvie/gitflow), die diese Arbeitsschritte automatisiert ausführen können; technisch zwingend nötig sind sie aber nicht.
 
 Einen guten Einblick in die Vorteile des Arbeitens mit GitFlow bekommt man auf [einer Tutorialseite von Atlassian](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow), die mit SourceTree auch ein kostenloses GUI-basiertes Git-Werkzeug anbieten, das GitFlow direkt unterstützt. Mehr dazu im nächsten Abschnitt.
 
@@ -178,7 +178,7 @@ Dazu ist es aber unerlässlich, dass der gesamte Code des Projektes —&nbsp;ink
 
 Variante 2 hat zudem den Nachteil, dass man eine sehr umfangreiche `.gitignore` Datei pflegen muss. Git selbst meldet sonst nämlich alle Core-Dateien als "neue Datei" und würde diese am liebsten gerne ins Repo übernehmen. Mit `.gitignore` kann man sicherstellen, dass Git diese Dateien und Ordner gar nicht erst sieht. Je länger jedoch diese `.gitignore` Datei wird, umso langsamer wird auch git.
 
-Git unterstützt übrigens zwei unterschiedliche `.gitignore` Dateien. Eine liegt im Repo und wird für gewöhnlich mit allen anderen geteilt. Eine weitere liegt global auf eurem Rechner.
+Git unterstützt übrigens zwei unterschiedliche `.gitignore` Dateien. Eine liegt im Repo und wird für gewöhnlich mit allen anderen geteilt. Eine weitere liegt und gilt global auf eurem Rechner.
 
 ##### Globale `.gitignore_global`
 
