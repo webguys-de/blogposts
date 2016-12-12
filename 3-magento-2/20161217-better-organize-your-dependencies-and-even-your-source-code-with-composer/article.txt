@@ -1,0 +1,546 @@
+Title: Türchen 17 : Better organize your dependencies and even your source code with composer
+
+----
+
+Date: 2016-12-17
+
+----
+
+Author: Jacques Bodin-Hullin
+
+----
+
+Author-Text: Jacques Bodin-Hullin is a PHP developer since he's 13 years old. He is fully certified on Magento and works at [Monsieur Biz](https://monsieurbiz.com), a french web agency. Known as an elePHPants trainer, he is also passionnated about any kind of performance tools.
+
+----
+
+Intro: You probably know composer. Let me give you some tips and tricks about it, how powerful it is and how you can save a lot of time! Using aliases, metapackages or even projects. Mastering composer is not an easy task. But with Magento 2 you'll probably want to know more about it.
+
+----
+
+Text:
+
+Organizing code isn't so easy. Sometimes it is even a warrior's journey.
+[Composer][composer] and [git][git] are tools that every developer knows for years now.
+
+But do you really know how to use composer? Let me give you some tips and tricks to help you to organize the source code of your projects.
+
+*Note: I will consider that you already have [composer][composer] and [git][git] installed on your machine.*
+
+Composer allows you to manage your dependencies. We often use a git repository behind each dependency. Also, if your dependency is packaged, it becomes possible to use the archive ball instead of the sources.
+
+Git is there to help you organizing your developments. Yes! It is not only a versioning tool. You can use it like me, every day, as a powerful tool, helping me organizing my commits and my git trees and branches.  
+And composer doesn't work without git (in fact it does, but I can't recommend it during development).
+
+By using both of them at the same time we can go so far in industrialization and code maintainability.
+
+So, following are few things I wanted to share.
+
+
+## Managing versions, even during development
+
+When you ask composer to include a dependency without specifying its version, it will try to install the latest available version. In other words the last tag in the git repository, or maybe not the last, but always the higher.
+
+You can indicate a multitude of methods of resolution depending on how you name the required version.
+
+If your dependency doesn't have any tag (which means no version) then you can use the `@dev` version which indicates to take the last commit in the main branch.
+
+If you want to use a specific state of your project, using the commit hash, you can do it by specyfiyng it in the `require` node in the `composer.json` like `"jacques/foo": "dev-master#5538b1e"`.
+In that case the version `5538b1e` of the `master` branch will be used.
+
+I prefer to use the `dev-master` notation for our internal modules because we know that their master branch is always stable.
+But be careful! Never use an unstable version (like `@dev` or `dev-branchname`) outside your project. So, no unstable dependencies into a module which will be distributed.
+You can do it but the `composer.json` should also contain any unstable dependencies required by your dependencies! Does it make sense to you?
+
+In other words, if you require a dependency `A` which has itself a dependency to `B` version `@dev`, `composer` will stop you as it's impossible to install an unstable package.
+If you still want to do it, you'll also have to require the `B` package version `@dev`. In that case, it's ok, because all de development releases (or unstable versions) are specified in your own `composer.json`.
+
+If your tag is name `v1.0.1` then the version to use in your `composer.json` will be `1.0.1`. Composer making itself the prefix removal.
+
+You can use the tilde `~` sign to specify that only the minimum minor version can change.  
+As examples:
+
+* `~1.2.3` as `>=1.2.3 AND <1.3.0`.
+* `~1.2` as `>=1.2.0 AND <2.0.0`. In that case the `2.0.0-beta1` version which is considered as `<2.0.0` won't be used because the major version is updated. Which is forbidden by the tilde "rules".
+
+In other case it's the `^` symbol which allows you to install any version before any BC break.  
+Example:
+
+* `^1.2.3` as `>=1.2.3 AND <2.0.0`
+
+You should always prefer to use a strict version number to define your dependencies. You'll avoid a lot of headaches.
+By fixing the commit hash or directly with a strict version number, as you prefer.
+
+In your libraries or modules, prefer `^` because the theory says that still a version doesn't have any BC break, it's compatible with your code.
+In practice it's not always the case. But you can have hope and chance! And maybe all your dependencies follow the semantic versioning rules. Like you of course!
+
+## Composer alias to fix conflicts or only to change the version of a dependency
+
+Composer is a powerful tool. But it doesn't know how to resolve conflicts between two versions of the same package.
+
+Let us take the example of the world wide known library `jacques/yolo`, which has [Hoa\Zombie][hoa-zombie] version `^2` (same as `~2.0`, `>=2.0,<3.0`) as a dependency.
+
+But what if you really need a version greater than `3.0` in your project?
+
+> Houston, we've had a problem.
+
+Should composer use the version `2` (required by a dependency) or `3` (required by you) of your dependency?
+
+If you require the version `3` (the latest version available) in your own `composer.json` you'll get an error:
+
+(code:bash)
+$ composer require hoa/zombie
+Using version 3.16.01.11 for hoa/zombie
+./composer.json has been updated
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Your requirements could not be resolved to an installable set of packages.
+
+  Problem 1
+    - jacques/yolo dev-master requires hoa/zombie 2.* -> satisfiable by hoa/zombie[2.14.09.17, …] but these conflict with your requirements or minimum-stability.
+
+Installation failed, reverting ./composer.json to its original content.
+(/code)
+
+As you can see composer wants to use the version `3.*` but it can't because the package `jacques/yolo` uses already that package, but in its version `2.*`.
+
+Don't worry. We have aliases!
+
+Let's update our `composer.json` manually. We have to add the dependency by ourselves because the previous command failed and the changes have been reverted.
+
+In the node `require` of your `composer.json`, add the following dependency: `"hoa/zombie": "3.16.01.11 as 2.14.09.17"`.  
+We have to be strict with the version because that's how aliases work. We just told composer to use the version `3.16.01.11` instead of the `2.14.09.17`.
+
+So now our dependency to `3.*` is downloaded and installed because the conflict is solved!
+But be careful, the dependency in `jacques/yolo` is `2.*` and not `2.14.09.17`. So… maybe you'll have to do it again.
+
+But if the version 3 is on its way, there are not so much possibilities that the version 2 will evolved a lot. Kind of safe.
+
+We had this problem with [composer and its own version in Magento 2](https://github.com/magento/magento2/issues/2476). True story bro.  
+So, it's possible to upgrade some dependencies of Magento 2. And because they fixed every version, it should be easy and "safe".
+
+Aliases can fix some issues but it is better to avoid them. Like always, if you can do it without getting around it, do it!
+They are like rewrites in Magento 1, it is better without.
+
+
+## Repo path
+
+If you want to manage a module, like a theme, aside your `app` folder you can do it using the `path` repository of composer.
+
+Ok, given the following tree:
+
+(code:plain)
+.
+├── .git/
+├── apps/
+│   └── magento2/
+│       ├── composer.json
+│       └── …
+└── modules/
+    └── Mbiz_Price/
+        ├── composer.json
+        └── …
+(/code)
+
+In our Magento 2 we want to install our `Mbiz_Price` module.
+But this module is outside the `apps/magento2` folder. It can be a theme, or anything else.
+
+It has its own `composer.json`, with the `name` (`jacques/mbiz_price`) of the package.
+
+Let's go in our `magento2` folder and run some commands to require our `Mbiz_Price` module:
+
+(code:bash)
+$ cd apps/magento2
+[apps/magento2/] $ composer require jacques/mbiz_price
+
+  [InvalidArgumentException]
+  Could not find package jacques/mbiz_price at any version for your minimum-stability (stable). Check the package spelling or your minimum-stability
+(/code)
+
+Hum… Of course, how could composer be aware of our local package?
+
+We have to update our `composer.json` (in `apps/magento2`): (very simple version, for the purpose of the article)
+
+
+(code:json)
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../modules/Mbiz_Price",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "jacques/mbiz_price": "*"
+    }
+}
+(/code)
+
+Now we run the update of composer:
+
+(code:bash)
+[apps/magento2/] $ composer update jacques/mbiz_price
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+  - Installing jacques/mbiz_price (dev-master)
+    Symlinked from ../../modules/Mbiz_Price
+
+Writing lock file
+Generating autoload files
+(/code)
+
+But wait! How do we define a version for `Mbiz_Price`? Why `*@dev`?
+
+As you can see in the initial tree, we are in a git repository, and this repository is on a branch (we don't really know which one) and our module is tracked by this repository.
+
+How to translate "our repository is on a branch, but we don't know which one" to a version number?
+
+`*@dev` makes sense isn't it!? `*` stands for "any version" and `@dev` stands for `development branch` (which is equal to`current branch`).  
+But… You'll probably have few questions, like this one:
+
+**If we update the content of `Mbiz_Price/`, do we have to run `composer update` again? Even after few commits?**
+
+No. You don't have to.  
+You can notice the `"symlink": true` in the `options` node. This option allows you to forget about the content of your package.
+
+If you don't want to symlink your package, you'll have one big problem: your package won't be able to change its version. It means that even if you add a lot of content in your module, then you commit them, then you run a `composer update` (in order to update the module in your `magento2` project), you'll get something like this:
+
+(code:bash)
+[apps/magento2/] $ composer update jacques/mbiz_price
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Nothing to install or update
+Generating autoload files
+(/code)
+
+Using the `symlink` option is safer.
+
+The only moment the package will be updated is when you checkout another branch. In that case, because the branch name is important to composer, the hash will be updated.
+
+So, one important thing to avoid updating the `composer.lock` too much times: always run a global `composer update` on the same branch (like `develop`).  
+If you are on a specific branch (like `feature/my-stuff`), always update only the packages you need, like `composer update jacques/yolo`. Be specific is the best thing to do.
+
+If you don't follow any rules, you'll have some strange behaviors with composer, but nothing really hard to solve, don't be afraid.
+
+## Metapackages
+
+When you have a lot of dependencies you use in all your projects (or most of them…) you can probably create a metapackage!
+
+A metapackage is like a shortcut, or a Pandora box (depending on what you have in it). You require the metapackage and the metapackage requires other dependencies, which require other dependencies… inception!
+
+It's only a composer.json, nothing more, nothing less.
+
+It is useless to add some `require-dev` (see below) in your metapackage because composer won't install them in your project.
+
+Be careful, never use an unstable version in your metapackages. And it's better to fix the versions of your dependencies (like `1.0.1`), unless you know that your code is well developed.  
+In that case you can have a version like `^1.0`, but not `~1.0`. Because the caret is considered as stable, the tilde is considered as dev stability.
+
+We use the caret symbol in our [`Mbiz_MetaPackage`](https://github.com/monsieurbiz/Mbiz_MetaPackage/blob/master/composer.json).  
+We fixed the versions of our dependencies mostly to `^0.1` (which means `>=0.1.0,<1.0`).
+
+But we don't use a specific version for our metapackage because we want to specify the right version on each project.
+So, to require the metapackage we run the following command:
+
+(code:bash)
+[apps/magento2/] $ composer require monsieurbiz/mbiz_metapackage:dev-master#8af4f6d
+./composer.json has been updated
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+  - Installing monsieurbiz/mbiz_setup (0.1.1)
+    Loading from cache
+  …
+Writing lock file
+Generating autoload files
+(/code)
+
+And we are done!
+
+We do that because the metapackage can change. It always has more or less dependencies, depending on our developments.  
+Using the caret in the metapackage dependencies allows us to have a more stable version of them. But specifying the hash of the metapackage gives us a safety check: we won't get a new dependency magically after running a `composer update`!
+
+Unlike other dependencies, the metapackage project is not installed in your `vendor/` directory.
+
+Have a look to the "Satis" part below if you want to know how to host the references of your private packages.  
+Why the power of composer should be available only for public repositories?
+
+## require-dev: the toolbox!
+
+It is possible to use the `require-dev` node, instead of the main `require` node.
+
+In that case, if your dependencies are in `require-dev`, they will be installed only if you don't speficy the `--no-dev` when you run any composer command.
+
+It works well on Magento 2 because a dependency is really a dependency in the `vendor/` directory.  
+It doesn't work well on Magento 1 since it uses a lot of symlinks in your `app/` folder.
+
+So, let's use the package `jacquesbh/eater`, which is really simple. It's like the `Varien_Object` in Magento 1, I'm sure you know it.
+
+But we only want this package during development, not in production.
+
+(code:bash)
+[apps/magento2/] $ composer require --dev jacquesbh/eater
+Using version ^2.0 for jacquesbh/eater
+./composer.json has been updated
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Nothing to install or update
+Writing lock file
+Generating autoload files
+(/code)
+
+You can require(-dev) a lot of tools like [`symfony/debug`](http://symfony.com/doc/current/components/debug.html) or [`symfony/var-dumper`](http://symfony.com/doc/current/components/var_dumper.html)!
+
+In Magento 2 it is possible to add a lot of commands to the `magento` binary. Don't hesitate to create your own commands available only for the developers and not in production.  
+It can save a lot of time to your team. Human operations are never safe!
+
+## Scripts
+
+Composer can run some scripts when some events appear, like "a package just got installed" (`post-package-install` event).
+
+So, if you want to run some commands, like running a shell command (`chmod +x bin/magento` as example), you can easily do it in your `composer.json`:
+
+(code:json)
+{
+    …
+    "scripts": {
+        "post-update-cmd": [
+            "chmod +x bin/magento"
+        ]
+    }
+}
+(/code)
+
+You can, by example, execute the run of your test suites after updating your dependencies.  
+
+You can also add some commands to composer, using them like `composer yolo`. Here is howto:
+
+`composer.json`:
+
+(code:json)
+{
+    …
+    "scripts": {
+        "yolo": "echo yolo"
+    }
+}
+(/code)
+
+Then:
+
+(code:bash)
+[apps/magento2/] $ composer yolo
+> echo yolo
+yolo
+(/code)
+
+It can be perfect to run some commands like `phpunit`, or…  
+If you alias (bash alias) `composer` to `c` (like I do), and you add a command `mage`, you can do that kind of things: `c di`.
+
+Which will run `./bin/magento setup:di:compile` as example.
+
+Or simply… `c mage setup:di:compile` or `c mage my:command` to run any command using the `magento` binary.
+
+(code:json)
+{
+    …
+    "scripts": {
+        "mage": "php ./bin/magento"
+    }
+}
+(/code)
+
+So now, imagine you add your own commands using the `require-dev` and run them with ease directly using composer! So perfect.
+
+(code:bash)
+c mage dev:my:command
+(/code)
+
+Tip about `symfony/console`: `./bin/magento set:di:com` is the same as `./bin/magento setup:di:compile`! Shortcuts are everywhere!
+
+## Packagist or satis ?
+
+Packagist is the main composer repository. You can add your public packages directly by registering them on <https://packagist.org>.
+
+You can get your own version of [packagist by cloning/forking it](https://github.com/composer/packagist). But it can be kind of a huge application if you have only few packages.
+
+What about your own and simple composer repository?
+
+Do you know satis?
+
+Satis is a simple composer repository. It is really [easy to install](https://github.com/composer/satis).
+
+Firegento has [its own satis running](https://packages.firegento.com/). You can use it for a lot of Magento 1 modules.  
+To use it, you can add it to your project's `composer.json` by using this command:
+
+(code:bash)
+composer config repositories.firegento composer https://packages.firegento.com
+(/code)
+
+Or globally by using this command:
+
+(code:bash)
+composer config -g repositories.firegento composer https://packages.firegento.com
+(/code)
+
+Last thing about composer repositories: [Jordi Boggiano](https://github.com/Seldaek) created [Toran Proxy](https://toranproxy.com/): it is a private and hosted composer repository. I can recommend it if you don't want to maintain your own packagist or satis instance(s). It can be used as a backup repository in case github goes down too! Very helpful if you have a lot of projects depending on github.
+
+## A project template?
+
+I hope you installed Magento 2 using composer! If you did it, you probably remember this command line:
+
+(code:bash)
+composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition my-project/
+(/code)
+
+Now, we take a look at the `composer.json` of the `magento/project-community-edition` package:
+
+(code:json)
+{
+    "name": "magento/project-community-edition",
+    "description": "eCommerce Platform for Growth (Community Edition)",
+    "type": "project",
+    "version": "2.1.2",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "magento/product-community-edition": "2.1.2",
+        "composer/composer": "@alpha"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.1.0",
+        "squizlabs/php_codesniffer": "1.5.3",
+        "phpmd/phpmd": "@stable",
+        "pdepend/pdepend": "2.2.2",
+        "fabpot/php-cs-fixer": "~1.2",
+        "lusitanian/oauth": "~0.3 <=0.7.0",
+        "sebastian/phpcpd": "2.0.0"
+    },
+    "config": {
+        "use-include-path": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\": "lib/internal/Magento/Framework/",
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/Magento/"
+        },
+        "psr-0": {
+            "": "app/code/"
+        },
+        "files": [
+            "app/etc/NonComposerComponentRegistration.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
+            "Magento\\Tools\\": "dev/tools/Magento/Tools/",
+            "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
+            "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
+            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
+        }
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    ],
+    "extra": {
+        "magento-force": "override"
+    }
+}
+(/code)
+
+The package type is `project`. Which means that we can use it with the `create-project` command.  
+That command copies everything which is in the project in your project directory then runs a simple `composer install`.
+
+And because it runs a `composer install`, we can see that it requires a `magento/product-community-edition`: a metapackage.
+
+This project defines the Magento repository, it forces the stability of the packages to `alpha` (not great… but because of composer in `@alpha`, but it's not required because the stability is forced when you use the `@` operator in a version).  
+It adds some autoloads to composer and some `require-dev` packages. These packages will be installed because they will be in your main `composer.json` (because it's copied from the `project`).  
+It means that by default you'll have `phpunit` and so on, installed on your machine.
+
+Oh, and by the way, if you can't do the `composer create-project` command because your platform doesn't have all the system dependencies (like some PHP extensions) but you'll run your project on a VM so you don't want them to be installed, you can use the `--ignore-platform-reqs` as an argument of your command:
+
+(code:bash)
+composer create-project --ignore-platform-reqs --repository-url=https://repo.magento.com/ magento/project-community-edition my-project/
+(/code)
+
+Much better!
+
+Here is the `composer.json` of the metapackage `magento/product-community-edition`: (with some `…` to avoid to paste it entirely)
+
+(code:json)
+{
+  "name": "magento/product-community-edition",
+  "description": "eCommerce Platform for Growth (Community Edition)",
+  "version": "2.1.2",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "type": "metapackage",
+  "require": {
+    "magento/magento2-base": "2.1.2",
+    "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+    "zendframework/zend-stdlib": "~2.4.6",
+    "zendframework/zend-code": "~2.4.6",
+    "…": "…",
+    "ext-simplexml": "*",
+    "ext-mcrypt": "*",
+    "ext-hash": "*",
+    "ext-curl": "*",
+    "…": "…",
+    "magento/module-marketplace": "100.1.1",
+    "magento/module-admin-notification": "100.1.1",
+    "…": "…",
+    "magento/module-catalog": "101.0.2",
+    "magento/module-wishlist": "100.1.2",
+    "…": "…",
+    "magento/theme-adminhtml-backend": "100.1.1",
+    "magento/theme-frontend-blank": "100.1.1",
+    "magento/theme-frontend-luma": "100.1.1",
+    "magento/language-de_de": "100.1.0",
+    "magento/language-en_us": "100.1.0",
+    "magento/language-es_es": "100.1.0",
+    "…": "…",
+    "magento/framework": "100.1.2"
+  }
+}
+(/code)
+
+That metapackage requires every dependencies of Magento 2.
+
+So, to be clear with the "project" thing:
+
+You can create a package with the `project` type.  
+This package is a project "template". Everything in it will be copied to your new project directory.
+It can require some packages and metapackages in order to init the dependencies of your new project.
+
+Creating a composer project is really a time saver. With it you can initiate a lot of projects, depending on what you want to create.
+You can store all your "projects" on a satis repository or even on Packagist.
+
+## Conclusion
+
+It was a mega big article because composer is a great great tool.
+
+If you use it great, you can reduce the time you spend on maintainance. And you can really improve your developments.
+
+By creating some metapackages, some projects, using the power of the versions to install whatever you want to.
+
+And a last tip… Please bookmark <http://composer.json.jolicode.com/>!
+
+
+[composer]: http://getcomposer.org/
+[git]: https://git-scm.com/
+[hoa-zombie]: https://hoa-project.net/En/Literature/Hack/Zombie.html
+[versions-composer]: https://getcomposer.org/doc/articles/versions.md
+
+
