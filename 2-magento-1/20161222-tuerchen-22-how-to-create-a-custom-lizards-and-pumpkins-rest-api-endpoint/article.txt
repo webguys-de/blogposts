@@ -1,0 +1,543 @@
+Title: Türchen 22 : How to create a custom Lizards & Pumpkins REST API endpoint
+
+----
+
+Date: 2016-12-22
+
+----
+
+Author: Tim Bezhashvyly
+
+----
+
+One of core principles of Lizards & Pumpkins and what makes it extremely attractive among e-commerce platforms is the API-first approach. The business logic is completely front-end agnostic and can be used for feeding either website, mobile app or anything else. And as the name suggests the binding point here is an API, a REST API in our case.
+
+Native REST API of Lizards & Pumpkins already provides a rich set of endpoints. However for some very implementation specific functionality you may want to create a custom endpoint. Bestsellers or some custom cross-sells are first that comes to mind. Luckily implementing custom REST API endpoint is extremely easy in Lizards.
+
+### Service
+
+The first thing to do is to create a service which will return a requested data. Let’s call it `BestsellersService`. It will have just one public method `getBestsellers` which will return an array of bestselling product data.
+
+So let’s start with most degenerative test:
+
+```php
+final protected function setUp()
+{
+   $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
+   $this->stubProductJsonService = $this->createMock(ProductJsonService::class);
+   
+   $this->bestsellerService = new BestsellerService($this->mockDataPoolReader, $this->stubProductJsonService);
+
+   $this->stubContext = $this->createMock(Context::class);
+}
+
+public function testReturnsAnEmptyArrayIfNoProductsMatchBestsellingCriteria()
+{
+   $this->mockDataPoolReader->method('getProductIdsMatchingCriteria')->willReturn([]);
+   $this->assertSame([], $this->bestsellerService->getBestsellers($this->stubContext));
+}
+```
+
+For the sake of readability the property declarations are omitted.
+
+As you can see our service will take a `DataPoolReader` and `ProductJsonService` as constructor arguments. The later will create a JSON representation of product IDs returned by the former.
+
+The `Context` stub will be used in every test so let’s also put into a class property. The `Context` is a nifty bastard that holds information about the current store, language, currency, customer group or whatever else can be request specific.
+
+Now to the test. It is simple as The Beatles. If the `DataPoolReader` returns an empty set of product IDs matching our bestselling criteria the service should also return an empty array.
+
+Now let’s make this test pass.
+
+```php
+public function __construct(DataPoolReader $dataPoolReader, ProductJsonService $productJsonService,)
+{
+    $this->dataPoolReader = $dataPoolReader;
+    $this->productJsonService = $productJsonService;
+}
+
+public function getBestsellers(Context $context) : array
+{
+    return [];
+}
+```
+
+Property declarations are again omitted. Constructor is not doing anything as every good constructor shouldn’t. And the `getBestsellers` method is returning an empty array so the only test passes.
+
+The next test will not be much more complicated. Simplicity is the key, you know.
+
+```php
+public function testReturnsArrayOfBestSellingProductData()
+{
+   $stubProductIds = [$this->createMock(ProductId::class), $this->createMock(ProductId::class)];
+   $expectedProductData = [['Dummy product A data'], ['Dummy product B data']];
+
+   $this->mockDataPoolReader->method('getProductIdsMatchingCriteria')->willReturn($stubProductIds);
+   $this->stubProductJsonService->method('get')->with(stubProductIds)->willReturn($expectedProductData);
+
+   $this->assertSame($expectedProductData, $this->bestsellerService->getBestsellers($this->stubContext));
+}
+```
+
+So if `DataPoolReader` returns us a set of product IDs and then those are passed to `ProductJsonService` it will then return some fake JSON representation for each of them.
+
+This will fail of course as `getBestsellers` so far always return an empty array so let’s make it pass.
+
+```php
+public function getBestsellers(Context $context) : array
+{
+   $productIds = $this->getBestsellingProductIds($context);
+
+   if ([] === $productIds) {
+       return [];
+   }
+
+   return $this->productJsonService->get($context, ...$productIds);
+}
+
+private function getBestsellingProductIds(Context $context) : array
+{
+   $searchCriteria = SearchCriterionGreaterThan::create('bestselling_score', '10');
+   $sortBy = new SortBy(
+       AttributeCode::fromString('bestselling_score'),
+       SortDirection::create(SortDirection::DESC)
+   );
+   $rowsPerPage = 12;
+   $pageNumber = 0;
+
+   return $this->dataPoolReader->getProductIdsMatchingCriteria(
+       $searchCriteria,
+       $context,
+       $sortBy,
+       $rowsPerPage,
+       $pageNumber
+   );
+}
+```
+
+No magic here too. First get bestselling product IDs, if there’s none return an empty array in order to satisfy the first test, otherwise pass them to `ProductJsonService` and return obtained product data to caller.
+
+Actual business logic resides in `getBestsellingProductIds` utility method.
+
+An important concept here is the search criteria. As the name suggests it is a rule or set of rules for querying products out of the data pool. In our example we use `SearchCriterionGreaterThan` rule. For the whole set check `SearchCriteria` interface implementations. One of them deserves a special note. `CompositeSearchCriterion` allows combining two or more criteria with `AND` or `OR` condition. One of those criteria could be `CompositeSearchCriterion` itself which allows building criteria with unlimited levels of sub-criteria. This however deserves a separate article. To keep our example as simple as possible let’s assume our products have an attribute `bestselling_score` and we want to pull top 12 with score higher than 10.
+
+The search criteria is then passed to `DataPoolReader` along with desired sort order, number of results and offset and an array of marching product IDs is returned.
+
+### Request Handler
+
+This is it about the service class. The next thing that must be implemented is the REST API request handler. When Lizards & Pumpkins gets a REST API request it loops through all registered REST API request handlers trying to find a matching one.
+
+All REST API request handlers must extend the abstract `ApiRequestHandler` class. Let our first test assure this.
+
+```php
+final protected function setUp()
+{
+   $this->mockBestsellerService = $this->createMock(BestsellerService::class);
+   $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+   
+   $this->requestHandler = new BestsellerApiV1GetRequestHandler(
+       $this->mockBestsellerService,
+       $this->stubContextBuilder
+   );
+
+   $this->stubRequest = $this->createMock(HttpRequest::class);
+}
+
+public function testIsApiRequestHandler()
+{
+   $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+}
+```
+
+The class will need the service we have just implemented and a `ContextBuilder`. `ContextBuilder` is just a simple builder class which in our case will create an instance of a `Context` from given HTTP request. Once again, the `Context` is an object that encapsulates information of current store, currency or whatever else can be different from one HTTP request to another.
+
+I also created a stub request here as it will be used by every upcoming test.
+
+Now let’s make it pass.
+
+```php
+class BestsellerApiV1GetRequestHandler extends ApiRequestHandler
+{
+   /**
+    * @var BestsellerService
+    */
+   private $bestsellerService;
+
+   /**
+    * @var ContextBuilder
+    */
+   private $contextBuilder;
+
+   public function __construct(BestsellerService $bestsellerService, ContextBuilder $contextBuilder)
+   {
+       $this->bestsellerService = $bestselerService;
+       $this->contextBuilder = $contextBuilder;
+   }
+}
+```
+
+This will force us to implement the `canProcess(HttpRequest $request) : bool` method of the `HttpRequestHandler` interface and the abstract `getResponse(HttpRequest $request) : HttpResponse` template method of the `ApiRequestHandler` class. The first one must evaluate request and decide if our endpoint is responsible for handling it. The second will return the actual response for the request. But for now we will just place dummies in order to satisfy PHP interpreter.
+
+```php
+public function canProcess(HttpRequest $request) : bool
+{
+   return true;
+}
+
+final protected function getResponse(HttpRequest $request) : HttpResponse
+{
+   $body = '';
+   $headers = [];
+
+   return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
+}
+```
+
+The next test must be a most degenerative one. How about we test that the request handler will not be able to process other request types but GET?
+
+```php
+/**
+* @dataProvider nonGetRequestMethodProvider
+*/
+public function testCanNotProcessNonHttpGetRequestTypes(string $nonGetRequestMethod)
+{
+   $this->stubRequest->method('getMethod')->willReturn($nonGetRequestMethod);
+   $message = sprintf('%s request should NOT be able to be processed', $nonGetRequestMethod);
+   $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
+}
+
+/**
+* @return array[]
+*/
+public function nonGetRequestMethodProvider() : array
+{
+   return [
+       [HttpRequest::METHOD_POST],
+       [HttpRequest::METHOD_PUT],
+       [HttpRequest::METHOD_DELETE],
+       [HttpRequest::METHOD_HEAD],
+   ];
+}
+```
+
+To make it pass all we have to do is to switch the returned value of our `canProcess()` dummy from `true` to `false`.
+
+```php
+public function canProcess(HttpRequest $request) : bool
+{
+   return false;
+}
+```
+
+That’s it. Yeah, dumb. But we are only allowed to write a productive code which will make test pass. And this change proves our test to work correctly, so it isn't actually all that dumb. We now need a test which will force us to write the real logic.
+
+```php
+public function testCanProcessHttpGetRequest()
+{
+   $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+   $message = 'GET request should be able to be processed';
+   $this->assertTrue($this->requestHandler->canProcess($this->stubRequest), $message);
+}
+```
+
+To make it pass we just need to check a request type.
+
+```php
+public function canProcess(HttpRequest $request) : bool
+{
+   return $request->getMethod() === HttpRequest::METHOD_GET;
+}
+```
+
+Our request handler should only be able to process requests to the given endpoint (let’s name it “bestseller”). Let’s test it also.
+
+```php
+/**
+* @dataProvider nonMatchingRequestPathProvider
+*/
+public function testCanNotProcessNonMatchingGetRequests(string $nonMatchingRequestPath)
+{
+   $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+   $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
+   $message = sprintf('GET request to "%s" should NOT be able to be processed', $nonMatchingRequestPath);
+   $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
+}
+
+public function nonMatchingRequestPathProvider() : array
+{
+   return [
+       ['/api/'],
+       ['/api/foo/'],
+       ['/api/bestseller/foo/'],
+   ];
+}
+```
+
+Quite straightforward. The request path must be `/api/bestseller` and the rest must be rejected. There is no need to evaluate `/api` part of request path as this is already done in the `ApiRouter`. So let’s make this test pass.
+
+```php
+public function canProcess(HttpRequest $request) : bool
+{
+   if ($request->getMethod() !== HttpRequest::METHOD_GET) {
+       return false;
+   }
+
+   $parts = $this->getRequestPathParts($request);
+
+   if (count($parts) !== 2 || self::ENDPOINT_NAME !== $parts[1]) {
+       return false;
+   }
+
+   return true;
+}
+
+/**
+* @param HttpRequest $request
+* @return string[]
+*/
+private function getRequestPathParts(HttpRequest $request) : array
+{
+   return explode('/', trim($request->getPathWithoutWebsitePrefix(), '/'));
+}
+```
+
+Now PHPUnit doesn’t like my `testCanProcessHttpGetRequest` anymore. I’d like to change it into something like this:
+
+```php
+public function testCanProcessMatchingRequest()
+{
+   $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+   $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/bestseller');
+
+   $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
+}
+```
+
+All we have to do is to check that after the change all is green again. And it is!
+
+I guess this is it for `canProcess()` method. Now to `getResponse()`. Let’s first test that if someone will pass a non matching request it will throw an exception.
+
+```php
+public function testThrowsAnExceptionDuringAttemptToProcessInvalidRequest()
+{
+   $this->expectException(UnableToProcessBestsellerRequestException::class);
+
+   $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
+   $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/bestseller');
+
+   $this->requestHandler->process($this->stubRequest);
+}
+```
+
+Important thing to note here is the method that we are calling on the SUT. `process()` is a method of the `ApiRequestHandler` class we extend and it will call `getResponse()` in its turn. The creation of the exception class is omitted to keep this post focused on the relevant steps.
+
+In order to make this test pass all we have to do is to call the `canProcess()` method we just created and throw the exception if it returns `false`.
+
+```php
+final protected function getResponse(HttpRequest $request) : HttpResponse
+{
+   if (! $this->canProcess($request)) {
+       throw new UnableToProcessBestsellerRequestException();
+   }
+
+   $body = '';
+   $headers = [];
+
+   return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
+}
+```
+
+There’s one last test we are missing. The response body must contain the actual data. The data comes from the service class we have already created so all we have to test is a delegation:
+
+```php
+public function testDelegatesFetchingProductsToBestsellerService()
+{
+   $testProductData = ['total' => 1, 'data' => ['Dummy data']];
+
+   $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+   $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/bestseller');
+
+   $this->mockBestsellerService->expects($this->once())->method('query')->willReturn($testProductData);
+
+   $stubContext = $this->createMock(Context::class);
+   $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
+
+   $response = $this->requestHandler->process($this->stubRequest);
+
+   $this->assertSame(json_encode($testProductData), $response->getBody());
+   $this->assertSame(HttpResponse::STATUS_OK, $response->getStatusCode());
+}
+```
+
+And here is the final version of our `getResponse()` method:
+
+```php
+final protected function getResponse(HttpRequest $request) : HttpResponse
+{
+   if (! $this->canProcess($request)) {
+       throw new UnableToProcessBestsellerRequestException();
+   }
+
+   $context = $this->contextBuilder->createFromRequest($request);
+   $data = $this->bestsellerService->getBestsellers($context);
+  
+   $body = json_encode($data);
+   $headers = [];
+
+   return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
+}
+```
+
+### Factory
+
+The last class to implement is the `BestsellerFactory`. It will contain two methods instantiating each of the classes created above plus the REST API endpoint registration. As this is quite a trivial thing and I’m sure you are already bored reading, so I will just print out the `BestsellerFactoryTest` class entirely:
+
+```php
+class BestsellerFactoryTest extends \PHPUnit\Framework\TestCase
+{
+   /**
+    * @var BestsellerFactory
+    */
+   private $factory;
+
+   final protected function setUp()
+   {
+       $masterFactory = new SampleMasterFactory();
+       $masterFactory->register(new CommonFactory());
+       $masterFactory->register(new RestApiFactory());
+       $masterFactory->register(new UnitTestFactory($this));
+     
+       $this->factory = new BestsellerFactory();
+
+       $masterFactory->register($this->factory);
+   }
+
+   public function testFactoryInterfaceIsImplemented()
+   {
+       $this->assertInstanceOf(Factory::class, $this->factory);
+   }
+
+   public function testFactoryWithCallbackInterfaceIsImplemented()
+   {
+       $this->assertInstanceOf(FactoryWithCallback::class, $this->factory);
+   }
+
+   public function testBestsellerApiEndpointIsRegistered()
+   {
+       $endpointKey = 'get_bestseller';
+       $apiVersion = 1;
+
+       $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
+       $mockApiRequestHandlerLocator->expects($this->once())->method('register')
+           ->with($endpointKey, $apiVersion, $this->isInstanceOf(BestsellerApiV1GetRequestHandler::class));
+
+       $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
+           ['register', 'getApiRequestHandlerLocator']
+       )->getMock();
+       $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
+
+       $this->factory->factoryRegistrationCallback($stubMasterFactory);
+   }
+}
+```
+
+The first test ensures the `Factory` interface is implemented. Each factory must implement it.
+
+The second test checks that our factory also implements the `FactoryWithCallback` interface. It will force our factory to have a `factoryRegistrationCallback` method which is an entry point into a factory.
+
+Last test checks that once this entry point is called and our REST API endpoint is registered.
+
+Here is the productive code:
+
+```php
+class BestsellerFactory implements Factory, FactoryWithCallback
+{
+   use FactoryTrait;
+
+   public function factoryRegistrationCallback(MasterFactory $masterFactory)
+   {
+       $apiVersion = 1;
+
+       /** @var ApiRequestHandlerLocator $apiRequestHandlerLocator */
+       $apiRequestHandlerLocator = $masterFactory->getApiRequestHandlerLocator();
+       $apiRequestHandlerLocator->register(
+           'get_bestseller',
+           $apiVersion,
+           $this->getMasterFactory()->createBestsellerApiV1GetRequestHandler()
+       );
+   }
+
+   public function createBestsellerApiV1GetRequestHandler() : BestsellerApiV1GetRequestHandler
+   {
+       return new BestsellerApiV1GetRequestHandler(
+           $this->getMasterFactory()->createBestsellerService(),
+           $this->getMasterFactory()->createContextBuilder()
+       );
+   }
+
+   public function createBestsellerService() : BestsellerService
+   {
+       return new BestsellerService(
+           $this->getMasterFactory()->createDataPoolReader(),
+           $this->getMasterFactory()->createProductJsonService()
+       );
+   }
+}
+```
+
+The `factoryRegistrationCallback()` method receives a master factory. It gets an `ApiRequestHandlerLocator` from it and registers new REST API endpoint. Very straightforward.
+
+### That’s all. Right?
+
+No. Let’s write an integration test which will ensure all we just wrote works in real life.
+
+```php
+class BestsellerApiTest extends AbstractIntegrationTest
+{
+   public function testEmptyJsonIsReturnedIfNoProductsMatchTheRequest()
+   {
+       $httpUrl = HttpUrl::fromString('http://example.com/api/bestseller');
+       $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.bestseller.v1+json']);
+       $httpRequestBody = new HttpRequestBody('');
+       $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+
+       $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+       $factory->register(new BestsellerFactory());
+
+       $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
+
+       $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+       $response = $website->processRequest();
+
+       $this->assertEquals(json_encode([]), $response->getBody());
+   }
+
+   public function testProductDetailsMatchingRequestAreReturned()
+   {
+       $httpUrl = HttpUrl::fromString('http://example.com/api/bestseller');
+       $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.bestseller.v1+json']);
+       $httpRequestBody = new HttpRequestBody('');
+       $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+
+       $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+       $factory->register(new BestsellerFactory());
+
+       $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
+       $this->importCatalogFixture($factory);
+
+       $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+       $response = $website->processRequest();
+
+       $this->assertGreaterThan(0, count(json_decode($response->getBody(), true)));
+   }
+}
+```
+
+As you can see the test class extends `AbstractIntegrationTest` which is just a set of helper methods shared across integration tests. We will use just 3. I believe their names clearly reveal the intent:
+
+- `prepareIntegrationTestMasterFactoryForRequest`
+- `importCatalogFixture`
+- `getIntegrationTestFactory`
+
+So as the `importCatalogFixture` is only called in the second test the first one deals with an empty catalog so bestsellers REST API call must return an empty JSON and for the second it mustn’t be empty.
+
+This is it. A REST API call is ready. Of course the use case is very simplified, but it all comes down to the logic which the service class uses to select matching products. But as to the REST API endpoint, it is just implementing a service class, a request handler and their factory.
