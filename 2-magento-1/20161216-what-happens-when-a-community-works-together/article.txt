@@ -1,0 +1,63 @@
+Title: Türchen 16: What Happens When a Community Works Together
+----
+
+Date: 2016-12-16
+
+----
+
+Author: sherrie-rohde
+
+----
+
+Intro: The Magento Community is steadily growing and where is no limit to what we can accomplish when we continue working together, no matter if you're new to the Magento Community or a veteran.
+
+----
+
+Text:
+
+The Magento Community has been a part of my life since 2007. [As I've shared before](https://magento.com/blog/magento-news/power-community), it's changed my story in a positive way, and I know several of you can relate. This is powerful.
+
+If you were at Meet Magento New York in 2015, you may have heard Ben Marks share that there is no problem that community cannot solve.
+
+<blockquote class="twitter-tweet" data-lang="en">
+    <p lang="en" dir="ltr">&quot;There is no problem that community cannot solve.&quot; <a href="https://twitter.com/benmarks">@benmarks</a> <a href="https://twitter.com/hashtag/mn15ny?src=hash">#mn15ny</a> <a href="http://t.co/twNNQkrKwn">pic.twitter.com/twNNQkrKwn</a></p>&mdash; Sherrie Rohde (@sherrierohde) <a href="https://twitter.com/sherrierohde/status/646085473945944064">September 21, 2015</a>
+</blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+I couldn’t agree more, and I think even beyond that, there is simply no limit to what we can accomplish when we work together.
+
+##What does this look like for our community?
+
+In 2015, the Magento community:
+- presented over 500 talks on Magento or at Magento-centric events,
+- produced over 100 podcast episodes centered around Magento,
+- organized conferences and meetups in over 24 different countries,
+- wrote three books about Magento,
+- contributed to official product documentation and core code,
+- wrote countless blog posts to raise awareness and education, and
+- answered thousands of questions on both StackExchange and the Magento Forums.
+
+**While 2016 is not quite over, it's still clear this community is running forward at a rapid rate!**
+
+So far in 2016, the Magento community has:
+- presented over 725 talks on Magento or at Magento-centric events,
+- produced over 100 podcast episodes centered around Magento,
+- organized conferences and meetups in over 34 different countries,
+- written seven books about Magento,
+- contributed to official product documentation and core code,
+- written over 1,000 blog posts to raise awareness and education, and
+- answered thousands of questions on both StackExchange and the Magento Forums.
+
+In addition to everything above, your endless efforts of testing, feedback, pull requests, and reported issues have all helped improve our product to make it better meet your needs as well as the needs of your customers and our broader community. (Yay, open source!)
+
+## How can we keep working together?
+Whether you’re new to the Magento Community (hi!) or a veteran looking for more ways to get involved, here’s a few ideas:
+- Answer, or ask, questions on the [Magento Forums](https://community.magento.com/) or [Stack Exchange](http://magento.stackexchange.com/).
+- Find a local [Magento Meetup](https://www.meetup.com/pro/magento/) (or start one) to meet others who use and develop on Magento.
+- Listen to [advice from Magento Masters](https://magento.com/blog/events/magento-masters-contributing-magento) on how to contribute (from their MageTitans panel).
+- Check out our [Contributor Guide](https://devdocs.magento.com/guides/v2.1/contributor-guide/contributing.html) to learn how to get started contributing to DevDocs and our core code on Github.
+- If none of those work for you, check out my post on [How to Get Involved in the Magento Community](https://magento.com/blog/technical/how-get-involved-magento-community) for even more ideas (or ask me!).
+
+Huge thank you to [Fabian Blechschmidt](https://twitter.com/Fabian_ikono) and [Tobias Vogt](https://twitter.com/tobi_pb) for organizing this Magento Advent Calendar, and inviting me to be a part of it, as well as to [Hirokazu Nishi](https://twitter.com/hirokazu_nishi) for organizing the [Japanese Magento Advent Calendar](www.adventar.org/calendars/1372).
+
+You, the Magento Community, are my heroes and I look forward to what else will happen as we continue to work together. Bring it on, 2017!
