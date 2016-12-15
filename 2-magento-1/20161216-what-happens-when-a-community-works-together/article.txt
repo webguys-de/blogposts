@@ -9,14 +9,11 @@ Author: sherrie-rohde
 
 ----
 
-Intro: The Magento Community is steadily growing and where is no limit to what we can accomplish when we continue working together, no matter if you're new to the Magento Community or a veteran.
+Intro: The Magento Community has been a part of my life since 2007. [As I've shared before](https://magento.com/blog/magento-news/power-community), it's changed my story in a positive way, and I know several of you can relate. This is powerful.
 
 ----
 
 Text:
-
-The Magento Community has been a part of my life since 2007. [As I've shared before](https://magento.com/blog/magento-news/power-community), it's changed my story in a positive way, and I know several of you can relate. This is powerful.
-
 If you were at Meet Magento New York in 2015, you may have heard Ben Marks share that there is no problem that community cannot solve.
 
 <blockquote class="twitter-tweet" data-lang="en">
