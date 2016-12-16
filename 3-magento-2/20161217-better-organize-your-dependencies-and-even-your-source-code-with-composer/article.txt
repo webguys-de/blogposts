@@ -6,11 +6,7 @@ Date: 2016-12-17
 
 ----
 
-Author: Jacques Bodin-Hullin
-
-----
-
-Author-Text: Jacques Bodin-Hullin is a PHP developer since he's 13 years old. He is fully certified on Magento and works at [Monsieur Biz](https://monsieurbiz.com), a french web agency. Known as an elePHPants trainer, he is also passionnated about any kind of performance tools.
+Author: jacques-bodin-hullin
 
 ----
 
