@@ -55,6 +55,6 @@ Whether you’re new to the Magento Community (hi!) or a veteran looking for mor
 - Check out our [Contributor Guide](https://devdocs.magento.com/guides/v2.1/contributor-guide/contributing.html) to learn how to get started contributing to DevDocs and our core code on Github.
 - If none of those work for you, check out my post on [How to Get Involved in the Magento Community](https://magento.com/blog/technical/how-get-involved-magento-community) for even more ideas (or ask me!).
 
-Huge thank you to [Fabian Blechschmidt](https://twitter.com/Fabian_ikono) and [Tobias Vogt](https://twitter.com/tobi_pb) for organizing this Magento Advent Calendar, and inviting me to be a part of it, as well as to [Hirokazu Nishi](https://twitter.com/hirokazu_nishi) for organizing the [Japanese Magento Advent Calendar](www.adventar.org/calendars/1372).
+Huge thank you to [Fabian Blechschmidt](https://twitter.com/Fabian_ikono) and [Tobias Vogt](https://twitter.com/tobi_pb) for organizing this Magento Advent Calendar, and inviting me to be a part of it, as well as to [Hirokazu Nishi](https://twitter.com/hirokazu_nishi) for organizing the [Japanese Magento Advent Calendar](http://www.adventar.org/calendars/1372).
 
 You, the Magento Community, are my heroes and I look forward to what else will happen as we continue to work together. Bring it on, 2017!
