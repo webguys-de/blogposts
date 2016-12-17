@@ -1,4 +1,4 @@
-Title: Türchen 17 : Better organize your dependencies and even your source code with composer
+Title: Türchen 17: Better organize your dependencies and even your source code with composer
 
 ----
 
