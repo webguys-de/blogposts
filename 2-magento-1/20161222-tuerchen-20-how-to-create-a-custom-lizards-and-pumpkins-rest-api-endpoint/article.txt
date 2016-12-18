@@ -1,14 +1,16 @@
-Title: Türchen 22 : How to create a custom Lizards & Pumpkins REST API endpoint
+Title: Türchen 20 : How to create a custom Lizards & Pumpkins REST API endpoint
 
 ----
 
-Date: 2016-12-22
+Date: 2016-12-20
 
 ----
 
-Author: Tim Bezhashvyly
+Author: timbezhashvyly
 
 ----
+
+Text:
 
 One of core principles of Lizards & Pumpkins and what makes it extremely attractive among e-commerce platforms is the API-first approach. The business logic is completely front-end agnostic and can be used for feeding either website, mobile app or anything else. And as the name suggests the binding point here is an API, a REST API in our case.
 
