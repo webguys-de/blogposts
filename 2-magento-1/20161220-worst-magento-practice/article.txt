@@ -1,0 +1,179 @@
+Title: Türchen 20 : Worst Magento Practice
+
+----
+
+Date: 2016-12-20
+
+----
+
+Author: Andreas von Studnitz
+
+----
+
+Author-Text: Andreas has been a Magento developer since 2008, also among the first Magento Certified Developers (2011) and Magento Certified Solution Specialists (2014).
+             After working as a Magento freelancer, he founded integer_net in 2012 in Germany, joining forces with three partners. The company is specialized in high quality Magento development.
+             Andreas focuses on module development, interface development, training and consulting.
+             Additionally, he is an active member of both the German and international Magento community, regularly speaking at conferences and meetups.
+
+----
+
+Intro: During years of working with Magento, Andreas von Studnitz has seen a lot of Magento shops. Not all of them were in a good shape, and this article will expose the most hair-raising issues. Some problems are obvious, some are not, but all are either dangerous, make Magento slow or are extremely ugly. Learn how to avoid the worst mistakes when setting up and running Magento. 
+
+----
+
+Text: 
+
+When looking for the biggest problems you can have with your Magento shop, you might think of poor performance, 
+code quality or updatability. All those are important for a well running shops, but there is one more import problem:
+
+## Security
+
+Unfortunately, most merchants, most agencies and most developers only take it seriously once they have been affected
+by a hacked store directly. This is what can happen:
+
+* Customer Data stolen
+* Access Data stolen
+* Payment Data stolen
+* Site taken offline
+
+Each of those incidents can mean costs high costs - there are statistics saying that the average cost is about 150 $ per 
+lost or stolen record (see [www.ibm.com/security/data-breach/](www.ibm.com/security/data-breach/)).
+
+### Example
+
+Just one example which happened to me a year ago: during a shop analysis I found a modified core file <strong>lib/Varien/Object.php</strong>.
+At the beginning of the file, one line of code was added:
+
+(image: exploit.png)
+
+This line of code stores all data entered in the checkout process and in the admin area in a single hidden text file which everyone
+could download and decode. The exploit was active for <strong>6 months</strong> and contained:
+
+* 5,628 datasets (email address, name, telephone)
+* 1,612 passwords (a part of them could probably have been used for other services like PayPal)
+* All admin usernames and passwords.
+
+The line of code was probably added by using a security hole.
+ 
+### Counter-Measures: The Obvious
+
+There are a few things which should be respected by every developer and every shop manager:
+
+* Keep your Magento updated
+* At least apply security patches
+* Keep PHP and other server software up to date
+* Don't use the default admin username / password
+* Don't use common usernames and passwords
+
+If you are following this advice, you should be safer than 90% of all Magento stores online worldwide which will make
+attacking your shop relatively hard and not worthwile for most attackers. Though, if you make any of the following
+mistakes, you'll have a problem:
+ 
+## Top 10 Worst Magento Practices
+
+### #10: Downloadable Code
+
+(image: top10.png)
+
+Don't put your whole code on GitHub - unprotected! Also, if you have your .git directory in your main directory, make sure 
+noone can access it through the browser - otherwise your whole repository can be downloaded and scanned for security issues.
+
+### Top 9: Downloadable Data
+
+(image: top9.png)
+
+Don't put your database dumps anywhere where they can be accessed by browser, especially not in the main directory.
+Not having any links to the file doesn't help much - the files can be found anyways. You don't want anyone to get all your
+customer data including password hash.
+
+### Top 8: Unprotected Executables
+
+(image: top8.png)
+
+Those files can be called via the browser by anyone. Depending on the script, calling them can cause importing or exporting
+data or doing any other operation, possibly severely messing up your system. For example: if a reindexing script is called 
+several times in a row, it can block the whole system.
+
+### Top 7: Unprotected Database Credentials
+
+(image: top7.png)
+
+Depending on your server configuration, having your app/etc/local.xml open to access via browser can mean anyone can
+have access to your database server. Having database access, they can for example read or delete all your customer data or 
+create new admin accounts.
+
+### Top 6: Unsecured Admin
+
+Change your admin URL from /admin/ to anything else. If an attacker can't find the location of your admin area easily,
+he will likely go on to another shop which is easier to hack.
+The same goes for the /downloader/ URL. You can't change that easily so it's best to [deactivate it completely](https://www.integer-net.com/why-modules-shouldnt-be-installed-via-magento-connect-manager/). 
+
+### Top 5: Unsecured Tools
+
+(image: top5.png)
+
+If you have any external tools for your store, make sure they can't be accessed without authentication. The image shows
+<strong>Magmi</strong>, a tool for importing data into Magento. I found this tool through a simple Google search and
+would have been able to take over the whole system with that. The installed Magmi version allows to install a newer 
+version of itself up update but doesn't check the source, so I could download any version, add some backdoor code and 
+upload it via the web interface.
+
+Nearly every external tool can be misued, so please be extra careful about that. I have seen unprotected external tools
+which allowed to change appearance of a configurator or access all order data.
+
+### Top 4: Patches not applied
+
+If you don't install security patches released by Magento or install the latest Magento version, you are vulnerable 
+to attacks. Example: the <strong>Shoplift bug</strong> which was patched by Magento in Febuary 2015. In April 2016, still
+<strong>50,000 out of 250,000</strong> Magento shops were not patched and thus vulnerable to it (Source: [byte.nl](http://byte.nl)).
+That makes 50,000 easy targets. Don't let your store be one of them.
+ 
+In order to get to know about security issues, I recommend subscribing to the official [Magento Security Alert Registry](https://magento.com/security/sign-up). 
+
+### Top 3: Insecure Modules
+
+<blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr">Hmm, do I want to install this module?<br>&quot;return base64_encode(base64_encode(base64_encode(...&quot; <a href="https://twitter.com/hashtag/realmagento?src=hash">#realmagento</a></p>&mdash; Andreas Mautz (@a_v_o_g_t) <a href="https://twitter.com/a_v_o_g_t/status/600948007669014528">20. Mai 2015</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+If you don't know the developer of a module well, you can never know if there isn't some malware or security issue included.
+To be sure, you need to do a review of every module you are installing to your store.
+
+Important: If you are serious about security, never install a module which is encrypted (i.e. with Ioncube) or obfuscated.
+
+### Top 2: Database Tools
+
+(image: top2.png)
+
+I found this database management tools during a store review. You should never install database management tools 
+(like PhpMyAdmin or Adminer) on your store without additionally protecting them as security issues are found in them 
+regularly.
+
+In this case it was even worse: you don't even need MySQL credential as they have been pre-filled. So you have full
+access to the database if you know the (simple) filename which can be guessed or found out otherwise. 
+
+### Top 1: Backdoors
+
+(image: top1_1.png)
+
+I also found this file in the store review I mentioned above. An input field with the output of the path of the file?
+Well, looking into the sourcecode made the purpose of that file clear:
+
+(image: top1_2.png)
+
+You can run any server command through this simple web interface. No authentication, no protection, and the power to
+do everything on the server you want, depending on the server configuration. Don't do that!
+
+## Conclusion
+
+Those have been the most hair-rising issues I found in the last years working with Magento. I am sure there are more; 
+probably every experienced Magento developer can add his/her own examples.
+ 
+It's hard to impossible to make a Magento store (or any online store) 100% secure, but it's not too difficult to make
+it hard enough for attackers so they choose different targets. If you avoid the above mentioned mistakes, you will 
+have reached that goal.
+
+To check your goals, I suggest using [MageReport](https://www.magereport.com) by [byte.nl](http://byte.nl). It will scan your store and tell you 
+if there are severe security problems left on your store. It will even email you about new issues found if you 
+register (for free).
+
+(image:magereport.png)
