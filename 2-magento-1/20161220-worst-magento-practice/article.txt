@@ -1,19 +1,12 @@
-Title: Türchen 20 : Worst Magento Practice
+Title: Türchen 19: Worst Magento Practice
 
 ----
 
-Date: 2016-12-20
+Date: 2016-12-19
 
 ----
 
-Author: Andreas von Studnitz
-
-----
-
-Author-Text: Andreas has been a Magento developer since 2008, also among the first Magento Certified Developers (2011) and Magento Certified Solution Specialists (2014).
-             After working as a Magento freelancer, he founded integer_net in 2012 in Germany, joining forces with three partners. The company is specialized in high quality Magento development.
-             Andreas focuses on module development, interface development, training and consulting.
-             Additionally, he is an active member of both the German and international Magento community, regularly speaking at conferences and meetups.
+Author: andreas-von-studnitz
 
 ----
 
