@@ -5,11 +5,7 @@ Date: 2016-12-21
 
 ----
 
-Author: t_niebergall
-
-----
-
-Author-Text: Tobias Niebergall arbeitet seit 2012 mit Magento und ist Mitgründer und CTO bei der [e3N GmbH & Co. KG](https://e3n.de/ "Internetagentur e3N - Magento & Symfony") mit Sitz in Mainz. Er ist Mitglied in der FireGento e.V. und auf vielen Magento Events vertreten.
+Author: t-niebergall
 
 ----
 
