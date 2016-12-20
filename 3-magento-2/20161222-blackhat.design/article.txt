@@ -1,0 +1,63 @@
+Title: Blackhat.Design: Weapons of Social Seduction
+
+----
+
+Author: Guido Jansen 
+
+----
+
+Intro: You are being seduced and persuaded to buy stuff you don’t need and to make choices you would not have made if your options were presented differently.
+
+**What are you going to do about that**?
+
+----
+Text: A “Blackhat.Design” is a UI intentionally designed to ‘trick’ people into making choices that benefit the company, but are (usually) bad for the customer. 
+
+In my work as a psychologist and conversion optimization specialist I help webshops implement these persuasion tactics in online marketing campaigns. But there is also an ethical responsibility to give the audiences of these organisations the tools to guard themselves against these techniques for when they are misused.
+
+If you want a more elaborate introduction: [Read this on Blackhat.Design first](https://blackhat.design/blackhat-design-aa14767a85bc).
+
+In this post, I’m going to give you 3 examples of common tactics to help you recognize them and make better choices. In other words: to give you some Counter Persuasion Tactics (CPT).
+
+## Easy too get in, hard to get out
+One trick called ‘Roach Motel’ is to make it really easy to sign up for a commitment, but REALLY HARD to get out. Some examples from nature:
+
+![Easy/Hard 1][http://gxjansen.com/images/easy-hard-1.jpg]
+
+![Easy/Hard 2][http://gxjansen.com/images/easy-hard-2.jpg]
+
+![Easy/Hard 3][http://gxjansen.com/images/easy-hard-3.jpg]
+
+Take [Texture](https://www.texture.com), selling digital magazine subscriptions. This is all you need to sign up: 
+
+![Texture Create][http://gxjansen.com/images/texture-create.png]
+
+So far so good. Now let’s see what it takes to unsubscribe:
+
+![Texture Out][http://gxjansen.com/images/texture-out.jpg]
+
+Really? I wonder why they didn’t go with the morsecode option…
+
+There is no technological reason to not make unsubscribing just as easy as signing up. This is pure evil to keep people subscribed.
+
+## Limited rooms available (Scarcity)
+When there is not much left of something, we want it even more.
+Originally Dutch booking site Booking.com got called back by a judge for mis/overusing this tactic.
+
+![Hidden Fees][http://gxjansen.com/images/booking-scarcity.png]
+
+Sentences like “Only 2 rooms left” make you think that there are only 2 rooms left in the whole hotel, while it just meant that there were only 2 rooms left on booking.com (that day…). If you’d call the hotel, you might find out that a lot more rooms were actually available.
+
+## Hiding important information
+At Euroflorist some of our usability research showed that users could hardly find the delivery fee and when they did said it came across untrustworthy as it looked like we were hiding it:
+
+![Hidden Fees][http://gxjansen.com/images/hidden-fees.png]
+Original on the left, improved version on the right.
+
+(Technically not a Blackhat.Design because it wasn’t intentional in our case, but a lot of companies try to hide information in the fine print that they think might not be beneficial for the purchase.)
+
+Not coming across as trustworthy is not a good long-term strategy. In this case, it’s even a very bad short-term strategy: the version on the right (where the delivery fee was placed directly below the product price) had a **conversion rate increase of over 12%**.
+
+
+### Want more Counter Persuasion Tactics?
+**Subscribe to [blackhat.design](http://blackhat.design), I’ll be posting more next year, including an overall defence plan you can use for you next big purchase!** (:
