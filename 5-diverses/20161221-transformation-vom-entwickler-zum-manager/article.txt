@@ -1,0 +1,92 @@
+Title: Türchen 21: Die Transformation vom Entwickler zum Unternehmer
+----
+
+Date: 2016-12-21
+
+----
+
+Author: t_niebergall
+
+----
+
+Author-Text: Tobias Niebergall arbeitet seit 2012 mit Magento und ist Mitgründer und CTO bei der [e3N GmbH & Co. KG](https://e3n.de/ "Internetagentur e3N - Magento & Symfony") mit Sitz in Mainz. Er ist Mitglied in der FireGento e.V. und auf vielen Magento Events vertreten.
+
+----
+
+Intro: Für viele Gründer ist der Weg zum Unternehmer eine Herausforderung. Mit diesem Beitrag möchte ich Dir in Form eines Rückblicks auf meine vergangenen 4 Jahre einige Tipps mitgeben für die Transformation vom Entwickler zum Unternehmer.
+
+----
+
+Text:
+In den vergangenen Jahren habe ich immer wieder Selbstständige und Unternehmer kennengelernt, die einige Jahre nach der Gründung - trotz gut laufender Geschäfte - gescheitert sind oder sich bewusst verkleinert haben.
+Doch weshalb kommt es dazu und was hat das mit der Transformation vom Entwickler zum Unternehmer zu tun?
+
+## Definition der Formen einer Selbstständigkeit
+Für mich gibt es in unserer Branche 2 relevante Formen der Selbstständigkeit, die der selbstständigen Fachkraft und die des Unternehmers. Doch wie unterscheiden sich die beiden?
+
+### Die selbständige Fachkraft (Freelancer)
+Ein Freelancer muss sich um alle Bereiche im Unternehmen kümmern (auch wenn dieses nur aus ihr selbst besteht) und muss sich so ein breites Wissen über das eigentliche Fachwissen hinaus aneignen. Zumeist handelt es sich um eine Person, die das Arbeiten in ihrem Fachbereich liebt und niemals aufgeben möchte.
+
+### Der Unternehmer
+Der Unternehmer arbeitet nicht als Fachkraft im Unternehmen, sondern am Unternehmen selbst. Er beschäftigt sich mit der langfristigen Planung und strategischen Ausrichtung des Unternehmens und trägt i.d.R. das Gesamtrisiko. Der Unternehmer wird in den unterschiedlichen Bereichen seines Unternehmens von seinen Mitarbeitern unterstützt.
+
+### Wie alles begann
+So begann auch ich gemeinsam mit meinem Bruder Jonas 2012 mit der Gründung unserer Internet Agentur die Reise. Du diesem Zeitpunkt waren wir 2 junge Magento Entwickler, die sich in Form einer Agentur zusammengeschlossen hatten und klassische selbstständige Fachkräfte waren. Für uns war jedoch von Anfang an klar, dass wir uns zu Unternehmern weiterentwickeln möchten und eine erfolgreiche Agentur aufbauen möchten.
+
+**Tipps**
+- Bevor Du Dich selbstständig machst solltest Du Deine Ziele definieren (Das muss kein kompletter Businessplan sein)
+- Wenn möglich: Suche Dir einen Partner, dessen Interessen sich mit Deinen ergänzen
+- Probiere es einfach aus, meist hast du nichts zu verlieren
+
+In dieser ersten Phase entstehen meist noch keine Probleme. Man hat ein paar Kunden, kann seiner Leidenschaft nachgehen und erhält dafür eine gute Entlohnung.
+
+### Das Wachstum
+Auf diese erste Phase folgen die ersten Rückschläge und Zweifel. Diese können vielfältig sein, der große Kunde ist weggefallen, neue Projekte sind gerade nicht in Aussicht, die ersten schlechten Erfahrungen mit Mitarbeitern entstehen ... - was mache ich nun?
+Zunächst einmal: Ruhe bewahren und reflektieren was schiefgelaufen ist? Fehler erkennen, korrigieren und nach vorne schauen.
+
+Mit diesem ersten Wachstum kommt meiner Meinung nach auch die erste große Entscheidung. Möchte ich Unternehmer werden oder Fachkraft bleiben?
+
+**Tipps**
+- Gehe in Dich und frage Dich selbst: Was sind meine Stärken, Schwächen und Ziele?
+- Möchtest Du selbst das Fachwissen deiner Tätigkeit haben (Fachkraft)?
+- Möchtest du Dein Fachwissen Deiner Tätigkeit an Mitarbeiter weitergeben/abtreten und Dich aus den Fachaufgaben zurückziehen (Unternehmer)?
+- Sprich mit Leuten, die diesen Weg bereits gegangen sind
+
+In dieser Phase kommen neben/nach den oben beschriebenen Problemen meist mehr Aufträge auf einen zu, sodass man diese nicht mehr selbstständig bewältigen kann. Somit beginnt man das Unternehmen auszubauen, Mitarbeiter einzustellen oder mit Freelancern zusammenzuarbeiten.
+
+### Und plötzlich machst du etwas ganz Anderes
+Bis zu einer gewissen Größe kann man dieses Wachstum auch als Fachkraft durchziehen, doch plötzlich spürt man eine gewisse Unzufriedenheit, die man gar nicht so genau definieren kann. Die Mitarbeiter sind fleißig, die Projekte erfolgreich und es kommen genug neue Anfragen.
+
+Zu diesem Zeitpunkt steht man vor der ersten Transformation. Die eigentliche Fachtätigkeit rückt immer stärker in den Hintergrund und man ist hauptsächlich damit beschäftigt, seine Mitarbeiter und die Projekte zu koordinieren.
+Dies ist der Zeitpunkt, um wieder eine Entscheidung zu treffen, denn trifft man diese nicht, arbeitet man gegen sich selbst, da man als Fachkraft und Manager verschiede Ansichten und Ziele vertritt. Wenn Du mehr zu diesem Thema erfahren möchtest, empfehle ich das Buch "Der Weg zum erfolgreichen Unternehmer" von Stefan Merath.
+
+Genau diese Phasen (sie kommen nicht von heute auf morgen) zeichnen den Punkt, an dem einige scheitern oder sich bewusst dazu entscheiden, sich wieder auf ihren ursprünglichen Fachbereich zu konzentrieren. Denn, wenn man immer in einem Zwiespalt zwischen Fachkraft, Manager und Unternehmer steckt, wird man auf Dauer nicht glücklich und fragt sich oft: was mache ich hier eigentlich?
+
+**Tipp**
+- Versuche frühzeitig einzulenken, wenn Du merkst, dass Dein Weg Dich nicht erfüllt
+- Entscheide, ob Du Dein Unternehmen anpasst oder suche Dir Mitarbeiter, die Dich unterstützen
+- Triff eine Entscheidung, sonst treffen sie andere für Dich
+
+Es gibt viele Möglichkeiten diesen Weg weiter zu gehen, ich habe Menschen kennengelernt, die wieder zurück in ihren Fachbereich gegangen sind und die Führung ihren Partnern überlassen haben, denen das Unternehmer-Dasein mehr zusagte. Andere haben sich entschlossen ihre Agenturen zu verkaufen oder auf eine Größe zu reduzieren, in der sie als Fachkraft mitarbeiten können.
+
+Einen falschen Weg gibt es letztendlich nicht, die Entscheidung, welcher der Richtige ist, kannst Du nur alleine treffen.
+
+### Mein Weg
+Ich persönlich habe mich dazu entschieden, Unternehmer zu werden. Ich sehe es als neue Herausforderung in meinem Leben und eine Chance neue, spannende Dinge kennenzulernen. Noch stecke ich mitten in der Wachstumsphase und bin Fachkraft, Projektmanager und Unternehemer.
+Durch diese doch sehr unterschiedlichen Aufgaben, kenne ich das Gefühl "Was habe ich jetzt eigentlich genau heute gearbeitet?" sehr gut. Hier ist mein Tipp, ein klares Ziel vor Augen zu haben und auf dieses hinzuarbeiten.
+
+Ein hilfreiches Werkzeug, das während des ersten Wachstums gerne vergessen wird ist der Aufbau von Prozessen und Standards. Langfristig sind diese jedoch die einzige Möglichkeit eine Agentur, die wächst erfolgreich zu führen und eine gleichbleibende Qualität zu gewährleisten.
+Wer nur wächst und abarbeitet wird irgendwann an einen Punkt kommen, an dem im besten Fall das Wachstum nur stagniert, im schlimmsten Fall aber das gesamte Unternehmen zusammenbricht.
+
+Wir selbst haben dieses Jahr unsere Prozesse stark optimiert und unserem Wachstum angepasst, diese sind an der ein oder anderen Stelle aktuell noch etwas "zu groß", noch ist eine Prozesseinführung leicht durchzuführen und wirkt sich positiv auf ein kontinuierliches und gesundes Wachstum aus.
+
+Wenn Du Dich entschieden hast, Unternehmer zu werden, habe ich noch ein paar Tipps wie Dir Dir das Leben leichter machen kannst.
+
+**Tipps**
+- Setze Dir klar definierte Ziele
+- Priorisiere Deine Aufgaben
+- Lerne Aufgaben abzugeben und diese nicht irgendwann selbst zu übernehmen (egal wie oft Du sie zurückgeben musst)
+- Suche Dir gleichgesinnte und lerne von Menschen mit Erfahrung (Aufbau eines Netzwerks)
+- Probiere Dinge aus, mache Fehler und lerne daraus
+
+Ich hoffe, ich konnte Dir einen Einblick in die Transformation geben und bei einer vielleicht anstehenden Entscheidung helfen. Solltest Du Fragen haben oder noch mehr wissen wollen, kannst Du mich gerne anschreiben.
