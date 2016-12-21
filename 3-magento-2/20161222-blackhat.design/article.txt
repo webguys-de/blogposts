@@ -13,7 +13,11 @@ Author: guidojansen
 Intro: You are being seduced and persuaded to buy stuff you don’t need and to make choices you would not have made if your options were presented differently.
 
 ----
-Text: **What are you going to do about that**?
+Text:
+
+**What are you going to do about that**?
+
+![Blackhat.Design][http://gxjansen.com/images/Blackhat-Design.png]
 
 A “Blackhat.Design” is a UI intentionally designed to ‘trick’ people into making choices that benefit the company, but are (usually) bad for the customer.
 
