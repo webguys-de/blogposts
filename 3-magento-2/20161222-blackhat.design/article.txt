@@ -17,7 +17,7 @@ Text:
 
 **What are you going to do about that**?
 
-![Blackhat.Design][http://gxjansen.com/images/Blackhat-Design.png]
+(image: Blackhat-Design.png)
 
 A “Blackhat.Design” is a UI intentionally designed to ‘trick’ people into making choices that benefit the company, but are (usually) bad for the customer.
 
