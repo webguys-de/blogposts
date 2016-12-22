@@ -17,8 +17,7 @@ Intro: Magento kann viele Sachen ziemlich gut, eine Sache gehört jedoch nicht d
 Text:
 
 ##Warum Easy template
-Viele Themes bringen teilweise echt gut gestaltete Seiten mit, die aus einzelnen Komponenten zusammengesetzt sind und im Idealfall auch einfach adaptiert und wieder verwendet werden können.
-Schaut man sich in einem solchem Theme die betreffende Seite im Editor und die teilweise endlosen Zeilen HTML-Codes an, bedarf es einer gehörigen Portion Wissen um die HTML-Syntax und des Baukastensystems des Themes um die Seite zu verändern und/oder neue Seiten anzulegen.
+Viele Themes bringen teilweise echt gut gestaltete Seiten mit, die aus einzelnen Komponenten zusammengesetzt sind und im Idealfall auch einfach adaptiert und wieder verwendet werden können. Schaut man sich in einem solchem Theme die betreffende Seite im Editor und die teilweise endlosen Zeilen HTML-Codes an, bedarf es einer gehörigen Portion Wissen um die HTML-Syntax und des Baukastensystems des Themes um die Seite zu verändern und/oder neue Seiten anzulegen.
 
 Dies zu vereinfachen und so uns und den Kunden in der Lage zu versetzen, schnell Seiten zu erstellen und Inhalte zu pflegen war der Ansporn für Easytemplate.
 
@@ -141,9 +140,7 @@ Das ist schon mal ein toller Anfang, aber es wird noch besser. Die Felder der Ma
 Hier können wir sehen, dass der Baustein 'Headvisual' keine Eingabefelder für die Slides bietet, sondern die Möglichkeit eröffnet, Sub-Bausteine hinzuzufügen. Somit lässt sich die Übersichtlichkeit signifikant erhöhen, ebenso wird der Shopbetreiber nicht von unzähligen Eingabefeldern erschlagen.
 
 ##Easy template im Laufenden Betrieb
-Während der Arbeit erleichert die Anlage einer Arbeitskopie die Arbeit ungemein. Möchte man eine Seite verändern, so wissen wir aus der täglichen Arbeit mit Magento, dass die Änderungen nach Klick auf 'Speichern' sofort online sind. Das macht die Arbeit nicht unbedingt besser.
-Den Workaround, eine Test-Seite anzulegen und dort die Änderungen vorzunehmen, ist auch nur bedingt komfortabel.
-Aus diesem Grund gibt es die Funktion 'Arbeitskopie anlegen' - diese legt eine temporäre Kopie der Seite an.
+Während der Arbeit erleichert die Anlage einer Arbeitskopie die Arbeit ungemein. Möchte man eine Seite verändern, so wissen wir aus der täglichen Arbeit mit Magento, dass die Änderungen nach Klick auf 'Speichern' sofort online sind. Das macht die Arbeit nicht unbedingt besser. Den Workaround, eine Test-Seite anzulegen und dort die Änderungen vorzunehmen, ist auch nur bedingt komfortabel. Aus diesem Grund gibt es die Funktion 'Arbeitskopie anlegen' - diese legt eine temporäre Kopie der Seite an.
 
 (image: arbeitskopie.png)
 
@@ -154,16 +151,15 @@ Man hat jetzt genügend Zeit Änderungen vorzunehmen bis man zufrieden ist.
 Ist der Status der Glückseligkeit erreicht, reicht ein Klick auf 'Arbeitskopie veröffentlichen', um die Änderungen zu übernehmen. Dies geschieht ohne, das der Besucher im Shop etwas von den Arbeiten sieht.
 
 ##Easy template im Deployment
-Nicht selten kommt es vor, dass ein Update, welches auf einem System vorbereitet wird, über optische Änderungen verfügt, welche neben dem anderen Änderungen übertragen werden müssen.
-Bei technischen Änderungen ist dies kein Problem, über Versionierung und entsprechende Setup-Skripte lässt sich das meiste schnell in den Griff bekommen.
+Nicht selten kommt es vor, dass ein Update, welches auf einem System vorbereitet wird, über optische Änderungen verfügt, welche neben dem anderen Änderungen übertragen werden müssen. Bei technischen Änderungen ist dies kein Problem, über Versionierung und entsprechende Setup-Skripte lässt sich das meiste schnell in den Griff bekommen.
 
 Anders sind hier jedoch Inhalte, die in Seiten oder Blöcken benötigt werden, hier kann man schneller mal den Überblick verlieren. Aus diesem Grund bietet Easy template die Möglichkeit die kompletten Bausteine einer Seite oder eines Blockes als Zip herunter zu laden und im Live-System wieder einzufügen - mit allen Inhalten selbstverständlich.
 
 (image: download.png)
 
+## Open-Source auf Github
 
-##Easy template und die Zukunft
-
+Natürlich gibt es EasyTemplate frei auf Github unter https://github.com/webguys-de/EasyTemplate - die Portierung zu Magento 2 hatten wir schon einmal angefangen - ist dann aber ins Stocken geraten. Aktuell haben wir uns noch keinen genauen Zeitplan gesetzt. Aber vlt. hat der eine oder andere Lust und Zeit sich an einer Portierung zu beteiligen.
 
 
 
