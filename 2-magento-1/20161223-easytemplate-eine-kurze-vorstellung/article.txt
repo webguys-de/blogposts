@@ -1,0 +1,182 @@
+Title: Türchen 23 : Easytemplate - eine kurze Vorstellung
+
+----
+
+Date: 2016-12-23
+
+----
+
+Author: ingo
+
+----
+
+Intro: Magento kann viele Sachen ziemlich gut, eine Sache gehört jedoch nicht dazu: schöne Seiten einfach und schnell anlegen.
+
+----
+
+Text:
+
+##Warum Easy template
+Viele Themes bringen teilweise echt gut gestaltete Seiten mit, die aus einzelnen Komponenten zusammengesetzt sind und im Idealfall auch einfach adaptiert und wieder verwendet werden können.
+Schaut man sich in einem solchem Theme die betreffende Seite im Editor und die teilweise endlosen Zeilen HTML-Codes an, bedarf es einer gehörigen Portion Wissen um die HTML-Syntax und des Baukastensystems des Themes um die Seite zu verändern und/oder neue Seiten anzulegen.
+
+Dies zu vereinfachen und so uns und den Kunden in der Lage zu versetzen, schnell Seiten zu erstellen und Inhalte zu pflegen war der Ansporn für Easytemplate.
+
+##Easy template im Überblick
+Easy template ist ein Baukastensystem aus unterschiedlichen, endlos erweiterbaren Bausteinen aus dem der Shopbetreiber wählen kann, um Inhalte zu pflegen.
+
+(image: information.png)
+
+Klickt man auf den neuen Reiter 'Easy template' gelangt man zum neuen Inhaltsbereich.
+
+(image: inhaltsbereich.png)
+
+Hier kann man gut erkennen, dass die Inhalte modul gepflegt werden, gekapselt und übersichtlich vorliegen.
+
+Ein neuer Baustein kann über 'Neue Vorlage' eingefügt werden.Aus einer kategorisierbaren Liste kann der entsprechende Baustein ausgewählt werden, welcher dann am Anfang der Seite eingefügt wird.
+
+(image: vorlagenliste.png)
+
+Die Bausteine können einfach per Drag'n Drop verschoben werden, des weiteren können einzelne Bausteine deaktiviert oder auch nur für einen Zeitraum aktiviert werden. So lassen sich z.b. Inhalte im Voraus planen und nicht immer manuell eingeriffen werden.
+
+(image: baustein.png)
+
+Diese Maske wird durch eine XML-Datei erzeugt, in der alle Bausteine definiert sind.
+
+```
+...
+                <productlisting_as_multiple_carousel template="easytemplate/home/product_list.phtml" type="easytemplate/template_product_skulist" translate="label,comment">
+                    <enabled>1</enabled>
+                    <label>Produktliste als Karussell</label>
+                    <sort_order>40</sort_order>
+                    <fields>
+                        <global_headline translate="label,comment">
+                            <label>Überschrift</label>
+                            <input_renderer>easytemplate/input_renderer_text</input_renderer>
+                            <sort_order>10</sort_order>
+                            <required>0</required>
+                        </global_headline>
+
+                        <global_headline_type translate="label,comment">
+                            <label>Titel-Typ</label>
+                            <comment />
+                            <input_renderer>easytemplate/input_renderer_select</input_renderer>
+                            <input_renderer_source>easytemplate/input_renderer_source_values</input_renderer_source>
+                            <values>
+                                <h1>H1</h1>
+                                <h2>H2</h2>
+                                <h3>H3</h3>
+                                <h4>H4</h4>
+                                <h5>H5</h5>
+                            </values>
+                            <sort_order>15</sort_order>
+                            <default_value>h2</default_value>
+                            <required>0</required>
+                        </global_headline_type>
+                        <skus translate="label,comment">
+                            <label>Artikelnummern</label>
+                            <input_renderer>easytemplate/input_renderer_text</input_renderer>
+                            <sort_order>20</sort_order>
+                            <comment>Kommagetrennte Angabe mehrerer Artikelnummern</comment>
+                            <required>0</required>
+                        </skus>
+                        <background-color translate="label,comment">
+                            <label>Hintergrundfarbe</label>
+                            <input_renderer>easytemplate/input_renderer_text</input_renderer>
+                            <sort_order>30</sort_order>
+                            <required>0</required>
+                        </background-color>
+                    </fields>
+                </productlisting_as_multiple_carousel>
+...
+```
+
+An diesem Beispiel kann man erkennen, dass es unterschiedliche Renderer gibt, die die Anzeige in Magento steuern und nahezu alle erdenktlichen Fälle abbilden können.
+
+In der ersten Zeile wird dem Baustein das entsprechende Template zugewiesen.
+
+Das Template des Baustein ist wie folgt aufgebaut:
+
+```
+<?php /** @var $this Webguys_Easytemplate_Block_Template_Product_Skulist */ ?>
+
+<?php $uniqid = uniqid(); ?>
+
+<div class="easy-module product_list" style="background-color: <?php echo $this->getData('background-color');?>">
+
+    <div class="main-container">
+        <div class="row">
+            <div class="col-xs-12-12">
+
+                    <?php if ($this->getData('global_headline')) : ?>
+                        <<?php echo $this->getData('global_headline_type');?> class="h2">
+                            <?php echo $this->getData('global_headline'); ?>
+                        </<?php echo $this->getData('global_headline_type');?>>
+                    <?php endif; ?>
+
+                <?php if ($skus = $this->getData('skus')): ?>
+
+                    <div class="easytemplate_product_carousel_container">
+                        <?php echo $this->getProductListBlock($skus)->setTemplate('easytemplate/products/list.phtml')->toHtml(); ?>
+                    </div>
+
+                <?php endif; ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+```
+
+Die atomaren Eingaben in der Pflegemaske werden einfach über den im XML eingegeben Bezeichner angesprochen und die Werte können ausgegeben und/oder weiter verarbeitet werden.
+
+```
+$this->getData('global_headline');
+```
+
+Das ist schon mal ein toller Anfang, aber es wird noch besser. Die Felder der Maske werden über die XMl-Datei festgelegt. Spätestens wenn man jedoch einen Slider für einen Kunden baut und diese auf z.B. drei Bilder begrenzt, wird sich der Kunde vertrauensvoll an euch wenden, weil er gerne min. vier Bilder präsentieren möchte.
+
+(image: extended_slider.png)
+
+Hier können wir sehen, dass der Baustein 'Headvisual' keine Eingabefelder für die Slides bietet, sondern die Möglichkeit eröffnet, Sub-Bausteine hinzuzufügen. Somit lässt sich die Übersichtlichkeit signifikant erhöhen, ebenso wird der Shopbetreiber nicht von unzähligen Eingabefeldern erschlagen.
+
+##Easy template im Laufenden Betrieb
+Während der Arbeit erleichert die Anlage einer Arbeitskopie die Arbeit ungemein. Möchte man eine Seite verändern, so wissen wir aus der täglichen Arbeit mit Magento, dass die Änderungen nach Klick auf 'Speichern' sofort online sind. Das macht die Arbeit nicht unbedingt besser.
+Den Workaround, eine Test-Seite anzulegen und dort die Änderungen vorzunehmen, ist auch nur bedingt komfortabel.
+Aus diesem Grund gibt es die Funktion 'Arbeitskopie anlegen' - diese legt eine temporäre Kopie der Seite an.
+
+(image: arbeitskopie.png)
+
+Man hat jetzt genügend Zeit Änderungen vorzunehmen bis man zufrieden ist.
+
+(image: preview_arbeitskopie.png)
+
+Ist der Status der Glückseligkeit erreicht, reicht ein Klick auf 'Arbeitskopie veröffentlichen', um die Änderungen zu übernehmen. Dies geschieht ohne, das der Besucher im Shop etwas von den Arbeiten sieht.
+
+##Easy template im Deployment
+Nicht selten kommt es vor, dass ein Update, welches auf einem System vorbereitet wird, über optische Änderungen verfügt, welche neben dem anderen Änderungen übertragen werden müssen.
+Bei technischen Änderungen ist dies kein Problem, über Versionierung und entsprechende Setup-Skripte lässt sich das meiste schnell in den Griff bekommen.
+
+Anders sind hier jedoch Inhalte, die in Seiten oder Blöcken benötigt werden, hier kann man schneller mal den Überblick verlieren. Aus diesem Grund bietet Easy template die Möglichkeit die kompletten Bausteine einer Seite oder eines Blockes als Zip herunter zu laden und im Live-System wieder einzufügen - mit allen Inhalten selbstverständlich.
+
+(image: download.png)
+
+
+##Easy template und die Zukunft
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
