@@ -30,7 +30,9 @@ Intro: Thanks to all various authors of our xmas-special. We hope you have enjoy
 
 Text: We wish you merry chrismas, a happy new year - see you soon at some magento conferences :)
 
-<h2>All posts</h2>
+This year we filled the "Türchen"-list so fast as never before, thank you very much for all your help, great blog posts and sharing your knowledge. that is so awesome!
+
+<h2>Short review about all xmas-posts from 2016</h2>
 
 (advent: 2016)
 
