@@ -5,9 +5,19 @@ Date: 2016-12-16
 
 ----
 
+Tags: adventskalender
+
+----
+
+
 Author: sherrie-rohde
 
 ----
+
+Tags: adventskalender
+
+----
+
 
 Intro: The Magento Community has been a part of my life since 2007. [As I've shared before](https://magento.com/blog/magento-news/power-community), it's changed my story in a positive way, and I know several of you can relate. This is powerful.
 

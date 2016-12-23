@@ -10,6 +10,10 @@ Author: sander-mangel
 
 ----
 
+Tags: adventskalender
+
+----
+
 Intro: One thing in the past year which was very dear to me was the team we built and the steps we made at FitForMe, where I'm working as the Technical Lead. And I would like to share the lessons learned on building an IT team from the ground up.
 
 ----

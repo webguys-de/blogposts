@@ -10,6 +10,10 @@ Author: lydia
 
 ----
 
+Tags: adventskalender
+
+----
+
 Intro: During the past few months, a bunch of articles about the community of Magento and Meet Magento buzzed through the spheres of the world wide web (such as [here](https://www.google.com/url?q=https://www.integer-net.com/an-open-approachable-magento-community-are-we-as-open-and-welcoming-as-we-should-be/?utm_source%3Dtwitter%26utm_medium%3Dpost%26utm_term%3Dblog%26utm_content%3Dcommunity%26utm_campaign%3Dapproachable&sa=D&ust=1481394514843000&usg=AFQjCNE-2CE55pIQTM1oOY5NNf79aoRTsA), [here](https://www.google.com/url?q=https://medium.com/@RebeccaLTroth/being-a-magento-extrovert-is-challenging-9fd99ba4a001%23.lv8srcjab&sa=D&ust=1481394514844000&usg=AFQjCNHrSdSQjyzkd_nQAG-jkKFLOfBC_Q) and [here](https://www.google.com/url?q=https://medium.com/@gxjansen/let-the-hard-work-begin-147a02664110%23.olt53hz6o&sa=D&ust=1481394514845000&usg=AFQjCNH5eZw2ubTi-RHWvrYX4R74OBnmxw)).
 
 ----

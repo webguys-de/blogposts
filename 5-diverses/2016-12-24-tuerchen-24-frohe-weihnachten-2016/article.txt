@@ -1,0 +1,53 @@
+Article-meta: 
+
+----
+
+Title: Türchen 24: Frohe Weihnachten & Merry Christmas
+
+----
+
+Date: 2016-12-24
+
+----
+
+Tags: adventskalender
+
+----
+
+Author: tobi
+
+----
+
+Article-content: 
+
+----
+
+Intro: Thanks to all various authors of our xmas-special. We hope you have enjoyed!
+
+
+
+----
+
+Text: We wish you merry chrismas, a happy new year - see you soon at some magento conferences :)
+
+<h2>All posts</h2>
+
+(advent: 2016)
+
+
+
+----
+
+Article-options: 
+
+----
+
+Cover: 
+
+----
+
+Main: 0
+
+----
+
+Wpid: 4201

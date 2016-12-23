@@ -10,6 +10,10 @@ Author: ingo
 
 ----
 
+Tags: adventskalender
+
+----
+
 Intro: Magento kann viele Sachen ziemlich gut, eine Sache gehört jedoch nicht dazu: schöne Seiten einfach und schnell anlegen.
 
 ----
