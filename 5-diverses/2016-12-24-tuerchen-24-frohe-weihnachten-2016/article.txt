@@ -28,7 +28,7 @@ Intro: Thanks to all various authors of our xmas-special. We hope you have enjoy
 
 ----
 
-Text: We wish you merry chrismas, a happy new year - see you soon at some magento conferences :)
+Text: We wish you merry christmas, a happy new year - see you soon at some magento conferences :)
 
 This year we filled the "Türchen"-list so fast as never before, thank you very much for all your help, great blog posts and sharing your knowledge. that is so awesome!
 
