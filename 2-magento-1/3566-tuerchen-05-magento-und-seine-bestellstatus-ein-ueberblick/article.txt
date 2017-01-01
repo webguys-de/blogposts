@@ -56,19 +56,21 @@ bzw.
 den vorherigen Zustand.
 <h3>Welche Möglichkeiten habe ich im Code, um den Status bzw. State der Bestellung zu ändern?</h3>
 <ol><li>Analog zur Handhabung über das Backend, kann auch im Code durch das Hinzufügen eines Kommentars der Bestellstatus geändert werden:
-<pre>(code)Mage_Sales_Model_Order::addStatusHistoryComment()(/code)</pre>
+(code)Mage_Sales_Model_Order::addStatusHistoryComment()(/code)
 ändert mit dem Statuscode als zweitem Parameter den Status der Bestellung bzw. setzt den Default Status, sofern (code)true(/code) übergeben wird.</li>
 	<li>Die Funktion (code)addStatusHistoryComment()(/code) ruft intern den Magic Setter
-<pre>(code)$order->setStatus()(/code)</pre>
+(code)$order->setStatus()(/code)
 auf, der natürlich auch direkt verwendet werden kann.</li>
 	<li>Status- und State-Wechsel können zudem über die Methode
-<pre>(code)Mage_Sales_Model_Order::setState()(/code)</pre>
+(code)Mage_Sales_Model_Order::setState()(/code)
 erreicht werden.
 
 Eine <strong>Ausnahme</strong> bilden hierbei die States <em>complete</em> und <em>closed</em>, diese können nicht explizit über die genannten Methoden gesetzt werden, da sie per Intention nur über den oben gezeigten Workflow erreicht werden sollen.
 Vorausgesetzt, man weiß was man tut (!), kann dieser Schutzmechanismus allerdings über einen Aufruf der internen Methode (code)$order->_setState()(/code) mit dem fünften Parameterwert (code)$shouldProtectState = false(/code) nach entsprechendem Rewrite umgangen werden.
 </li>
-</ol><h3>Was kann <span style="text-decoration: underline">schief gehen</span>?</h3>
+</ol>
+
+<h3>Was kann <span style="text-decoration: underline">schief gehen</span>?</h3>
 Der State wird automatisch über die Methode (code)Mage_Sales_Model_Order::_checkState()(/code)
 bei jedem Speichern des Order-Objekts gesetzt. Unglücklicherweise prüft Magento beim Setzen der Status über die oben genannten Methoden nicht, ob die Status/State-Zuordnung eingehalten wurde.
 D.h. es ist zum Beispiel möglich - und wird leider in manchen Extensions auch so gehandhabt - über den Aufruf
