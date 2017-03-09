@@ -45,7 +45,7 @@ SET `level` = (LENGTH(path) - LENGTH(REPLACE( path, '/', '' ))+1)
 (code lang: sql)
 CREATE TEMPORARY TABLE `catalog_category_entity_tmp` as
 SELECT m.`entity_id`,
-(LENGTH(m.`path`) – LENGTH(REPLACE( m.`path`, ‘/’, '' ))+1) as `level`,
+(LENGTH(m.`path`) - LENGTH(REPLACE( m.`path`, '/', '' ))+1) as `level`,
 COUNT(c.`entity_id`) as `children_count`
 FROM catalog_category_entity as m
 LEFT JOIN `catalog_category_entity` as c ON c.`parent_id` = m.`entity_id`
