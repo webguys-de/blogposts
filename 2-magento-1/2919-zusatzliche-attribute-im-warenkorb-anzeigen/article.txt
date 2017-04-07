@@ -39,17 +39,17 @@ Text: Dazu sind wirklich nur ein paar Zeilen Quellcode in der config.xml seines 
 	[..]
 	<global>
 		[..]
-        <sales>
-            <quote>
-                <item>
-                    <product_attributes>
-                        <abmessung/>
-                    </product_attributes>
-                </item>
-            </quote>
-        </sales>
-    	[..]
-	<global>
+        	<sales>
+	            <quote>
+        	        <item>
+                	    <product_attributes>
+                        	<abmessung/>
+	                    </product_attributes>
+        	        </item>
+	            </quote>
+        	</sales>
+	    	[..]
+	</global>
 	[..]
 </config>
 (/code)
