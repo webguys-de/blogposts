@@ -37,7 +37,7 @@ Text: Mit folgendem SQL lassen sich die Level der Kategorien sowie deren Kinder 
 
 (code lang: sql)
 UPDATE catalog_category_entity
-SET `level` = (LENGTH(path) - LENGTH(REPLACE( path, '/', '' ))+1)
+SET `level` = (LENGTH(path) - LENGTH(REPLACE( path, '/', '' ))+0)
 (/code)
 
 <strong>Anzahl der Unterkategorien (Kinder) setzen</strong>
