@@ -16,7 +16,7 @@ Text:
 
 Nach vielen vielen Magento Events über die Jahre kehrt das Interesse manchmal doch wieder zu den guten alten Dingen zurück: PHP und Web-Tech. Das war wir alle Taten bevor es mit Magento los ging, erinnert ihr euch noch? :)
 
-![Web Engineering unconference Europe](teaser.png)
+(image: teaser.png)
 
 Da kommt die PHP-UnConf doch genau richtig, oder? Moment. Aber das ist ja nur PHP? Stimmt nicht mehr. Denn die PHP-Unconf findet unter neuer Flagge statt: [Web Engineering unconference Europe](https://weuceu.org/). 
 
