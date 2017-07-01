@@ -1,0 +1,27 @@
+Title: Web Engineering Unconference Europe wir kommen
+----
+
+Date: 2017-07-01
+
+----
+
+Author: tobi
+
+----
+
+Intro: Vom 15.07 bis zum 17.09.2017 findet wieder die PHP-Unconference Europe statt. Allerdings unter anderem Namen aber in gewohnter Location.
+----
+
+Text:
+
+Nach vielen vielen Magento Events über die Jahre kehrt das Interesse manchmal doch wieder zu den guten alten Dingen zurück: PHP und Web-Tech. Das war wir alle Taten bevor es mit Magento los ging, erinnert ihr euch noch? :)
+
+![Web Engineering unconference Europe](teaser.png)
+
+Da kommt die PHP-UnConf doch genau richtig, oder? Moment. Aber das ist ja nur PHP? Stimmt nicht mehr. Denn die PHP-Unconf findet unter neuer Flagge statt: [Web Engineering unconference Europe](https://weuceu.org/). 
+
+Nachdem in den letzten Jahren die Themen ohnehin sehr Web-Tech-Lastig, und somit häufig PHP unabhängig, waren ist der Schritt alle spannenden Techniken in einer Conference zu vereinen nur naheliegend. 
+
+Mit den Erfahrungen aus dem E-Commerce Camp in Jena, welches immerhin schon Shop-System unabhängig ist, viel es uns dann am Ende leicht zu entscheiden: Ja, wir sind dabei und bringen natürlich unser Team mit.
+
+Achso, hatte ich erwähnt dass das Ticket nur 60€ kostet und der ganze Spaß auch noch in der Sonne auf Malle stattfindet? 
