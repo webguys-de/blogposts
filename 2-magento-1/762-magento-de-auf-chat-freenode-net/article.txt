@@ -34,6 +34,8 @@ Text: Nicht alle Fragen lassen sich in Foren und Blogs klären. Oft ist es auch 
 
 Der Chat ist im IRC unter <strong>chat.freenode.net</strong> im Channel <strong>#magento-de</strong> per IRC-Software oder direkt per <a href="http://webchat.freenode.net/">Webinterface</a> zu erreichen.
 
+Zusätzlich zum IRC gibt es mittlerweile unter https://magento-de.slack.com/ einen eigenen Slack für die deutsprachige Community. Ihr könnt euch <a href="https://magento-de.slack.com/x-44525966866-58014834084/signup">hier registrieren</a> oder ihr wendet euch per Twitter an <h href="https://twitter.com/mautz_et_tong">Andreas Mautz</a> oder <a href="https://twitter.com/kkoepke">Kai Köpke</a>.
+
 ----
 
 Article-options: 
